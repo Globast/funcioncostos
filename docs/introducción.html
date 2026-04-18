@@ -4,23 +4,23 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Capítulo 2 Introducción | Título del Libro Académico</title>
+  <title>Capítulo 2 Introducción | Analisis del costo unitario de producción en un proceso manufacturero multifactorial</title>
   <meta name="description" content="Libro académico elaborado en bookdown para Maestría en Estadística Aplicada." />
   <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Capítulo 2 Introducción | Título del Libro Académico" />
+  <meta property="og:title" content="Capítulo 2 Introducción | Analisis del costo unitario de producción en un proceso manufacturero multifactorial" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="Libro académico elaborado en bookdown para Maestría en Estadística Aplicada." />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Capítulo 2 Introducción | Título del Libro Académico" />
+  <meta name="twitter:title" content="Capítulo 2 Introducción | Analisis del costo unitario de producción en un proceso manufacturero multifactorial" />
   
   <meta name="twitter:description" content="Libro académico elaborado en bookdown para Maestría en Estadística Aplicada." />
   
 
-<meta name="author" content="Tu Nombre Completo" />
+<meta name="author" content="Gloria Bastidas" />
 
 
 
@@ -212,7 +212,7 @@ div.csl-indent {
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Título del Libro Académico</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Analisis del costo unitario de producción en un proceso manufacturero multifactorial</a>
           </h1>
         </div>
 
@@ -222,9 +222,13 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="introducción" class="section level1 hasAnchor" number="2">
 <h1><span class="header-section-number">Capítulo 2</span> Introducción<a href="introducción.html#introducción" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>La documentación académica de un análisis estadístico exige tres cosas: claridad conceptual, reproducibilidad computacional y presentación formal. En este libro se utiliza <strong>bookdown</strong> para integrar texto, código, tablas y figuras en una sola salida HTML.</p>
-<p>La motivación principal es construir una evidencia escrita del proceso analítico. Esto incluye la formulación del problema, la descripción de los datos y la justificación de las herramientas estadísticas utilizadas.</p>
-<p>Como ejemplo base, si no existe una base propia en <code>data/</code>, se trabaja con una versión de <code>mtcars</code>. Cuando se incorpore la base real del proyecto, el flujo del libro se conserva sin cambios estructurales.</p>
+<p>La manufactura farmacéutica opera bajo presión creciente sobre sus márgenes. Los costos de conversión y de insumos representan en conjunto la mayor parte del costo de ventas en empresas de formas sólidas, y su variabilidad entre órdenes de producción puede comprometer la rentabilidad unitaria y la calidad de la información para la toma de decisiones (Basu et al., 2008; Suresh &amp; Basu, 2008). En la práctica, los sistemas ERP registran centenares de órdenes por mes con decenas de atributos, pero los responsables de planeación rara vez disponen de evidencia estadística sobre cuáles de esos atributos explican la dispersión del costo unitario observado.
+La investigación académica sobre determinantes del costo ha evolucionado en tres olas sucesivas. Foster y Gupta (1990) abrieron la tradición empírica al mostrar, con datos de 37 plantas de electrónica, que el volumen es un predictor fuerte del overhead, mientras que variables de complejidad y eficiencia resultan débiles una vez controlado el tamaño. Banker et al. (1995) matizaron esa conclusión: al especificar variables transaccionales como órdenes de cambio de ingeniería y personal de planeación, los autores encontraron que las transacciones explican una proporción mayor de la varianza de overhead que el propio volumen. Paralelamente, Cooper y Kaplan (1988, 1992) articularon el marco conceptual del costeo basado en actividades, en el que la regresión múltiple ocupa un rol central para identificar y validar drivers. Anderson, Banker y Janakiraman (2003), una década después, documentaron con 7,629 empresas un fenómeno que la tradición anterior no contemplaba: los costos responden de forma asimétrica a variaciones de volumen, comportamiento conocido como ‘sticky costs’.
+En paralelo, la ingeniería de costos desarrolló una taxonomía complementaria. Niazi et al. (2006) sistematizaron las técnicas de estimación de costo de producto y ubicaron la regresión dentro de los métodos paramétricos y analógicos. Trabajos posteriores han comparado la regresión lineal con redes neuronales y métodos de ensemble en distintos sectores (Cavalieri et al., 2004; Loyer et al., 2016), con un consenso emergente: los métodos no lineales mejoran la precisión cuando se dispone de volúmenes grandes de datos homogéneos, pero la regresión lineal conserva ventajas de interpretabilidad que son críticas cuando el objetivo es explicar —no solo predecir— la variabilidad del costo.
+La literatura específica sobre manufactura farmacéutica es más reducida y se orienta hacia dos focos: el costo de biosimilares y anticuerpos monoclonales (Basu et al., 2008) y la comparación económica entre tecnologías batch y continuas en formas sólidas (Matsunami et al., 2018). Estos trabajos identifican el tamaño de lote, el tipo de proceso y el rendimiento como drivers principales, pero no modelan estadísticamente la variabilidad del costo unitario a nivel de orden de producción. La escasez de estudios con esta granularidad, en particular en contextos latinoamericanos, constituye un vacío que este trabajo aborda.
+El problema que motiva esta tesis se ubica en una empresa farmacéutica colombiana productora de cápsulas duras y medicamentos. La empresa cuenta con 406 órdenes de producción registradas en su ERP con información estructurada sobre ocho atributos operativos: modelo de máquina, máquina individual, tamaño de lote, número de insumos, tipo de insumos, referencia de insumos, tipo de proceso y tamaño del producto. El análisis descriptivo previo muestra una dispersión notable del costo unitario de conversión y del costo unitario de insumos entre órdenes, sin que exista claridad sobre cuáles atributos explican esa variabilidad. La hipótesis de trabajo es que las variables operativas mencionadas, de forma conjunta y con interacciones, explican una proporción sustancial de la variabilidad observada, y que su cuantificación estadística permite priorizar acciones correctivas en planeación y en calidad de datos del ERP.
+La regresión lineal múltiple se elige como técnica principal por cuatro razones. Primero, por su alineación con la tradición empírica dominante en la literatura de cost drivers (Foster &amp; Gupta, 1990; Banker et al., 1995; Anderson et al., 2003). Segundo, por su interpretabilidad: los coeficientes parciales permiten atribuir variación a cada driver controlando por los demás, lo cual es indispensable para el diálogo con el área financiera y de operaciones. Tercero, por su compatibilidad con pruebas diagnósticas estandarizadas (multicolinealidad, heterocedasticidad, normalidad de residuos) documentadas en textos metodológicos de referencia (Montgomery et al., 2021; Hair et al., 2018). Cuarto, porque el tamaño muestral de 406 órdenes permite estimar con razonable potencia modelos con variables categóricas codificadas como dummies, complementables con regularización Lasso o Ridge cuando la colinealidad o la alta cardinalidad lo exijan (James et al., 2021).
+El aporte del estudio se articula en tres ejes. En el eje teórico, extiende la evidencia empírica sobre cost drivers al sector de manufactura farmacéutica de formas sólidas, poco representado en la literatura internacional. En el eje metodológico, combina regresión múltiple con variables categóricas de alta cardinalidad a nivel de orden, modela dos variables respuesta complementarias (conversión e insumos) y contrasta la especificación lineal con alternativas regularizadas. En el eje aplicado, entrega a la empresa un conjunto de coeficientes interpretables, un ranking de drivers por poder explicativo, y recomendaciones concretas de planeación y de mejora del registro de datos en el ERP, lo cual conecta directamente con la línea de investigación de calidad de datos transaccionales que la autora viene desarrollando.</p>
 
 </div>
             </section>
