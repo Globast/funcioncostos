@@ -1,0 +1,7 @@
+# Introducción
+
+La documentación académica de un análisis estadístico exige tres cosas: claridad conceptual, reproducibilidad computacional y presentación formal. En este libro se utiliza **bookdown** para integrar texto, código, tablas y figuras en una sola salida HTML.
+
+La motivación principal es construir una evidencia escrita del proceso analítico. Esto incluye la formulación del problema, la descripción de los datos y la justificación de las herramientas estadísticas utilizadas.
+
+Como ejemplo base, si no existe una base propia en `data/`, se trabaja con una versión de `mtcars`. Cuando se incorpore la base real del proyecto, el flujo del libro se conserva sin cambios estructurales.

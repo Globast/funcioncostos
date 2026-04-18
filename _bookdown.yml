@@ -1,0 +1,19 @@
+book_filename: "libro-maestria-estadistica-aplicada"
+output_dir: "docs"
+delete_merged_file: true
+new_session: false
+language:
+  ui:
+    chapter_name: "Capítulo "
+rmd_files:
+  - "index.Rmd"
+  - "01-resumen.Rmd"
+  - "02-introduccion.Rmd"
+  - "03-objetivos.Rmd"
+  - "04-metodologia.Rmd"
+  - "05-diccionario-campos.Rmd"
+  - "06-analisis-exploratorio.Rmd"
+  - "07-pruebas-hipotesis.Rmd"
+  - "08-modelos.Rmd"
+  - "09-conclusion.Rmd"
+  - "10-bibliografia.Rmd"

@@ -1,0 +1,60 @@
+---
+title: "Título del Libro Académico"
+author: "Tu Nombre Completo"
+date: "`r format(Sys.Date(), '%d/%m/%Y')`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: ["references.bib"]
+link-citations: yes
+lang: es
+description: "Libro académico elaborado en bookdown para Maestría en Estadística Aplicada."
+---
+
+# Portada {-}
+
+<div class="portada">
+  <h1>Título del Libro Académico</h1>
+  <p><strong>Maestría en Estadística Aplicada</strong></p>
+  <p>Autor: Tu Nombre Completo</p>
+  <p>Institución: Nombre de la Universidad</p>
+  <p>Fecha: `r format(Sys.Date(), '%d/%m/%Y')`</p>
+</div>
+
+# Prefacio {-}
+
+Este libro presenta una estructura reproducible y académica para documentar un proyecto de análisis estadístico usando **R**, **bookdown**, **GitHub Codespaces** y **GitHub Pages**.
+
+Se recomienda mantener todos los datos en la carpeta `data/`, todas las imágenes en `images/` y todas las referencias en `references.bib`.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center",
+  fig.width = 7,
+  fig.height = 4.5,
+  out.width = "90%"
+)
+
+options(scipen = 999)
+
+library(tidyverse)
+library(janitor)
+library(skimr)
+library(knitr)
+library(kableExtra)
+library(broom)
+library(here)
+
+ruta_datos <- "data/datos_ejemplo.csv"
+
+if (file.exists(ruta_datos)) {
+  datos <- readr::read_csv(ruta_datos, show_col_types = FALSE) |>
+    janitor::clean_names()
+} else {
+  datos <- mtcars |>
+    tibble::rownames_to_column("modelo") |>
+    janitor::clean_names()
+}
+```

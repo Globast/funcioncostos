@@ -1,0 +1,12 @@
+# Objetivos
+
+## Objetivo general
+
+Desarrollar un libro académico reproducible para presentar un análisis estadístico aplicado, utilizando R, bookdown, GitHub Codespaces y GitHub Pages.
+
+## Objetivos específicos
+
+1. Organizar un repositorio de trabajo con estructura clara y estable.
+2. Automatizar la generación de tablas, figuras y resultados estadísticos.
+3. Documentar el análisis con lenguaje académico y formato consistente.
+4. Publicar el producto final en línea mediante GitHub Pages.

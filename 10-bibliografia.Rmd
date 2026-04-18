@@ -1,0 +1,5 @@
+# Bibliografía
+
+A continuación, se citan algunas referencias de ejemplo usadas en este libro: @xie2015, @xie2016, @james2021 y @montgomery2019.
+
+La bibliografía se administra desde el archivo `references.bib`. Para agregar nuevas fuentes, basta con incorporar nuevas entradas BibTeX y citarlas en el texto con la sintaxis `@clave`.

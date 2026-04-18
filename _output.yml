@@ -1,0 +1,18 @@
+bookdown::gitbook:
+  css: style.css
+  split_by: chapter
+  config:
+    toc:
+      collapse: subsection
+      before: |
+        <li><a href="./">Libro Académico</a></li>
+      after: |
+        <li><a href="https://github.com/">Publicado con GitHub Pages</a></li>
+    toolbar:
+      position: static
+    download: []
+    search: true
+    fontsettings:
+      theme: white
+      family: serif
+      size: 2

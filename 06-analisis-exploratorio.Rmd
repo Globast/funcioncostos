@@ -1,0 +1,64 @@
+# Análisis Exploratorio
+
+El análisis exploratorio describe la distribución de las variables, identifica patrones y permite detectar valores atípicos o posibles inconsistencias.
+
+## Tabla descriptiva
+
+```{r tabla-descriptiva}
+tabla_descriptiva <- datos |>
+  dplyr::select(where(is.numeric)) |>
+  summary()
+
+tabla_descriptiva
+```
+
+## Promedios por grupos
+
+Si existe la variable `cyl`, se construye una tabla de medias por grupo.
+
+```{r medias-grupo}
+if ("cyl" %in% names(datos) && "mpg" %in% names(datos)) {
+  tabla_mpg <- datos |>
+    dplyr::group_by(cyl) |>
+    dplyr::summarise(
+      n = dplyr::n(),
+      media_mpg = mean(mpg, na.rm = TRUE),
+      sd_mpg = sd(mpg, na.rm = TRUE)
+    )
+
+  knitr::kable(tabla_mpg, caption = "Resumen de mpg por número de cilindros.") |>
+    kableExtra::kable_styling(full_width = FALSE)
+}
+```
+
+## Histograma
+
+```{r histograma, fig.cap="Distribución de una variable numérica seleccionada."}
+var_num <- names(datos)[sapply(datos, is.numeric)][1]
+
+ggplot(datos, aes(x = .data[[var_num]])) +
+  geom_histogram(bins = 12) +
+  labs(
+    title = paste("Histograma de", var_num),
+    x = var_num,
+    y = "Frecuencia"
+  ) +
+  theme_minimal()
+```
+
+## Diagrama de dispersión
+
+```{r dispersion, fig.cap="Relación entre dos variables numéricas."}
+vars_num <- names(datos)[sapply(datos, is.numeric)]
+
+if (length(vars_num) >= 2) {
+  ggplot(datos, aes(x = .data[[vars_num[1]]], y = .data[[vars_num[2]]])) +
+    geom_point() +
+    labs(
+      title = paste("Dispersión entre", vars_num[1], "y", vars_num[2]),
+      x = vars_num[1],
+      y = vars_num[2]
+    ) +
+    theme_minimal()
+}
+```

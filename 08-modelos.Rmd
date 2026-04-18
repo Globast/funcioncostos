@@ -1,0 +1,44 @@
+# Modelos
+
+En esta sección se ajusta un modelo lineal simple como ejemplo base. Si la base contiene `mpg`, `wt` y `hp`, se usa esa especificación.
+
+## Ajuste del modelo
+
+```{r modelo-lineal}
+if (all(c("mpg", "wt", "hp") %in% names(datos))) {
+  modelo_lm <- lm(mpg ~ wt + hp, data = datos)
+
+  broom::tidy(modelo_lm) |>
+    knitr::kable(caption = "Coeficientes del modelo lineal.") |>
+    kableExtra::kable_styling(full_width = FALSE)
+}
+```
+
+## Medidas de ajuste
+
+```{r ajuste-modelo}
+if (exists("modelo_lm")) {
+  broom::glance(modelo_lm) |>
+    knitr::kable(caption = "Medidas globales de ajuste del modelo lineal.") |>
+    kableExtra::kable_styling(full_width = FALSE)
+}
+```
+
+## Gráfico de observados vs ajustados
+
+```{r observados-ajustados, fig.cap="Comparación entre valores observados y ajustados."}
+if (exists("modelo_lm")) {
+  datos_ajuste <- datos |>
+    dplyr::mutate(ajustado = fitted(modelo_lm))
+
+  ggplot(datos_ajuste, aes(x = ajustado, y = mpg)) +
+    geom_point() +
+    geom_abline(slope = 1, intercept = 0, linetype = 2) +
+    labs(
+      title = "Valores observados frente a ajustados",
+      x = "Valor ajustado",
+      y = "Valor observado"
+    ) +
+    theme_minimal()
+}
+```

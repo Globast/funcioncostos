@@ -1,0 +1,19 @@
+# Diccionario de campos
+
+En esta sección se documentan los campos principales de la base de datos utilizada.
+
+```{r diccionario-campos}
+diccionario <- tibble::tibble(
+  variable = names(datos),
+  clase = sapply(datos, function(x) class(x)[1]),
+  descripcion = dplyr::case_when(
+    names(datos) == "modelo" ~ "Identificador o nombre del registro",
+    TRUE ~ "Completar con la descripción específica de la variable"
+  )
+)
+
+knitr::kable(diccionario, caption = "Diccionario base de campos.") |>
+  kableExtra::kable_styling(full_width = FALSE)
+```
+
+La tabla anterior sirve como plantilla. En el trabajo final conviene reemplazar las descripciones genéricas por definiciones sustantivas y operacionales.

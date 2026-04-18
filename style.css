@@ -1,0 +1,54 @@
+body {
+  font-family: Georgia, "Times New Roman", serif;
+  line-height: 1.7;
+  font-size: 17px;
+  color: #222;
+}
+
+.book .book-summary {
+  background: #f8f8f8;
+}
+
+.book .book-summary ul.summary li a {
+  color: #1b1b1b;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal h1,
+.book .book-body .page-wrapper .page-inner section.normal h2,
+.book .book-body .page-wrapper .page-inner section.normal h3 {
+  color: #111;
+  font-weight: 700;
+}
+
+.portada {
+  text-align: center;
+  margin-top: 80px;
+  margin-bottom: 80px;
+}
+
+.portada h1 {
+  font-size: 2.2em;
+  margin-bottom: 20px;
+}
+
+.portada p {
+  margin: 8px 0;
+  font-size: 1.05em;
+}
+
+.caption {
+  font-size: 0.95em;
+  color: #555;
+}
+
+table {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+blockquote {
+  border-left: 4px solid #999;
+  padding-left: 12px;
+  color: #444;
+  font-style: italic;
+}

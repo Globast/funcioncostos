@@ -1,0 +1,30 @@
+# Metodología
+
+La metodología se divide en cinco etapas: preparación del entorno, carga de datos, depuración, análisis estadístico y comunicación de resultados.
+
+## Carga de datos
+
+```{r carga-datos}
+datos_base <- datos
+glimpse(datos_base)
+```
+
+## Limpieza de nombres
+
+El paquete `janitor` permite convertir nombres de variables a formato estandarizado.
+
+```{r limpieza-nombres}
+names(datos_base)
+```
+
+## Revisión de estructura
+
+```{r estructura-datos}
+skimr::skim(datos_base)
+```
+
+## Consideraciones metodológicas
+
+- Todas las rutas de archivos son relativas al repositorio.
+- Los resultados se regeneran al renderizar el libro.
+- La salida HTML se guarda en `docs/`, lo que facilita la publicación en GitHub Pages.

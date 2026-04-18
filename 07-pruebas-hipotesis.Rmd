@@ -1,0 +1,24 @@
+# Pruebas de Hipótesis
+
+En esta sección se presenta un ejemplo de contraste de medias. Si la base contiene las variables `mpg` y `am`, se compara el rendimiento promedio entre dos grupos.
+
+## Prueba t de dos muestras
+
+```{r prueba-hipotesis}
+if (all(c("mpg", "am") %in% names(datos))) {
+
+  datos_prueba <- datos |>
+    dplyr::filter(!is.na(mpg), !is.na(am)) |>
+    dplyr::mutate(am = as.factor(am))
+
+  prueba_t <- t.test(mpg ~ am, data = datos_prueba)
+
+  broom::tidy(prueba_t) |>
+    knitr::kable(caption = "Resultado de la prueba t de diferencia de medias.") |>
+    kableExtra::kable_styling(full_width = FALSE)
+}
+```
+
+## Interpretación base
+
+La hipótesis nula plantea igualdad de medias entre grupos. La hipótesis alternativa plantea diferencia de medias. En el trabajo final, la interpretación debe escribirse con base en el valor-p, el intervalo de confianza y el contexto sustantivo del problema.
