@@ -1,6 +1,6 @@
 ---
-title: "Título del Libro Académico"
-author: "Tu Nombre Completo"
+title: "Analisis del costo unitario de producción en un proceso manufacturero multifactorial"
+author: "Gloria Bastidas"
 date: "`r format(Sys.Date(), '%d/%m/%Y')`"
 site: bookdown::bookdown_site
 documentclass: book
