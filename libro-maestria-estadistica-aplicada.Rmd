@@ -1,3 +1,40 @@
+---
+title: "Analisis del costo unitario de producción en un proceso manufacturero multifactorial"
+author: "Gloria Bastidas"
+date: "`r format(Sys.Date(), '%d/%m/%Y')`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: ["references.bib"]
+link-citations: yes
+lang: es
+description: "Libro académico elaborado en bookdown para Maestría en Estadística Aplicada."
+---
+
+# Portada {-}
+
+Placeholder
+
+
+
+<!--chapter:end:index.Rmd-->
+
+# Resumen
+
+Este documento presenta una estructura reproducible para una entrega académica de maestría en Estadística Aplicada. El propósito del libro es documentar de manera ordenada el problema, los datos, la metodología, el análisis exploratorio, las pruebas de hipótesis, los modelos estadísticos y las conclusiones.
+
+La lógica de trabajo es la siguiente:
+
+1. cargar los datos desde la carpeta `data/`;
+2. limpiar nombres y revisar calidad de la información;
+3. explorar patrones descriptivos;
+4. contrastar hipótesis;
+5. ajustar modelos;
+6. comunicar resultados con tablas, figuras y referencias.
+
+Este enfoque permite mantener una trazabilidad completa del análisis y facilita la reproducción de los resultados.
+
+<!--chapter:end:01-resumen.Rmd-->
+
 # Introducción
 
 La manufactura farmacéutica opera bajo presión creciente sobre sus márgenes. Los costos de conversión y de insumos representan en conjunto la mayor parte del costo de ventas en empresas de formas sólidas, y su variabilidad entre órdenes de producción puede comprometer la rentabilidad unitaria y la calidad de la información para la toma de decisiones (Basu et al., 2008; Suresh & Basu, 2008). En la práctica, los sistemas ERP registran centenares de órdenes por mes con decenas de atributos, pero los responsables de planeación rara vez disponen de evidencia estadística sobre cuáles de esos atributos explican la dispersión del costo unitario observado.
@@ -7,3 +44,129 @@ La literatura específica sobre manufactura farmacéutica es más reducida y se 
 El problema que motiva esta tesis se ubica en una empresa farmacéutica colombiana productora de cápsulas duras y medicamentos. La empresa cuenta con 406 órdenes de producción registradas en su ERP con información estructurada sobre ocho atributos operativos: modelo de máquina, máquina individual, tamaño de lote, número de insumos, tipo de insumos, referencia de insumos, tipo de proceso y tamaño del producto. El análisis descriptivo previo muestra una dispersión notable del costo unitario de conversión y del costo unitario de insumos entre órdenes, sin que exista claridad sobre cuáles atributos explican esa variabilidad. La hipótesis de trabajo es que las variables operativas mencionadas, de forma conjunta y con interacciones, explican una proporción sustancial de la variabilidad observada, y que su cuantificación estadística permite priorizar acciones correctivas en planeación y en calidad de datos del ERP.
 La regresión lineal múltiple se elige como técnica principal por cuatro razones. Primero, por su alineación con la tradición empírica dominante en la literatura de cost drivers (Foster & Gupta, 1990; Banker et al., 1995; Anderson et al., 2003). Segundo, por su interpretabilidad: los coeficientes parciales permiten atribuir variación a cada driver controlando por los demás, lo cual es indispensable para el diálogo con el área financiera y de operaciones. Tercero, por su compatibilidad con pruebas diagnósticas estandarizadas (multicolinealidad, heterocedasticidad, normalidad de residuos) documentadas en textos metodológicos de referencia (Montgomery et al., 2021; Hair et al., 2018). Cuarto, porque el tamaño muestral de 406 órdenes permite estimar con razonable potencia modelos con variables categóricas codificadas como dummies, complementables con regularización Lasso o Ridge cuando la colinealidad o la alta cardinalidad lo exijan (James et al., 2021).
 El aporte del estudio se articula en tres ejes. En el eje teórico, extiende la evidencia empírica sobre cost drivers al sector de manufactura farmacéutica de formas sólidas, poco representado en la literatura internacional. En el eje metodológico, combina regresión múltiple con variables categóricas de alta cardinalidad a nivel de orden, modela dos variables respuesta complementarias (conversión e insumos) y contrasta la especificación lineal con alternativas regularizadas. En el eje aplicado, entrega a la empresa un conjunto de coeficientes interpretables, un ranking de drivers por poder explicativo, y recomendaciones concretas de planeación y de mejora del registro de datos en el ERP, lo cual conecta directamente con la línea de investigación de calidad de datos transaccionales que la autora viene desarrollando.
+
+<!--chapter:end:02-introduccion.Rmd-->
+
+# Objetivos
+
+## Objetivo general
+
+Desarrollar un libro académico reproducible para presentar un análisis estadístico aplicado, utilizando R, bookdown, GitHub Codespaces y GitHub Pages.
+
+## Objetivos específicos
+
+1. Organizar un repositorio de trabajo con estructura clara y estable.
+2. Automatizar la generación de tablas, figuras y resultados estadísticos.
+3. Documentar el análisis con lenguaje académico y formato consistente.
+4. Publicar el producto final en línea mediante GitHub Pages.
+
+<!--chapter:end:03-objetivos.Rmd-->
+
+
+# Metodología
+
+Placeholder
+
+
+## Carga de datos
+## Limpieza de nombres
+## Revisión de estructura
+## Consideraciones metodológicas
+
+<!--chapter:end:04-metodologia.Rmd-->
+
+# Diccionario de campos
+
+En esta sección se documentan los campos principales de la base de datos utilizada.
+
+```{r diccionario-campos}
+diccionario <- tibble::tibble(
+  variable = names(datos),
+  clase = sapply(datos, function(x) class(x)[1]),
+  descripcion = dplyr::case_when(
+    names(datos) == "modelo" ~ "Identificador o nombre del registro",
+    TRUE ~ "Completar con la descripción específica de la variable"
+  )
+)
+
+knitr::kable(diccionario, caption = "Diccionario base de campos.") |>
+  kableExtra::kable_styling(full_width = FALSE)
+```
+
+La tabla anterior sirve como plantilla. En el trabajo final conviene reemplazar las descripciones genéricas por definiciones sustantivas y operacionales.
+
+<!--chapter:end:05-diccionario-campos.Rmd-->
+
+
+# Análisis Exploratorio
+
+Placeholder
+
+
+## Tabla descriptiva
+## Promedios por grupos
+## Histograma
+## Diagrama de dispersión
+
+<!--chapter:end:06-analisis-exploratorio.Rmd-->
+
+# Pruebas de Hipótesis
+
+En esta sección se presenta un ejemplo de contraste de medias. Si la base contiene las variables `mpg` y `am`, se compara el rendimiento promedio entre dos grupos.
+
+## Prueba t de dos muestras
+
+```{r prueba-hipotesis}
+if (all(c("mpg", "am") %in% names(datos))) {
+
+  datos_prueba <- datos |>
+    dplyr::filter(!is.na(mpg), !is.na(am)) |>
+    dplyr::mutate(am = as.factor(am))
+
+  prueba_t <- t.test(mpg ~ am, data = datos_prueba)
+
+  broom::tidy(prueba_t) |>
+    knitr::kable(caption = "Resultado de la prueba t de diferencia de medias.") |>
+    kableExtra::kable_styling(full_width = FALSE)
+}
+```
+
+## Interpretación base
+
+La hipótesis nula plantea igualdad de medias entre grupos. La hipótesis alternativa plantea diferencia de medias. En el trabajo final, la interpretación debe escribirse con base en el valor-p, el intervalo de confianza y el contexto sustantivo del problema.
+
+<!--chapter:end:07-pruebas-hipotesis.Rmd-->
+
+
+# Modelos
+
+Placeholder
+
+
+## Ajuste del modelo
+## Medidas de ajuste
+## Gráfico de observados vs ajustados
+
+<!--chapter:end:08-modelos.Rmd-->
+
+# Conclusión
+
+La estructura propuesta permite transformar un análisis estadístico en un producto académico ordenado, reproducible y publicable. El valor de este enfoque no está solo en la salida HTML, sino en la disciplina metodológica que impone:
+
+1. cada resultado proviene de código ejecutable;
+2. cada tabla y figura se actualiza al recompilar;
+3. la documentación queda integrada al análisis;
+4. la publicación final puede compartirse por URL.
+
+En la versión definitiva del proyecto, esta sección debe sintetizar hallazgos, limitaciones, alcances y líneas de trabajo futuras.
+
+<!--chapter:end:09-conclusion.Rmd-->
+
+# Bibliografía
+
+A continuación, se citan algunas referencias de ejemplo usadas en este libro: @xie2015, @xie2016, @james2021 y @montgomery2019.
+
+La bibliografía se administra desde el archivo `references.bib`. Para agregar nuevas fuentes, basta con incorporar nuevas entradas BibTeX y citarlas en el texto con la sintaxis `@clave`.
+
+<!--chapter:end:10-bibliografia.Rmd-->
+
