@@ -13,9 +13,9 @@ description: "Libro académico elaborado en bookdown para Maestría en Estadíst
 # Portada {-}
 
 <div class="portada">
-  <h1>Título del Libro Académico</h1>
+  <h1>Analisis del costo unitario de producción en un proceso manufacturero multifactorial</h1>
   <p><strong>Maestría en Estadística Aplicada</strong></p>
-  <p>Autor: Tu Nombre Completo</p>
+  <p>Autor: Gloria</p>
   <p>Institución: Nombre de la Universidad</p>
   <p>Fecha: `r format(Sys.Date(), '%d/%m/%Y')`</p>
 </div>
