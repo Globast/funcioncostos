@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Capítulo 5 Diccionario de campos | Analisis del costo unitario de producción en un proceso manufacturero multifactorial</title>
+  <title>Capítulo 5 Diccionario de campos | Análisis exploratorio e inferencial</title>
   <meta name="description" content="Libro académico elaborado en bookdown para Maestría en Estadística Aplicada." />
   <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Capítulo 5 Diccionario de campos | Analisis del costo unitario de producción en un proceso manufacturero multifactorial" />
+  <meta property="og:title" content="Capítulo 5 Diccionario de campos | Análisis exploratorio e inferencial" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="Libro académico elaborado en bookdown para Maestría en Estadística Aplicada." />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Capítulo 5 Diccionario de campos | Analisis del costo unitario de producción en un proceso manufacturero multifactorial" />
+  <meta name="twitter:title" content="Capítulo 5 Diccionario de campos | Análisis exploratorio e inferencial" />
   
   <meta name="twitter:description" content="Libro académico elaborado en bookdown para Maestría en Estadística Aplicada." />
   
@@ -212,7 +212,7 @@ div.csl-indent {
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Analisis del costo unitario de producción en un proceso manufacturero multifactorial</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Análisis exploratorio e inferencial</a>
           </h1>
         </div>
 
@@ -243,9 +243,6 @@ Unidad
 <th style="text-align:left;font-weight: bold;background-color: rgba(242, 242, 242, 255) !important;">
 Rol en el análisis
 </th>
-<th style="text-align:left;font-weight: bold;background-color: rgba(242, 242, 242, 255) !important;">
-Transformación / derivación
-</th>
 </tr>
 </thead>
 <tbody>
@@ -253,7 +250,7 @@ Transformación / derivación
 <td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
 periodo
 </td>
-<td style="text-align:left;width: 20em; ">
+<td style="text-align:left;width: 22em; ">
 Año-mes contable de la orden, formato YYYYMM
 </td>
 <td style="text-align:left;width: 10em; ">
@@ -262,18 +259,15 @@ Temporal (ordinal)
 <td style="text-align:left;width: 8em; ">
 Mes
 </td>
-<td style="text-align:left;width: 12em; ">
+<td style="text-align:left;width: 14em; ">
 Control / estratificación
-</td>
-<td style="text-align:left;width: 20em; ">
-Convertir a fecha; derivar año, mes_num
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
 codigo_producto
 </td>
-<td style="text-align:left;width: 20em; ">
+<td style="text-align:left;width: 22em; ">
 Identificador único del SKU producido
 </td>
 <td style="text-align:left;width: 10em; ">
@@ -282,18 +276,15 @@ Categórica nominal
 <td style="text-align:left;width: 8em; ">
 —
 </td>
-<td style="text-align:left;width: 12em; ">
+<td style="text-align:left;width: 14em; ">
 Factor de agrupación
-</td>
-<td style="text-align:left;width: 20em; ">
-Cruzar con maestro de productos
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
 id_orden
 </td>
-<td style="text-align:left;width: 20em; ">
+<td style="text-align:left;width: 22em; ">
 Identificador único de la orden de producción
 </td>
 <td style="text-align:left;width: 10em; ">
@@ -302,18 +293,15 @@ Categórica nominal
 <td style="text-align:left;width: 8em; ">
 —
 </td>
-<td style="text-align:left;width: 12em; ">
+<td style="text-align:left;width: 14em; ">
 Identificador (no entra al modelo)
-</td>
-<td style="text-align:left;width: 20em; ">
-Validar unicidad; revisar duplicados
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
 volumen_lote
 </td>
-<td style="text-align:left;width: 20em; ">
+<td style="text-align:left;width: 22em; ">
 Cantidad de unidades producidas en la orden
 </td>
 <td style="text-align:left;width: 10em; ">
@@ -322,58 +310,49 @@ Numérica discreta
 <td style="text-align:left;width: 8em; ">
 unidades
 </td>
-<td style="text-align:left;width: 12em; ">
+<td style="text-align:left;width: 14em; ">
 Predictora (escala)
 </td>
-<td style="text-align:left;width: 20em; ">
-Aplicar log para estabilizar varianza
-</td>
 </tr>
 <tr>
-<td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;background-color: rgba(255, 248, 225, 255) !important;">
+<td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
 costo_transformacion
 </td>
-<td style="text-align:left;width: 20em; background-color: rgba(255, 248, 225, 255) !important;">
+<td style="text-align:left;width: 22em; ">
 Costo de conversión por unidad producida (mano de obra, energía, depreciación, indirectos)
 </td>
-<td style="text-align:left;width: 10em; background-color: rgba(255, 248, 225, 255) !important;">
+<td style="text-align:left;width: 10em; ">
 Numérica continua
 </td>
-<td style="text-align:left;width: 8em; background-color: rgba(255, 248, 225, 255) !important;">
+<td style="text-align:left;width: 8em; ">
 UM/unidad
 </td>
-<td style="text-align:left;width: 12em; background-color: rgba(255, 248, 225, 255) !important;">
+<td style="text-align:left;width: 14em; ">
 Variable respuesta 1
-</td>
-<td style="text-align:left;width: 20em; background-color: rgba(255, 248, 225, 255) !important;">
-Inspeccionar distribución; evaluar log-transformación si es asimétrica
 </td>
 </tr>
 <tr>
-<td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;background-color: rgba(255, 248, 225, 255) !important;">
+<td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
 costo_insumo
 </td>
-<td style="text-align:left;width: 20em; background-color: rgba(255, 248, 225, 255) !important;">
+<td style="text-align:left;width: 22em; ">
 Costo de materias primas e insumos por unidad producida
 </td>
-<td style="text-align:left;width: 10em; background-color: rgba(255, 248, 225, 255) !important;">
+<td style="text-align:left;width: 10em; ">
 Numérica continua
 </td>
-<td style="text-align:left;width: 8em; background-color: rgba(255, 248, 225, 255) !important;">
+<td style="text-align:left;width: 8em; ">
 UM/unidad
 </td>
-<td style="text-align:left;width: 12em; background-color: rgba(255, 248, 225, 255) !important;">
+<td style="text-align:left;width: 14em; ">
 Variable respuesta 2
-</td>
-<td style="text-align:left;width: 20em; background-color: rgba(255, 248, 225, 255) !important;">
-Idem
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
 equipo_id
 </td>
-<td style="text-align:left;width: 20em; ">
+<td style="text-align:left;width: 22em; ">
 Identificador único de la máquina física
 </td>
 <td style="text-align:left;width: 10em; ">
@@ -382,18 +361,15 @@ Categórica nominal
 <td style="text-align:left;width: 8em; ">
 —
 </td>
-<td style="text-align:left;width: 12em; ">
+<td style="text-align:left;width: 14em; ">
 Predictora (efecto fijo o aleatorio)
-</td>
-<td style="text-align:left;width: 20em; ">
-Revisar número de niveles; agrupación si &gt; 30
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
 tipo_equipo
 </td>
-<td style="text-align:left;width: 20em; ">
+<td style="text-align:left;width: 22em; ">
 Familia o categoría tecnológica de la máquina (A1, B2, …)
 </td>
 <td style="text-align:left;width: 10em; ">
@@ -402,18 +378,15 @@ Categórica nominal
 <td style="text-align:left;width: 8em; ">
 —
 </td>
-<td style="text-align:left;width: 12em; ">
+<td style="text-align:left;width: 14em; ">
 Predictora (factor)
-</td>
-<td style="text-align:left;width: 20em; ">
-Codificación dummy con base = nivel más frecuente
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
 categoria_producto
 </td>
-<td style="text-align:left;width: 20em; ">
+<td style="text-align:left;width: 22em; ">
 Clasificación del producto
 </td>
 <td style="text-align:left;width: 10em; ">
@@ -422,18 +395,15 @@ Categórica nominal
 <td style="text-align:left;width: 8em; ">
 —
 </td>
-<td style="text-align:left;width: 12em; ">
+<td style="text-align:left;width: 14em; ">
 Predictora (factor)
-</td>
-<td style="text-align:left;width: 20em; ">
-Codificación dummy
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
 num_insumos
 </td>
-<td style="text-align:left;width: 20em; ">
+<td style="text-align:left;width: 22em; ">
 Número de insumos consumidos en la orden
 </td>
 <td style="text-align:left;width: 10em; ">
@@ -442,18 +412,15 @@ Categórica ordinal
 <td style="text-align:left;width: 8em; ">
 {0, 1, 2}
 </td>
-<td style="text-align:left;width: 12em; ">
+<td style="text-align:left;width: 14em; ">
 Predictora (proxy de complejidad)
-</td>
-<td style="text-align:left;width: 20em; ">
-Tratar como factor ordenado; verificar coherencia con insumo_1, insumo_2
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
 insumo_1
 </td>
-<td style="text-align:left;width: 20em; ">
+<td style="text-align:left;width: 22em; ">
 Identificador del primer insumo principal
 </td>
 <td style="text-align:left;width: 10em; ">
@@ -462,18 +429,15 @@ Categórica nominal
 <td style="text-align:left;width: 8em; ">
 —
 </td>
-<td style="text-align:left;width: 12em; ">
+<td style="text-align:left;width: 14em; ">
 Predictora (factor)
-</td>
-<td style="text-align:left;width: 20em; ">
-Reagrupar categorías raras (&lt; 5%) en ‘Otros’
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
 insumo_2
 </td>
-<td style="text-align:left;width: 20em; ">
+<td style="text-align:left;width: 22em; ">
 Identificador del segundo insumo (NA cuando num_insumos &lt; 2)
 </td>
 <td style="text-align:left;width: 10em; ">
@@ -482,18 +446,15 @@ Categórica nominal
 <td style="text-align:left;width: 8em; ">
 —
 </td>
-<td style="text-align:left;width: 12em; ">
+<td style="text-align:left;width: 14em; ">
 Predictora (factor)
-</td>
-<td style="text-align:left;width: 20em; ">
-Mantener NA como categoría explícita ‘Sin segundo insumo’
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
 cantidad_insumo_1
 </td>
-<td style="text-align:left;width: 20em; ">
+<td style="text-align:left;width: 22em; ">
 Cantidad consumida del insumo 1
 </td>
 <td style="text-align:left;width: 10em; ">
@@ -502,18 +463,15 @@ Numérica continua
 <td style="text-align:left;width: 8em; ">
 kg / L (verificar)
 </td>
-<td style="text-align:left;width: 12em; ">
+<td style="text-align:left;width: 14em; ">
 Predictora (intensidad de uso)
-</td>
-<td style="text-align:left;width: 20em; ">
-Conservar; valor 0 legítimo cuando num_insumos = 0
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
 cantidad_insumo_2
 </td>
-<td style="text-align:left;width: 20em; ">
+<td style="text-align:left;width: 22em; ">
 Cantidad consumida del insumo 2
 </td>
 <td style="text-align:left;width: 10em; ">
@@ -522,18 +480,15 @@ Numérica continua
 <td style="text-align:left;width: 8em; ">
 kg / L (verificar)
 </td>
-<td style="text-align:left;width: 12em; ">
+<td style="text-align:left;width: 14em; ">
 Predictora (intensidad de uso)
-</td>
-<td style="text-align:left;width: 20em; ">
-Conservar 0 cuando num_insumos &lt; 2 (estructural, no missing)
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
 modalidad_proceso
 </td>
-<td style="text-align:left;width: 20em; ">
+<td style="text-align:left;width: 22em; ">
 Modalidad de operación del proceso (X, Y, …)
 </td>
 <td style="text-align:left;width: 10em; ">
@@ -542,18 +497,15 @@ Categórica nominal
 <td style="text-align:left;width: 8em; ">
 —
 </td>
-<td style="text-align:left;width: 12em; ">
+<td style="text-align:left;width: 14em; ">
 Predictora (factor)
-</td>
-<td style="text-align:left;width: 20em; ">
-Codificación dummy
 </td>
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
 duracion_proceso
 </td>
-<td style="text-align:left;width: 20em; ">
+<td style="text-align:left;width: 22em; ">
 Tiempo total de ejecución de la orden
 </td>
 <td style="text-align:left;width: 10em; ">
@@ -562,11 +514,8 @@ Numérica continua
 <td style="text-align:left;width: 8em; ">
 horas
 </td>
-<td style="text-align:left;width: 12em; ">
+<td style="text-align:left;width: 14em; ">
 Predictora (intensidad temporal)
-</td>
-<td style="text-align:left;width: 20em; ">
-Derivar velocidad_produccion = volumen_lote / duracion_proceso (unidades/hora)
 </td>
 </tr>
 </tbody>
