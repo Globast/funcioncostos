@@ -1,5 +1,5 @@
 tab:estructura-datos
-tab:diccionario-campos
+tab:diccionario-datos
 tab:medias-grupo
 fig:histograma
 fig:dispersion

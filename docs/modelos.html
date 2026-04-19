@@ -225,13 +225,13 @@ div.csl-indent {
 <p>En esta sección se ajusta un modelo lineal simple como ejemplo base. Si la base contiene <code>mpg</code>, <code>wt</code> y <code>hp</code>, se usa esa especificación.</p>
 <div id="ajuste-del-modelo" class="section level2 hasAnchor" number="8.1">
 <h2><span class="header-section-number">8.1</span> Ajuste del modelo<a href="modelos.html#ajuste-del-modelo" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="modelos.html#cb13-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">all</span>(<span class="fu">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;wt&quot;</span>, <span class="st">&quot;hp&quot;</span>) <span class="sc">%in%</span> <span class="fu">names</span>(datos))) {</span>
-<span id="cb13-2"><a href="modelos.html#cb13-2" tabindex="-1"></a>  modelo_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> wt <span class="sc">+</span> hp, <span class="at">data =</span> datos)</span>
-<span id="cb13-3"><a href="modelos.html#cb13-3" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="modelos.html#cb13-4" tabindex="-1"></a>  broom<span class="sc">::</span><span class="fu">tidy</span>(modelo_lm) <span class="sc">|&gt;</span></span>
-<span id="cb13-5"><a href="modelos.html#cb13-5" tabindex="-1"></a>    knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Coeficientes del modelo lineal.&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb13-6"><a href="modelos.html#cb13-6" tabindex="-1"></a>    kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb13-7"><a href="modelos.html#cb13-7" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="modelos.html#cb12-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">all</span>(<span class="fu">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;wt&quot;</span>, <span class="st">&quot;hp&quot;</span>) <span class="sc">%in%</span> <span class="fu">names</span>(datos))) {</span>
+<span id="cb12-2"><a href="modelos.html#cb12-2" tabindex="-1"></a>  modelo_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> wt <span class="sc">+</span> hp, <span class="at">data =</span> datos)</span>
+<span id="cb12-3"><a href="modelos.html#cb12-3" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="modelos.html#cb12-4" tabindex="-1"></a>  broom<span class="sc">::</span><span class="fu">tidy</span>(modelo_lm) <span class="sc">|&gt;</span></span>
+<span id="cb12-5"><a href="modelos.html#cb12-5" tabindex="-1"></a>    knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Coeficientes del modelo lineal.&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-6"><a href="modelos.html#cb12-6" tabindex="-1"></a>    kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb12-7"><a href="modelos.html#cb12-7" tabindex="-1"></a>}</span></code></pre></div>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:modelo-lineal">Table 8.1: </span><span id="tab:modelo-lineal">Table 8.2: </span>Coeficientes del modelo lineal.
@@ -312,11 +312,11 @@ hp
 </div>
 <div id="medidas-de-ajuste" class="section level2 hasAnchor" number="8.2">
 <h2><span class="header-section-number">8.2</span> Medidas de ajuste<a href="modelos.html#medidas-de-ajuste" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="modelos.html#cb14-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">exists</span>(<span class="st">&quot;modelo_lm&quot;</span>)) {</span>
-<span id="cb14-2"><a href="modelos.html#cb14-2" tabindex="-1"></a>  broom<span class="sc">::</span><span class="fu">glance</span>(modelo_lm) <span class="sc">|&gt;</span></span>
-<span id="cb14-3"><a href="modelos.html#cb14-3" tabindex="-1"></a>    knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Medidas globales de ajuste del modelo lineal.&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb14-4"><a href="modelos.html#cb14-4" tabindex="-1"></a>    kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb14-5"><a href="modelos.html#cb14-5" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="modelos.html#cb13-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">exists</span>(<span class="st">&quot;modelo_lm&quot;</span>)) {</span>
+<span id="cb13-2"><a href="modelos.html#cb13-2" tabindex="-1"></a>  broom<span class="sc">::</span><span class="fu">glance</span>(modelo_lm) <span class="sc">|&gt;</span></span>
+<span id="cb13-3"><a href="modelos.html#cb13-3" tabindex="-1"></a>    knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Medidas globales de ajuste del modelo lineal.&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb13-4"><a href="modelos.html#cb13-4" tabindex="-1"></a>    kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb13-5"><a href="modelos.html#cb13-5" tabindex="-1"></a>}</span></code></pre></div>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:ajuste-modelo">Table 8.3: </span><span id="tab:ajuste-modelo">Table 8.4: </span>Medidas globales de ajuste del modelo lineal.
@@ -405,20 +405,20 @@ nobs
 </div>
 <div id="gráfico-de-observados-vs-ajustados" class="section level2 hasAnchor" number="8.3">
 <h2><span class="header-section-number">8.3</span> Gráfico de observados vs ajustados<a href="modelos.html#gráfico-de-observados-vs-ajustados" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="modelos.html#cb15-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">exists</span>(<span class="st">&quot;modelo_lm&quot;</span>)) {</span>
-<span id="cb15-2"><a href="modelos.html#cb15-2" tabindex="-1"></a>  datos_ajuste <span class="ot">&lt;-</span> datos <span class="sc">|&gt;</span></span>
-<span id="cb15-3"><a href="modelos.html#cb15-3" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">ajustado =</span> <span class="fu">fitted</span>(modelo_lm))</span>
-<span id="cb15-4"><a href="modelos.html#cb15-4" tabindex="-1"></a></span>
-<span id="cb15-5"><a href="modelos.html#cb15-5" tabindex="-1"></a>  <span class="fu">ggplot</span>(datos_ajuste, <span class="fu">aes</span>(<span class="at">x =</span> ajustado, <span class="at">y =</span> mpg)) <span class="sc">+</span></span>
-<span id="cb15-6"><a href="modelos.html#cb15-6" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb15-7"><a href="modelos.html#cb15-7" tabindex="-1"></a>    <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb15-8"><a href="modelos.html#cb15-8" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
-<span id="cb15-9"><a href="modelos.html#cb15-9" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">&quot;Valores observados frente a ajustados&quot;</span>,</span>
-<span id="cb15-10"><a href="modelos.html#cb15-10" tabindex="-1"></a>      <span class="at">x =</span> <span class="st">&quot;Valor ajustado&quot;</span>,</span>
-<span id="cb15-11"><a href="modelos.html#cb15-11" tabindex="-1"></a>      <span class="at">y =</span> <span class="st">&quot;Valor observado&quot;</span></span>
-<span id="cb15-12"><a href="modelos.html#cb15-12" tabindex="-1"></a>    ) <span class="sc">+</span></span>
-<span id="cb15-13"><a href="modelos.html#cb15-13" tabindex="-1"></a>    <span class="fu">theme_minimal</span>()</span>
-<span id="cb15-14"><a href="modelos.html#cb15-14" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="modelos.html#cb14-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">exists</span>(<span class="st">&quot;modelo_lm&quot;</span>)) {</span>
+<span id="cb14-2"><a href="modelos.html#cb14-2" tabindex="-1"></a>  datos_ajuste <span class="ot">&lt;-</span> datos <span class="sc">|&gt;</span></span>
+<span id="cb14-3"><a href="modelos.html#cb14-3" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">ajustado =</span> <span class="fu">fitted</span>(modelo_lm))</span>
+<span id="cb14-4"><a href="modelos.html#cb14-4" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="modelos.html#cb14-5" tabindex="-1"></a>  <span class="fu">ggplot</span>(datos_ajuste, <span class="fu">aes</span>(<span class="at">x =</span> ajustado, <span class="at">y =</span> mpg)) <span class="sc">+</span></span>
+<span id="cb14-6"><a href="modelos.html#cb14-6" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb14-7"><a href="modelos.html#cb14-7" tabindex="-1"></a>    <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb14-8"><a href="modelos.html#cb14-8" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
+<span id="cb14-9"><a href="modelos.html#cb14-9" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">&quot;Valores observados frente a ajustados&quot;</span>,</span>
+<span id="cb14-10"><a href="modelos.html#cb14-10" tabindex="-1"></a>      <span class="at">x =</span> <span class="st">&quot;Valor ajustado&quot;</span>,</span>
+<span id="cb14-11"><a href="modelos.html#cb14-11" tabindex="-1"></a>      <span class="at">y =</span> <span class="st">&quot;Valor observado&quot;</span></span>
+<span id="cb14-12"><a href="modelos.html#cb14-12" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb14-13"><a href="modelos.html#cb14-13" tabindex="-1"></a>    <span class="fu">theme_minimal</span>()</span>
+<span id="cb14-14"><a href="modelos.html#cb14-14" tabindex="-1"></a>}</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:observados-ajustados"></span>
 <img src="libro-maestria-estadistica-aplicada_files/figure-html/observados-ajustados-1.png" alt="Comparación entre valores observados y ajustados." width="90%" />
 <p class="caption">

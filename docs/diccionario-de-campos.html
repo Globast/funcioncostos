@@ -222,171 +222,355 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="diccionario-de-campos" class="section level1 hasAnchor" number="5">
 <h1><span class="header-section-number">Capítulo 5</span> Diccionario de campos<a href="diccionario-de-campos.html#diccionario-de-campos" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>En esta sección se documentan los campos principales de la base de datos utilizada.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="diccionario-de-campos.html#cb6-1" tabindex="-1"></a>diccionario <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tibble</span>(</span>
-<span id="cb6-2"><a href="diccionario-de-campos.html#cb6-2" tabindex="-1"></a>  <span class="at">variable =</span> <span class="fu">names</span>(datos),</span>
-<span id="cb6-3"><a href="diccionario-de-campos.html#cb6-3" tabindex="-1"></a>  <span class="at">clase =</span> <span class="fu">sapply</span>(datos, <span class="cf">function</span>(x) <span class="fu">class</span>(x)[<span class="dv">1</span>]),</span>
-<span id="cb6-4"><a href="diccionario-de-campos.html#cb6-4" tabindex="-1"></a>  <span class="at">descripcion =</span> dplyr<span class="sc">::</span><span class="fu">case_when</span>(</span>
-<span id="cb6-5"><a href="diccionario-de-campos.html#cb6-5" tabindex="-1"></a>    <span class="fu">names</span>(datos) <span class="sc">==</span> <span class="st">&quot;modelo&quot;</span> <span class="sc">~</span> <span class="st">&quot;Identificador o nombre del registro&quot;</span>,</span>
-<span id="cb6-6"><a href="diccionario-de-campos.html#cb6-6" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">&quot;Completar con la descripción específica de la variable&quot;</span></span>
-<span id="cb6-7"><a href="diccionario-de-campos.html#cb6-7" tabindex="-1"></a>  )</span>
-<span id="cb6-8"><a href="diccionario-de-campos.html#cb6-8" tabindex="-1"></a>)</span>
-<span id="cb6-9"><a href="diccionario-de-campos.html#cb6-9" tabindex="-1"></a></span>
-<span id="cb6-10"><a href="diccionario-de-campos.html#cb6-10" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(diccionario, <span class="at">caption =</span> <span class="st">&quot;Diccionario base de campos.&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb6-11"><a href="diccionario-de-campos.html#cb6-11" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
-<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>
-<span id="tab:diccionario-campos">Table 5.1: </span><span id="tab:diccionario-campos">Table 5.2: </span>Diccionario base de campos.
+<table class="table table-striped table-hover table-condensed table-responsive" style="font-size: 13px; ">
+<caption style="font-size: initial !important;">
+<span id="tab:diccionario-datos">Table 5.1: </span>Diccionario de datos del proceso productivo (n = 406 órdenes)
 </caption>
 <thead>
 <tr>
-<th style="text-align:left;">
-variable
+<th style="text-align:left;font-weight: bold;background-color: rgba(242, 242, 242, 255) !important;">
+Variable
 </th>
-<th style="text-align:left;">
-clase
+<th style="text-align:left;font-weight: bold;background-color: rgba(242, 242, 242, 255) !important;">
+Descripción
 </th>
-<th style="text-align:left;">
-descripcion
+<th style="text-align:left;font-weight: bold;background-color: rgba(242, 242, 242, 255) !important;">
+Tipo
+</th>
+<th style="text-align:left;font-weight: bold;background-color: rgba(242, 242, 242, 255) !important;">
+Unidad
+</th>
+<th style="text-align:left;font-weight: bold;background-color: rgba(242, 242, 242, 255) !important;">
+Rol en el análisis
+</th>
+<th style="text-align:left;font-weight: bold;background-color: rgba(242, 242, 242, 255) !important;">
+Transformación / derivación
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left;">
-modelo
+<td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
+periodo
 </td>
-<td style="text-align:left;">
-character
+<td style="text-align:left;width: 20em; ">
+Año-mes contable de la orden, formato YYYYMM
 </td>
-<td style="text-align:left;">
-Identificador o nombre del registro
+<td style="text-align:left;width: 10em; ">
+Temporal (ordinal)
 </td>
-</tr>
-<tr>
-<td style="text-align:left;">
-mpg
+<td style="text-align:left;width: 8em; ">
+Mes
 </td>
-<td style="text-align:left;">
-numeric
+<td style="text-align:left;width: 12em; ">
+Control / estratificación
 </td>
-<td style="text-align:left;">
-Completar con la descripción específica de la variable
+<td style="text-align:left;width: 20em; ">
+Convertir a fecha; derivar año, mes_num
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-cyl
+<td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
+codigo_producto
 </td>
-<td style="text-align:left;">
-numeric
+<td style="text-align:left;width: 20em; ">
+Identificador único del SKU producido
 </td>
-<td style="text-align:left;">
-Completar con la descripción específica de la variable
+<td style="text-align:left;width: 10em; ">
+Categórica nominal
 </td>
-</tr>
-<tr>
-<td style="text-align:left;">
-disp
+<td style="text-align:left;width: 8em; ">
+—
 </td>
-<td style="text-align:left;">
-numeric
+<td style="text-align:left;width: 12em; ">
+Factor de agrupación
 </td>
-<td style="text-align:left;">
-Completar con la descripción específica de la variable
+<td style="text-align:left;width: 20em; ">
+Cruzar con maestro de productos
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-hp
+<td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
+id_orden
 </td>
-<td style="text-align:left;">
-numeric
+<td style="text-align:left;width: 20em; ">
+Identificador único de la orden de producción
 </td>
-<td style="text-align:left;">
-Completar con la descripción específica de la variable
+<td style="text-align:left;width: 10em; ">
+Categórica nominal
 </td>
-</tr>
-<tr>
-<td style="text-align:left;">
-drat
+<td style="text-align:left;width: 8em; ">
+—
 </td>
-<td style="text-align:left;">
-numeric
+<td style="text-align:left;width: 12em; ">
+Identificador (no entra al modelo)
 </td>
-<td style="text-align:left;">
-Completar con la descripción específica de la variable
+<td style="text-align:left;width: 20em; ">
+Validar unicidad; revisar duplicados
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-wt
+<td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
+volumen_lote
 </td>
-<td style="text-align:left;">
-numeric
+<td style="text-align:left;width: 20em; ">
+Cantidad de unidades producidas en la orden
 </td>
-<td style="text-align:left;">
-Completar con la descripción específica de la variable
+<td style="text-align:left;width: 10em; ">
+Numérica discreta
 </td>
-</tr>
-<tr>
-<td style="text-align:left;">
-qsec
+<td style="text-align:left;width: 8em; ">
+unidades
 </td>
-<td style="text-align:left;">
-numeric
+<td style="text-align:left;width: 12em; ">
+Predictora (escala)
 </td>
-<td style="text-align:left;">
-Completar con la descripción específica de la variable
+<td style="text-align:left;width: 20em; ">
+Aplicar log para estabilizar varianza
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-vs
+<td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;background-color: rgba(255, 248, 225, 255) !important;">
+costo_transformacion
 </td>
-<td style="text-align:left;">
-numeric
+<td style="text-align:left;width: 20em; background-color: rgba(255, 248, 225, 255) !important;">
+Costo de conversión por unidad producida (mano de obra, energía, depreciación, indirectos)
 </td>
-<td style="text-align:left;">
-Completar con la descripción específica de la variable
+<td style="text-align:left;width: 10em; background-color: rgba(255, 248, 225, 255) !important;">
+Numérica continua
 </td>
-</tr>
-<tr>
-<td style="text-align:left;">
-am
+<td style="text-align:left;width: 8em; background-color: rgba(255, 248, 225, 255) !important;">
+UM/unidad
 </td>
-<td style="text-align:left;">
-numeric
+<td style="text-align:left;width: 12em; background-color: rgba(255, 248, 225, 255) !important;">
+Variable respuesta 1
 </td>
-<td style="text-align:left;">
-Completar con la descripción específica de la variable
+<td style="text-align:left;width: 20em; background-color: rgba(255, 248, 225, 255) !important;">
+Inspeccionar distribución; evaluar log-transformación si es asimétrica
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-gear
+<td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;background-color: rgba(255, 248, 225, 255) !important;">
+costo_insumo
 </td>
-<td style="text-align:left;">
-numeric
+<td style="text-align:left;width: 20em; background-color: rgba(255, 248, 225, 255) !important;">
+Costo de materias primas e insumos por unidad producida
 </td>
-<td style="text-align:left;">
-Completar con la descripción específica de la variable
+<td style="text-align:left;width: 10em; background-color: rgba(255, 248, 225, 255) !important;">
+Numérica continua
+</td>
+<td style="text-align:left;width: 8em; background-color: rgba(255, 248, 225, 255) !important;">
+UM/unidad
+</td>
+<td style="text-align:left;width: 12em; background-color: rgba(255, 248, 225, 255) !important;">
+Variable respuesta 2
+</td>
+<td style="text-align:left;width: 20em; background-color: rgba(255, 248, 225, 255) !important;">
+Idem
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-carb
+<td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
+equipo_id
 </td>
-<td style="text-align:left;">
-numeric
+<td style="text-align:left;width: 20em; ">
+Identificador único de la máquina física
 </td>
-<td style="text-align:left;">
-Completar con la descripción específica de la variable
+<td style="text-align:left;width: 10em; ">
+Categórica nominal
+</td>
+<td style="text-align:left;width: 8em; ">
+—
+</td>
+<td style="text-align:left;width: 12em; ">
+Predictora (efecto fijo o aleatorio)
+</td>
+<td style="text-align:left;width: 20em; ">
+Revisar número de niveles; agrupación si &gt; 30
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
+tipo_equipo
+</td>
+<td style="text-align:left;width: 20em; ">
+Familia o categoría tecnológica de la máquina (A1, B2, …)
+</td>
+<td style="text-align:left;width: 10em; ">
+Categórica nominal
+</td>
+<td style="text-align:left;width: 8em; ">
+—
+</td>
+<td style="text-align:left;width: 12em; ">
+Predictora (factor)
+</td>
+<td style="text-align:left;width: 20em; ">
+Codificación dummy con base = nivel más frecuente
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
+categoria_producto
+</td>
+<td style="text-align:left;width: 20em; ">
+Clasificación del producto
+</td>
+<td style="text-align:left;width: 10em; ">
+Categórica nominal
+</td>
+<td style="text-align:left;width: 8em; ">
+—
+</td>
+<td style="text-align:left;width: 12em; ">
+Predictora (factor)
+</td>
+<td style="text-align:left;width: 20em; ">
+Codificación dummy
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
+num_insumos
+</td>
+<td style="text-align:left;width: 20em; ">
+Número de insumos consumidos en la orden
+</td>
+<td style="text-align:left;width: 10em; ">
+Categórica ordinal
+</td>
+<td style="text-align:left;width: 8em; ">
+{0, 1, 2}
+</td>
+<td style="text-align:left;width: 12em; ">
+Predictora (proxy de complejidad)
+</td>
+<td style="text-align:left;width: 20em; ">
+Tratar como factor ordenado; verificar coherencia con insumo_1, insumo_2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
+insumo_1
+</td>
+<td style="text-align:left;width: 20em; ">
+Identificador del primer insumo principal
+</td>
+<td style="text-align:left;width: 10em; ">
+Categórica nominal
+</td>
+<td style="text-align:left;width: 8em; ">
+—
+</td>
+<td style="text-align:left;width: 12em; ">
+Predictora (factor)
+</td>
+<td style="text-align:left;width: 20em; ">
+Reagrupar categorías raras (&lt; 5%) en ‘Otros’
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
+insumo_2
+</td>
+<td style="text-align:left;width: 20em; ">
+Identificador del segundo insumo (NA cuando num_insumos &lt; 2)
+</td>
+<td style="text-align:left;width: 10em; ">
+Categórica nominal
+</td>
+<td style="text-align:left;width: 8em; ">
+—
+</td>
+<td style="text-align:left;width: 12em; ">
+Predictora (factor)
+</td>
+<td style="text-align:left;width: 20em; ">
+Mantener NA como categoría explícita ‘Sin segundo insumo’
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
+cantidad_insumo_1
+</td>
+<td style="text-align:left;width: 20em; ">
+Cantidad consumida del insumo 1
+</td>
+<td style="text-align:left;width: 10em; ">
+Numérica continua
+</td>
+<td style="text-align:left;width: 8em; ">
+kg / L (verificar)
+</td>
+<td style="text-align:left;width: 12em; ">
+Predictora (intensidad de uso)
+</td>
+<td style="text-align:left;width: 20em; ">
+Conservar; valor 0 legítimo cuando num_insumos = 0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
+cantidad_insumo_2
+</td>
+<td style="text-align:left;width: 20em; ">
+Cantidad consumida del insumo 2
+</td>
+<td style="text-align:left;width: 10em; ">
+Numérica continua
+</td>
+<td style="text-align:left;width: 8em; ">
+kg / L (verificar)
+</td>
+<td style="text-align:left;width: 12em; ">
+Predictora (intensidad de uso)
+</td>
+<td style="text-align:left;width: 20em; ">
+Conservar 0 cuando num_insumos &lt; 2 (estructural, no missing)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
+modalidad_proceso
+</td>
+<td style="text-align:left;width: 20em; ">
+Modalidad de operación del proceso (X, Y, …)
+</td>
+<td style="text-align:left;width: 10em; ">
+Categórica nominal
+</td>
+<td style="text-align:left;width: 8em; ">
+—
+</td>
+<td style="text-align:left;width: 12em; ">
+Predictora (factor)
+</td>
+<td style="text-align:left;width: 20em; ">
+Codificación dummy
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 10em; font-weight: bold;font-family: monospace;">
+duracion_proceso
+</td>
+<td style="text-align:left;width: 20em; ">
+Tiempo total de ejecución de la orden
+</td>
+<td style="text-align:left;width: 10em; ">
+Numérica continua
+</td>
+<td style="text-align:left;width: 8em; ">
+horas
+</td>
+<td style="text-align:left;width: 12em; ">
+Predictora (intensidad temporal)
+</td>
+<td style="text-align:left;width: 20em; ">
+Derivar velocidad_produccion = volumen_lote / duracion_proceso (unidades/hora)
 </td>
 </tr>
 </tbody>
 </table>
-<p>La tabla anterior sirve como plantilla. En el trabajo final conviene reemplazar las descripciones genéricas por definiciones sustantivas y operacionales.</p>
 
 </div>
             </section>
