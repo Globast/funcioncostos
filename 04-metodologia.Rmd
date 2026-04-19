@@ -1,30 +1,98 @@
-# Metodología
+# Metodología {#metodologia}
 
-La metodología se divide en cinco etapas: preparación del entorno, carga de datos, depuración, análisis estadístico y comunicación de resultados.
+## Diseño del estudio
 
-## Carga de datos
+Este trabajo corresponde a un **estudio observacional, retrospectivo y transversal** sobre el proceso productivo de cápsulas duras de una empresa farmacéutica colombiana. Es observacional porque no se manipulan variables sobre el proceso; retrospectivo porque utiliza registros generados durante operaciones ya ejecutadas; y transversal porque captura información de un período acotado sin seguimiento longitudinal de unidades individuales.
 
-```{r carga-datos}
-datos_base <- datos
-glimpse(datos_base)
+La **población objetivo** son todas las órdenes de producción ejecutadas en el proceso de fabricación de cápsulas durante el régimen operativo vigente. La **muestra** está conformada por 406 órdenes de producción registradas en el sistema ERP durante el período de estudio, extraídas mediante consultas SQL sobre las tablas transaccionales de órdenes, consumos y tiempos, junto con la tabla de costos por período y el maestro de productos. La consolidación se realizó en Excel y posteriormente se exportó a formato CSV para garantizar reproducibilidad y trazabilidad.
+
+Sobre la **representatividad de la muestra**, se asume que las 406 órdenes constituyen una muestra representativa del proceso productivo bajo el régimen operativo vigente, en la medida en que cubren la variedad de productos, equipos, modalidades y tamaños de lote habituales del proceso. Esta representatividad se evaluará empíricamente en el capítulo de análisis exploratorio mediante la verificación de la cobertura de niveles en cada variable categórica.
+
+Las **limitaciones conocidas del dataset** que conviene declarar de entrada son las siguientes. Primero, el dataset no incluye órdenes anuladas, abortadas o reprocesadas, lo que genera una potencial subestimación de la variabilidad real del costo. Segundo, la calidad del registro depende de la disciplina del operario en el momento de cierre de la orden en el ERP, lo cual introduce una fuente de error de medición no cuantificable a priori. Tercero, las cantidades de insumo se reportan en unidades que pueden diferir entre tipos de insumo (kg, L, unidades), lo cual limita la posibilidad de agregarlas en una métrica única. Cuarto, los costos están expresados en unidades monetarias por unidad de producto y reflejan la tarifa interna de costeo del período, sin ajuste por inflación intra-período.
+
+Sobre los **aspectos éticos y de confidencialidad**, los datos provienen de operaciones industriales reales y contienen información sensible para la empresa. Por esta razón, los identificadores de producto, máquina e insumo fueron anonimizados en origen mediante codificación alfanumérica que preserva la estructura analítica sin revelar identidades comerciales. Los costos se mantienen en su escala original por requerirlo el análisis estadístico, pero se reportan sin referencia a tarifas externas o márgenes.
+
+El **software utilizado** es R versión 4 o superior, con los paquetes `tidyverse` para manipulación y visualización, `Amelia` para diagnóstico de valores faltantes, `janitor` como guardia defensiva en limpieza de nombres, `kableExtra` para presentación de tablas, y `patchwork` y `gridExtra` para composición de gráficos. Todos los análisis son completamente reproducibles a partir del código fuente disponible en el repositorio.
+
+## Extracción, transformación y carga (ETL)
+
+### Carga del conjunto de datos
+
+```{r carga-datos, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(janitor)
+library(Amelia)
+
+datos <- read_csv2("data/data_costos.csv", 
+                  locale = locale(encoding = "UTF-8"),
+                  show_col_types = FALSE) %>%
+  clean_names()
 ```
 
-## Limpieza de nombres
+### Verificación de la lectura
 
-El paquete `janitor` permite convertir nombres de variables a formato estandarizado.
+Verificamos que el archivo se leyó correctamente inspeccionando las primeras filas, las dimensiones, los nombres de las columnas y la estructura de tipos detectados.
 
-```{r limpieza-nombres}
-names(datos_base)
+```{r verificacion-lectura}
+head(datos, n = 5)
 ```
 
-## Revisión de estructura
-
-```{r estructura-datos}
-skimr::skim(datos_base)
+```{r dimensiones}
+dim(datos)
 ```
 
-## Consideraciones metodológicas
+```{r columnas}
+colnames(datos)
+```
 
-- Todas las rutas de archivos son relativas al repositorio.
-- Los resultados se regeneran al renderizar el libro.
-- La salida HTML se guarda en `docs/`, lo que facilita la publicación en GitHub Pages.
+```{r estructura}
+str(datos)
+```
+
+El conjunto de datos contiene 406 órdenes de producción y 16 variables, conforme a la definición presentada en el capítulo del diccionario de datos. Los tipos detectados por `read_csv` corresponden mayoritariamente a `numeric` y `character`. En la siguiente etapa se ajustan los tipos para que reflejen la naturaleza estadística real de cada variable.
+
+### Conversión de tipos
+
+La inspección de la estructura revela que varias variables están almacenadas con tipos que no corresponden a su naturaleza analítica. La variable `periodo` viene como entero `YYYYMM` y debe convertirse a fecha para permitir análisis temporales. La variable `num_insumos`, restringida a los valores 0, 1 y 2, debe tratarse como factor ordenado. Las variables `tipo_equipo`, `categoria_producto`, `equipo_id`, `modalidad_proceso`, `insumo_1` e `insumo_2` deben convertirse a factor para los análisis inferenciales posteriores. La variable `insumo_2` requiere además una recodificación explícita de los valores faltantes a una categoría "sin segundo insumo", dado que el `NA` no representa un dato perdido sino una característica estructural de la orden (cuando `num_insumos < 2`).
+
+```{r conversion-tipos}
+datos <- datos %>%
+  mutate(
+    periodo = as.Date(paste0(periodo, "01"), format = "%Y%m%d"),
+    num_insumos = factor(num_insumos, levels = c(0, 1, 2), ordered = TRUE),
+    tipo_equipo = as.factor(tipo_equipo),
+    categoria_producto = as.factor(categoria_producto),
+    equipo_id = as.factor(equipo_id),
+    modalidad_proceso = as.factor(modalidad_proceso),
+    insumo_1 = as.factor(insumo_1),
+    insumo_2 = factor(if_else(is.na(insumo_2), "sin_segundo_insumo", insumo_2))
+  )
+
+str(datos)
+```
+
+### Identificación de valores faltantes
+
+Identificamos los valores faltantes por columna mediante dos enfoques complementarios. El primero entrega el conteo absoluto por variable; el segundo proporciona una visualización del patrón de ausencias.
+
+```{r na-conteo}
+datos %>%
+  summarise(across(everything(), ~ sum(is.na(.)), .names = "NA_{.col}"))
+```
+
+```{r na-mapa, fig.width=10, fig.height=5}
+missmap(datos, main = "Mapa de valores faltantes", 
+        col = c("#d62728", "#1f77b4"), legend = TRUE)
+```
+
+El conteo y el mapa de ausencias permiten verificar si existen valores faltantes que requieran tratamiento. Conforme a las consultas SQL de origen, los únicos `NA` legítimos corresponden a `insumo_2` cuando `num_insumos < 2`, los cuales fueron recodificados en la etapa anterior como una categoría explícita.
+
+### Advertencias sobre inconsistencias detectadas
+
+Durante la inspección preliminar del dataset se identificaron tres aspectos que conviene declarar antes del análisis exploratorio, para evitar interpretaciones erróneas en etapas posteriores.
+
+Primero, la variable `cantidad_insumo_2` reporta el valor cero cuando `num_insumos` toma valores 0 o 1, es decir, cuando estructuralmente no existe un segundo insumo. Estos ceros no constituyen mediciones de cantidad consumida sino indicadores de ausencia de la categoría, y deben distinguirse de los ceros que pudieran reportarse como cantidad consumida real. La misma consideración aplica a `cantidad_insumo_1` cuando `num_insumos = 0`. Para los análisis posteriores, los estadísticos descriptivos sobre cantidades de insumo se calcularán condicionando sobre la presencia efectiva del insumo correspondiente.
+
+Segundo, las cantidades de insumo (`cantidad_insumo_1` y `cantidad_insumo_2`) presentan magnitudes muy heterogéneas entre observaciones (por ejemplo, valores de 6, 1.5, 0.5 frente a 0.05), lo que sugiere que insumos distintos se miden en unidades distintas (kilogramos, litros, unidades). Esta limitación impide construir una métrica agregada de "cantidad total de insumo" sin normalización previa por tipo de insumo, decisión que se documentará en el capítulo de análisis exploratorio.
+
+Tercero, los costos `costo_transformacion` y `costo_insumo` se interpretan como unidades monetarias por unidad de producto producida, conforme a la definición del ERP. Esta unidad permite comparaciones directas entre órdenes de cualquier tamaño de lote, sin necesidad de transformaciones por escala de producción.

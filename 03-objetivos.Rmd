@@ -2,11 +2,11 @@
 
 ## Objetivo general
 
-Desarrollar un libro académico reproducible para presentar un análisis estadístico aplicado, utilizando R, bookdown, GitHub Codespaces y GitHub Pages.
+Analizar y cuantificar el impacto de diversos factores productivos (equipos, modalidades, productos, insumos, tiempo y volumen) sobre el costo unitario, utilizando métodos paramétricos y no paramétricos para fundamentar la toma de decisiones en evidencia técnica.
 
 ## Objetivos específicos
 
-1. Organizar un repositorio de trabajo con estructura clara y estable.
-2. Automatizar la generación de tablas, figuras y resultados estadísticos.
-3. Documentar el análisis con lenguaje académico y formato consistente.
-4. Publicar el producto final en línea mediante GitHub Pages.
+1. Analizar las diferencias entre tipos de equipo y su impacto en el costo
+2. Investigar si existe igualdad de medias en los equipos de un mismo tipo.
+3. Explorar la correlación entre el costo unitario y el tiempo de conversión.
+4. Evaluar la correlación entre el costo unitario, el número de insumos y el tipo de insumos.

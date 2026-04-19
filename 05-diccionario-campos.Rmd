@@ -1,19 +1,82 @@
+
+---
+title: "Análisis exploratorio e inferencial"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    df_print: paged
+    theme: flatly
+---
+
 # Diccionario de campos
 
-En esta sección se documentan los campos principales de la base de datos utilizada.
 
-```{r diccionario-campos}
-diccionario <- tibble::tibble(
-  variable = names(datos),
-  clase = sapply(datos, function(x) class(x)[1]),
-  descripcion = dplyr::case_when(
-    names(datos) == "modelo" ~ "Identificador o nombre del registro",
-    TRUE ~ "Completar con la descripción específica de la variable"
-  )
+```{r diccionario-datos, echo=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+library(kableExtra)
+
+diccionario <- data.frame(
+  Variable = c("periodo", "codigo_producto", "id_orden", "volumen_lote",
+               "costo_transformacion", "costo_insumo", "equipo_id", "tipo_equipo",
+               "categoria_producto", "num_insumos", "insumo_1", "insumo_2",
+               "cantidad_insumo_1", "cantidad_insumo_2", "modalidad_proceso",
+               "duracion_proceso"),
+  Descripcion = c(
+    "Año-mes contable de la orden, formato YYYYMM",
+    "Identificador único del SKU producido",
+    "Identificador único de la orden de producción",
+    "Cantidad de unidades producidas en la orden",
+    "Costo de conversión por unidad producida (mano de obra, energía, depreciación, indirectos)",
+    "Costo de materias primas e insumos por unidad producida",
+    "Identificador único de la máquina física",
+    "Familia o categoría tecnológica de la máquina (A1, B2, ...)",
+    "Clasificación del producto",
+    "Número de insumos consumidos en la orden",
+    "Identificador del primer insumo principal",
+    "Identificador del segundo insumo (NA cuando num_insumos < 2)",
+    "Cantidad consumida del insumo 1",
+    "Cantidad consumida del insumo 2",
+    "Modalidad de operación del proceso (X, Y, ...)",
+    "Tiempo total de ejecución de la orden"
+  ),
+  Tipo = c("Temporal (ordinal)", "Categórica nominal", "Categórica nominal",
+           "Numérica discreta", "Numérica continua", "Numérica continua",
+           "Categórica nominal", "Categórica nominal", "Categórica nominal",
+           "Categórica ordinal", "Categórica nominal", "Categórica nominal",
+           "Numérica continua", "Numérica continua", "Categórica nominal",
+           "Numérica continua"),
+  Unidad = c("Mes", "—", "—", "unidades", "UM/unidad", "UM/unidad",
+             "—", "—", "—", "{0, 1, 2}", "—", "—",
+             "kg / L (verificar)", "kg / L (verificar)", "—", "horas"),
+  Rol = c("Control / estratificación", "Factor de agrupación",
+          "Identificador (no entra al modelo)", "Predictora (escala)",
+          "Variable respuesta 1", "Variable respuesta 2",
+          "Predictora (efecto fijo o aleatorio)", "Predictora (factor)",
+          "Predictora (factor)", "Predictora (proxy de complejidad)",
+          "Predictora (factor)", "Predictora (factor)",
+          "Predictora (intensidad de uso)", "Predictora (intensidad de uso)",
+          "Predictora (factor)", "Predictora (intensidad temporal)"),
+  stringsAsFactors = FALSE
 )
 
-knitr::kable(diccionario, caption = "Diccionario base de campos.") |>
-  kableExtra::kable_styling(full_width = FALSE)
+kbl(diccionario,
+    col.names = c("Variable", "Descripción", "Tipo", "Unidad",
+                  "Rol en el análisis"),
+    caption = "Diccionario de datos del proceso productivo (n = 406 órdenes)",
+    align = c("l", "l", "l", "l", "l"),
+    escape = FALSE) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = TRUE,
+    font_size = 13,
+    position = "left"
+  ) %>%
+  column_spec(1, bold = TRUE, width = "10em", monospace = TRUE) %>%
+  column_spec(2, width = "22em") %>%
+  column_spec(3, width = "10em") %>%
+  column_spec(4, width = "8em") %>%
+  column_spec(5, width = "14em") %>%
+  row_spec(0, bold = TRUE, background = "#f2f2f2")
 ```
 
-La tabla anterior sirve como plantilla. En el trabajo final conviene reemplazar las descripciones genéricas por definiciones sustantivas y operacionales.
