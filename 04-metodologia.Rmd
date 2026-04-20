@@ -132,17 +132,19 @@ pct_na_insumo_2 <- round(n_na_insumo_2 / n_filas_inicial * 100, 1)
 conteo_ceros <- datos %>% 
   summarise(across(everything(), ~ sum(. == 0, na.rm = TRUE))) %>% 
   pivot_longer(everything(), names_to = "variable", values_to = "n_ceros")
+  total_ceros <- sum(conteo_ceros$n_ceros)
 knitr::kable(conteo_ceros, caption = "Variables con valores en cero") %>% 
   kableExtra::kable_styling(full_width = FALSE) %>% 
   kableExtra::column_spec(1, width = "12em") %>% 
   kableExtra::column_spec(2, width = "12em")
-total_ceros <- sum(conteo_ceros$n_ceros)
+
 ```
 
-Se identifican un total de  `r total_ceros` registros de variables con valores cero. 
+Se identifican un total de  `r total_ceros` registros de variables con valores cero. Se valida que el número de NA identificado en la sesion anterior, coincide con el número de ceros detectados en cantidad de insumos. 
+Se procede a identificar las ordenes con valores faltandes, excluyendo la cantidad de insumo 2 que es una condición estructural y normal del dataset.
 
 ```{r casoscero}
-cols_excluir <- c("cantidad_insumo_1", "cantidad_insumo_2")
+cols_excluir <- c("cantidad_insumo_2")
 
 casos_con_ceros <- datos %>% 
   filter(if_any(
@@ -156,9 +158,11 @@ knitr::kable(casos_con_ceros, caption = "Registros con valores en cero (excluyen
 
 ```
 
-
-En total son 9 ordenes de producción donde algunoas de sus variables presentaron valores en cero.
-8 de estas ordenes ya se habían identificado con los NA de los insumos. En esta revisión se identifica una orden adicional, la cual revisando con operaciones, también confirma que obedeció a un error de tipeo.
+En total son 9 ordenes de producción donde algunaas de sus variables presentaron valores en cero.
+8 de estas ordenes ya se habían identificado con los NA de los insumos y se validaron con la busqueda de ceros. 
+De estas 8 ordenes, 4 son ordenes cerradas sin registros de tiempos ni de consumos, es decir, en la realidad práctica no se trabajaron. 
+las 4 ordenes restantes de numero de insumos en cero o NA en cantidad de insumo 1, son errores de digitación.  
+En esta revisión se identifica una orden adicional, la cual revisando con operaciones, corresponde a una orden que no produjo cantidad conforme. Gastó recursos de tiempos e insumos pero todo fue rechazado, el costo lo asumió la merma, no el producto bueno. 
 
 
 ### Conversión de tipos
@@ -188,31 +192,31 @@ str(datos)
 
 ### Eliminación de errores de digitación confirmados
 
-Durante la revisión preliminar del dataset se identificaron registros con `num_insumos = 0`. Tras consulta con el área de operaciones, se confirmó que se trata de errores de digitación en el registro del ERP: toda orden de producción real requiere al menos un insumo activo, por lo que `num_insumos = 0` no corresponde a una configuración operativa válida del proceso. En consecuencia, estos registros se eliminan antes del análisis exploratorio.
+Durante la revisión preliminar del dataset se identificaron registros con `costo_insumo = 0`. Tras consulta con el área de operaciones, se confirmó que se trata de errores de digitación en el registro del ERP: toda orden de producción real requiere al menos un insumo activo, por lo que `num_insumos = 0` no corresponde a una configuración operativa válida del proceso. En consecuencia, estos registros se eliminan antes del análisis exploratorio.
 
 Primero cuantificamos cuántos casos afectan:
 
 ```{r cuantificar-errores}
 datos %>%
-  count(num_insumos) %>%
+  count(costo_insumo==0) %>%
   mutate(porcentaje = round(n / sum(n) * 100, 2))
 
 ```
 ```{r conteos-errores, echo=FALSE}
 n_original <- nrow(datos)
-n_errores  <- sum(datos$num_insumos == 0)
+n_errores  <- sum(datos$costo_insumo == 0)
 n_final    <- n_original - n_errores
-pct_errores <- round(n_errores / n_original * 100, 1)
+pct_errores <- round(n_errores / n_original * 100, 3)
 ```
 
 Se identificaron `r n_errores` órdenes con número de insumos en cero (`r pct_errores`% del total de registros) .
 
-A continuación se eliminan los registros con `num_insumos = 0`:
+A continuación se eliminan los registros con `costo_insumo = 0`:
 
 ```{r eliminar-errores}
 datos %>%
-  filter(num_insumos != 0) %>%
-  mutate(num_insumos = droplevels(num_insumos)) -> datos
+  filter(costo_insumo != 0) %>%
+  mutate(costo_insumo = droplevels(costo_insumo)) -> datos
 
 dim(datos)
 ```
