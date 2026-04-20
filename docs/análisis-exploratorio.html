@@ -188,10 +188,9 @@ div.csl-indent {
 <li class="chapter" data-level="5" data-path="diccionario-de-campos.html"><a href="diccionario-de-campos.html"><i class="fa fa-check"></i><b>5</b> Diccionario de campos</a></li>
 <li class="chapter" data-level="6" data-path="análisis-exploratorio.html"><a href="análisis-exploratorio.html"><i class="fa fa-check"></i><b>6</b> Análisis Exploratorio</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="análisis-exploratorio.html"><a href="análisis-exploratorio.html#tabla-descriptiva"><i class="fa fa-check"></i><b>6.1</b> Tabla descriptiva</a></li>
-<li class="chapter" data-level="6.2" data-path="análisis-exploratorio.html"><a href="análisis-exploratorio.html#promedios-por-grupos"><i class="fa fa-check"></i><b>6.2</b> Promedios por grupos</a></li>
-<li class="chapter" data-level="6.3" data-path="análisis-exploratorio.html"><a href="análisis-exploratorio.html#histograma"><i class="fa fa-check"></i><b>6.3</b> Histograma</a></li>
-<li class="chapter" data-level="6.4" data-path="análisis-exploratorio.html"><a href="análisis-exploratorio.html#diagrama-de-dispersi%C3%B3n"><i class="fa fa-check"></i><b>6.4</b> Diagrama de dispersión</a></li>
+<li class="chapter" data-level="6.1" data-path="análisis-exploratorio.html"><a href="análisis-exploratorio.html#promedios-por-grupos"><i class="fa fa-check"></i><b>6.1</b> Promedios por grupos</a></li>
+<li class="chapter" data-level="6.2" data-path="análisis-exploratorio.html"><a href="análisis-exploratorio.html#histograma"><i class="fa fa-check"></i><b>6.2</b> Histograma</a></li>
+<li class="chapter" data-level="6.3" data-path="análisis-exploratorio.html"><a href="análisis-exploratorio.html#diagrama-de-dispersi%C3%B3n"><i class="fa fa-check"></i><b>6.3</b> Diagrama de dispersión</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="pruebas-de-hipótesis.html"><a href="pruebas-de-hipótesis.html"><i class="fa fa-check"></i><b>7</b> Pruebas de Hipótesis</a>
 <ul>
@@ -228,9 +227,8 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="análisis-exploratorio" class="section level1 hasAnchor" number="6">
 <h1><span class="header-section-number">Capítulo 6</span> Análisis Exploratorio<a href="análisis-exploratorio.html#an%C3%A1lisis-exploratorio" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>El análisis exploratorio describe la distribución de las variables, identifica patrones y permite detectar valores atípicos o posibles inconsistencias.</p>
-<div id="tabla-descriptiva" class="section level2 hasAnchor" number="6.1">
-<h2><span class="header-section-number">6.1</span> Tabla descriptiva<a href="análisis-exploratorio.html#tabla-descriptiva" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>prueba
+## Tabla descriptiva</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="análisis-exploratorio.html#cb15-1" tabindex="-1"></a>tabla_descriptiva <span class="ot">&lt;-</span> datos <span class="sc">|&gt;</span></span>
 <span id="cb15-2"><a href="análisis-exploratorio.html#cb15-2" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">|&gt;</span></span>
 <span id="cb15-3"><a href="análisis-exploratorio.html#cb15-3" tabindex="-1"></a>  <span class="fu">summary</span>()</span>
@@ -243,9 +241,8 @@ div.csl-indent {
 ##  Mean   :571757   Mean   :  24533   Mean   :3336345182   Mean   :  175   
 ##  3rd Qu.:585414   3rd Qu.:   3300   3rd Qu.:4134610034   3rd Qu.:  160   
 ##  Max.   :603802   Max.   :3534951   Max.   :9992373389   Max.   :14575</code></pre>
-</div>
-<div id="promedios-por-grupos" class="section level2 hasAnchor" number="6.2">
-<h2><span class="header-section-number">6.2</span> Promedios por grupos<a href="análisis-exploratorio.html#promedios-por-grupos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="promedios-por-grupos" class="section level2 hasAnchor" number="6.1">
+<h2><span class="header-section-number">6.1</span> Promedios por grupos<a href="análisis-exploratorio.html#promedios-por-grupos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Si existe la variable <code>cyl</code>, se construye una tabla de medias por grupo.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="análisis-exploratorio.html#cb17-1" tabindex="-1"></a><span class="cf">if</span> (<span class="st">&quot;cyl&quot;</span> <span class="sc">%in%</span> <span class="fu">names</span>(datos) <span class="sc">&amp;&amp;</span> <span class="st">&quot;mpg&quot;</span> <span class="sc">%in%</span> <span class="fu">names</span>(datos)) {</span>
 <span id="cb17-2"><a href="análisis-exploratorio.html#cb17-2" tabindex="-1"></a>  tabla_mpg <span class="ot">&lt;-</span> datos <span class="sc">|&gt;</span></span>
@@ -260,8 +257,8 @@ div.csl-indent {
 <span id="cb17-11"><a href="análisis-exploratorio.html#cb17-11" tabindex="-1"></a>    kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb17-12"><a href="análisis-exploratorio.html#cb17-12" tabindex="-1"></a>}</span></code></pre></div>
 </div>
-<div id="histograma" class="section level2 hasAnchor" number="6.3">
-<h2><span class="header-section-number">6.3</span> Histograma<a href="análisis-exploratorio.html#histograma" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="histograma" class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> Histograma<a href="análisis-exploratorio.html#histograma" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="análisis-exploratorio.html#cb18-1" tabindex="-1"></a>var_num <span class="ot">&lt;-</span> <span class="fu">names</span>(datos)[<span class="fu">sapply</span>(datos, is.numeric)][<span class="dv">1</span>]</span>
 <span id="cb18-2"><a href="análisis-exploratorio.html#cb18-2" tabindex="-1"></a></span>
 <span id="cb18-3"><a href="análisis-exploratorio.html#cb18-3" tabindex="-1"></a><span class="fu">ggplot</span>(datos, <span class="fu">aes</span>(<span class="at">x =</span> .data[[var_num]])) <span class="sc">+</span></span>
@@ -279,8 +276,8 @@ Figure 6.1: Distribución de una variable numérica seleccionada.
 </p>
 </div>
 </div>
-<div id="diagrama-de-dispersión" class="section level2 hasAnchor" number="6.4">
-<h2><span class="header-section-number">6.4</span> Diagrama de dispersión<a href="análisis-exploratorio.html#diagrama-de-dispersi%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="diagrama-de-dispersión" class="section level2 hasAnchor" number="6.3">
+<h2><span class="header-section-number">6.3</span> Diagrama de dispersión<a href="análisis-exploratorio.html#diagrama-de-dispersi%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="análisis-exploratorio.html#cb19-1" tabindex="-1"></a>vars_num <span class="ot">&lt;-</span> <span class="fu">names</span>(datos)[<span class="fu">sapply</span>(datos, is.numeric)]</span>
 <span id="cb19-2"><a href="análisis-exploratorio.html#cb19-2" tabindex="-1"></a></span>
 <span id="cb19-3"><a href="análisis-exploratorio.html#cb19-3" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(vars_num) <span class="sc">&gt;=</span> <span class="dv">2</span>) {</span>

@@ -1,7 +1,6 @@
 # Análisis Exploratorio
 
-El análisis exploratorio describe la distribución de las variables, identifica patrones y permite detectar valores atípicos o posibles inconsistencias.
-
+prueba
 ## Tabla descriptiva
 
 ```{r tabla-descriptiva}
