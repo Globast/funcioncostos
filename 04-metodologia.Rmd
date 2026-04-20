@@ -60,9 +60,29 @@ El significado, tipo analítico, unidad de medida y rol de cada una de las 16 va
 
 ### Identificación de valores faltantes
 
-Identificamos valores faltantes en
+La identificación de valores faltantes se estructura en tres dimensiones analíticas que pueden solaparse o converger según la naturaleza de las variables:
 
-Identificamos los valores faltantes por columna mediante dos enfoques complementarios. El primero entrega el conteo absoluto por variable; el segundo proporciona una visualización del patrón de ausencias.
+1. Valores no registrados, tales como cadenas vacías u otros marcadores de ausencia implícita.
+2. Valores NA, ausencia explícita de información en el sistema.
+3. Identificación de valores iguales a cero. Dado que las variables analizadas corresponden a costos y tiempos de proceso, la presencia de valores "cero" carece de sustento teórico,ya que no es consistente con la naturaleza de estas magnitudes.
+
+# Identificación de valores no registrados (Vacios)
+
+```{r vacio-conteo}
+conteo_vacios <- datos %>% 
+  summarise(across(everything(), ~ sum(trimws(.) == "", na.rm = TRUE))) %>% 
+  pivot_longer(everything(), names_to = "variable", values_to = "n_vacios")
+ knitr::kable(conteo_vacios, caption = "Variables con valores en cero") %>% 
+  kableExtra::kable_styling(full_width = FALSE) %>% 
+  kableExtra::column_spec(1, width = "12em") %>% 
+  kableExtra::column_spec(2, width = "12em")
+total_vacios <- sum(conteo_vacios$datos)
+```
+
+
+Hay `r total_vacios` registros vacios.
+
+# Identificación de valores NA
 
 ```{r na-calculos}
 
@@ -79,7 +99,7 @@ tabla_na <- conteo_na %>%
   knitr::kable(tabla_na, caption = "Variables con valores NA") %>% 
   kableExtra::kable_styling(full_width = FALSE) %>% 
   kableExtra::column_spec(1, width = "12em") %>% 
-  kableExtra::column_spec(2, width = "6em")
+  kableExtra::column_spec(2, width = "12em")
 total_na <- sum(conteo_na$n_na)
 
 
@@ -105,6 +125,9 @@ pct_na_insumo_2 <- round(n_na_insumo_2 / n_filas_inicial * 100, 1)
 - La variable `insumo_1` concentra `r n_na_insumo_1` ausencias.
 - La variable `insumo_2` concentra `r n_na_insumo_2` ausencias, equivalentes al `r pct_na_insumo_2`% de las `r n_filas_inicial` órdenes. Conforme a las consultas SQL de origen, estos `NA` no representan datos perdidos sino la ausencia estructural de un segundo insumo cuando `num_insumos < 2`. 
   
+# Identificación de valores no registrados (Vacios)
+
+
 ```{r cero-conteo}
 conteo_ceros <- datos %>% 
   summarise(across(everything(), ~ sum(. == 0, na.rm = TRUE))) %>% 
@@ -112,29 +135,24 @@ conteo_ceros <- datos %>%
 knitr::kable(conteo_ceros, caption = "Variables con valores en cero") %>% 
   kableExtra::kable_styling(full_width = FALSE) %>% 
   kableExtra::column_spec(1, width = "12em") %>% 
-  kableExtra::column_spec(2, width = "6em")
+  kableExtra::column_spec(2, width = "12em")
 total_ceros <- sum(conteo_ceros$datos)
-
-conteo_vacios <- datos %>% 
-  summarise(across(everything(), ~ sum(trimws(.) == "", na.rm = TRUE))) %>% 
-  pivot_longer(everything(), names_to = "variable", values_to = "n_vacios")
- knitr::kable(conteo_vacios, caption = "Variables con valores en cero") %>% 
-  kableExtra::kable_styling(full_width = FALSE) %>% 
-  kableExtra::column_spec(1, width = "12em") %>% 
-  kableExtra::column_spec(2, width = "6em")
-total_vacios <- sum(conteo_vacios$datos)
 ```
+
 
 Se identifican un total de  `r total_ceros` registros con valores cero los cuales hay que entrar a analizar según la variable, al tratarse de costos, no puede tener costos en cero, o tiempos de proceso en cero. por esto se verifica . 
-Hay `r total_vacios` registros vacios.
 
-```{r na-mapa, fig.width=10, fig.height=5}
-missmap(datos, main = "Mapa de valores faltantes", 
-        col = c("#d62728", "#1f77b4"), legend = TRUE)
+```{r casoscero}
+
+cols_excluir <- c("cantidad_insumo_1", "cantidad_insumo_2")
+
+casos_con_ceros <- datos %>% 
+  filter(if_any(
+    -all_of(cols_excluir), 
+    ~ . == 0
+  ))
 ```
 
-
-El resto de variables del dataset no presenta valores faltantes, lo cual es consistente con el proceso de consolidación desde las tablas transaccionales del ERP.
 
 
 ### Conversión de tipos

@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Capítulo 13 Bibliografía | Análisis exploratorio e inferencial</title>
+  <title>Capítulo 5 Identificación de valores no registrados (Vacios) | Análisis exploratorio e inferencial</title>
   <meta name="description" content="Libro académico elaborado en bookdown para Maestría en Estadística Aplicada." />
   <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Capítulo 13 Bibliografía | Análisis exploratorio e inferencial" />
+  <meta property="og:title" content="Capítulo 5 Identificación de valores no registrados (Vacios) | Análisis exploratorio e inferencial" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="Libro académico elaborado en bookdown para Maestría en Estadística Aplicada." />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Capítulo 13 Bibliografía | Análisis exploratorio e inferencial" />
+  <meta name="twitter:title" content="Capítulo 5 Identificación de valores no registrados (Vacios) | Análisis exploratorio e inferencial" />
   
   <meta name="twitter:description" content="Libro académico elaborado en bookdown para Maestría en Estadística Aplicada." />
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="conclusión.html"/>
-
+<link rel="prev" href="metodologia.html"/>
+<link rel="next" href="identificación-de-valores-na.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -231,48 +231,170 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="bibliografía" class="section level1 hasAnchor" number="13">
-<h1><span class="header-section-number">Capítulo 13</span> Bibliografía<a href="bibliografía.html#bibliograf%C3%ADa" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>A continuación, se citan algunas referencias de ejemplo usadas en este libro: <span class="citation">Xie (<a href="#ref-xie2015">2015</a>)</span>, <span class="citation">Xie (<a href="#ref-xie2016">2016</a>)</span>, <span class="citation">James et al. (<a href="#ref-james2021">2021</a>)</span> y <span class="citation">Montgomery et al. (<a href="#ref-montgomery2019">2019</a>)</span>.</p>
-<p>La bibliografía se administra desde el archivo <code>references.bib</code>. Para agregar nuevas fuentes, basta con incorporar nuevas entradas BibTeX y citarlas en el texto con la sintaxis <code>@clave</code>.</p>
-
-<div id="refs" class="references csl-bib-body hanging-indent">
-<div class="csl-entry">
-James, Gareth, Daniela Witten, Trevor Hastie, y Robert Tibshirani. 2021. <em>An Introduction to Statistical Learning</em>. 2.ª ed. Springer.
-</div>
-<div class="csl-entry">
-Montgomery, Douglas C., Elizabeth A. Peck, y G. Geoffrey Vining. 2019. <em>Introduction to Linear Regression Analysis</em>. 6.ª ed. Wiley.
-</div>
-<div class="csl-entry">
-Xie, Yihui. 2015. <em>Dynamic Documents with R and knitr</em>. Chapman; Hall/CRC.
-</div>
-<div class="csl-entry">
-Xie, Yihui. 2016. <em>bookdown: Authoring Books and Technical Documents with R Markdown</em>. Chapman; Hall/CRC.
-</div>
-</div>
-</div>
-<h3>References</h3>
-<div id="refs" class="references csl-bib-body hanging-indent">
-<div id="ref-james2021" class="csl-entry">
-James, Gareth, Daniela Witten, Trevor Hastie, y Robert Tibshirani. 2021. <em>An Introduction to Statistical Learning</em>. 2.ª ed. Springer.
-</div>
-<div id="ref-montgomery2019" class="csl-entry">
-Montgomery, Douglas C., Elizabeth A. Peck, y G. Geoffrey Vining. 2019. <em>Introduction to Linear Regression Analysis</em>. 6.ª ed. Wiley.
-</div>
-<div id="ref-xie2015" class="csl-entry">
-Xie, Yihui. 2015. <em>Dynamic Documents with R and knitr</em>. Chapman; Hall/CRC.
-</div>
-<div id="ref-xie2016" class="csl-entry">
-Xie, Yihui. 2016. <em>bookdown: Authoring Books and Technical Documents with R Markdown</em>. Chapman; Hall/CRC.
-</div>
+<div id="identificación-de-valores-no-registrados-vacios" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">Capítulo 5</span> Identificación de valores no registrados (Vacios)<a href="identificación-de-valores-no-registrados-vacios.html#identificaci%C3%B3n-de-valores-no-registrados-vacios" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="identificación-de-valores-no-registrados-vacios.html#cb10-1" tabindex="-1"></a>conteo_vacios <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="identificación-de-valores-no-registrados-vacios.html#cb10-2" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">trimws</span>(.) <span class="sc">==</span> <span class="st">&quot;&quot;</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-3"><a href="identificación-de-valores-no-registrados-vacios.html#cb10-3" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">&quot;variable&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;n_vacios&quot;</span>)</span>
+<span id="cb10-4"><a href="identificación-de-valores-no-registrados-vacios.html#cb10-4" tabindex="-1"></a> knitr<span class="sc">::</span><span class="fu">kable</span>(conteo_vacios, <span class="at">caption =</span> <span class="st">&quot;Variables con valores en cero&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-5"><a href="identificación-de-valores-no-registrados-vacios.html#cb10-5" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-6"><a href="identificación-de-valores-no-registrados-vacios.html#cb10-6" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">column_spec</span>(<span class="dv">1</span>, <span class="at">width =</span> <span class="st">&quot;12em&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-7"><a href="identificación-de-valores-no-registrados-vacios.html#cb10-7" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">column_spec</span>(<span class="dv">2</span>, <span class="at">width =</span> <span class="st">&quot;12em&quot;</span>)</span></code></pre></div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:vacio-conteo">Table 5.1: </span><span id="tab:vacio-conteo">Table 5.2: </span>Variables con valores en cero
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+variable
+</th>
+<th style="text-align:right;">
+n_vacios
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 12em; ">
+periodo
+</td>
+<td style="text-align:right;width: 12em; ">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 12em; ">
+codigo_producto
+</td>
+<td style="text-align:right;width: 12em; ">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 12em; ">
+id_orden
+</td>
+<td style="text-align:right;width: 12em; ">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 12em; ">
+volumen_lote
+</td>
+<td style="text-align:right;width: 12em; ">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 12em; ">
+costo_transformacion
+</td>
+<td style="text-align:right;width: 12em; ">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 12em; ">
+costo_insumo
+</td>
+<td style="text-align:right;width: 12em; ">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 12em; ">
+equipo_id
+</td>
+<td style="text-align:right;width: 12em; ">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 12em; ">
+tipo_equipo
+</td>
+<td style="text-align:right;width: 12em; ">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 12em; ">
+categoria_producto
+</td>
+<td style="text-align:right;width: 12em; ">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 12em; ">
+num_insumos
+</td>
+<td style="text-align:right;width: 12em; ">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 12em; ">
+insumo_1
+</td>
+<td style="text-align:right;width: 12em; ">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 12em; ">
+insumo_2
+</td>
+<td style="text-align:right;width: 12em; ">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 12em; ">
+cantidad_insumo_1
+</td>
+<td style="text-align:right;width: 12em; ">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 12em; ">
+cantidad_insumo_2
+</td>
+<td style="text-align:right;width: 12em; ">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 12em; ">
+modalidad_proceso
+</td>
+<td style="text-align:right;width: 12em; ">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 12em; ">
+duracion_proceso
+</td>
+<td style="text-align:right;width: 12em; ">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="identificación-de-valores-no-registrados-vacios.html#cb11-1" tabindex="-1"></a>total_vacios <span class="ot">&lt;-</span> <span class="fu">sum</span>(conteo_vacios<span class="sc">$</span>datos)</span></code></pre></div>
+<p>Hay 0 registros vacios.</p>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="conclusión.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="metodologia.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="identificación-de-valores-na.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
