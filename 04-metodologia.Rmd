@@ -1,10 +1,12 @@
 # Metodología {#metodologia}
 
+Este capítulo documenta el diseño metodológico del estudio, el proceso de obtención de los datos desde el sistema ERP, y los procedimientos de carga, verificación de integridad y depuración aplicados antes del análisis estadístico. Al final del capítulo, el dataset analítico queda conformado por las órdenes de producción que cumplen los criterios de completitud y validez operativa.
+
 ## Diseño del estudio
 
 Este trabajo corresponde a un **estudio observacional, retrospectivo y transversal** sobre el proceso productivo de una empresa farmacéutica colombiana. Es observacional porque no se manipulan variables sobre el proceso; retrospectivo porque utiliza registros generados durante operaciones ya ejecutadas; y transversal porque captura información de un período acotado sin seguimiento longitudinal de unidades individuales.
 
-La muestra está conformada por 404 órdenes de producción registradas en el sistema ERP durante el período de estudio, extraídas mediante consultas SQL sobre las tablas transaccionales de órdenes, consumos y tiempos, junto con la tabla de costos por período y el maestro de productos. La consolidación se realizó en Excel y posteriormente se exportó a formato CSV para garantizar reproducibilidad y trazabilidad. Las 404 órdenes constituyen una muestra representativa del proceso productivo, en la medida en que cubren la variedad de productos, equipos, modalidades y tamaños de lote habituales del proceso.
+La muestra inicial está conformada por 404 órdenes de producción registradas en el sistema ERP durante el período de estudio, extraídas mediante consultas SQL sobre las tablas transaccionales de órdenes, consumos y tiempos, junto con la tabla de costos por período y el maestro de productos. La consolidación se realizó en Excel y posteriormente se exportó a formato CSV para garantizar reproducibilidad y trazabilidad. Tras la depuración de registros inválidos documentada en la sección 4.2.3, el dataset analítico final queda conformado por las órdenes que cubren la variedad de productos, equipos, modalidades y tamaños de lote habituales del proceso.
 
 **Limitaciones conocidas del dataset:**
 
@@ -21,7 +23,7 @@ La muestra está conformada por 404 órdenes de producción registradas en el si
 
 ### Carga del conjunto de datos
 
-El archivo CSV exportado desde el consolidado Excel utiliza punto y coma (`;`) como separador de columnas y punto (`.`) como separador decimal. 
+El archivo CSV exportado desde el consolidado Excel utiliza punto y coma (`;`) como separador de columnas y punto (`.`) como separador decimal. Dado que `read_csv2` asume coma como decimal y `read_csv` asume coma como separador, se utiliza `read_delim` con especificación explícita de ambos parámetros.
 
 ```{r carga-datos, message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -38,6 +40,11 @@ datos <- read_delim("data/data_costos.csv",
 
 Verificamos que el archivo se leyó correctamente inspeccionando las primeras filas, las dimensiones, los nombres de las columnas y la estructura de tipos detectados.
 
+```{r dims-iniciales, echo=FALSE}
+n_filas_inicial <- nrow(datos)
+n_vars <- ncol(datos)
+```
+
 ```{r head}
 head(datos, n = 5)
 ```
@@ -50,180 +57,184 @@ dim(datos)
 colnames(datos)
 ```
 
-```{r str}
+```{r str-inicial}
 str(datos)
 ```
 
-El conjunto de datos contiene 404 órdenes de producción y 16 variables, conforme a la definición presentada en el capítulo del diccionario de datos. Los costos `costo_transformacion` y `costo_insumo`, así como las cantidades de insumo, se leyeron correctamente como numéricos de tipo `double`. En la siguiente etapa se ajustan los tipos para que las variables categóricas reflejen su naturaleza estadística real.
-El significado, tipo analítico, unidad de medida y rol de cada una de las 16 variables se documenta en detalle en el siguiente capítulo.
+El conjunto de datos contiene `r n_filas_inicial` órdenes de producción y `r n_vars` variables, conforme a la definición presentada en el capítulo del diccionario de datos. Los costos `costo_transformacion` y `costo_insumo`, así como las cantidades de insumo, se leyeron correctamente como numéricos de tipo `double`. El significado, tipo analítico, unidad de medida y rol de cada una de las `r n_vars` variables se documenta en detalle en el siguiente capítulo.
 
+### Revisión de integridad de datos
 
-### Identificación de valores faltantes
+La revisión de integridad se estructura en tres dimensiones analíticas que pueden solaparse o converger según la naturaleza de las variables:
 
-La identificación de valores faltantes se estructura en tres dimensiones analíticas que pueden solaparse o converger según la naturaleza de las variables:
+1. **Cadenas vacías:** marcadores de ausencia implícita en variables de tipo texto.
+2. **Valores NA:** ausencia explícita de información en el sistema.
+3. **Valores con magnitud cero:** registros presentes en el dataset pero con valor numérico cero. Dado que las variables analizadas corresponden a costos, volúmenes y tiempos de proceso, la presencia de valores cero carece de sustento teórico, ya que no es consistente con la naturaleza de estas magnitudes.
 
-1. Valores no registrados, tales como cadenas vacías u otros marcadores de ausencia implícita.
-2. Valores NA, ausencia explícita de información en el sistema.
-3. Identificación de valores iguales a cero. Dado que las variables analizadas corresponden a costos y tiempos de proceso, la presencia de valores "cero" carece de sustento teórico,ya que no es consistente con la naturaleza de estas magnitudes.
+#### Cadenas vacías
 
-## Identificación de valores no registrados (Vacios)
-
-```{r vacio-conteo}
-conteo_vacios <- datos %>% 
-  summarise(across(everything(), ~ sum(trimws(.) == "", na.rm = TRUE))) %>% 
+```{r conteo-vacios}
+conteo_vacios <- datos %>%
+  summarise(across(everything(), ~ sum(trimws(as.character(.)) == "", na.rm = TRUE))) %>%
   pivot_longer(everything(), names_to = "variable", values_to = "n_vacios")
- knitr::kable(conteo_vacios, caption = "Variables con registros vacios") %>% 
-  kableExtra::kable_styling(full_width = FALSE) %>% 
-  kableExtra::column_spec(1, width = "12em") %>% 
+
+total_vacios <- sum(conteo_vacios$n_vacios)
+
+knitr::kable(conteo_vacios, caption = "Conteo de cadenas vacías por variable") %>%
+  kableExtra::kable_styling(full_width = FALSE) %>%
+  kableExtra::column_spec(1, width = "12em") %>%
   kableExtra::column_spec(2, width = "12em")
-total_vacios <- sum(conteo_vacios$datos)
 ```
 
+Se identificaron `r total_vacios` cadenas vacías en el dataset. No se requiere intervención en esta dimensión de integridad.
 
-Hay `r total_vacios` registros vacios. No se identifican variables vacías u otros marcadores de ausencia implícita.
+#### Valores NA
 
-## Identificación de valores NA
-
-```{r na-calculos}
-
-n_filas_inicial <- nrow(datos)
-n_vars <- ncol(datos)
-
-conteo_na <- datos %>% 
-  summarise(across(everything(), ~ sum(is.na(.)))) %>% 
+```{r conteo-na}
+conteo_na <- datos %>%
+  summarise(across(everything(), ~ sum(is.na(.)))) %>%
   pivot_longer(everything(), names_to = "variable", values_to = "n_na")
 
+tabla_na <- conteo_na %>% filter(n_na > 0)
 
-tabla_na <- conteo_na %>% 
-  filter(n_na > 0)
-  knitr::kable(tabla_na, caption = "Variables con valores NA") %>% 
-  kableExtra::kable_styling(full_width = FALSE) %>% 
-  kableExtra::column_spec(1, width = "12em") %>% 
-  kableExtra::column_spec(2, width = "12em")
-total_na <- sum(conteo_na$n_na)
-
-
-```
-
-El conteo absoluto muestra un total de `r total_na` valores faltantes distribuidos en 2 variables del data set (`insumo_1` e `insumo_2`). 
-
-```{r na-calculos_porvariable, echo=FALSE}
-n_na_insumo_1 <- conteo_na %>% 
-  filter(variable == "insumo_1") %>% 
-  pull(n_na)
-
-
-n_na_insumo_2 <- conteo_na %>% 
-  filter(variable == "insumo_2") %>% 
-  pull(n_na)
-
+total_na       <- sum(conteo_na$n_na)
+n_vars_con_na  <- nrow(tabla_na)
+n_na_insumo_1  <- conteo_na %>% filter(variable == "insumo_1") %>% pull(n_na)
+n_na_insumo_2  <- conteo_na %>% filter(variable == "insumo_2") %>% pull(n_na)
 pct_na_insumo_2 <- round(n_na_insumo_2 / n_filas_inicial * 100, 1)
 
-
-```
-
-- La variable `insumo_1` concentra `r n_na_insumo_1` ausencias.
-- La variable `insumo_2` concentra `r n_na_insumo_2` ausencias, equivalentes al `r pct_na_insumo_2`% de las `r n_filas_inicial` órdenes. Conforme a las consultas SQL de origen, estos `NA` no representan datos perdidos sino la ausencia estructural de un segundo insumo cuando `num_insumos < 2`. 
-  
-## Identificación Variables con valores cero
-
-
-```{r cero-conteo}
-conteo_ceros <- datos %>% 
-  summarise(across(everything(), ~ sum(. == 0, na.rm = TRUE))) %>% 
-  pivot_longer(everything(), names_to = "variable", values_to = "n_ceros")
-  total_ceros <- sum(conteo_ceros$n_ceros)
-knitr::kable(conteo_ceros, caption = "Variables con valores en cero") %>% 
-  kableExtra::kable_styling(full_width = FALSE) %>% 
-  kableExtra::column_spec(1, width = "12em") %>% 
+knitr::kable(tabla_na, caption = "Variables con valores NA") %>%
+  kableExtra::kable_styling(full_width = FALSE) %>%
+  kableExtra::column_spec(1, width = "12em") %>%
   kableExtra::column_spec(2, width = "12em")
-
 ```
 
-Se identifican un total de  `r total_ceros` registros de variables con valores cero. Se valida que el número de NA identificado en la sesion anterior, coincide con el número de ceros detectados en cantidad de insumos. 
-Se procede a identificar las ordenes con valores faltandes, excluyendo la cantidad de insumo 2 que es una condición estructural y normal del dataset.
+```{r na-mapa, fig.width=10, fig.height=5}
+missmap(datos, main = "Mapa de valores faltantes", 
+        col = c("#d62728", "#1f77b4"), legend = TRUE)
+```
 
-```{r casoscero}
+El conteo absoluto muestra un total de `r total_na` valores NA distribuidos en `r n_vars_con_na` variables del dataset. La variable `insumo_2` concentra `r n_na_insumo_2` ausencias, equivalentes al `r pct_na_insumo_2`% de las `r n_filas_inicial` órdenes; conforme a las consultas SQL de origen, estos NA no representan datos perdidos sino la ausencia estructural de un segundo insumo cuando `num_insumos < 2`, y se recodifican en la sección 4.2.4 como una categoría explícita. La variable `insumo_1` presenta `r n_na_insumo_1` ausencias, las cuales se investigan en la siguiente sección junto con los valores cero, dado que ambos fenómenos tienden a coincidir en los mismos registros.
+
+#### Valores con magnitud cero
+
+```{r conteo-ceros}
+conteo_ceros <- datos %>%
+  summarise(across(where(is.numeric), ~ sum(. == 0, na.rm = TRUE))) %>%
+  pivot_longer(everything(), names_to = "variable", values_to = "n_ceros")
+
+total_ceros <- sum(conteo_ceros$n_ceros)
+
+knitr::kable(conteo_ceros, caption = "Conteo de valores cero por variable numérica") %>%
+  kableExtra::kable_styling(full_width = FALSE) %>%
+  kableExtra::column_spec(1, width = "12em") %>%
+  kableExtra::column_spec(2, width = "12em")
+```
+
+Se identificaron `r total_ceros` registros con valores en cero distribuidos entre las variables numéricas. Los `r conteo_ceros %>% filter(variable == "cantidad_insumo_2") %>% pull(n_ceros)` ceros en `cantidad_insumo_2` coinciden con el total de órdenes que reportan un solo insumo y corresponden a una condición estructural y esperada del dataset, no a mediciones anómalas. A continuación se identifican las órdenes con valores cero en variables distintas de `cantidad_insumo_2`:
+
+```{r casos-con-ceros}
 cols_excluir <- c("cantidad_insumo_2")
 
-casos_con_ceros <- datos %>% 
+casos_con_ceros <- datos %>%
   filter(if_any(
-    -all_of(cols_excluir), 
+    where(is.numeric) & -all_of(cols_excluir),
     ~ . == 0
-  )) %>% 
-    select(id_orden, volumen_lote, costo_transformacion,  duracion_proceso, costo_insumo, num_insumos )%>% 
- arrange(costo_transformacion)
-knitr::kable(casos_con_ceros, caption = "Registros con valores en cero (excluyendo cantidad_insumo)") %>% 
-  kableExtra::kable_styling(full_width = FALSE)
+  )) %>%
+  select(id_orden, volumen_lote, costo_transformacion, costo_insumo,
+         duracion_proceso, num_insumos) %>%
+  arrange(costo_transformacion)
 
+n_casos_cero <- nrow(casos_con_ceros)
+
+knitr::kable(casos_con_ceros,
+             caption = "Órdenes con valores cero en variables no estructurales",
+             format.args = list(big.mark = "")) %>%
+  kableExtra::kable_styling(full_width = FALSE)
 ```
 
-En total son 9 ordenes de producción donde algunaas de sus variables presentaron valores en cero.
-8 de estas ordenes ya se habían identificado con los NA de los insumos y se validaron con la busqueda de ceros. 
-De estas 8 ordenes, 4 son ordenes cerradas sin registros de tiempos ni de consumos, es decir, en la realidad práctica no se trabajaron. 
-las 4 ordenes restantes de numero de insumos en cero o NA en cantidad de insumo 1, son errores de digitación.  
-En esta revisión se identifica una orden adicional, la cual revisando con operaciones, corresponde a una orden que no produjo cantidad conforme. Gastó recursos de tiempos e insumos pero todo fue rechazado, el costo lo asumió la merma, no el producto bueno. 
+Se identifican `r n_casos_cero` órdenes de producción con valores cero en variables no estructurales. Tras consulta con el área de operaciones, estas órdenes se clasifican en tres categorías causales:
 
+```{r tabla-causas, echo=FALSE}
+tabla_causas <- tribble(
+  ~Categoría, ~`Causa operativa`, ~`Órdenes`,
+  "Órdenes cerradas sin ejecutar",
+    "Volumen, tiempos y consumos en cero; en la práctica no se trabajaron",
+    4,
+  "Errores de digitación",
+    "num_insumos = 0 o cantidad_insumo_1 = NA, configuraciones no válidas del proceso",
+    4,
+  "Producción no conforme",
+    "Recursos consumidos asumidos como merma; no se asignaron al producto conforme",
+    1
+) %>%
+  bind_rows(tibble(Categoría = "**Total**", `Causa operativa` = "", `Órdenes` = 9))
+
+knitr::kable(tabla_causas, caption = "Clasificación operativa de las órdenes con valores cero") %>%
+  kableExtra::kable_styling(full_width = FALSE) %>%
+  kableExtra::column_spec(1, width = "18em") %>%
+  kableExtra::column_spec(2, width = "28em") %>%
+  kableExtra::column_spec(3, width = "6em")
+```
+
+Las tres categorías representan configuraciones no válidas para el análisis de costo unitario: en los tres casos, el costo del insumo no refleja una producción efectiva del producto conforme, por lo que su inclusión distorsionaría los estadísticos descriptivos y las estimaciones inferenciales posteriores.
+
+#### Eliminación de registros inválidos
+
+Dado que las tres categorías causales convergen en un rasgo común —ausencia de costo de insumo asignable al producto conforme— la variable `costo_insumo == 0` captura exactamente las `r n_casos_cero` órdenes a eliminar y se adopta como criterio único de filtrado. Este criterio es preferible a un filtro compuesto porque es más parsimonioso y tiene una interpretación operativa directa: toda orden de producción válida debe registrar un costo de insumo mayor que cero, independientemente de si el cero proviene de error de digitación, orden no ejecutada o producción no conforme.
+
+```{r verificar-criterio}
+datos %>%
+  count(costo_insumo == 0) %>%
+  mutate(porcentaje = round(n / sum(n) * 100, 1))
+```
+
+```{r eliminar-invalidos}
+datos <- datos %>%
+  filter(costo_insumo != 0)
+
+n_filas_final <- nrow(datos)
+n_eliminadas  <- n_filas_inicial - n_filas_final
+pct_eliminadas <- round(n_eliminadas / n_filas_inicial * 100, 1)
+
+dim(datos)
+```
+
+Se eliminaron `r n_eliminadas` órdenes (`r pct_eliminadas`% del total) con `costo_insumo == 0`. El dataset analítico queda conformado por `r n_filas_final` órdenes, las cuales constituyen la base para todos los análisis posteriores.
 
 ### Conversión de tipos
 
-La inspección de la estructura revela que varias variables están almacenadas con tipos que no corresponden a su naturaleza analítica. 
-- La variable `periodo` viene como entero `YYYYMM`; en análisis posteriores se podrá convertir a fecha para análisis de temporalidad, pero en el presente estudio se conserva como texto, dado que no se realizarán análisis de series de tiempo. 
-- La variable `num_insumos`, restringida a los valores 0, 1 y 2, se trata como factor ordenado. 
-- Las variables `tipo_equipo`, `categoria_producto`, `equipo_id`, `modalidad_proceso`, `insumo_1` e `insumo_2` se convierten a factor para los análisis inferenciales posteriores. 
-- La variable `insumo_2` requiere además una recodificación explícita de los valores faltantes a la categoría `sin_segundo_insumo`, dado que el `NA` no representa un dato perdido sino una característica estructural de la orden (cuando `num_insumos < 2`).
+Sobre el dataset ya depurado se ajustan los tipos de las variables cuya representación por defecto no corresponde a su naturaleza analítica:
+
+- La variable `periodo` viene como entero `YYYYMM`; en análisis posteriores se podrá convertir a fecha para análisis de temporalidad, pero en el presente estudio se conserva como texto, dado que no se realizarán análisis de series de tiempo.
+- La variable `num_insumos`, restringida a los valores 0, 1 y 2, se trata como factor ordenado.
+- Las variables `tipo_equipo`, `categoria_producto`, `equipo_id`, `modalidad_proceso`, `insumo_1` e `insumo_2` se convierten a factor para los análisis inferenciales posteriores.
+- La variable `insumo_2` requiere además una recodificación explícita de los valores faltantes a la categoría `sin_segundo_insumo`, dado que el NA no representa un dato perdido sino una característica estructural de la orden (cuando `num_insumos < 2`).
 
 ```{r conversion-tipos}
 datos <- datos %>%
   mutate(
-    periodo = as.character(periodo),
-    num_insumos = factor(num_insumos, levels = c(0, 1, 2), ordered = TRUE),
-    tipo_equipo = as.factor(tipo_equipo),
+    periodo            = as.character(periodo),
+    num_insumos        = factor(num_insumos, levels = c(0, 1, 2), ordered = TRUE),
+    tipo_equipo        = as.factor(tipo_equipo),
     categoria_producto = as.factor(categoria_producto),
-    equipo_id = as.factor(equipo_id),
-    modalidad_proceso = as.factor(modalidad_proceso),
-    insumo_1 = as.factor(insumo_1),
-    insumo_2 = factor(if_else(is.na(insumo_2), "sin_segundo_insumo", insumo_2))
+    equipo_id          = as.factor(equipo_id),
+    modalidad_proceso  = as.factor(modalidad_proceso),
+    insumo_1           = as.factor(insumo_1),
+    insumo_2           = factor(if_else(is.na(insumo_2), "sin_segundo_insumo", insumo_2))
   )
 
 str(datos)
 ```
 
+Tras la conversión, las variables categóricas quedan representadas como factores, el factor ordenado `num_insumos` preserva la jerarquía natural de sus niveles, y la categoría `sin_segundo_insumo` de `insumo_2` absorbe las ausencias estructurales sin pérdida de observaciones.
 
-### Eliminación de errores de digitación confirmados
+### Consideraciones estructurales para el análisis
 
-Durante la revisión preliminar del dataset se identificaron registros con `costo_insumo = 0`. Tras consulta con el área de operaciones, se confirmó que se trata de errores de digitación en el registro del ERP: toda orden de producción real requiere al menos un insumo activo, por lo que `num_insumos = 0` no corresponde a una configuración operativa válida del proceso. En consecuencia, estos registros se eliminan antes del análisis exploratorio.
+Antes de proceder al análisis exploratorio se documentan dos aspectos estructurales del dataset depurado que, si no se declaran explícitamente, pueden inducir interpretaciones erróneas.
 
-Primero cuantificamos cuántos casos afectan:
+Primero, la variable `cantidad_insumo_2` reporta el valor cero cuando `num_insumos = 1`, es decir, cuando estructuralmente no existe un segundo insumo. Estos ceros no constituyen mediciones de cantidad consumida, sino indicadores de ausencia de la categoría, y deben distinguirse de los ceros que pudieran reportarse como cantidad consumida real en casos donde el insumo sí esté presente. Para los análisis posteriores, los estadísticos descriptivos sobre cantidades de insumo se calcularán condicionando sobre la presencia efectiva del insumo correspondiente.
 
-```{r cuantificar-errores}
-datos %>%
-  count(costo_insumo==0) %>%
-  mutate(porcentaje = round(n / sum(n) * 100, 2))
+Segundo, los costos `costo_transformacion` y `costo_insumo` se interpretan como unidades monetarias por unidad de producto producida, conforme a la definición del ERP. Esta unidad permite comparaciones directas entre órdenes de cualquier tamaño de lote, sin necesidad de transformaciones por escala de producción.
 
-```
-```{r conteos-errores, echo=FALSE}
-n_original <- nrow(datos)
-n_errores  <- sum(datos$costo_insumo == 0)
-n_final    <- n_original - n_errores
-pct_errores <- round(n_errores / n_original * 100, 3)
-```
-
-Se identificaron `r n_errores` órdenes con número de insumos en cero (`r pct_errores`% del total de registros) .
-
-A continuación se eliminan los registros con `costo_insumo = 0`:
-
-```{r eliminar-errores}
-datos <- datos %>% 
-  filter(costo_insumo != 0)
-
-dim(datos)
-```
-
-Después de la eliminación, el dataset analítico queda conformado por `r n_final`  órdenes con al menos un insumo registrado. 
-
-### Consideraciones estructurales de la data
-
-- La variable `cantidad_insumo_2` reporta el valor cero cuando `num_insumos = 1`, es decir, cuando estructuralmente no existe un segundo insumo. Estos ceros no constituyen mediciones de cantidad consumida, sino indicadores de ausencia de la categoría, y deben distinguirse de los ceros que pudieran reportarse como cantidad consumida real en casos donde el insumo sí está presente. Para los análisis posteriores, los estadísticos descriptivos sobre cantidades de insumo se calcularán condicionando sobre la presencia efectiva del insumo correspondiente.
-
-- Los costos `costo_transformacion` y `costo_insumo` se interpretan como unidades monetarias por unidad de producto producida, conforme a la definición del ERP. Esta unidad permite comparaciones directas entre órdenes de cualquier tamaño de lote, sin necesidad de transformaciones por escala de producción.
+El dataset analítico final está conformado por `r n_filas_final` órdenes de producción, que constituyen la base para el análisis exploratorio e inferencial desarrollado en los capítulos siguientes.
