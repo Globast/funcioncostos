@@ -361,9 +361,11 @@ El significado, tipo analítico, unidad de medida y rol de cada una de las 16 va
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="metodologia.html#cb14-1" tabindex="-1"></a><span class="fu">missmap</span>(datos, <span class="at">main =</span> <span class="st">&quot;Mapa de valores faltantes&quot;</span>, </span>
 <span id="cb14-2"><a href="metodologia.html#cb14-2" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;#d62728&quot;</span>, <span class="st">&quot;#1f77b4&quot;</span>), <span class="at">legend =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/na-mapa-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
-<p>La variable <code>insumo_2</code> concentra 279 ausencias, equivalentes al 69.1% de las 404 órdenes. Conforme a las consultas SQL de origen, estos <code>NA</code> no representan datos perdidos sino la ausencia estructural de un segundo insumo cuando <code>num_insumos &lt; 2</code>.</p>
-<p>La variable <code>insumo_2</code> concentra 279 ausencias, equivalentes al 69.1% de las 404 órdenes. Conforme a las consultas SQL de origen, estos <code>NA</code> no representan datos perdidos sino la ausencia estructural de un segundo insumo cuando <code>num_insumos &lt; 2</code>.
-El resto de variables del dataset no presenta valores faltantes, lo cual es consistente con el proceso de consolidación desde las tablas transaccionales del ERP.</p>
+<ul>
+<li>La variable <code>insumo_1</code> concentra 8 ausencias.</li>
+<li>La variable <code>insumo_2</code> concentra 279 ausencias, equivalentes al 69.1% de las 404 órdenes. Conforme a las consultas SQL de origen, estos <code>NA</code> no representan datos perdidos sino la ausencia estructural de un segundo insumo cuando <code>num_insumos &lt; 2</code>.
+El resto de variables del dataset no presenta valores faltantes, lo cual es consistente con el proceso de consolidación desde las tablas transaccionales del ERP.</li>
+</ul>
 </div>
 <div id="conversión-de-tipos" class="section level3 hasAnchor" number="4.2.4">
 <h3><span class="header-section-number">4.2.4</span> Conversión de tipos<a href="metodologia.html#conversi%C3%B3n-de-tipos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
