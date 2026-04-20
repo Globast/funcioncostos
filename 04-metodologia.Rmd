@@ -76,7 +76,8 @@ conteo_na <- datos %>%
 
 tabla_na <- conteo_na %>% 
   filter(n_na > 0)
-  knitr::kable(tabla_na, caption = "Variables con valores NA")
+  knitr::kable(tabla_na, caption = "Variables con valores NA") %>% 
+  kableExtra::kable_styling(full_width = FALSE)
 
 total_na <- sum(conteo_na$n_na)
 
@@ -108,12 +109,14 @@ conteo_ceros <- datos %>%
   summarise(across(everything(), ~ sum(. == 0, na.rm = TRUE))) %>% 
   pivot_longer(everything(), names_to = "variable", values_to = "n_ceros")
 knitr::kable(conteo_ceros, caption = "Variables con valores en cero")
-total_ceros <- sum(conteo_ceros$datos)
+total_ceros <- sum(conteo_ceros$datos) %>% 
+  kableExtra::kable_styling(full_width = FALSE)
 
 conteo_vacios <- datos %>% 
   summarise(across(everything(), ~ sum(trimws(.) == "", na.rm = TRUE))) %>% 
   pivot_longer(everything(), names_to = "variable", values_to = "n_vacios")
- knitr::kable(conteo_vacios, caption = "Variables con valores en cero")
+ knitr::kable(conteo_vacios, caption = "Variables con valores en cero") %>% 
+  kableExtra::kable_styling(full_width = FALSE)
 total_vacios <- sum(conteo_vacios$datos)
 ```
 
