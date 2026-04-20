@@ -338,18 +338,12 @@ El significado, tipo analítico, unidad de medida y rol de cada una de las 16 va
 <span id="cb10-11"><a href="metodologia.html#cb10-11" tabindex="-1"></a>total_na <span class="ot">&lt;-</span> <span class="fu">sum</span>(conteo_na<span class="sc">$</span>n_na)</span>
 <span id="cb10-12"><a href="metodologia.html#cb10-12" tabindex="-1"></a><span class="fu">view</span>(total_na)</span></code></pre></div>
 <p>El conteo absoluto muestra un total de 287 valores faltantes distribuidos en 2 variables del data set (<code>insumo_1</code> e <code>insumo_2</code>).</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="metodologia.html#cb11-1" tabindex="-1"></a>n_na_insumo_1 <span class="ot">&lt;-</span> conteo_na <span class="sc">%&gt;%</span> </span>
-<span id="cb11-2"><a href="metodologia.html#cb11-2" tabindex="-1"></a>  <span class="fu">filter</span>(variable <span class="sc">==</span> <span class="st">&quot;insumo_1&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb11-3"><a href="metodologia.html#cb11-3" tabindex="-1"></a>  <span class="fu">pull</span>(n_na)</span>
-<span id="cb11-4"><a href="metodologia.html#cb11-4" tabindex="-1"></a></span>
-<span id="cb11-5"><a href="metodologia.html#cb11-5" tabindex="-1"></a></span>
-<span id="cb11-6"><a href="metodologia.html#cb11-6" tabindex="-1"></a>n_na_insumo_2 <span class="ot">&lt;-</span> conteo_na <span class="sc">%&gt;%</span> </span>
-<span id="cb11-7"><a href="metodologia.html#cb11-7" tabindex="-1"></a>  <span class="fu">filter</span>(variable <span class="sc">==</span> <span class="st">&quot;insumo_2&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb11-8"><a href="metodologia.html#cb11-8" tabindex="-1"></a>  <span class="fu">pull</span>(n_na)</span>
-<span id="cb11-9"><a href="metodologia.html#cb11-9" tabindex="-1"></a></span>
-<span id="cb11-10"><a href="metodologia.html#cb11-10" tabindex="-1"></a>pct_na_insumo_2 <span class="ot">&lt;-</span> <span class="fu">round</span>(n_na_insumo_2 <span class="sc">/</span> n_filas_inicial <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="metodologia.html#cb12-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
-<span id="cb12-2"><a href="metodologia.html#cb12-2" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(.)), <span class="at">.names =</span> <span class="st">&quot;NA_{.col}&quot;</span>))</span></code></pre></div>
+<ul>
+<li>La variable <code>insumo_1</code> concentra 8 ausencias.</li>
+<li>La variable <code>insumo_2</code> concentra 279 ausencias, equivalentes al 69.1% de las 404 órdenes. Conforme a las consultas SQL de origen, estos <code>NA</code> no representan datos perdidos sino la ausencia estructural de un segundo insumo cuando <code>num_insumos &lt; 2</code>.</li>
+</ul>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="metodologia.html#cb11-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="metodologia.html#cb11-2" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(.)), <span class="at">.names =</span> <span class="st">&quot;NA_{.col}&quot;</span>))</span></code></pre></div>
 <pre><code>## # A tibble: 1 × 16
 ##   NA_periodo NA_codigo_producto NA_id_orden NA_volumen_lote
 ##        &lt;int&gt;              &lt;int&gt;       &lt;int&gt;           &lt;int&gt;
@@ -359,14 +353,10 @@ El significado, tipo analítico, unidad de medida y rol de cada una de las 16 va
 ## #   NA_num_insumos &lt;int&gt;, NA_insumo_1 &lt;int&gt;, NA_insumo_2 &lt;int&gt;,
 ## #   NA_cantidad_insumo_1 &lt;int&gt;, NA_cantidad_insumo_2 &lt;int&gt;,
 ## #   NA_modalidad_proceso &lt;int&gt;, NA_duracion_proceso &lt;int&gt;</code></pre>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="metodologia.html#cb14-1" tabindex="-1"></a><span class="fu">missmap</span>(datos, <span class="at">main =</span> <span class="st">&quot;Mapa de valores faltantes&quot;</span>, </span>
-<span id="cb14-2"><a href="metodologia.html#cb14-2" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;#d62728&quot;</span>, <span class="st">&quot;#1f77b4&quot;</span>), <span class="at">legend =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="metodologia.html#cb13-1" tabindex="-1"></a><span class="fu">missmap</span>(datos, <span class="at">main =</span> <span class="st">&quot;Mapa de valores faltantes&quot;</span>, </span>
+<span id="cb13-2"><a href="metodologia.html#cb13-2" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;#d62728&quot;</span>, <span class="st">&quot;#1f77b4&quot;</span>), <span class="at">legend =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/na-mapa-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
-<ul>
-<li>La variable <code>insumo_1</code> concentra 8 ausencias.</li>
-<li>La variable <code>insumo_2</code> concentra 279 ausencias, equivalentes al 69.1% de las 404 órdenes. Conforme a las consultas SQL de origen, estos <code>NA</code> no representan datos perdidos sino la ausencia estructural de un segundo insumo cuando <code>num_insumos &lt; 2</code>.
-El resto de variables del dataset no presenta valores faltantes, lo cual es consistente con el proceso de consolidación desde las tablas transaccionales del ERP.</li>
-</ul>
+<p>El resto de variables del dataset no presenta valores faltantes, lo cual es consistente con el proceso de consolidación desde las tablas transaccionales del ERP.</p>
 </div>
 <div id="conversión-de-tipos" class="section level3 hasAnchor" number="4.2.4">
 <h3><span class="header-section-number">4.2.4</span> Conversión de tipos<a href="metodologia.html#conversi%C3%B3n-de-tipos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -375,19 +365,19 @@ El resto de variables del dataset no presenta valores faltantes, lo cual es cons
 - La variable <code>num_insumos</code>, restringida a los valores 0, 1 y 2, se trata como factor ordenado.
 - Las variables <code>tipo_equipo</code>, <code>categoria_producto</code>, <code>equipo_id</code>, <code>modalidad_proceso</code>, <code>insumo_1</code> e <code>insumo_2</code> se convierten a factor para los análisis inferenciales posteriores.
 - La variable <code>insumo_2</code> requiere además una recodificación explícita de los valores faltantes a la categoría <code>sin_segundo_insumo</code>, dado que el <code>NA</code> no representa un dato perdido sino una característica estructural de la orden (cuando <code>num_insumos &lt; 2</code>).</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="metodologia.html#cb15-1" tabindex="-1"></a>datos <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
-<span id="cb15-2"><a href="metodologia.html#cb15-2" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb15-3"><a href="metodologia.html#cb15-3" tabindex="-1"></a>    <span class="at">periodo =</span> <span class="fu">as.character</span>(periodo),</span>
-<span id="cb15-4"><a href="metodologia.html#cb15-4" tabindex="-1"></a>    <span class="at">num_insumos =</span> <span class="fu">factor</span>(num_insumos, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>), <span class="at">ordered =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb15-5"><a href="metodologia.html#cb15-5" tabindex="-1"></a>    <span class="at">tipo_equipo =</span> <span class="fu">as.factor</span>(tipo_equipo),</span>
-<span id="cb15-6"><a href="metodologia.html#cb15-6" tabindex="-1"></a>    <span class="at">categoria_producto =</span> <span class="fu">as.factor</span>(categoria_producto),</span>
-<span id="cb15-7"><a href="metodologia.html#cb15-7" tabindex="-1"></a>    <span class="at">equipo_id =</span> <span class="fu">as.factor</span>(equipo_id),</span>
-<span id="cb15-8"><a href="metodologia.html#cb15-8" tabindex="-1"></a>    <span class="at">modalidad_proceso =</span> <span class="fu">as.factor</span>(modalidad_proceso),</span>
-<span id="cb15-9"><a href="metodologia.html#cb15-9" tabindex="-1"></a>    <span class="at">insumo_1 =</span> <span class="fu">as.factor</span>(insumo_1),</span>
-<span id="cb15-10"><a href="metodologia.html#cb15-10" tabindex="-1"></a>    <span class="at">insumo_2 =</span> <span class="fu">factor</span>(<span class="fu">if_else</span>(<span class="fu">is.na</span>(insumo_2), <span class="st">&quot;sin_segundo_insumo&quot;</span>, insumo_2))</span>
-<span id="cb15-11"><a href="metodologia.html#cb15-11" tabindex="-1"></a>  )</span>
-<span id="cb15-12"><a href="metodologia.html#cb15-12" tabindex="-1"></a></span>
-<span id="cb15-13"><a href="metodologia.html#cb15-13" tabindex="-1"></a><span class="fu">str</span>(datos)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="metodologia.html#cb14-1" tabindex="-1"></a>datos <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="metodologia.html#cb14-2" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb14-3"><a href="metodologia.html#cb14-3" tabindex="-1"></a>    <span class="at">periodo =</span> <span class="fu">as.character</span>(periodo),</span>
+<span id="cb14-4"><a href="metodologia.html#cb14-4" tabindex="-1"></a>    <span class="at">num_insumos =</span> <span class="fu">factor</span>(num_insumos, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>), <span class="at">ordered =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb14-5"><a href="metodologia.html#cb14-5" tabindex="-1"></a>    <span class="at">tipo_equipo =</span> <span class="fu">as.factor</span>(tipo_equipo),</span>
+<span id="cb14-6"><a href="metodologia.html#cb14-6" tabindex="-1"></a>    <span class="at">categoria_producto =</span> <span class="fu">as.factor</span>(categoria_producto),</span>
+<span id="cb14-7"><a href="metodologia.html#cb14-7" tabindex="-1"></a>    <span class="at">equipo_id =</span> <span class="fu">as.factor</span>(equipo_id),</span>
+<span id="cb14-8"><a href="metodologia.html#cb14-8" tabindex="-1"></a>    <span class="at">modalidad_proceso =</span> <span class="fu">as.factor</span>(modalidad_proceso),</span>
+<span id="cb14-9"><a href="metodologia.html#cb14-9" tabindex="-1"></a>    <span class="at">insumo_1 =</span> <span class="fu">as.factor</span>(insumo_1),</span>
+<span id="cb14-10"><a href="metodologia.html#cb14-10" tabindex="-1"></a>    <span class="at">insumo_2 =</span> <span class="fu">factor</span>(<span class="fu">if_else</span>(<span class="fu">is.na</span>(insumo_2), <span class="st">&quot;sin_segundo_insumo&quot;</span>, insumo_2))</span>
+<span id="cb14-11"><a href="metodologia.html#cb14-11" tabindex="-1"></a>  )</span>
+<span id="cb14-12"><a href="metodologia.html#cb14-12" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="metodologia.html#cb14-13" tabindex="-1"></a><span class="fu">str</span>(datos)</span></code></pre></div>
 <pre><code>## tibble [404 × 16] (S3: tbl_df/tbl/data.frame)
 ##  $ periodo             : chr [1:404] &quot;202501&quot; &quot;202501&quot; &quot;202501&quot; &quot;202501&quot; ...
 ##  $ codigo_producto     : chr [1:404] &quot;P05747&quot; &quot;P06976&quot; &quot;P07920&quot; &quot;P07767&quot; ...
@@ -410,9 +400,9 @@ El resto de variables del dataset no presenta valores faltantes, lo cual es cons
 <h3><span class="header-section-number">4.2.5</span> Eliminación de errores de digitación confirmados<a href="metodologia.html#eliminaci%C3%B3n-de-errores-de-digitaci%C3%B3n-confirmados" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Durante la revisión preliminar del dataset se identificaron registros con <code>num_insumos = 0</code>. Tras consulta con el área de operaciones, se confirmó que se trata de errores de digitación en el registro del ERP: toda orden de producción real requiere al menos un insumo activo, por lo que <code>num_insumos = 0</code> no corresponde a una configuración operativa válida del proceso. En consecuencia, estos registros se eliminan antes del análisis exploratorio.</p>
 <p>Primero cuantificamos cuántos casos afectan:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="metodologia.html#cb17-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
-<span id="cb17-2"><a href="metodologia.html#cb17-2" tabindex="-1"></a>  <span class="fu">count</span>(num_insumos) <span class="sc">%&gt;%</span></span>
-<span id="cb17-3"><a href="metodologia.html#cb17-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">porcentaje =</span> <span class="fu">round</span>(n <span class="sc">/</span> <span class="fu">sum</span>(n) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="metodologia.html#cb16-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="metodologia.html#cb16-2" tabindex="-1"></a>  <span class="fu">count</span>(num_insumos) <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="metodologia.html#cb16-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">porcentaje =</span> <span class="fu">round</span>(n <span class="sc">/</span> <span class="fu">sum</span>(n) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>))</span></code></pre></div>
 <pre><code>## # A tibble: 3 × 3
 ##   num_insumos     n porcentaje
 ##   &lt;ord&gt;       &lt;int&gt;      &lt;dbl&gt;
@@ -421,11 +411,11 @@ El resto de variables del dataset no presenta valores faltantes, lo cual es cons
 ## 3 2             125      30.9</code></pre>
 <p>Se identificaron 8 órdenes con número de insumos en cero (2% del total de registros) .</p>
 <p>A continuación se eliminan los registros con <code>num_insumos = 0</code>:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="metodologia.html#cb19-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
-<span id="cb19-2"><a href="metodologia.html#cb19-2" tabindex="-1"></a>  <span class="fu">filter</span>(num_insumos <span class="sc">!=</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb19-3"><a href="metodologia.html#cb19-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">num_insumos =</span> <span class="fu">droplevels</span>(num_insumos)) <span class="ot">-&gt;</span> datos</span>
-<span id="cb19-4"><a href="metodologia.html#cb19-4" tabindex="-1"></a></span>
-<span id="cb19-5"><a href="metodologia.html#cb19-5" tabindex="-1"></a><span class="fu">dim</span>(datos)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="metodologia.html#cb18-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="metodologia.html#cb18-2" tabindex="-1"></a>  <span class="fu">filter</span>(num_insumos <span class="sc">!=</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb18-3"><a href="metodologia.html#cb18-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">num_insumos =</span> <span class="fu">droplevels</span>(num_insumos)) <span class="ot">-&gt;</span> datos</span>
+<span id="cb18-4"><a href="metodologia.html#cb18-4" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="metodologia.html#cb18-5" tabindex="-1"></a><span class="fu">dim</span>(datos)</span></code></pre></div>
 <pre><code>## [1] 396  16</code></pre>
 <p>Después de la eliminación, el dataset analítico queda conformado por 396 órdenes con al menos un insumo registrado.</p>
 </div>

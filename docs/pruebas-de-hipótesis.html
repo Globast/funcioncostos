@@ -231,18 +231,18 @@ div.csl-indent {
 <p>En esta sección se presenta un ejemplo de contraste de medias. Si la base contiene las variables <code>mpg</code> y <code>am</code>, se compara el rendimiento promedio entre dos grupos.</p>
 <div id="prueba-t-de-dos-muestras" class="section level2 hasAnchor" number="7.1">
 <h2><span class="header-section-number">7.1</span> Prueba t de dos muestras<a href="pruebas-de-hipótesis.html#prueba-t-de-dos-muestras" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="pruebas-de-hipótesis.html#cb26-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">all</span>(<span class="fu">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;am&quot;</span>) <span class="sc">%in%</span> <span class="fu">names</span>(datos))) {</span>
-<span id="cb26-2"><a href="pruebas-de-hipótesis.html#cb26-2" tabindex="-1"></a></span>
-<span id="cb26-3"><a href="pruebas-de-hipótesis.html#cb26-3" tabindex="-1"></a>  datos_prueba <span class="ot">&lt;-</span> datos <span class="sc">|&gt;</span></span>
-<span id="cb26-4"><a href="pruebas-de-hipótesis.html#cb26-4" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(mpg), <span class="sc">!</span><span class="fu">is.na</span>(am)) <span class="sc">|&gt;</span></span>
-<span id="cb26-5"><a href="pruebas-de-hipótesis.html#cb26-5" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">am =</span> <span class="fu">as.factor</span>(am))</span>
-<span id="cb26-6"><a href="pruebas-de-hipótesis.html#cb26-6" tabindex="-1"></a></span>
-<span id="cb26-7"><a href="pruebas-de-hipótesis.html#cb26-7" tabindex="-1"></a>  prueba_t <span class="ot">&lt;-</span> <span class="fu">t.test</span>(mpg <span class="sc">~</span> am, <span class="at">data =</span> datos_prueba)</span>
-<span id="cb26-8"><a href="pruebas-de-hipótesis.html#cb26-8" tabindex="-1"></a></span>
-<span id="cb26-9"><a href="pruebas-de-hipótesis.html#cb26-9" tabindex="-1"></a>  broom<span class="sc">::</span><span class="fu">tidy</span>(prueba_t) <span class="sc">|&gt;</span></span>
-<span id="cb26-10"><a href="pruebas-de-hipótesis.html#cb26-10" tabindex="-1"></a>    knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Resultado de la prueba t de diferencia de medias.&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb26-11"><a href="pruebas-de-hipótesis.html#cb26-11" tabindex="-1"></a>    kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb26-12"><a href="pruebas-de-hipótesis.html#cb26-12" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="pruebas-de-hipótesis.html#cb25-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">all</span>(<span class="fu">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;am&quot;</span>) <span class="sc">%in%</span> <span class="fu">names</span>(datos))) {</span>
+<span id="cb25-2"><a href="pruebas-de-hipótesis.html#cb25-2" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="pruebas-de-hipótesis.html#cb25-3" tabindex="-1"></a>  datos_prueba <span class="ot">&lt;-</span> datos <span class="sc">|&gt;</span></span>
+<span id="cb25-4"><a href="pruebas-de-hipótesis.html#cb25-4" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(mpg), <span class="sc">!</span><span class="fu">is.na</span>(am)) <span class="sc">|&gt;</span></span>
+<span id="cb25-5"><a href="pruebas-de-hipótesis.html#cb25-5" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">am =</span> <span class="fu">as.factor</span>(am))</span>
+<span id="cb25-6"><a href="pruebas-de-hipótesis.html#cb25-6" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="pruebas-de-hipótesis.html#cb25-7" tabindex="-1"></a>  prueba_t <span class="ot">&lt;-</span> <span class="fu">t.test</span>(mpg <span class="sc">~</span> am, <span class="at">data =</span> datos_prueba)</span>
+<span id="cb25-8"><a href="pruebas-de-hipótesis.html#cb25-8" tabindex="-1"></a></span>
+<span id="cb25-9"><a href="pruebas-de-hipótesis.html#cb25-9" tabindex="-1"></a>  broom<span class="sc">::</span><span class="fu">tidy</span>(prueba_t) <span class="sc">|&gt;</span></span>
+<span id="cb25-10"><a href="pruebas-de-hipótesis.html#cb25-10" tabindex="-1"></a>    knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Resultado de la prueba t de diferencia de medias.&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb25-11"><a href="pruebas-de-hipótesis.html#cb25-11" tabindex="-1"></a>    kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb25-12"><a href="pruebas-de-hipótesis.html#cb25-12" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="interpretación-base" class="section level2 hasAnchor" number="7.2">
 <h2><span class="header-section-number">7.2</span> Interpretación base<a href="pruebas-de-hipótesis.html#interpretaci%C3%B3n-base" class="anchor-section" aria-label="Anchor link to header"></a></h2>
