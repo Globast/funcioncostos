@@ -12,8 +12,8 @@ extracción-transformación-y-carga-etl
 carga-del-conjunto-de-datos
 verificación-de-la-lectura
 conversión-de-tipos
-identificación-de-valores-faltantes
 eliminación-de-errores-de-digitación-confirmados
+identificación-de-valores-faltantes
 advertencias-sobre-inconsistencias-estructurales
 diccionario-de-campos
 análisis-exploratorio

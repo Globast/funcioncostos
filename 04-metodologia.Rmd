@@ -2,7 +2,7 @@
 
 ## Diseño del estudio
 
-Este trabajo corresponde a un **estudio observacional, retrospectivo y transversal** sobre el proceso productivo de cápsulas duras de una empresa farmacéutica colombiana. Es observacional porque no se manipulan variables sobre el proceso; retrospectivo porque utiliza registros generados durante operaciones ya ejecutadas; y transversal porque captura información de un período acotado sin seguimiento longitudinal de unidades individuales.
+Este trabajo corresponde a un **estudio observacional, retrospectivo y transversal** sobre el proceso productivo de una empresa farmacéutica colombiana. Es observacional porque no se manipulan variables sobre el proceso; retrospectivo porque utiliza registros generados durante operaciones ya ejecutadas; y transversal porque captura información de un período acotado sin seguimiento longitudinal de unidades individuales.
 
 La muestra está conformada por 404 órdenes de producción registradas en el sistema ERP durante el período de estudio, extraídas mediante consultas SQL sobre las tablas transaccionales de órdenes, consumos y tiempos, junto con la tabla de costos por período y el maestro de productos. La consolidación se realizó en Excel y posteriormente se exportó a formato CSV para garantizar reproducibilidad y trazabilidad. Las 404 órdenes constituyen una muestra representativa del proceso productivo, en la medida en que cubren la variedad de productos, equipos, modalidades y tamaños de lote habituales del proceso.
 
@@ -13,10 +13,7 @@ La muestra está conformada por 404 órdenes de producción registradas en el si
 - **Imprecisión en consumos:** los insumos se registran en litros equivalentes a un envase estándar; las fracciones menores se estiman visualmente ante la falta de un proceso de pesaje, lo que afecta la precisión de las cantidades reportadas.
 - **Base de valoración:** los costos se expresan en unidades monetarias por producto, calculados según la tarifa de costeo del período reportado.
 
-
 **Aspectos éticos y de confidencialidad.** Los datos provienen de operaciones industriales reales y contienen información sensible para la empresa. Por esta razón, los identificadores de producto, máquina e insumo fueron anonimizados en origen mediante codificación alfanumérica que preserva la estructura analítica sin revelar identidades comerciales.
-
-**Tratamiento de valores atípicos.** El presente capítulo aborda únicamente la limpieza de errores de digitación confirmados a priori con el área de operaciones, correspondientes a registros con `num_insumos = 0`. La detección e interpretación de valores atípicos estadísticos se realiza en el capítulo de análisis exploratorio, con base en boxplots y estadísticos robustos (rango intercuartílico). La decisión final sobre retención, eliminación o análisis separado de dichos valores se toma tras consulta con el área de operaciones, que permite distinguir errores de registro, eventos excepcionales y variabilidad legítima del proceso.
 
 **Software.** Los análisis se realizan en R versión 4 o superior, con los paquetes `tidyverse` para manipulación y visualización, `Amelia` para diagnóstico de valores faltantes, `janitor` como guardia defensiva en limpieza de nombres, `kableExtra` para presentación de tablas, y `patchwork` y `gridExtra` para composición de gráficos. Todos los análisis son completamente reproducibles a partir del código fuente disponible en el repositorio.
 
@@ -24,7 +21,7 @@ La muestra está conformada por 404 órdenes de producción registradas en el si
 
 ### Carga del conjunto de datos
 
-El archivo CSV exportado desde el consolidado Excel utiliza punto y coma (`;`) como separador de columnas y punto (`.`) como separador decimal. Dado que `read_csv2` asume coma como decimal y `read_csv` asume coma como separador, se utiliza `read_delim` con especificación explícita de ambos parámetros.
+El archivo CSV exportado desde el consolidado Excel utiliza punto y coma (`;`) como separador de columnas y punto (`.`) como separador decimal. 
 
 ```{r carga-datos, message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -58,10 +55,16 @@ str(datos)
 ```
 
 El conjunto de datos contiene 404 órdenes de producción y 16 variables, conforme a la definición presentada en el capítulo del diccionario de datos. Los costos `costo_transformacion` y `costo_insumo`, así como las cantidades de insumo, se leyeron correctamente como numéricos de tipo `double`. En la siguiente etapa se ajustan los tipos para que las variables categóricas reflejen su naturaleza estadística real.
+El significado, tipo analítico, unidad de medida y rol de cada una de las 16 variables se documenta en detalle en el siguiente capítulo.
+
 
 ### Conversión de tipos
 
-La inspección de la estructura revela que varias variables están almacenadas con tipos que no corresponden a su naturaleza analítica. La variable `periodo` viene como entero `YYYYMM`; en análisis posteriores se podrá convertir a fecha para análisis de temporalidad, pero en el presente estudio se conserva como texto, dado que no se realizarán análisis de series de tiempo. La variable `num_insumos`, restringida a los valores 0, 1 y 2, se trata como factor ordenado. Las variables `tipo_equipo`, `categoria_producto`, `equipo_id`, `modalidad_proceso`, `insumo_1` e `insumo_2` se convierten a factor para los análisis inferenciales posteriores. La variable `insumo_2` requiere además una recodificación explícita de los valores faltantes a la categoría `sin_segundo_insumo`, dado que el `NA` no representa un dato perdido sino una característica estructural de la orden (cuando `num_insumos < 2`).
+La inspección de la estructura revela que varias variables están almacenadas con tipos que no corresponden a su naturaleza analítica. 
+- La variable `periodo` viene como entero `YYYYMM`; en análisis posteriores se podrá convertir a fecha para análisis de temporalidad, pero en el presente estudio se conserva como texto, dado que no se realizarán análisis de series de tiempo. 
+- La variable `num_insumos`, restringida a los valores 0, 1 y 2, se trata como factor ordenado. 
+- Las variables `tipo_equipo`, `categoria_producto`, `equipo_id`, `modalidad_proceso`, `insumo_1` e `insumo_2` se convierten a factor para los análisis inferenciales posteriores. 
+- La variable `insumo_2` requiere además una recodificación explícita de los valores faltantes a la categoría `sin_segundo_insumo`, dado que el `NA` no representa un dato perdido sino una característica estructural de la orden (cuando `num_insumos < 2`).
 
 ```{r conversion-tipos}
 datos <- datos %>%
@@ -79,6 +82,41 @@ datos <- datos %>%
 str(datos)
 ```
 
+
+### Eliminación de errores de digitación confirmados
+
+Durante la revisión preliminar del dataset se identificaron registros con `num_insumos = 0`. Tras consulta con el área de operaciones, se confirmó que se trata de errores de digitación en el registro del ERP: toda orden de producción real requiere al menos un insumo activo, por lo que `num_insumos = 0` no corresponde a una configuración operativa válida del proceso. En consecuencia, estos registros se eliminan antes del análisis exploratorio.
+
+Primero cuantificamos cuántos casos afectan:
+
+```{r cuantificar-errores}
+datos %>%
+  count(num_insumos) %>%
+  mutate(porcentaje = round(n / sum(n) * 100, 2))
+
+```
+```{r conteos-errores, echo=FALSE}
+n_original <- nrow(datos)
+n_errores  <- sum(datos$num_insumos == 0)
+n_final    <- n_original - n_errores
+pct_errores <- round(n_errores / n_original * 100, 1)
+```
+
+Se identificaron `r n_errores` órdenes con número de insumos en cero (`r pct_errores`% del total de registros) .
+
+A continuación se eliminan los registros con `num_insumos = 0`:
+
+```{r eliminar-errores}
+datos %>%
+  filter(num_insumos != 0) %>%
+  mutate(num_insumos = droplevels(num_insumos)) -> datos
+
+dim(datos)
+```
+
+Después de la eliminación, el dataset analítico queda conformado por `r n_final`  órdenes con al menos un insumo registrado. 
+
+
 ### Identificación de valores faltantes
 
 Identificamos los valores faltantes por columna mediante dos enfoques complementarios. El primero entrega el conteo absoluto por variable; el segundo proporciona una visualización del patrón de ausencias.
@@ -94,30 +132,6 @@ missmap(datos, main = "Mapa de valores faltantes",
 ```
 
 El conteo y el mapa de ausencias permiten verificar si existen valores faltantes que requieran tratamiento. Conforme a las consultas SQL de origen, los únicos `NA` legítimos corresponden a `insumo_2` cuando `num_insumos < 2`, los cuales fueron recodificados en la etapa anterior como una categoría explícita.
-
-### Eliminación de errores de digitación confirmados
-
-Durante la revisión preliminar del dataset se identificaron registros con `num_insumos = 0`. Tras consulta con el área de operaciones, se confirmó que se trata de errores de digitación en el registro del ERP: toda orden de producción real requiere al menos un insumo activo, por lo que `num_insumos = 0` no corresponde a una configuración operativa válida del proceso. En consecuencia, estos registros se eliminan antes del análisis exploratorio.
-
-Primero cuantificamos cuántos casos afectan:
-
-```{r cuantificar-errores}
-datos %>%
-  count(num_insumos) %>%
-  mutate(porcentaje = round(n / sum(n) * 100, 2))
-```
-
-A continuación se eliminan los registros con `num_insumos = 0`:
-
-```{r eliminar-errores}
-datos %>%
-  filter(num_insumos != 0) %>%
-  mutate(num_insumos = droplevels(num_insumos)) -> datos
-
-dim(datos)
-```
-
-Después de la eliminación, el dataset analítico queda conformado por las órdenes con al menos un insumo registrado. La función `droplevels()` elimina el nivel `0` del factor ordenado para evitar que aparezca vacío en tablas y gráficos posteriores.
 
 ### Advertencias sobre inconsistencias estructurales
 
