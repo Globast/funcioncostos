@@ -169,12 +169,15 @@ El conjunto de datos contiene 406 órdenes de producción y 16 variables, confor
 
 ### Conversión de tipos
 
-La inspección de la estructura revela que varias variables están almacenadas con tipos que no corresponden a su naturaleza analítica. La variable `periodo` viene como entero `YYYYMM` y debe convertirse a fecha para permitir análisis temporales. La variable `num_insumos`, restringida a los valores 0, 1 y 2, debe tratarse como factor ordenado. Las variables `tipo_equipo`, `categoria_producto`, `equipo_id`, `modalidad_proceso`, `insumo_1` e `insumo_2` deben convertirse a factor para los análisis inferenciales posteriores. La variable `insumo_2` requiere además una recodificación explícita de los valores faltantes a una categoría "sin segundo insumo", dado que el `NA` no representa un dato perdido sino una característica estructural de la orden (cuando `num_insumos < 2`).
+La inspección de la estructura revela que varias variables están almacenadas con tipos que no corresponden a su naturaleza analítica. 
+La variable `periodo` viene como entero `YYYYMM`  , en analisis posteriores se debe convertir a fecha para analisis de temporalidad, en el presente estudio se dejara como texto.
+La variable `num_insumos`, restringida a los valores 0, 1 y 2, debe tratarse como factor ordenado. 
+Las variables `tipo_equipo`, `categoria_producto`, `equipo_id`, `modalidad_proceso`, `insumo_1` e `insumo_2` deben convertirse a factor para los análisis inferenciales posteriores. 
+La variable `insumo_2` requiere además una recodificación explícita de los valores faltantes a una categoría "sin segundo insumo", dado que el `NA` no representa un dato perdido sino una característica estructural de la orden (cuando `num_insumos < 2`).
 
 ```{r conversion-tipos}
 datos <- datos %>%
   mutate(
-    periodo = as.Date(paste0(periodo, "01"), format = "%Y%m%d"),
     num_insumos = factor(num_insumos, levels = c(0, 1, 2), ordered = TRUE),
     tipo_equipo = as.factor(tipo_equipo),
     categoria_producto = as.factor(categoria_producto),
@@ -206,12 +209,9 @@ El conteo y el mapa de ausencias permiten verificar si existen valores faltantes
 ### Advertencias sobre inconsistencias detectadas
 
 Durante la inspección preliminar del dataset se identificaron tres aspectos que conviene declarar antes del análisis exploratorio, para evitar interpretaciones erróneas en etapas posteriores.
-
-Primero, la variable `cantidad_insumo_2` reporta el valor cero cuando `num_insumos` toma valores 0 o 1, es decir, cuando estructuralmente no existe un segundo insumo. Estos ceros no constituyen mediciones de cantidad consumida sino indicadores de ausencia de la categoría, y deben distinguirse de los ceros que pudieran reportarse como cantidad consumida real. La misma consideración aplica a `cantidad_insumo_1` cuando `num_insumos = 0`. Para los análisis posteriores, los estadísticos descriptivos sobre cantidades de insumo se calcularán condicionando sobre la presencia efectiva del insumo correspondiente.
-
-Segundo, las cantidades de insumo (`cantidad_insumo_1` y `cantidad_insumo_2`) presentan magnitudes muy heterogéneas entre observaciones (por ejemplo, valores de 6, 1.5, 0.5 frente a 0.05), lo que sugiere que insumos distintos se miden en unidades distintas (kilogramos, litros, unidades). Esta limitación impide construir una métrica agregada de "cantidad total de insumo" sin normalización previa por tipo de insumo, decisión que se documentará en el capítulo de análisis exploratorio.
-
-Tercero, los costos `costo_transformacion` y `costo_insumo` se interpretan como unidades monetarias por unidad de producto producida, conforme a la definición del ERP. Esta unidad permite comparaciones directas entre órdenes de cualquier tamaño de lote, sin necesidad de transformaciones por escala de producción.
+`num_insumos`, cuando es 0 , primero cuantificar cuantos casos son y después debe eliminarse porque se tratan de errores de digitación. 
+La variable `cantidad_insumo_2` reporta el valor cero cuando `num_insumos` toma valores 0 o 1, es decir, cuando estructuralmente no existe un segundo insumo. Estos ceros no constituyen mediciones de cantidad consumida sino indicadores de ausencia de la categoría, y deben distinguirse de los ceros que pudieran reportarse como cantidad consumida real. La misma consideración aplica a `cantidad_insumo_1` cuando `num_insumos = 0`. Para los análisis posteriores, los estadísticos descriptivos sobre cantidades de insumo se calcularán condicionando sobre la presencia efectiva del insumo correspondiente.
+Los costos `costo_transformacion` y `costo_insumo` se interpretan como unidades monetarias por unidad de producto producida, conforme a la definición del ERP. Esta unidad permite comparaciones directas entre órdenes de cualquier tamaño de lote, sin necesidad de transformaciones por escala de producción.
 
 <!--chapter:end:04-metodologia.Rmd-->
 
