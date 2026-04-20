@@ -27,9 +27,7 @@ library(tidyverse)
 library(janitor)
 library(Amelia)
 
-datos <- read_csv("data/data_costos.csv", 
-                  locale = locale(encoding = "UTF-8") %>%
-  clean_names()
+datos <- read_csv("data/data_costos.csv")
 ```
 
 ### Verificación de la lectura
