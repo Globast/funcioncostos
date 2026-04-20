@@ -337,7 +337,9 @@ El significado, tipo analítico, unidad de medida y rol de cada una de las 16 va
 <span id="cb10-9"><a href="metodologia.html#cb10-9" tabindex="-1"></a>tabla_na <span class="ot">&lt;-</span> conteo_na <span class="sc">%&gt;%</span> </span>
 <span id="cb10-10"><a href="metodologia.html#cb10-10" tabindex="-1"></a>  <span class="fu">filter</span>(n_na <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
 <span id="cb10-11"><a href="metodologia.html#cb10-11" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(tabla_na, <span class="at">caption =</span> <span class="st">&quot;Variables con valores NA&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-12"><a href="metodologia.html#cb10-12" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<span id="cb10-12"><a href="metodologia.html#cb10-12" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-13"><a href="metodologia.html#cb10-13" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">column_spec</span>(<span class="dv">1</span>, <span class="at">width =</span> <span class="st">&quot;12em&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-14"><a href="metodologia.html#cb10-14" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">column_spec</span>(<span class="dv">2</span>, <span class="at">width =</span> <span class="st">&quot;6em&quot;</span>)</span></code></pre></div>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:na-calculos">Table 4.1: </span><span id="tab:na-calculos">Table 4.2: </span>Variables con valores NA
@@ -354,18 +356,18 @@ n_na
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 insumo_1
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 8
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 insumo_2
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 279
 </td>
 </tr>
@@ -381,7 +383,9 @@ insumo_2
 <span id="cb12-2"><a href="metodologia.html#cb12-2" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">sum</span>(. <span class="sc">==</span> <span class="dv">0</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))) <span class="sc">%&gt;%</span> </span>
 <span id="cb12-3"><a href="metodologia.html#cb12-3" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">&quot;variable&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;n_ceros&quot;</span>)</span>
 <span id="cb12-4"><a href="metodologia.html#cb12-4" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(conteo_ceros, <span class="at">caption =</span> <span class="st">&quot;Variables con valores en cero&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb12-5"><a href="metodologia.html#cb12-5" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<span id="cb12-5"><a href="metodologia.html#cb12-5" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-6"><a href="metodologia.html#cb12-6" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">column_spec</span>(<span class="dv">1</span>, <span class="at">width =</span> <span class="st">&quot;12em&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-7"><a href="metodologia.html#cb12-7" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">column_spec</span>(<span class="dv">2</span>, <span class="at">width =</span> <span class="st">&quot;6em&quot;</span>)</span></code></pre></div>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:cero-conteo">Table 4.3: </span><span id="tab:cero-conteo">Table 4.4: </span>Variables con valores en cero
@@ -398,130 +402,130 @@ n_ceros
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 periodo
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 0
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 codigo_producto
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 0
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 id_orden
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 0
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 volumen_lote
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 5
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 costo_transformacion
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 5
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 costo_insumo
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 9
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 equipo_id
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 0
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 tipo_equipo
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 0
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 categoria_producto
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 0
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 num_insumos
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 8
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 insumo_1
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 0
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 insumo_2
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 0
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 cantidad_insumo_1
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 8
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 cantidad_insumo_2
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 279
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 modalidad_proceso
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 0
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 duracion_proceso
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 4
 </td>
 </tr>
@@ -533,7 +537,9 @@ duracion_proceso
 <span id="cb13-4"><a href="metodologia.html#cb13-4" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">trimws</span>(.) <span class="sc">==</span> <span class="st">&quot;&quot;</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))) <span class="sc">%&gt;%</span> </span>
 <span id="cb13-5"><a href="metodologia.html#cb13-5" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">&quot;variable&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;n_vacios&quot;</span>)</span>
 <span id="cb13-6"><a href="metodologia.html#cb13-6" tabindex="-1"></a> knitr<span class="sc">::</span><span class="fu">kable</span>(conteo_vacios, <span class="at">caption =</span> <span class="st">&quot;Variables con valores en cero&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb13-7"><a href="metodologia.html#cb13-7" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<span id="cb13-7"><a href="metodologia.html#cb13-7" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-8"><a href="metodologia.html#cb13-8" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">column_spec</span>(<span class="dv">1</span>, <span class="at">width =</span> <span class="st">&quot;12em&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-9"><a href="metodologia.html#cb13-9" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">column_spec</span>(<span class="dv">2</span>, <span class="at">width =</span> <span class="st">&quot;6em&quot;</span>)</span></code></pre></div>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:cero-conteo">Table 4.3: </span><span id="tab:cero-conteo">Table 4.3: </span>Variables con valores en cero
@@ -550,130 +556,130 @@ n_vacios
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 periodo
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 0
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 codigo_producto
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 0
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 id_orden
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 0
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 volumen_lote
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 0
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 costo_transformacion
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 0
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 costo_insumo
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 0
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 equipo_id
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 0
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 tipo_equipo
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 0
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 categoria_producto
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 0
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 num_insumos
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 0
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 insumo_1
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 0
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 insumo_2
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 0
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 cantidad_insumo_1
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 0
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 cantidad_insumo_2
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 0
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 modalidad_proceso
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 0
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;width: 12em; ">
 duracion_proceso
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;width: 6em; ">
 0
 </td>
 </tr>
