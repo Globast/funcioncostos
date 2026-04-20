@@ -336,23 +336,38 @@ El significado, tipo analítico, unidad de medida y rol de cada una de las 16 va
 <span id="cb10-8"><a href="metodologia.html#cb10-8" tabindex="-1"></a></span>
 <span id="cb10-9"><a href="metodologia.html#cb10-9" tabindex="-1"></a>tabla_na <span class="ot">&lt;-</span> conteo_na <span class="sc">%&gt;%</span> </span>
 <span id="cb10-10"><a href="metodologia.html#cb10-10" tabindex="-1"></a>  <span class="fu">filter</span>(n_na <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
-<span id="cb10-11"><a href="metodologia.html#cb10-11" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(tabla_na, <span class="at">caption =</span> <span class="st">&quot;Variables con valores NA&quot;</span>)</span></code></pre></div>
-<table>
-<caption><span id="tab:na-calculos">Table 4.1: </span>Variables con valores NA</caption>
+<span id="cb10-11"><a href="metodologia.html#cb10-11" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(tabla_na, <span class="at">caption =</span> <span class="st">&quot;Variables con valores NA&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-12"><a href="metodologia.html#cb10-12" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:na-calculos">Table 4.1: </span><span id="tab:na-calculos">Table 4.2: </span>Variables con valores NA
+</caption>
 <thead>
-<tr class="header">
-<th align="left">variable</th>
-<th align="right">n_na</th>
+<tr>
+<th style="text-align:left;">
+variable
+</th>
+<th style="text-align:right;">
+n_na
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">insumo_1</td>
-<td align="right">8</td>
+<tr>
+<td style="text-align:left;">
+insumo_1
+</td>
+<td style="text-align:right;">
+8
+</td>
 </tr>
-<tr class="even">
-<td align="left">insumo_2</td>
-<td align="right">279</td>
+<tr>
+<td style="text-align:left;">
+insumo_2
+</td>
+<td style="text-align:right;">
+279
+</td>
 </tr>
 </tbody>
 </table>
@@ -365,79 +380,150 @@ El significado, tipo analítico, unidad de medida y rol de cada una de las 16 va
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="metodologia.html#cb12-1" tabindex="-1"></a>conteo_ceros <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span> </span>
 <span id="cb12-2"><a href="metodologia.html#cb12-2" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">sum</span>(. <span class="sc">==</span> <span class="dv">0</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))) <span class="sc">%&gt;%</span> </span>
 <span id="cb12-3"><a href="metodologia.html#cb12-3" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">&quot;variable&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;n_ceros&quot;</span>)</span>
-<span id="cb12-4"><a href="metodologia.html#cb12-4" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(conteo_ceros, <span class="at">caption =</span> <span class="st">&quot;Variables con valores en cero&quot;</span>)</span></code></pre></div>
-<table>
-<caption><span id="tab:cero-conteo">Table 4.2: </span>Variables con valores en cero</caption>
+<span id="cb12-4"><a href="metodologia.html#cb12-4" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(conteo_ceros, <span class="at">caption =</span> <span class="st">&quot;Variables con valores en cero&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-5"><a href="metodologia.html#cb12-5" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:cero-conteo">Table 4.3: </span><span id="tab:cero-conteo">Table 4.4: </span>Variables con valores en cero
+</caption>
 <thead>
-<tr class="header">
-<th align="left">variable</th>
-<th align="right">n_ceros</th>
+<tr>
+<th style="text-align:left;">
+variable
+</th>
+<th style="text-align:right;">
+n_ceros
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">periodo</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+periodo
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="even">
-<td align="left">codigo_producto</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+codigo_producto
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="odd">
-<td align="left">id_orden</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+id_orden
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="even">
-<td align="left">volumen_lote</td>
-<td align="right">5</td>
+<tr>
+<td style="text-align:left;">
+volumen_lote
+</td>
+<td style="text-align:right;">
+5
+</td>
 </tr>
-<tr class="odd">
-<td align="left">costo_transformacion</td>
-<td align="right">5</td>
+<tr>
+<td style="text-align:left;">
+costo_transformacion
+</td>
+<td style="text-align:right;">
+5
+</td>
 </tr>
-<tr class="even">
-<td align="left">costo_insumo</td>
-<td align="right">9</td>
+<tr>
+<td style="text-align:left;">
+costo_insumo
+</td>
+<td style="text-align:right;">
+9
+</td>
 </tr>
-<tr class="odd">
-<td align="left">equipo_id</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+equipo_id
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="even">
-<td align="left">tipo_equipo</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+tipo_equipo
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="odd">
-<td align="left">categoria_producto</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+categoria_producto
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="even">
-<td align="left">num_insumos</td>
-<td align="right">8</td>
+<tr>
+<td style="text-align:left;">
+num_insumos
+</td>
+<td style="text-align:right;">
+8
+</td>
 </tr>
-<tr class="odd">
-<td align="left">insumo_1</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+insumo_1
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="even">
-<td align="left">insumo_2</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+insumo_2
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="odd">
-<td align="left">cantidad_insumo_1</td>
-<td align="right">8</td>
+<tr>
+<td style="text-align:left;">
+cantidad_insumo_1
+</td>
+<td style="text-align:right;">
+8
+</td>
 </tr>
-<tr class="even">
-<td align="left">cantidad_insumo_2</td>
-<td align="right">279</td>
+<tr>
+<td style="text-align:left;">
+cantidad_insumo_2
+</td>
+<td style="text-align:right;">
+279
+</td>
 </tr>
-<tr class="odd">
-<td align="left">modalidad_proceso</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+modalidad_proceso
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="even">
-<td align="left">duracion_proceso</td>
-<td align="right">4</td>
+<tr>
+<td style="text-align:left;">
+duracion_proceso
+</td>
+<td style="text-align:right;">
+4
+</td>
 </tr>
 </tbody>
 </table>
@@ -446,85 +532,156 @@ El significado, tipo analítico, unidad de medida y rol de cada una de las 16 va
 <span id="cb13-3"><a href="metodologia.html#cb13-3" tabindex="-1"></a>conteo_vacios <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span> </span>
 <span id="cb13-4"><a href="metodologia.html#cb13-4" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">trimws</span>(.) <span class="sc">==</span> <span class="st">&quot;&quot;</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))) <span class="sc">%&gt;%</span> </span>
 <span id="cb13-5"><a href="metodologia.html#cb13-5" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">&quot;variable&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;n_vacios&quot;</span>)</span>
-<span id="cb13-6"><a href="metodologia.html#cb13-6" tabindex="-1"></a> knitr<span class="sc">::</span><span class="fu">kable</span>(conteo_vacios, <span class="at">caption =</span> <span class="st">&quot;Variables con valores en cero&quot;</span>)</span></code></pre></div>
-<table>
-<caption><span id="tab:cero-conteo">Table 4.2: </span>Variables con valores en cero</caption>
+<span id="cb13-6"><a href="metodologia.html#cb13-6" tabindex="-1"></a> knitr<span class="sc">::</span><span class="fu">kable</span>(conteo_vacios, <span class="at">caption =</span> <span class="st">&quot;Variables con valores en cero&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-7"><a href="metodologia.html#cb13-7" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:cero-conteo">Table 4.3: </span><span id="tab:cero-conteo">Table 4.3: </span>Variables con valores en cero
+</caption>
 <thead>
-<tr class="header">
-<th align="left">variable</th>
-<th align="right">n_vacios</th>
+<tr>
+<th style="text-align:left;">
+variable
+</th>
+<th style="text-align:right;">
+n_vacios
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">periodo</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+periodo
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="even">
-<td align="left">codigo_producto</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+codigo_producto
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="odd">
-<td align="left">id_orden</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+id_orden
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="even">
-<td align="left">volumen_lote</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+volumen_lote
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="odd">
-<td align="left">costo_transformacion</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+costo_transformacion
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="even">
-<td align="left">costo_insumo</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+costo_insumo
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="odd">
-<td align="left">equipo_id</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+equipo_id
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="even">
-<td align="left">tipo_equipo</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+tipo_equipo
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="odd">
-<td align="left">categoria_producto</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+categoria_producto
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="even">
-<td align="left">num_insumos</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+num_insumos
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="odd">
-<td align="left">insumo_1</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+insumo_1
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="even">
-<td align="left">insumo_2</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+insumo_2
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="odd">
-<td align="left">cantidad_insumo_1</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+cantidad_insumo_1
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="even">
-<td align="left">cantidad_insumo_2</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+cantidad_insumo_2
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="odd">
-<td align="left">modalidad_proceso</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+modalidad_proceso
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="even">
-<td align="left">duracion_proceso</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+duracion_proceso
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
 </tbody>
 </table>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="metodologia.html#cb14-1" tabindex="-1"></a>total_vacios <span class="ot">&lt;-</span> <span class="fu">sum</span>(conteo_vacios<span class="sc">$</span>datos)</span></code></pre></div>
-<p>Se identifican un total de <code>total_ceros</code> registros con valores cero los cuales hay que entrar a analizar según la variable, al tratarse de costos, no puede tener costos en cero, o tiempos de proceso en cero. por esto se verifica .
-Hay <code>total_vacios</code> registros vacios.</p>
+<p>Se identifican un total de 0 registros con valores cero los cuales hay que entrar a analizar según la variable, al tratarse de costos, no puede tener costos en cero, o tiempos de proceso en cero. por esto se verifica .
+Hay 0 registros vacios.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="metodologia.html#cb15-1" tabindex="-1"></a><span class="fu">missmap</span>(datos, <span class="at">main =</span> <span class="st">&quot;Mapa de valores faltantes&quot;</span>, </span>
 <span id="cb15-2"><a href="metodologia.html#cb15-2" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;#d62728&quot;</span>, <span class="st">&quot;#1f77b4&quot;</span>), <span class="at">legend =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/na-mapa-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>

@@ -108,9 +108,9 @@ pct_na_insumo_2 <- round(n_na_insumo_2 / n_filas_inicial * 100, 1)
 conteo_ceros <- datos %>% 
   summarise(across(everything(), ~ sum(. == 0, na.rm = TRUE))) %>% 
   pivot_longer(everything(), names_to = "variable", values_to = "n_ceros")
-knitr::kable(conteo_ceros, caption = "Variables con valores en cero")
-total_ceros <- sum(conteo_ceros$datos) %>% 
+knitr::kable(conteo_ceros, caption = "Variables con valores en cero") %>% 
   kableExtra::kable_styling(full_width = FALSE)
+total_ceros <- sum(conteo_ceros$datos)
 
 conteo_vacios <- datos %>% 
   summarise(across(everything(), ~ sum(trimws(.) == "", na.rm = TRUE))) %>% 
@@ -120,8 +120,8 @@ conteo_vacios <- datos %>%
 total_vacios <- sum(conteo_vacios$datos)
 ```
 
-Se identifican un total de  `total_ceros` registros con valores cero los cuales hay que entrar a analizar según la variable, al tratarse de costos, no puede tener costos en cero, o tiempos de proceso en cero. por esto se verifica . 
-Hay `total_vacios` registros vacios.
+Se identifican un total de  `r total_ceros` registros con valores cero los cuales hay que entrar a analizar según la variable, al tratarse de costos, no puede tener costos en cero, o tiempos de proceso en cero. por esto se verifica . 
+Hay `r total_vacios` registros vacios.
 
 ```{r na-mapa, fig.width=10, fig.height=5}
 missmap(datos, main = "Mapa de valores faltantes", 
