@@ -1,3 +1,5 @@
+tab:na-calculos
+tab:cero-conteo
 tab:diccionario-datos
 fig:histograma
 fig:dispersion
