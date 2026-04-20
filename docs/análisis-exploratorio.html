@@ -182,7 +182,8 @@ div.csl-indent {
 <li class="chapter" data-level="4.2.2" data-path="metodologia.html"><a href="metodologia.html#verificaci%C3%B3n-de-la-lectura"><i class="fa fa-check"></i><b>4.2.2</b> Verificación de la lectura</a></li>
 <li class="chapter" data-level="4.2.3" data-path="metodologia.html"><a href="metodologia.html#conversi%C3%B3n-de-tipos"><i class="fa fa-check"></i><b>4.2.3</b> Conversión de tipos</a></li>
 <li class="chapter" data-level="4.2.4" data-path="metodologia.html"><a href="metodologia.html#identificaci%C3%B3n-de-valores-faltantes"><i class="fa fa-check"></i><b>4.2.4</b> Identificación de valores faltantes</a></li>
-<li class="chapter" data-level="4.2.5" data-path="metodologia.html"><a href="metodologia.html#advertencias-sobre-inconsistencias-detectadas"><i class="fa fa-check"></i><b>4.2.5</b> Advertencias sobre inconsistencias detectadas</a></li>
+<li class="chapter" data-level="4.2.5" data-path="metodologia.html"><a href="metodologia.html#eliminaci%C3%B3n-de-errores-de-digitaci%C3%B3n-confirmados"><i class="fa fa-check"></i><b>4.2.5</b> Eliminación de errores de digitación confirmados</a></li>
+<li class="chapter" data-level="4.2.6" data-path="metodologia.html"><a href="metodologia.html#advertencias-sobre-inconsistencias-estructurales"><i class="fa fa-check"></i><b>4.2.6</b> Advertencias sobre inconsistencias estructurales</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="diccionario-de-campos.html"><a href="diccionario-de-campos.html"><i class="fa fa-check"></i><b>5</b> Diccionario de campos</a></li>
@@ -229,53 +230,53 @@ div.csl-indent {
 <h1><span class="header-section-number">Capítulo 6</span> Análisis Exploratorio<a href="análisis-exploratorio.html#an%C3%A1lisis-exploratorio" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>prueba
 ## Tabla descriptiva</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="análisis-exploratorio.html#cb15-1" tabindex="-1"></a>tabla_descriptiva <span class="ot">&lt;-</span> datos <span class="sc">|&gt;</span></span>
-<span id="cb15-2"><a href="análisis-exploratorio.html#cb15-2" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">|&gt;</span></span>
-<span id="cb15-3"><a href="análisis-exploratorio.html#cb15-3" tabindex="-1"></a>  <span class="fu">summary</span>()</span>
-<span id="cb15-4"><a href="análisis-exploratorio.html#cb15-4" tabindex="-1"></a></span>
-<span id="cb15-5"><a href="análisis-exploratorio.html#cb15-5" tabindex="-1"></a>tabla_descriptiva</span></code></pre></div>
-<pre><code>##     periodo          id_orden       volumen_lote     costo_transformacion
-##  Min.   :202501   Min.   :523523   Min.   :      0   Min.   :         0  
-##  1st Qu.:202504   1st Qu.:554865   1st Qu.:   1204   1st Qu.:2227611661  
-##  Median :202508   Median :572728   Median :   2000   Median :2975255378  
-##  Mean   :202517   Mean   :571757   Mean   :  24533   Mean   :3336345182  
-##  3rd Qu.:202511   3rd Qu.:585414   3rd Qu.:   3300   3rd Qu.:4134610034  
-##  Max.   :202603   Max.   :603802   Max.   :3534951   Max.   :9992373389  
-##  duracion_proceso
-##  Min.   :    0   
-##  1st Qu.:   60   
-##  Median :  103   
-##  Mean   :  175   
-##  3rd Qu.:  160   
-##  Max.   :14575</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="análisis-exploratorio.html#cb19-1" tabindex="-1"></a>tabla_descriptiva <span class="ot">&lt;-</span> datos <span class="sc">|&gt;</span></span>
+<span id="cb19-2"><a href="análisis-exploratorio.html#cb19-2" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">|&gt;</span></span>
+<span id="cb19-3"><a href="análisis-exploratorio.html#cb19-3" tabindex="-1"></a>  <span class="fu">summary</span>()</span>
+<span id="cb19-4"><a href="análisis-exploratorio.html#cb19-4" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="análisis-exploratorio.html#cb19-5" tabindex="-1"></a>tabla_descriptiva</span></code></pre></div>
+<pre><code>##     id_orden       volumen_lote   costo_transformacion  costo_insumo   
+##  Min.   :523523   Min.   :    0   Min.   : 0.00        Min.   : 0.000  
+##  1st Qu.:554856   1st Qu.: 1220   1st Qu.:21.82        1st Qu.: 2.397  
+##  Median :572564   Median : 1984   Median :29.08        Median : 4.177  
+##  Mean   :571568   Mean   : 2732   Mean   :29.86        Mean   : 5.036  
+##  3rd Qu.:585154   3rd Qu.: 3284   3rd Qu.:36.42        3rd Qu.: 6.204  
+##  Max.   :603802   Max.   :13300   Max.   :97.18        Max.   :46.219  
+##  cantidad_insumo_1 cantidad_insumo_2 duracion_proceso
+##  Min.   : 0.050    Min.   :0.0000    Min.   :  3.0   
+##  1st Qu.: 1.000    1st Qu.:0.0000    1st Qu.: 60.0   
+##  Median : 2.000    Median :0.0000    Median :100.0   
+##  Mean   : 2.286    Mean   :0.4489    Mean   :115.8   
+##  3rd Qu.: 3.000    3rd Qu.:0.5000    3rd Qu.:150.0   
+##  Max.   :14.000    Max.   :7.0000    Max.   :482.0</code></pre>
 <div id="promedios-por-grupos" class="section level2 hasAnchor" number="6.1">
 <h2><span class="header-section-number">6.1</span> Promedios por grupos<a href="análisis-exploratorio.html#promedios-por-grupos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Si existe la variable <code>cyl</code>, se construye una tabla de medias por grupo.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="análisis-exploratorio.html#cb17-1" tabindex="-1"></a><span class="cf">if</span> (<span class="st">&quot;cyl&quot;</span> <span class="sc">%in%</span> <span class="fu">names</span>(datos) <span class="sc">&amp;&amp;</span> <span class="st">&quot;mpg&quot;</span> <span class="sc">%in%</span> <span class="fu">names</span>(datos)) {</span>
-<span id="cb17-2"><a href="análisis-exploratorio.html#cb17-2" tabindex="-1"></a>  tabla_mpg <span class="ot">&lt;-</span> datos <span class="sc">|&gt;</span></span>
-<span id="cb17-3"><a href="análisis-exploratorio.html#cb17-3" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">group_by</span>(cyl) <span class="sc">|&gt;</span></span>
-<span id="cb17-4"><a href="análisis-exploratorio.html#cb17-4" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
-<span id="cb17-5"><a href="análisis-exploratorio.html#cb17-5" tabindex="-1"></a>      <span class="at">n =</span> dplyr<span class="sc">::</span><span class="fu">n</span>(),</span>
-<span id="cb17-6"><a href="análisis-exploratorio.html#cb17-6" tabindex="-1"></a>      <span class="at">media_mpg =</span> <span class="fu">mean</span>(mpg, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb17-7"><a href="análisis-exploratorio.html#cb17-7" tabindex="-1"></a>      <span class="at">sd_mpg =</span> <span class="fu">sd</span>(mpg, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb17-8"><a href="análisis-exploratorio.html#cb17-8" tabindex="-1"></a>    )</span>
-<span id="cb17-9"><a href="análisis-exploratorio.html#cb17-9" tabindex="-1"></a></span>
-<span id="cb17-10"><a href="análisis-exploratorio.html#cb17-10" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(tabla_mpg, <span class="at">caption =</span> <span class="st">&quot;Resumen de mpg por número de cilindros.&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb17-11"><a href="análisis-exploratorio.html#cb17-11" tabindex="-1"></a>    kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb17-12"><a href="análisis-exploratorio.html#cb17-12" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="análisis-exploratorio.html#cb21-1" tabindex="-1"></a><span class="cf">if</span> (<span class="st">&quot;cyl&quot;</span> <span class="sc">%in%</span> <span class="fu">names</span>(datos) <span class="sc">&amp;&amp;</span> <span class="st">&quot;mpg&quot;</span> <span class="sc">%in%</span> <span class="fu">names</span>(datos)) {</span>
+<span id="cb21-2"><a href="análisis-exploratorio.html#cb21-2" tabindex="-1"></a>  tabla_mpg <span class="ot">&lt;-</span> datos <span class="sc">|&gt;</span></span>
+<span id="cb21-3"><a href="análisis-exploratorio.html#cb21-3" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">group_by</span>(cyl) <span class="sc">|&gt;</span></span>
+<span id="cb21-4"><a href="análisis-exploratorio.html#cb21-4" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb21-5"><a href="análisis-exploratorio.html#cb21-5" tabindex="-1"></a>      <span class="at">n =</span> dplyr<span class="sc">::</span><span class="fu">n</span>(),</span>
+<span id="cb21-6"><a href="análisis-exploratorio.html#cb21-6" tabindex="-1"></a>      <span class="at">media_mpg =</span> <span class="fu">mean</span>(mpg, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb21-7"><a href="análisis-exploratorio.html#cb21-7" tabindex="-1"></a>      <span class="at">sd_mpg =</span> <span class="fu">sd</span>(mpg, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb21-8"><a href="análisis-exploratorio.html#cb21-8" tabindex="-1"></a>    )</span>
+<span id="cb21-9"><a href="análisis-exploratorio.html#cb21-9" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="análisis-exploratorio.html#cb21-10" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(tabla_mpg, <span class="at">caption =</span> <span class="st">&quot;Resumen de mpg por número de cilindros.&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb21-11"><a href="análisis-exploratorio.html#cb21-11" tabindex="-1"></a>    kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb21-12"><a href="análisis-exploratorio.html#cb21-12" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="histograma" class="section level2 hasAnchor" number="6.2">
 <h2><span class="header-section-number">6.2</span> Histograma<a href="análisis-exploratorio.html#histograma" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="análisis-exploratorio.html#cb18-1" tabindex="-1"></a>var_num <span class="ot">&lt;-</span> <span class="fu">names</span>(datos)[<span class="fu">sapply</span>(datos, is.numeric)][<span class="dv">1</span>]</span>
-<span id="cb18-2"><a href="análisis-exploratorio.html#cb18-2" tabindex="-1"></a></span>
-<span id="cb18-3"><a href="análisis-exploratorio.html#cb18-3" tabindex="-1"></a><span class="fu">ggplot</span>(datos, <span class="fu">aes</span>(<span class="at">x =</span> .data[[var_num]])) <span class="sc">+</span></span>
-<span id="cb18-4"><a href="análisis-exploratorio.html#cb18-4" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
-<span id="cb18-5"><a href="análisis-exploratorio.html#cb18-5" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb18-6"><a href="análisis-exploratorio.html#cb18-6" tabindex="-1"></a>    <span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;Histograma de&quot;</span>, var_num),</span>
-<span id="cb18-7"><a href="análisis-exploratorio.html#cb18-7" tabindex="-1"></a>    <span class="at">x =</span> var_num,</span>
-<span id="cb18-8"><a href="análisis-exploratorio.html#cb18-8" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Frecuencia&quot;</span></span>
-<span id="cb18-9"><a href="análisis-exploratorio.html#cb18-9" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb18-10"><a href="análisis-exploratorio.html#cb18-10" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="análisis-exploratorio.html#cb22-1" tabindex="-1"></a>var_num <span class="ot">&lt;-</span> <span class="fu">names</span>(datos)[<span class="fu">sapply</span>(datos, is.numeric)][<span class="dv">1</span>]</span>
+<span id="cb22-2"><a href="análisis-exploratorio.html#cb22-2" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="análisis-exploratorio.html#cb22-3" tabindex="-1"></a><span class="fu">ggplot</span>(datos, <span class="fu">aes</span>(<span class="at">x =</span> .data[[var_num]])) <span class="sc">+</span></span>
+<span id="cb22-4"><a href="análisis-exploratorio.html#cb22-4" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb22-5"><a href="análisis-exploratorio.html#cb22-5" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb22-6"><a href="análisis-exploratorio.html#cb22-6" tabindex="-1"></a>    <span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;Histograma de&quot;</span>, var_num),</span>
+<span id="cb22-7"><a href="análisis-exploratorio.html#cb22-7" tabindex="-1"></a>    <span class="at">x =</span> var_num,</span>
+<span id="cb22-8"><a href="análisis-exploratorio.html#cb22-8" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Frecuencia&quot;</span></span>
+<span id="cb22-9"><a href="análisis-exploratorio.html#cb22-9" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb22-10"><a href="análisis-exploratorio.html#cb22-10" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:histograma"></span>
 <img src="libro-maestria-estadistica-aplicada_files/figure-html/histograma-1.png" alt="Distribución de una variable numérica seleccionada." width="90%" />
 <p class="caption">
@@ -285,18 +286,18 @@ Figure 6.1: Distribución de una variable numérica seleccionada.
 </div>
 <div id="diagrama-de-dispersión" class="section level2 hasAnchor" number="6.3">
 <h2><span class="header-section-number">6.3</span> Diagrama de dispersión<a href="análisis-exploratorio.html#diagrama-de-dispersi%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="análisis-exploratorio.html#cb19-1" tabindex="-1"></a>vars_num <span class="ot">&lt;-</span> <span class="fu">names</span>(datos)[<span class="fu">sapply</span>(datos, is.numeric)]</span>
-<span id="cb19-2"><a href="análisis-exploratorio.html#cb19-2" tabindex="-1"></a></span>
-<span id="cb19-3"><a href="análisis-exploratorio.html#cb19-3" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(vars_num) <span class="sc">&gt;=</span> <span class="dv">2</span>) {</span>
-<span id="cb19-4"><a href="análisis-exploratorio.html#cb19-4" tabindex="-1"></a>  <span class="fu">ggplot</span>(datos, <span class="fu">aes</span>(<span class="at">x =</span> .data[[vars_num[<span class="dv">1</span>]]], <span class="at">y =</span> .data[[vars_num[<span class="dv">2</span>]]])) <span class="sc">+</span></span>
-<span id="cb19-5"><a href="análisis-exploratorio.html#cb19-5" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb19-6"><a href="análisis-exploratorio.html#cb19-6" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
-<span id="cb19-7"><a href="análisis-exploratorio.html#cb19-7" tabindex="-1"></a>      <span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;Dispersión entre&quot;</span>, vars_num[<span class="dv">1</span>], <span class="st">&quot;y&quot;</span>, vars_num[<span class="dv">2</span>]),</span>
-<span id="cb19-8"><a href="análisis-exploratorio.html#cb19-8" tabindex="-1"></a>      <span class="at">x =</span> vars_num[<span class="dv">1</span>],</span>
-<span id="cb19-9"><a href="análisis-exploratorio.html#cb19-9" tabindex="-1"></a>      <span class="at">y =</span> vars_num[<span class="dv">2</span>]</span>
-<span id="cb19-10"><a href="análisis-exploratorio.html#cb19-10" tabindex="-1"></a>    ) <span class="sc">+</span></span>
-<span id="cb19-11"><a href="análisis-exploratorio.html#cb19-11" tabindex="-1"></a>    <span class="fu">theme_minimal</span>()</span>
-<span id="cb19-12"><a href="análisis-exploratorio.html#cb19-12" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="análisis-exploratorio.html#cb23-1" tabindex="-1"></a>vars_num <span class="ot">&lt;-</span> <span class="fu">names</span>(datos)[<span class="fu">sapply</span>(datos, is.numeric)]</span>
+<span id="cb23-2"><a href="análisis-exploratorio.html#cb23-2" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="análisis-exploratorio.html#cb23-3" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(vars_num) <span class="sc">&gt;=</span> <span class="dv">2</span>) {</span>
+<span id="cb23-4"><a href="análisis-exploratorio.html#cb23-4" tabindex="-1"></a>  <span class="fu">ggplot</span>(datos, <span class="fu">aes</span>(<span class="at">x =</span> .data[[vars_num[<span class="dv">1</span>]]], <span class="at">y =</span> .data[[vars_num[<span class="dv">2</span>]]])) <span class="sc">+</span></span>
+<span id="cb23-5"><a href="análisis-exploratorio.html#cb23-5" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb23-6"><a href="análisis-exploratorio.html#cb23-6" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
+<span id="cb23-7"><a href="análisis-exploratorio.html#cb23-7" tabindex="-1"></a>      <span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;Dispersión entre&quot;</span>, vars_num[<span class="dv">1</span>], <span class="st">&quot;y&quot;</span>, vars_num[<span class="dv">2</span>]),</span>
+<span id="cb23-8"><a href="análisis-exploratorio.html#cb23-8" tabindex="-1"></a>      <span class="at">x =</span> vars_num[<span class="dv">1</span>],</span>
+<span id="cb23-9"><a href="análisis-exploratorio.html#cb23-9" tabindex="-1"></a>      <span class="at">y =</span> vars_num[<span class="dv">2</span>]</span>
+<span id="cb23-10"><a href="análisis-exploratorio.html#cb23-10" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb23-11"><a href="análisis-exploratorio.html#cb23-11" tabindex="-1"></a>    <span class="fu">theme_minimal</span>()</span>
+<span id="cb23-12"><a href="análisis-exploratorio.html#cb23-12" tabindex="-1"></a>}</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:dispersion"></span>
 <img src="libro-maestria-estadistica-aplicada_files/figure-html/dispersion-1.png" alt="Relación entre dos variables numéricas." width="90%" />
 <p class="caption">
