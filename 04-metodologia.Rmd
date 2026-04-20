@@ -214,9 +214,8 @@ Se identificaron `r n_errores` órdenes con número de insumos en cero (`r pct_e
 A continuación se eliminan los registros con `costo_insumo = 0`:
 
 ```{r eliminar-errores}
-datos %>%
-  filter(costo_insumo == 0) %>%
-  mutate(costo_insumo = droplevels(costo_insumo)) -> datos
+datos <- datos %>% 
+  filter(costo_insumo != 0)
 
 dim(datos)
 ```

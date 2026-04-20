@@ -555,10 +555,11 @@ insumo_2
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="metodologia.html#cb14-1" tabindex="-1"></a>conteo_ceros <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span> </span>
 <span id="cb14-2"><a href="metodologia.html#cb14-2" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">sum</span>(. <span class="sc">==</span> <span class="dv">0</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))) <span class="sc">%&gt;%</span> </span>
 <span id="cb14-3"><a href="metodologia.html#cb14-3" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">&quot;variable&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;n_ceros&quot;</span>)</span>
-<span id="cb14-4"><a href="metodologia.html#cb14-4" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(conteo_ceros, <span class="at">caption =</span> <span class="st">&quot;Variables con valores en cero&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb14-5"><a href="metodologia.html#cb14-5" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb14-6"><a href="metodologia.html#cb14-6" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">column_spec</span>(<span class="dv">1</span>, <span class="at">width =</span> <span class="st">&quot;12em&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb14-7"><a href="metodologia.html#cb14-7" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">column_spec</span>(<span class="dv">2</span>, <span class="at">width =</span> <span class="st">&quot;12em&quot;</span>)</span></code></pre></div>
+<span id="cb14-4"><a href="metodologia.html#cb14-4" tabindex="-1"></a>  total_ceros <span class="ot">&lt;-</span> <span class="fu">sum</span>(conteo_ceros<span class="sc">$</span>n_ceros)</span>
+<span id="cb14-5"><a href="metodologia.html#cb14-5" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(conteo_ceros, <span class="at">caption =</span> <span class="st">&quot;Variables con valores en cero&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-6"><a href="metodologia.html#cb14-6" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-7"><a href="metodologia.html#cb14-7" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">column_spec</span>(<span class="dv">1</span>, <span class="at">width =</span> <span class="st">&quot;12em&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-8"><a href="metodologia.html#cb14-8" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">column_spec</span>(<span class="dv">2</span>, <span class="at">width =</span> <span class="st">&quot;12em&quot;</span>)</span></code></pre></div>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:cero-conteo">Table 4.5: </span><span id="tab:cero-conteo">Table 4.6: </span>Variables con valores en cero
@@ -704,19 +705,19 @@ duracion_proceso
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="metodologia.html#cb15-1" tabindex="-1"></a>total_ceros <span class="ot">&lt;-</span> <span class="fu">sum</span>(conteo_ceros<span class="sc">$</span>n_ceros)</span></code></pre></div>
-<p>Se identifican un total de 318 registros de variables con valores cero.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="metodologia.html#cb16-1" tabindex="-1"></a>cols_excluir <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;cantidad_insumo_1&quot;</span>, <span class="st">&quot;cantidad_insumo_2&quot;</span>)</span>
-<span id="cb16-2"><a href="metodologia.html#cb16-2" tabindex="-1"></a></span>
-<span id="cb16-3"><a href="metodologia.html#cb16-3" tabindex="-1"></a>casos_con_ceros <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span> </span>
-<span id="cb16-4"><a href="metodologia.html#cb16-4" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">if_any</span>(</span>
-<span id="cb16-5"><a href="metodologia.html#cb16-5" tabindex="-1"></a>    <span class="sc">-</span><span class="fu">all_of</span>(cols_excluir), </span>
-<span id="cb16-6"><a href="metodologia.html#cb16-6" tabindex="-1"></a>    <span class="sc">~</span> . <span class="sc">==</span> <span class="dv">0</span></span>
-<span id="cb16-7"><a href="metodologia.html#cb16-7" tabindex="-1"></a>  )) <span class="sc">%&gt;%</span> </span>
-<span id="cb16-8"><a href="metodologia.html#cb16-8" tabindex="-1"></a>    <span class="fu">select</span>(id_orden, volumen_lote, costo_transformacion,  duracion_proceso, costo_insumo, num_insumos )<span class="sc">%&gt;%</span> </span>
-<span id="cb16-9"><a href="metodologia.html#cb16-9" tabindex="-1"></a> <span class="fu">arrange</span>(costo_transformacion)</span>
-<span id="cb16-10"><a href="metodologia.html#cb16-10" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(casos_con_ceros, <span class="at">caption =</span> <span class="st">&quot;Registros con valores en cero (excluyendo cantidad_insumo)&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb16-11"><a href="metodologia.html#cb16-11" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p>Se identifican un total de 318 registros de variables con valores cero. Se valida que el número de NA identificado en la sesion anterior, coincide con el número de ceros detectados en cantidad de insumos.
+Se procede a identificar las ordenes con valores faltandes, excluyendo la cantidad de insumo 2 que es una condición estructural y normal del dataset.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="metodologia.html#cb15-1" tabindex="-1"></a>cols_excluir <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;cantidad_insumo_2&quot;</span>)</span>
+<span id="cb15-2"><a href="metodologia.html#cb15-2" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="metodologia.html#cb15-3" tabindex="-1"></a>casos_con_ceros <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span> </span>
+<span id="cb15-4"><a href="metodologia.html#cb15-4" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">if_any</span>(</span>
+<span id="cb15-5"><a href="metodologia.html#cb15-5" tabindex="-1"></a>    <span class="sc">-</span><span class="fu">all_of</span>(cols_excluir), </span>
+<span id="cb15-6"><a href="metodologia.html#cb15-6" tabindex="-1"></a>    <span class="sc">~</span> . <span class="sc">==</span> <span class="dv">0</span></span>
+<span id="cb15-7"><a href="metodologia.html#cb15-7" tabindex="-1"></a>  )) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-8"><a href="metodologia.html#cb15-8" tabindex="-1"></a>    <span class="fu">select</span>(id_orden, volumen_lote, costo_transformacion,  duracion_proceso, costo_insumo, num_insumos )<span class="sc">%&gt;%</span> </span>
+<span id="cb15-9"><a href="metodologia.html#cb15-9" tabindex="-1"></a> <span class="fu">arrange</span>(costo_transformacion)</span>
+<span id="cb15-10"><a href="metodologia.html#cb15-10" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(casos_con_ceros, <span class="at">caption =</span> <span class="st">&quot;Registros con valores en cero (excluyendo cantidad_insumo)&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-11"><a href="metodologia.html#cb15-11" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:casoscero">Table 4.7: </span><span id="tab:casoscero">Table 4.8: </span>Registros con valores en cero (excluyendo cantidad_insumo)
@@ -926,8 +927,11 @@ num_insumos
 </tr>
 </tbody>
 </table>
-<p>En total son 9 ordenes de producción donde algunoas de sus variables presentaron valores en cero.
-8 de estas ordenes ya se habían identificado con los NA de los insumos. En esta revisión se identifica una orden adicional, la cual revisando con operaciones, también confirma que obedeció a un error de tipeo.</p>
+<p>En total son 9 ordenes de producción donde algunaas de sus variables presentaron valores en cero.
+8 de estas ordenes ya se habían identificado con los NA de los insumos y se validaron con la busqueda de ceros.
+De estas 8 ordenes, 4 son ordenes cerradas sin registros de tiempos ni de consumos, es decir, en la realidad práctica no se trabajaron.
+las 4 ordenes restantes de numero de insumos en cero o NA en cantidad de insumo 1, son errores de digitación.<br />
+En esta revisión se identifica una orden adicional, la cual revisando con operaciones, corresponde a una orden que no produjo cantidad conforme. Gastó recursos de tiempos e insumos pero todo fue rechazado, el costo lo asumió la merma, no el producto bueno.</p>
 <div id="conversión-de-tipos" class="section level3 hasAnchor" number="4.5.1">
 <h3><span class="header-section-number">4.5.1</span> Conversión de tipos<a href="metodologia.html#conversi%C3%B3n-de-tipos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>La inspección de la estructura revela que varias variables están almacenadas con tipos que no corresponden a su naturaleza analítica.
@@ -935,19 +939,19 @@ num_insumos
 - La variable <code>num_insumos</code>, restringida a los valores 0, 1 y 2, se trata como factor ordenado.
 - Las variables <code>tipo_equipo</code>, <code>categoria_producto</code>, <code>equipo_id</code>, <code>modalidad_proceso</code>, <code>insumo_1</code> e <code>insumo_2</code> se convierten a factor para los análisis inferenciales posteriores.
 - La variable <code>insumo_2</code> requiere además una recodificación explícita de los valores faltantes a la categoría <code>sin_segundo_insumo</code>, dado que el <code>NA</code> no representa un dato perdido sino una característica estructural de la orden (cuando <code>num_insumos &lt; 2</code>).</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="metodologia.html#cb17-1" tabindex="-1"></a>datos <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
-<span id="cb17-2"><a href="metodologia.html#cb17-2" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb17-3"><a href="metodologia.html#cb17-3" tabindex="-1"></a>    <span class="at">periodo =</span> <span class="fu">as.character</span>(periodo),</span>
-<span id="cb17-4"><a href="metodologia.html#cb17-4" tabindex="-1"></a>    <span class="at">num_insumos =</span> <span class="fu">factor</span>(num_insumos, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>), <span class="at">ordered =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb17-5"><a href="metodologia.html#cb17-5" tabindex="-1"></a>    <span class="at">tipo_equipo =</span> <span class="fu">as.factor</span>(tipo_equipo),</span>
-<span id="cb17-6"><a href="metodologia.html#cb17-6" tabindex="-1"></a>    <span class="at">categoria_producto =</span> <span class="fu">as.factor</span>(categoria_producto),</span>
-<span id="cb17-7"><a href="metodologia.html#cb17-7" tabindex="-1"></a>    <span class="at">equipo_id =</span> <span class="fu">as.factor</span>(equipo_id),</span>
-<span id="cb17-8"><a href="metodologia.html#cb17-8" tabindex="-1"></a>    <span class="at">modalidad_proceso =</span> <span class="fu">as.factor</span>(modalidad_proceso),</span>
-<span id="cb17-9"><a href="metodologia.html#cb17-9" tabindex="-1"></a>    <span class="at">insumo_1 =</span> <span class="fu">as.factor</span>(insumo_1),</span>
-<span id="cb17-10"><a href="metodologia.html#cb17-10" tabindex="-1"></a>    <span class="at">insumo_2 =</span> <span class="fu">factor</span>(<span class="fu">if_else</span>(<span class="fu">is.na</span>(insumo_2), <span class="st">&quot;sin_segundo_insumo&quot;</span>, insumo_2))</span>
-<span id="cb17-11"><a href="metodologia.html#cb17-11" tabindex="-1"></a>  )</span>
-<span id="cb17-12"><a href="metodologia.html#cb17-12" tabindex="-1"></a></span>
-<span id="cb17-13"><a href="metodologia.html#cb17-13" tabindex="-1"></a><span class="fu">str</span>(datos)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="metodologia.html#cb16-1" tabindex="-1"></a>datos <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="metodologia.html#cb16-2" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb16-3"><a href="metodologia.html#cb16-3" tabindex="-1"></a>    <span class="at">periodo =</span> <span class="fu">as.character</span>(periodo),</span>
+<span id="cb16-4"><a href="metodologia.html#cb16-4" tabindex="-1"></a>    <span class="at">num_insumos =</span> <span class="fu">factor</span>(num_insumos, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>), <span class="at">ordered =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb16-5"><a href="metodologia.html#cb16-5" tabindex="-1"></a>    <span class="at">tipo_equipo =</span> <span class="fu">as.factor</span>(tipo_equipo),</span>
+<span id="cb16-6"><a href="metodologia.html#cb16-6" tabindex="-1"></a>    <span class="at">categoria_producto =</span> <span class="fu">as.factor</span>(categoria_producto),</span>
+<span id="cb16-7"><a href="metodologia.html#cb16-7" tabindex="-1"></a>    <span class="at">equipo_id =</span> <span class="fu">as.factor</span>(equipo_id),</span>
+<span id="cb16-8"><a href="metodologia.html#cb16-8" tabindex="-1"></a>    <span class="at">modalidad_proceso =</span> <span class="fu">as.factor</span>(modalidad_proceso),</span>
+<span id="cb16-9"><a href="metodologia.html#cb16-9" tabindex="-1"></a>    <span class="at">insumo_1 =</span> <span class="fu">as.factor</span>(insumo_1),</span>
+<span id="cb16-10"><a href="metodologia.html#cb16-10" tabindex="-1"></a>    <span class="at">insumo_2 =</span> <span class="fu">factor</span>(<span class="fu">if_else</span>(<span class="fu">is.na</span>(insumo_2), <span class="st">&quot;sin_segundo_insumo&quot;</span>, insumo_2))</span>
+<span id="cb16-11"><a href="metodologia.html#cb16-11" tabindex="-1"></a>  )</span>
+<span id="cb16-12"><a href="metodologia.html#cb16-12" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="metodologia.html#cb16-13" tabindex="-1"></a><span class="fu">str</span>(datos)</span></code></pre></div>
 <pre><code>## tibble [404 × 16] (S3: tbl_df/tbl/data.frame)
 ##  $ periodo             : chr [1:404] &quot;202501&quot; &quot;202501&quot; &quot;202501&quot; &quot;202501&quot; ...
 ##  $ codigo_producto     : chr [1:404] &quot;P05747&quot; &quot;P06976&quot; &quot;P07920&quot; &quot;P07767&quot; ...
@@ -968,26 +972,24 @@ num_insumos
 </div>
 <div id="eliminación-de-errores-de-digitación-confirmados" class="section level3 hasAnchor" number="4.5.2">
 <h3><span class="header-section-number">4.5.2</span> Eliminación de errores de digitación confirmados<a href="metodologia.html#eliminaci%C3%B3n-de-errores-de-digitaci%C3%B3n-confirmados" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Durante la revisión preliminar del dataset se identificaron registros con <code>num_insumos = 0</code>. Tras consulta con el área de operaciones, se confirmó que se trata de errores de digitación en el registro del ERP: toda orden de producción real requiere al menos un insumo activo, por lo que <code>num_insumos = 0</code> no corresponde a una configuración operativa válida del proceso. En consecuencia, estos registros se eliminan antes del análisis exploratorio.</p>
+<p>Durante la revisión preliminar del dataset se identificaron registros con <code>costo_insumo = 0</code>. Tras consulta con el área de operaciones, se confirmó que se trata de errores de digitación en el registro del ERP: toda orden de producción real requiere al menos un insumo activo, por lo que <code>num_insumos = 0</code> no corresponde a una configuración operativa válida del proceso. En consecuencia, estos registros se eliminan antes del análisis exploratorio.</p>
 <p>Primero cuantificamos cuántos casos afectan:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="metodologia.html#cb19-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
-<span id="cb19-2"><a href="metodologia.html#cb19-2" tabindex="-1"></a>  <span class="fu">count</span>(num_insumos) <span class="sc">%&gt;%</span></span>
-<span id="cb19-3"><a href="metodologia.html#cb19-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">porcentaje =</span> <span class="fu">round</span>(n <span class="sc">/</span> <span class="fu">sum</span>(n) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>))</span></code></pre></div>
-<pre><code>## # A tibble: 3 × 3
-##   num_insumos     n porcentaje
-##   &lt;ord&gt;       &lt;int&gt;      &lt;dbl&gt;
-## 1 0               8       1.98
-## 2 1             271      67.1 
-## 3 2             125      30.9</code></pre>
-<p>Se identificaron 8 órdenes con número de insumos en cero (2% del total de registros) .</p>
-<p>A continuación se eliminan los registros con <code>num_insumos = 0</code>:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="metodologia.html#cb21-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
-<span id="cb21-2"><a href="metodologia.html#cb21-2" tabindex="-1"></a>  <span class="fu">filter</span>(num_insumos <span class="sc">!=</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb21-3"><a href="metodologia.html#cb21-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">num_insumos =</span> <span class="fu">droplevels</span>(num_insumos)) <span class="ot">-&gt;</span> datos</span>
-<span id="cb21-4"><a href="metodologia.html#cb21-4" tabindex="-1"></a></span>
-<span id="cb21-5"><a href="metodologia.html#cb21-5" tabindex="-1"></a><span class="fu">dim</span>(datos)</span></code></pre></div>
-<pre><code>## [1] 396  16</code></pre>
-<p>Después de la eliminación, el dataset analítico queda conformado por 396 órdenes con al menos un insumo registrado.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="metodologia.html#cb18-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="metodologia.html#cb18-2" tabindex="-1"></a>  <span class="fu">count</span>(costo_insumo<span class="sc">==</span><span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb18-3"><a href="metodologia.html#cb18-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">porcentaje =</span> <span class="fu">round</span>(n <span class="sc">/</span> <span class="fu">sum</span>(n) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 3
+##   `costo_insumo == 0`     n porcentaje
+##   &lt;lgl&gt;               &lt;int&gt;      &lt;dbl&gt;
+## 1 FALSE                 395      97.8 
+## 2 TRUE                    9       2.23</code></pre>
+<p>Se identificaron 9 órdenes con número de insumos en cero (2.228% del total de registros) .</p>
+<p>A continuación se eliminan los registros con <code>costo_insumo = 0</code>:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="metodologia.html#cb20-1" tabindex="-1"></a>datos <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span> </span>
+<span id="cb20-2"><a href="metodologia.html#cb20-2" tabindex="-1"></a>  <span class="fu">filter</span>(costo_insumo <span class="sc">!=</span> <span class="dv">0</span>)</span>
+<span id="cb20-3"><a href="metodologia.html#cb20-3" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="metodologia.html#cb20-4" tabindex="-1"></a><span class="fu">dim</span>(datos)</span></code></pre></div>
+<pre><code>## [1] 395  16</code></pre>
+<p>Después de la eliminación, el dataset analítico queda conformado por 395 órdenes con al menos un insumo registrado.</p>
 </div>
 <div id="consideraciones-estructurales-de-la-data" class="section level3 hasAnchor" number="4.5.3">
 <h3><span class="header-section-number">4.5.3</span> Consideraciones estructurales de la data<a href="metodologia.html#consideraciones-estructurales-de-la-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
