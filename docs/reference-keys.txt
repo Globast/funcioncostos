@@ -1,6 +1,7 @@
 tab:vacio-conteo
 tab:na-calculos
 tab:cero-conteo
+tab:casoscero
 tab:diccionario-datos
 fig:histograma
 fig:dispersion
@@ -17,7 +18,7 @@ verificación-de-la-lectura
 identificación-de-valores-faltantes
 identificación-de-valores-no-registrados-vacios
 identificación-de-valores-na
-identificación-de-valores-no-registrados-vacios-1
+identificación-variables-con-valores-cero
 conversión-de-tipos
 eliminación-de-errores-de-digitación-confirmados
 consideraciones-estructurales-de-la-data

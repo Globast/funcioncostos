@@ -184,7 +184,7 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="4.3" data-path="metodologia.html"><a href="metodologia.html#identificaci%C3%B3n-de-valores-no-registrados-vacios"><i class="fa fa-check"></i><b>4.3</b> Identificación de valores no registrados (Vacios)</a></li>
 <li class="chapter" data-level="4.4" data-path="metodologia.html"><a href="metodologia.html#identificaci%C3%B3n-de-valores-na"><i class="fa fa-check"></i><b>4.4</b> Identificación de valores NA</a></li>
-<li class="chapter" data-level="4.5" data-path="metodologia.html"><a href="metodologia.html#identificaci%C3%B3n-de-valores-no-registrados-vacios-1"><i class="fa fa-check"></i><b>4.5</b> Identificación de valores no registrados (Vacios)</a>
+<li class="chapter" data-level="4.5" data-path="metodologia.html"><a href="metodologia.html#identificaci%C3%B3n-variables-con-valores-cero"><i class="fa fa-check"></i><b>4.5</b> Identificación Variables con valores cero</a>
 <ul>
 <li class="chapter" data-level="4.5.1" data-path="metodologia.html"><a href="metodologia.html#conversi%C3%B3n-de-tipos"><i class="fa fa-check"></i><b>4.5.1</b> Conversión de tipos</a></li>
 <li class="chapter" data-level="4.5.2" data-path="metodologia.html"><a href="metodologia.html#eliminaci%C3%B3n-de-errores-de-digitaci%C3%B3n-confirmados"><i class="fa fa-check"></i><b>4.5.2</b> Eliminación de errores de digitación confirmados</a></li>
@@ -342,13 +342,13 @@ El significado, tipo analítico, unidad de medida y rol de cada una de las 16 va
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="metodologia.html#cb10-1" tabindex="-1"></a>conteo_vacios <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span> </span>
 <span id="cb10-2"><a href="metodologia.html#cb10-2" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">trimws</span>(.) <span class="sc">==</span> <span class="st">&quot;&quot;</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))) <span class="sc">%&gt;%</span> </span>
 <span id="cb10-3"><a href="metodologia.html#cb10-3" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">&quot;variable&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;n_vacios&quot;</span>)</span>
-<span id="cb10-4"><a href="metodologia.html#cb10-4" tabindex="-1"></a> knitr<span class="sc">::</span><span class="fu">kable</span>(conteo_vacios, <span class="at">caption =</span> <span class="st">&quot;Variables con valores en cero&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-4"><a href="metodologia.html#cb10-4" tabindex="-1"></a> knitr<span class="sc">::</span><span class="fu">kable</span>(conteo_vacios, <span class="at">caption =</span> <span class="st">&quot;Variables con registros vacios&quot;</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb10-5"><a href="metodologia.html#cb10-5" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb10-6"><a href="metodologia.html#cb10-6" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">column_spec</span>(<span class="dv">1</span>, <span class="at">width =</span> <span class="st">&quot;12em&quot;</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb10-7"><a href="metodologia.html#cb10-7" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">column_spec</span>(<span class="dv">2</span>, <span class="at">width =</span> <span class="st">&quot;12em&quot;</span>)</span></code></pre></div>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:vacio-conteo">Table 4.1: </span><span id="tab:vacio-conteo">Table 4.2: </span>Variables con valores en cero
+<span id="tab:vacio-conteo">Table 4.1: </span><span id="tab:vacio-conteo">Table 4.2: </span>Variables con registros vacios
 </caption>
 <thead>
 <tr>
@@ -492,7 +492,7 @@ duracion_proceso
 </tbody>
 </table>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="metodologia.html#cb11-1" tabindex="-1"></a>total_vacios <span class="ot">&lt;-</span> <span class="fu">sum</span>(conteo_vacios<span class="sc">$</span>datos)</span></code></pre></div>
-<p>Hay 0 registros vacios.</p>
+<p>Hay 0 registros vacios. No se identifican variables vacías u otros marcadores de ausencia implícita.</p>
 </div>
 <div id="identificación-de-valores-na" class="section level2 hasAnchor" number="4.4">
 <h2><span class="header-section-number">4.4</span> Identificación de valores NA<a href="metodologia.html#identificaci%C3%B3n-de-valores-na" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -550,8 +550,8 @@ insumo_2
 <li>La variable <code>insumo_2</code> concentra 279 ausencias, equivalentes al 69.1% de las 404 órdenes. Conforme a las consultas SQL de origen, estos <code>NA</code> no representan datos perdidos sino la ausencia estructural de un segundo insumo cuando <code>num_insumos &lt; 2</code>.</li>
 </ul>
 </div>
-<div id="identificación-de-valores-no-registrados-vacios-1" class="section level2 hasAnchor" number="4.5">
-<h2><span class="header-section-number">4.5</span> Identificación de valores no registrados (Vacios)<a href="metodologia.html#identificaci%C3%B3n-de-valores-no-registrados-vacios-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="identificación-variables-con-valores-cero" class="section level2 hasAnchor" number="4.5">
+<h2><span class="header-section-number">4.5</span> Identificación Variables con valores cero<a href="metodologia.html#identificaci%C3%B3n-variables-con-valores-cero" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="metodologia.html#cb14-1" tabindex="-1"></a>conteo_ceros <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span> </span>
 <span id="cb14-2"><a href="metodologia.html#cb14-2" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">sum</span>(. <span class="sc">==</span> <span class="dv">0</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))) <span class="sc">%&gt;%</span> </span>
 <span id="cb14-3"><a href="metodologia.html#cb14-3" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">&quot;variable&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;n_ceros&quot;</span>)</span>
@@ -704,15 +704,230 @@ duracion_proceso
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="metodologia.html#cb15-1" tabindex="-1"></a>total_ceros <span class="ot">&lt;-</span> <span class="fu">sum</span>(conteo_ceros<span class="sc">$</span>datos)</span></code></pre></div>
-<p>Se identifican un total de 0 registros con valores cero los cuales hay que entrar a analizar según la variable, al tratarse de costos, no puede tener costos en cero, o tiempos de proceso en cero. por esto se verifica .</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="metodologia.html#cb15-1" tabindex="-1"></a>total_ceros <span class="ot">&lt;-</span> <span class="fu">sum</span>(conteo_ceros<span class="sc">$</span>n_ceros)</span></code></pre></div>
+<p>Se identifican un total de 318 registros de variables con valores cero.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="metodologia.html#cb16-1" tabindex="-1"></a>cols_excluir <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;cantidad_insumo_1&quot;</span>, <span class="st">&quot;cantidad_insumo_2&quot;</span>)</span>
 <span id="cb16-2"><a href="metodologia.html#cb16-2" tabindex="-1"></a></span>
 <span id="cb16-3"><a href="metodologia.html#cb16-3" tabindex="-1"></a>casos_con_ceros <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span> </span>
 <span id="cb16-4"><a href="metodologia.html#cb16-4" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">if_any</span>(</span>
 <span id="cb16-5"><a href="metodologia.html#cb16-5" tabindex="-1"></a>    <span class="sc">-</span><span class="fu">all_of</span>(cols_excluir), </span>
 <span id="cb16-6"><a href="metodologia.html#cb16-6" tabindex="-1"></a>    <span class="sc">~</span> . <span class="sc">==</span> <span class="dv">0</span></span>
-<span id="cb16-7"><a href="metodologia.html#cb16-7" tabindex="-1"></a>  ))</span></code></pre></div>
+<span id="cb16-7"><a href="metodologia.html#cb16-7" tabindex="-1"></a>  )) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-8"><a href="metodologia.html#cb16-8" tabindex="-1"></a>    <span class="fu">select</span>(id_orden, volumen_lote, costo_transformacion,  duracion_proceso, costo_insumo, num_insumos )<span class="sc">%&gt;%</span> </span>
+<span id="cb16-9"><a href="metodologia.html#cb16-9" tabindex="-1"></a> <span class="fu">arrange</span>(costo_transformacion)</span>
+<span id="cb16-10"><a href="metodologia.html#cb16-10" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(casos_con_ceros, <span class="at">caption =</span> <span class="st">&quot;Registros con valores en cero (excluyendo cantidad_insumo)&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-11"><a href="metodologia.html#cb16-11" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:casoscero">Table 4.7: </span><span id="tab:casoscero">Table 4.8: </span>Registros con valores en cero (excluyendo cantidad_insumo)
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+id_orden
+</th>
+<th style="text-align:right;">
+volumen_lote
+</th>
+<th style="text-align:right;">
+costo_transformacion
+</th>
+<th style="text-align:right;">
+duracion_proceso
+</th>
+<th style="text-align:right;">
+costo_insumo
+</th>
+<th style="text-align:right;">
+num_insumos
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+566930
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.000000
+</td>
+<td style="text-align:right;">
+123.0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+584267
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.000000
+</td>
+<td style="text-align:right;">
+0.0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+587628
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.000000
+</td>
+<td style="text-align:right;">
+0.0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+594854
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.000000
+</td>
+<td style="text-align:right;">
+0.0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+584273
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.000000
+</td>
+<td style="text-align:right;">
+0.0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+585979
+</td>
+<td style="text-align:right;">
+7350
+</td>
+<td style="text-align:right;">
+5.640275
+</td>
+<td style="text-align:right;">
+100.0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+591391
+</td>
+<td style="text-align:right;">
+2525
+</td>
+<td style="text-align:right;">
+12.492979
+</td>
+<td style="text-align:right;">
+54.5
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+551657
+</td>
+<td style="text-align:right;">
+2100
+</td>
+<td style="text-align:right;">
+23.827177
+</td>
+<td style="text-align:right;">
+107.0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+568828
+</td>
+<td style="text-align:right;">
+375
+</td>
+<td style="text-align:right;">
+53.438830
+</td>
+<td style="text-align:right;">
+32.0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<p>En total son 9 ordenes de producción donde algunoas de sus variables presentaron valores en cero.
+8 de estas ordenes ya se habían identificado con los NA de los insumos. En esta revisión se identifica una orden adicional, la cual revisando con operaciones, también confirma que obedeció a un error de tipeo.</p>
 <div id="conversión-de-tipos" class="section level3 hasAnchor" number="4.5.1">
 <h3><span class="header-section-number">4.5.1</span> Conversión de tipos<a href="metodologia.html#conversi%C3%B3n-de-tipos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>La inspección de la estructura revela que varias variables están almacenadas con tipos que no corresponden a su naturaleza analítica.

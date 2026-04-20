@@ -72,7 +72,7 @@ La identificación de valores faltantes se estructura en tres dimensiones analí
 conteo_vacios <- datos %>% 
   summarise(across(everything(), ~ sum(trimws(.) == "", na.rm = TRUE))) %>% 
   pivot_longer(everything(), names_to = "variable", values_to = "n_vacios")
- knitr::kable(conteo_vacios, caption = "Variables con valores en cero") %>% 
+ knitr::kable(conteo_vacios, caption = "Variables con registros vacios") %>% 
   kableExtra::kable_styling(full_width = FALSE) %>% 
   kableExtra::column_spec(1, width = "12em") %>% 
   kableExtra::column_spec(2, width = "12em")
@@ -80,7 +80,7 @@ total_vacios <- sum(conteo_vacios$datos)
 ```
 
 
-Hay `r total_vacios` registros vacios.
+Hay `r total_vacios` registros vacios. No se identifican variables vacías u otros marcadores de ausencia implícita.
 
 ## Identificación de valores NA
 
@@ -125,7 +125,7 @@ pct_na_insumo_2 <- round(n_na_insumo_2 / n_filas_inicial * 100, 1)
 - La variable `insumo_1` concentra `r n_na_insumo_1` ausencias.
 - La variable `insumo_2` concentra `r n_na_insumo_2` ausencias, equivalentes al `r pct_na_insumo_2`% de las `r n_filas_inicial` órdenes. Conforme a las consultas SQL de origen, estos `NA` no representan datos perdidos sino la ausencia estructural de un segundo insumo cuando `num_insumos < 2`. 
   
-## Identificación de valores no registrados (Vacios)
+## Identificación Variables con valores cero
 
 
 ```{r cero-conteo}
@@ -136,23 +136,29 @@ knitr::kable(conteo_ceros, caption = "Variables con valores en cero") %>%
   kableExtra::kable_styling(full_width = FALSE) %>% 
   kableExtra::column_spec(1, width = "12em") %>% 
   kableExtra::column_spec(2, width = "12em")
-total_ceros <- sum(conteo_ceros$datos)
+total_ceros <- sum(conteo_ceros$n_ceros)
 ```
 
-
-Se identifican un total de  `r total_ceros` registros con valores cero los cuales hay que entrar a analizar según la variable, al tratarse de costos, no puede tener costos en cero, o tiempos de proceso en cero. por esto se verifica . 
+Se identifican un total de  `r total_ceros` registros de variables con valores cero. 
 
 ```{r casoscero}
-
 cols_excluir <- c("cantidad_insumo_1", "cantidad_insumo_2")
 
 casos_con_ceros <- datos %>% 
   filter(if_any(
     -all_of(cols_excluir), 
     ~ . == 0
-  ))
+  )) %>% 
+    select(id_orden, volumen_lote, costo_transformacion,  duracion_proceso, costo_insumo, num_insumos )%>% 
+ arrange(costo_transformacion)
+knitr::kable(casos_con_ceros, caption = "Registros con valores en cero (excluyendo cantidad_insumo)") %>% 
+  kableExtra::kable_styling(full_width = FALSE)
+
 ```
 
+
+En total son 9 ordenes de producción donde algunoas de sus variables presentaron valores en cero.
+8 de estas ordenes ya se habían identificado con los NA de los insumos. En esta revisión se identifica una orden adicional, la cual revisando con operaciones, también confirma que obedeció a un error de tipeo.
 
 
 ### Conversión de tipos
