@@ -11,10 +11,10 @@ diseño-del-estudio
 extracción-transformación-y-carga-etl
 carga-del-conjunto-de-datos
 verificación-de-la-lectura
+identificación-de-valores-faltantes
 conversión-de-tipos
 eliminación-de-errores-de-digitación-confirmados
-identificación-de-valores-faltantes
-advertencias-sobre-inconsistencias-estructurales
+consideraciones-estructurales-de-la-data
 diccionario-de-campos
 análisis-exploratorio
 promedios-por-grupos

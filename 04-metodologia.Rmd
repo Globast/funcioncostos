@@ -58,6 +58,59 @@ El conjunto de datos contiene 404 órdenes de producción y 16 variables, confor
 El significado, tipo analítico, unidad de medida y rol de cada una de las 16 variables se documenta en detalle en el siguiente capítulo.
 
 
+### Identificación de valores faltantes
+
+Identificamos los valores faltantes por columna mediante dos enfoques complementarios. El primero entrega el conteo absoluto por variable; el segundo proporciona una visualización del patrón de ausencias.
+
+```{r na-calculos}
+
+n_filas_inicial <- nrow(datos)
+n_vars <- ncol(datos)
+
+conteo_na <- datos %>% 
+  summarise(across(everything(), ~ sum(is.na(.)))) %>% 
+  pivot_longer(everything(), names_to = "variable", values_to = "n_na")
+view(conteo_na)
+
+total_na <- conteo_na %>% 
+  filter(n_na > 0)
+total_na <- sum(conteo_na$n_na)
+```
+
+El conteo absoluto muestra un total de `r total_na` valores faltantes distribuidos en 2 variables del data set (`insumo_1` e `insumo_2`). 
+
+```{r na-calculos_porvariable}
+n_na_insumo_1 <- conteo_na %>% 
+  filter(variable == "insumo_1") %>% 
+  pull(n_na)
+
+
+n_na_insumo_2 <- conteo_na %>% 
+  filter(variable == "insumo_2") %>% 
+  pull(n_na)
+
+pct_na_insumo_2 <- round(n_na_insumo_2 / n_filas_inicial * 100, 1)
+
+
+```
+
+```{r na-conteo}
+datos %>%
+  summarise(across(everything(), ~ sum(is.na(.)), .names = "NA_{.col}"))
+```
+
+```{r na-mapa, fig.width=10, fig.height=5}
+missmap(datos, main = "Mapa de valores faltantes", 
+        col = c("#d62728", "#1f77b4"), legend = TRUE)
+```
+
+
+La variable `insumo_2` concentra `r n_na_insumo_2` ausencias, equivalentes al `r pct_na_insumo_2`% de las `r n_filas_inicial` órdenes. Conforme a las consultas SQL de origen, estos `NA` no representan datos perdidos sino la ausencia estructural de un segundo insumo cuando `num_insumos < 2`. 
+
+La variable `insumo_2` concentra `r n_na_insumo_2` ausencias, equivalentes al `r pct_na_insumo_2`% de las `r n_filas_inicial` órdenes. Conforme a las consultas SQL de origen, estos `NA` no representan datos perdidos sino la ausencia estructural de un segundo insumo cuando `num_insumos < 2`. 
+El resto de variables del dataset no presenta valores faltantes, lo cual es consistente con el proceso de consolidación desde las tablas transaccionales del ERP.
+
+
 ### Conversión de tipos
 
 La inspección de la estructura revela que varias variables están almacenadas con tipos que no corresponden a su naturaleza analítica. 
@@ -116,27 +169,8 @@ dim(datos)
 
 Después de la eliminación, el dataset analítico queda conformado por `r n_final`  órdenes con al menos un insumo registrado. 
 
+### Consideraciones estructurales de la data
 
-### Identificación de valores faltantes
+- La variable `cantidad_insumo_2` reporta el valor cero cuando `num_insumos = 1`, es decir, cuando estructuralmente no existe un segundo insumo. Estos ceros no constituyen mediciones de cantidad consumida, sino indicadores de ausencia de la categoría, y deben distinguirse de los ceros que pudieran reportarse como cantidad consumida real en casos donde el insumo sí está presente. Para los análisis posteriores, los estadísticos descriptivos sobre cantidades de insumo se calcularán condicionando sobre la presencia efectiva del insumo correspondiente.
 
-Identificamos los valores faltantes por columna mediante dos enfoques complementarios. El primero entrega el conteo absoluto por variable; el segundo proporciona una visualización del patrón de ausencias.
-
-```{r na-conteo}
-datos %>%
-  summarise(across(everything(), ~ sum(is.na(.)), .names = "NA_{.col}"))
-```
-
-```{r na-mapa, fig.width=10, fig.height=5}
-missmap(datos, main = "Mapa de valores faltantes", 
-        col = c("#d62728", "#1f77b4"), legend = TRUE)
-```
-
-El conteo y el mapa de ausencias permiten verificar si existen valores faltantes que requieran tratamiento. Conforme a las consultas SQL de origen, los únicos `NA` legítimos corresponden a `insumo_2` cuando `num_insumos < 2`, los cuales fueron recodificados en la etapa anterior como una categoría explícita.
-
-### Advertencias sobre inconsistencias estructurales
-
-Antes de proceder al análisis exploratorio se documentan dos aspectos estructurales del dataset que, si no se declaran explícitamente, pueden inducir interpretaciones erróneas.
-
-Primero, la variable `cantidad_insumo_2` reporta el valor cero cuando `num_insumos = 1`, es decir, cuando estructuralmente no existe un segundo insumo. Estos ceros no constituyen mediciones de cantidad consumida, sino indicadores de ausencia de la categoría, y deben distinguirse de los ceros que pudieran reportarse como cantidad consumida real en casos donde el insumo sí está presente. Para los análisis posteriores, los estadísticos descriptivos sobre cantidades de insumo se calcularán condicionando sobre la presencia efectiva del insumo correspondiente.
-
-Segundo, los costos `costo_transformacion` y `costo_insumo` se interpretan como unidades monetarias por unidad de producto producida, conforme a la definición del ERP. Esta unidad permite comparaciones directas entre órdenes de cualquier tamaño de lote, sin necesidad de transformaciones por escala de producción.
+- Los costos `costo_transformacion` y `costo_insumo` se interpretan como unidades monetarias por unidad de producto producida, conforme a la definición del ERP. Esta unidad permite comparaciones directas entre órdenes de cualquier tamaño de lote, sin necesidad de transformaciones por escala de producción.
