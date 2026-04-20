@@ -27,7 +27,7 @@ library(tidyverse)
 library(janitor)
 library(Amelia)
 
-datos <- read_csv("data/data_costos.csv")
+datos <- read_csv2("data/data_costos.csv")
 ```
 
 ### Verificación de la lectura
