@@ -66,7 +66,7 @@ La identificación de valores faltantes se estructura en tres dimensiones analí
 2. Valores NA, ausencia explícita de información en el sistema.
 3. Identificación de valores iguales a cero. Dado que las variables analizadas corresponden a costos y tiempos de proceso, la presencia de valores "cero" carece de sustento teórico,ya que no es consistente con la naturaleza de estas magnitudes.
 
-# Identificación de valores no registrados (Vacios)
+## Identificación de valores no registrados (Vacios)
 
 ```{r vacio-conteo}
 conteo_vacios <- datos %>% 
@@ -82,7 +82,7 @@ total_vacios <- sum(conteo_vacios$datos)
 
 Hay `r total_vacios` registros vacios.
 
-# Identificación de valores NA
+## Identificación de valores NA
 
 ```{r na-calculos}
 
@@ -125,7 +125,7 @@ pct_na_insumo_2 <- round(n_na_insumo_2 / n_filas_inicial * 100, 1)
 - La variable `insumo_1` concentra `r n_na_insumo_1` ausencias.
 - La variable `insumo_2` concentra `r n_na_insumo_2` ausencias, equivalentes al `r pct_na_insumo_2`% de las `r n_filas_inicial` órdenes. Conforme a las consultas SQL de origen, estos `NA` no representan datos perdidos sino la ausencia estructural de un segundo insumo cuando `num_insumos < 2`. 
   
-# Identificación de valores no registrados (Vacios)
+## Identificación de valores no registrados (Vacios)
 
 
 ```{r cero-conteo}
