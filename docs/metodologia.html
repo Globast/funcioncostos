@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es" xml:lang="es">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capítulo 4 Metodología | Análisis exploratorio e inferencial</title>
+  <meta name="description" content="Libro académico elaborado en bookdown para Maestría en Estadística Aplicada." />
+  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capítulo 4 Metodología | Análisis exploratorio e inferencial" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Libro académico elaborado en bookdown para Maestría en Estadística Aplicada." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capítulo 4 Metodología | Análisis exploratorio e inferencial" />
+  
+  <meta name="twitter:description" content="Libro académico elaborado en bookdown para Maestría en Estadística Aplicada." />
+  
+
+<meta name="author" content="Gloria Bastidas" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="objetivos.html"/>
+<link rel="next" href="diccionario-de-campos.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Libro Académico</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Portada</a></li>
+<li class="chapter" data-level="" data-path="prefacio.html"><a href="prefacio.html"><i class="fa fa-check"></i>Prefacio</a></li>
+<li class="chapter" data-level="1" data-path="resumen.html"><a href="resumen.html"><i class="fa fa-check"></i><b>1</b> Resumen</a></li>
+<li class="chapter" data-level="2" data-path="introducción.html"><a href="introducción.html"><i class="fa fa-check"></i><b>2</b> Introducción</a></li>
+<li class="chapter" data-level="3" data-path="objetivos.html"><a href="objetivos.html"><i class="fa fa-check"></i><b>3</b> Objetivos</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="objetivos.html"><a href="objetivos.html#objetivo-general"><i class="fa fa-check"></i><b>3.1</b> Objetivo general</a></li>
+<li class="chapter" data-level="3.2" data-path="objetivos.html"><a href="objetivos.html#objetivos-espec%C3%ADficos"><i class="fa fa-check"></i><b>3.2</b> Objetivos específicos</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="metodologia.html"><a href="metodologia.html"><i class="fa fa-check"></i><b>4</b> Metodología</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="metodologia.html"><a href="metodologia.html#dise%C3%B1o-del-estudio"><i class="fa fa-check"></i><b>4.1</b> Diseño del estudio</a></li>
+<li class="chapter" data-level="4.2" data-path="metodologia.html"><a href="metodologia.html#extracci%C3%B3n-transformaci%C3%B3n-y-carga-etl"><i class="fa fa-check"></i><b>4.2</b> Extracción, transformación y carga (ETL)</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="metodologia.html"><a href="metodologia.html#carga-del-conjunto-de-datos"><i class="fa fa-check"></i><b>4.2.1</b> Carga del conjunto de datos</a></li>
+<li class="chapter" data-level="4.2.2" data-path="metodologia.html"><a href="metodologia.html#verificaci%C3%B3n-de-la-lectura"><i class="fa fa-check"></i><b>4.2.2</b> Verificación de la lectura</a></li>
+<li class="chapter" data-level="4.2.3" data-path="metodologia.html"><a href="metodologia.html#conversi%C3%B3n-de-tipos"><i class="fa fa-check"></i><b>4.2.3</b> Conversión de tipos</a></li>
+<li class="chapter" data-level="4.2.4" data-path="metodologia.html"><a href="metodologia.html#identificaci%C3%B3n-de-valores-faltantes"><i class="fa fa-check"></i><b>4.2.4</b> Identificación de valores faltantes</a></li>
+<li class="chapter" data-level="4.2.5" data-path="metodologia.html"><a href="metodologia.html#advertencias-sobre-inconsistencias-detectadas"><i class="fa fa-check"></i><b>4.2.5</b> Advertencias sobre inconsistencias detectadas</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="diccionario-de-campos.html"><a href="diccionario-de-campos.html"><i class="fa fa-check"></i><b>5</b> Diccionario de campos</a></li>
+<li class="chapter" data-level="6" data-path="análisis-exploratorio.html"><a href="análisis-exploratorio.html"><i class="fa fa-check"></i><b>6</b> Análisis Exploratorio</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="análisis-exploratorio.html"><a href="análisis-exploratorio.html#tabla-descriptiva"><i class="fa fa-check"></i><b>6.1</b> Tabla descriptiva</a></li>
+<li class="chapter" data-level="6.2" data-path="análisis-exploratorio.html"><a href="análisis-exploratorio.html#promedios-por-grupos"><i class="fa fa-check"></i><b>6.2</b> Promedios por grupos</a></li>
+<li class="chapter" data-level="6.3" data-path="análisis-exploratorio.html"><a href="análisis-exploratorio.html#histograma"><i class="fa fa-check"></i><b>6.3</b> Histograma</a></li>
+<li class="chapter" data-level="6.4" data-path="análisis-exploratorio.html"><a href="análisis-exploratorio.html#diagrama-de-dispersi%C3%B3n"><i class="fa fa-check"></i><b>6.4</b> Diagrama de dispersión</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="pruebas-de-hipótesis.html"><a href="pruebas-de-hipótesis.html"><i class="fa fa-check"></i><b>7</b> Pruebas de Hipótesis</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="pruebas-de-hipótesis.html"><a href="pruebas-de-hipótesis.html#prueba-t-de-dos-muestras"><i class="fa fa-check"></i><b>7.1</b> Prueba t de dos muestras</a></li>
+<li class="chapter" data-level="7.2" data-path="pruebas-de-hipótesis.html"><a href="pruebas-de-hipótesis.html#interpretaci%C3%B3n-base"><i class="fa fa-check"></i><b>7.2</b> Interpretación base</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="modelos.html"><a href="modelos.html"><i class="fa fa-check"></i><b>8</b> Modelos</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="modelos.html"><a href="modelos.html#ajuste-del-modelo"><i class="fa fa-check"></i><b>8.1</b> Ajuste del modelo</a></li>
+<li class="chapter" data-level="8.2" data-path="modelos.html"><a href="modelos.html#medidas-de-ajuste"><i class="fa fa-check"></i><b>8.2</b> Medidas de ajuste</a></li>
+<li class="chapter" data-level="8.3" data-path="modelos.html"><a href="modelos.html#gr%C3%A1fico-de-observados-vs-ajustados"><i class="fa fa-check"></i><b>8.3</b> Gráfico de observados vs ajustados</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="conclusión.html"><a href="conclusión.html"><i class="fa fa-check"></i><b>9</b> Conclusión</a></li>
+<li class="chapter" data-level="10" data-path="bibliografía.html"><a href="bibliografía.html"><i class="fa fa-check"></i><b>10</b> Bibliografía</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/">Publicado con GitHub Pages</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Análisis exploratorio e inferencial</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="metodologia" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">Capítulo 4</span> Metodología<a href="metodologia.html#metodologia" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="diseño-del-estudio" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Diseño del estudio<a href="metodologia.html#dise%C3%B1o-del-estudio" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Este trabajo corresponde a un <strong>estudio observacional, retrospectivo y transversal</strong> sobre el proceso productivo de cápsulas duras de una empresa farmacéutica colombiana. Es observacional porque no se manipulan variables sobre el proceso; retrospectivo porque utiliza registros generados durante operaciones ya ejecutadas; y transversal porque captura información de un período acotado sin seguimiento longitudinal de unidades individuales.</p>
+<p>La <strong>población objetivo</strong> son todas las órdenes de producción ejecutadas en el proceso de fabricación de cápsulas durante el régimen operativo vigente. La <strong>muestra</strong> está conformada por 406 órdenes de producción registradas en el sistema ERP durante el período de estudio, extraídas mediante consultas SQL sobre las tablas transaccionales de órdenes, consumos y tiempos, junto con la tabla de costos por período y el maestro de productos. La consolidación se realizó en Excel y posteriormente se exportó a formato CSV para garantizar reproducibilidad y trazabilidad.</p>
+<p>Sobre la <strong>representatividad de la muestra</strong>, se asume que las 406 órdenes constituyen una muestra representativa del proceso productivo bajo el régimen operativo vigente, en la medida en que cubren la variedad de productos, equipos, modalidades y tamaños de lote habituales del proceso. Esta representatividad se evaluará empíricamente en el capítulo de análisis exploratorio mediante la verificación de la cobertura de niveles en cada variable categórica.</p>
+<p>Las <strong>limitaciones conocidas del dataset</strong> que conviene declarar de entrada son las siguientes. Primero, el dataset no incluye órdenes anuladas, abortadas o reprocesadas, lo que genera una potencial subestimación de la variabilidad real del costo. Segundo, la calidad del registro depende de la disciplina del operario en el momento de cierre de la orden en el ERP, lo cual introduce una fuente de error de medición no cuantificable a priori. Tercero, las cantidades de insumo se reportan en unidades que pueden diferir entre tipos de insumo (kg, L, unidades), lo cual limita la posibilidad de agregarlas en una métrica única. Cuarto, los costos están expresados en unidades monetarias por unidad de producto y reflejan la tarifa interna de costeo del período, sin ajuste por inflación intra-período.</p>
+<p>Sobre los <strong>aspectos éticos y de confidencialidad</strong>, los datos provienen de operaciones industriales reales y contienen información sensible para la empresa. Por esta razón, los identificadores de producto, máquina e insumo fueron anonimizados en origen mediante codificación alfanumérica que preserva la estructura analítica sin revelar identidades comerciales. Los costos se mantienen en su escala original por requerirlo el análisis estadístico, pero se reportan sin referencia a tarifas externas o márgenes.</p>
+<p>El <strong>software utilizado</strong> es R versión 4 o superior, con los paquetes <code>tidyverse</code> para manipulación y visualización, <code>Amelia</code> para diagnóstico de valores faltantes, <code>janitor</code> como guardia defensiva en limpieza de nombres, <code>kableExtra</code> para presentación de tablas, y <code>patchwork</code> y <code>gridExtra</code> para composición de gráficos. Todos los análisis son completamente reproducibles a partir del código fuente disponible en el repositorio.</p>
+</div>
+<div id="extracción-transformación-y-carga-etl" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Extracción, transformación y carga (ETL)<a href="metodologia.html#extracci%C3%B3n-transformaci%C3%B3n-y-carga-etl" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="carga-del-conjunto-de-datos" class="section level3 hasAnchor" number="4.2.1">
+<h3><span class="header-section-number">4.2.1</span> Carga del conjunto de datos<a href="metodologia.html#carga-del-conjunto-de-datos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="metodologia.html#cb1-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="metodologia.html#cb1-2" tabindex="-1"></a><span class="fu">library</span>(janitor)</span>
+<span id="cb1-3"><a href="metodologia.html#cb1-3" tabindex="-1"></a><span class="fu">library</span>(Amelia)</span>
+<span id="cb1-4"><a href="metodologia.html#cb1-4" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="metodologia.html#cb1-5" tabindex="-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">read_csv2</span>(<span class="st">&quot;data/data_costos.csv&quot;</span>, </span>
+<span id="cb1-6"><a href="metodologia.html#cb1-6" tabindex="-1"></a>                  <span class="at">locale =</span> <span class="fu">locale</span>(<span class="at">encoding =</span> <span class="st">&quot;UTF-8&quot;</span>),</span>
+<span id="cb1-7"><a href="metodologia.html#cb1-7" tabindex="-1"></a>                  <span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-8"><a href="metodologia.html#cb1-8" tabindex="-1"></a>  <span class="fu">clean_names</span>()</span></code></pre></div>
+</div>
+<div id="verificación-de-la-lectura" class="section level3 hasAnchor" number="4.2.2">
+<h3><span class="header-section-number">4.2.2</span> Verificación de la lectura<a href="metodologia.html#verificaci%C3%B3n-de-la-lectura" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Verificamos que el archivo se leyó correctamente inspeccionando las primeras filas, las dimensiones, los nombres de las columnas y la estructura de tipos detectados.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="metodologia.html#cb2-1" tabindex="-1"></a><span class="fu">head</span>(datos, <span class="at">n =</span> <span class="dv">5</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 5 × 16
+##   periodo codigo_producto id_orden volumen_lote costo_transformacion
+##     &lt;dbl&gt; &lt;chr&gt;              &lt;dbl&gt;        &lt;dbl&gt;                &lt;dbl&gt;
+## 1  202501 P05747            546009         7440           2459984534
+## 2  202501 P06976            551645         1680           3650522371
+## 3  202501 P07920            548767         1556           2228017051
+## 4  202501 P07767            552185         2700           1416815559
+## 5  202501 P07576            546482         2578           1822597584
+## # ℹ 11 more variables: costo_insumo &lt;chr&gt;, equipo_id &lt;chr&gt;, tipo_equipo &lt;chr&gt;,
+## #   categoria_producto &lt;dbl&gt;, num_insumos &lt;dbl&gt;, insumo_1 &lt;chr&gt;,
+## #   insumo_2 &lt;chr&gt;, cantidad_insumo_1 &lt;chr&gt;, cantidad_insumo_2 &lt;chr&gt;,
+## #   modalidad_proceso &lt;chr&gt;, duracion_proceso &lt;dbl&gt;</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="metodologia.html#cb4-1" tabindex="-1"></a><span class="fu">dim</span>(datos)</span></code></pre></div>
+<pre><code>## [1] 404  16</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="metodologia.html#cb6-1" tabindex="-1"></a><span class="fu">colnames</span>(datos)</span></code></pre></div>
+<pre><code>##  [1] &quot;periodo&quot;              &quot;codigo_producto&quot;      &quot;id_orden&quot;            
+##  [4] &quot;volumen_lote&quot;         &quot;costo_transformacion&quot; &quot;costo_insumo&quot;        
+##  [7] &quot;equipo_id&quot;            &quot;tipo_equipo&quot;          &quot;categoria_producto&quot;  
+## [10] &quot;num_insumos&quot;          &quot;insumo_1&quot;             &quot;insumo_2&quot;            
+## [13] &quot;cantidad_insumo_1&quot;    &quot;cantidad_insumo_2&quot;    &quot;modalidad_proceso&quot;   
+## [16] &quot;duracion_proceso&quot;</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="metodologia.html#cb8-1" tabindex="-1"></a><span class="fu">str</span>(datos)</span></code></pre></div>
+<pre><code>## spc_tbl_ [404 × 16] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+##  $ periodo             : num [1:404] 202501 202501 202501 202501 202501 ...
+##  $ codigo_producto     : chr [1:404] &quot;P05747&quot; &quot;P06976&quot; &quot;P07920&quot; &quot;P07767&quot; ...
+##  $ id_orden            : num [1:404] 546009 551645 548767 552185 546482 ...
+##  $ volumen_lote        : num [1:404] 7440 1680 1556 2700 2578 ...
+##  $ costo_transformacion: num [1:404] 2459984534 3650522371 2228017051 1416815559 1822597584 ...
+##  $ costo_insumo        : chr [1:404] &quot;4.184607095&quot; &quot;1.594430404&quot; &quot;2.149802214&quot; &quot;3.843639109&quot; ...
+##  $ equipo_id           : chr [1:404] &quot;M08&quot; &quot;M02&quot; &quot;M14&quot; &quot;M13&quot; ...
+##  $ tipo_equipo         : chr [1:404] &quot;A1&quot; &quot;B2&quot; &quot;A1&quot; &quot;A1&quot; ...
+##  $ categoria_producto  : num [1:404] 7 5 5 5 5 5 5 5 5 4 ...
+##  $ num_insumos         : num [1:404] 1 2 1 1 2 2 2 2 1 1 ...
+##  $ insumo_1            : chr [1:404] &quot;B_T&quot; &quot;B_T&quot; &quot;N_O&quot; &quot;B_T&quot; ...
+##  $ insumo_2            : chr [1:404] NA &quot;N_T&quot; NA NA ...
+##  $ cantidad_insumo_1   : chr [1:404] &quot;6&quot; &quot;1.5&quot; &quot;0.5&quot; &quot;2&quot; ...
+##  $ cantidad_insumo_2   : chr [1:404] &quot;0&quot; &quot;0.05&quot; &quot;0&quot; &quot;0&quot; ...
+##  $ modalidad_proceso   : chr [1:404] &quot;X&quot; &quot;Y&quot; &quot;Y&quot; &quot;X&quot; ...
+##  $ duracion_proceso    : num [1:404] 300 98 100 62 91 ...
+##  - attr(*, &quot;spec&quot;)=
+##   .. cols(
+##   ..   periodo = col_double(),
+##   ..   codigo_producto = col_character(),
+##   ..   id_orden = col_double(),
+##   ..   volumen_lote = col_number(),
+##   ..   costo_transformacion = col_number(),
+##   ..   costo_insumo = col_character(),
+##   ..   equipo_id = col_character(),
+##   ..   tipo_equipo = col_character(),
+##   ..   categoria_producto = col_double(),
+##   ..   num_insumos = col_double(),
+##   ..   insumo_1 = col_character(),
+##   ..   insumo_2 = col_character(),
+##   ..   cantidad_insumo_1 = col_character(),
+##   ..   cantidad_insumo_2 = col_character(),
+##   ..   modalidad_proceso = col_character(),
+##   ..   duracion_proceso = col_number()
+##   .. )
+##  - attr(*, &quot;problems&quot;)=&lt;externalptr&gt;</code></pre>
+<p>El conjunto de datos contiene 406 órdenes de producción y 16 variables, conforme a la definición presentada en el capítulo del diccionario de datos. Los tipos detectados por <code>read_csv</code> corresponden mayoritariamente a <code>numeric</code> y <code>character</code>. En la siguiente etapa se ajustan los tipos para que reflejen la naturaleza estadística real de cada variable.</p>
+</div>
+<div id="conversión-de-tipos" class="section level3 hasAnchor" number="4.2.3">
+<h3><span class="header-section-number">4.2.3</span> Conversión de tipos<a href="metodologia.html#conversi%C3%B3n-de-tipos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>La inspección de la estructura revela que varias variables están almacenadas con tipos que no corresponden a su naturaleza analítica. La variable <code>periodo</code> viene como entero <code>YYYYMM</code> y debe convertirse a fecha para permitir análisis temporales. La variable <code>num_insumos</code>, restringida a los valores 0, 1 y 2, debe tratarse como factor ordenado. Las variables <code>tipo_equipo</code>, <code>categoria_producto</code>, <code>equipo_id</code>, <code>modalidad_proceso</code>, <code>insumo_1</code> e <code>insumo_2</code> deben convertirse a factor para los análisis inferenciales posteriores. La variable <code>insumo_2</code> requiere además una recodificación explícita de los valores faltantes a una categoría “sin segundo insumo”, dado que el <code>NA</code> no representa un dato perdido sino una característica estructural de la orden (cuando <code>num_insumos &lt; 2</code>).</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="metodologia.html#cb10-1" tabindex="-1"></a>datos <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="metodologia.html#cb10-2" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb10-3"><a href="metodologia.html#cb10-3" tabindex="-1"></a>    <span class="at">periodo =</span> <span class="fu">as.Date</span>(<span class="fu">paste0</span>(periodo, <span class="st">&quot;01&quot;</span>), <span class="at">format =</span> <span class="st">&quot;%Y%m%d&quot;</span>),</span>
+<span id="cb10-4"><a href="metodologia.html#cb10-4" tabindex="-1"></a>    <span class="at">num_insumos =</span> <span class="fu">factor</span>(num_insumos, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>), <span class="at">ordered =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb10-5"><a href="metodologia.html#cb10-5" tabindex="-1"></a>    <span class="at">tipo_equipo =</span> <span class="fu">as.factor</span>(tipo_equipo),</span>
+<span id="cb10-6"><a href="metodologia.html#cb10-6" tabindex="-1"></a>    <span class="at">categoria_producto =</span> <span class="fu">as.factor</span>(categoria_producto),</span>
+<span id="cb10-7"><a href="metodologia.html#cb10-7" tabindex="-1"></a>    <span class="at">equipo_id =</span> <span class="fu">as.factor</span>(equipo_id),</span>
+<span id="cb10-8"><a href="metodologia.html#cb10-8" tabindex="-1"></a>    <span class="at">modalidad_proceso =</span> <span class="fu">as.factor</span>(modalidad_proceso),</span>
+<span id="cb10-9"><a href="metodologia.html#cb10-9" tabindex="-1"></a>    <span class="at">insumo_1 =</span> <span class="fu">as.factor</span>(insumo_1),</span>
+<span id="cb10-10"><a href="metodologia.html#cb10-10" tabindex="-1"></a>    <span class="at">insumo_2 =</span> <span class="fu">factor</span>(<span class="fu">if_else</span>(<span class="fu">is.na</span>(insumo_2), <span class="st">&quot;sin_segundo_insumo&quot;</span>, insumo_2))</span>
+<span id="cb10-11"><a href="metodologia.html#cb10-11" tabindex="-1"></a>  )</span>
+<span id="cb10-12"><a href="metodologia.html#cb10-12" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="metodologia.html#cb10-13" tabindex="-1"></a><span class="fu">str</span>(datos)</span></code></pre></div>
+<pre><code>## tibble [404 × 16] (S3: tbl_df/tbl/data.frame)
+##  $ periodo             : Date[1:404], format: &quot;2025-01-01&quot; &quot;2025-01-01&quot; ...
+##  $ codigo_producto     : chr [1:404] &quot;P05747&quot; &quot;P06976&quot; &quot;P07920&quot; &quot;P07767&quot; ...
+##  $ id_orden            : num [1:404] 546009 551645 548767 552185 546482 ...
+##  $ volumen_lote        : num [1:404] 7440 1680 1556 2700 2578 ...
+##  $ costo_transformacion: num [1:404] 2459984534 3650522371 2228017051 1416815559 1822597584 ...
+##  $ costo_insumo        : chr [1:404] &quot;4.184607095&quot; &quot;1.594430404&quot; &quot;2.149802214&quot; &quot;3.843639109&quot; ...
+##  $ equipo_id           : Factor w/ 12 levels &quot;M02&quot;,&quot;M04&quot;,&quot;M05&quot;,..: 4 1 9 8 1 1 1 1 1 6 ...
+##  $ tipo_equipo         : Factor w/ 4 levels &quot;A1&quot;,&quot;B2&quot;,&quot;C3&quot;,..: 1 2 1 1 2 2 2 2 2 3 ...
+##  $ categoria_producto  : Factor w/ 7 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,..: 7 5 5 5 5 5 5 5 5 4 ...
+##  $ num_insumos         : Ord.factor w/ 3 levels &quot;0&quot;&lt;&quot;1&quot;&lt;&quot;2&quot;: 2 3 2 2 3 3 3 3 2 2 ...
+##  $ insumo_1            : Factor w/ 6 levels &quot;A_T&quot;,&quot;B_T&quot;,&quot;N_O&quot;,..: 2 2 3 2 2 2 2 2 5 3 ...
+##  $ insumo_2            : Factor w/ 7 levels &quot;A_T&quot;,&quot;B_T&quot;,&quot;N_O&quot;,..: 6 4 6 6 7 7 7 7 6 6 ...
+##  $ cantidad_insumo_1   : chr [1:404] &quot;6&quot; &quot;1.5&quot; &quot;0.5&quot; &quot;2&quot; ...
+##  $ cantidad_insumo_2   : chr [1:404] &quot;0&quot; &quot;0.05&quot; &quot;0&quot; &quot;0&quot; ...
+##  $ modalidad_proceso   : Factor w/ 3 levels &quot;X&quot;,&quot;Y&quot;,&quot;Z&quot;: 1 2 2 1 1 1 1 1 2 1 ...
+##  $ duracion_proceso    : num [1:404] 300 98 100 62 91 ...</code></pre>
+</div>
+<div id="identificación-de-valores-faltantes" class="section level3 hasAnchor" number="4.2.4">
+<h3><span class="header-section-number">4.2.4</span> Identificación de valores faltantes<a href="metodologia.html#identificaci%C3%B3n-de-valores-faltantes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Identificamos los valores faltantes por columna mediante dos enfoques complementarios. El primero entrega el conteo absoluto por variable; el segundo proporciona una visualización del patrón de ausencias.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="metodologia.html#cb12-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="metodologia.html#cb12-2" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(.)), <span class="at">.names =</span> <span class="st">&quot;NA_{.col}&quot;</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 16
+##   NA_periodo NA_codigo_producto NA_id_orden NA_volumen_lote
+##        &lt;int&gt;              &lt;int&gt;       &lt;int&gt;           &lt;int&gt;
+## 1          0                  0           0               0
+## # ℹ 12 more variables: NA_costo_transformacion &lt;int&gt;, NA_costo_insumo &lt;int&gt;,
+## #   NA_equipo_id &lt;int&gt;, NA_tipo_equipo &lt;int&gt;, NA_categoria_producto &lt;int&gt;,
+## #   NA_num_insumos &lt;int&gt;, NA_insumo_1 &lt;int&gt;, NA_insumo_2 &lt;int&gt;,
+## #   NA_cantidad_insumo_1 &lt;int&gt;, NA_cantidad_insumo_2 &lt;int&gt;,
+## #   NA_modalidad_proceso &lt;int&gt;, NA_duracion_proceso &lt;int&gt;</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="metodologia.html#cb14-1" tabindex="-1"></a><span class="fu">missmap</span>(datos, <span class="at">main =</span> <span class="st">&quot;Mapa de valores faltantes&quot;</span>, </span>
+<span id="cb14-2"><a href="metodologia.html#cb14-2" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;#d62728&quot;</span>, <span class="st">&quot;#1f77b4&quot;</span>), <span class="at">legend =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/na-mapa-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<p>El conteo y el mapa de ausencias permiten verificar si existen valores faltantes que requieran tratamiento. Conforme a las consultas SQL de origen, los únicos <code>NA</code> legítimos corresponden a <code>insumo_2</code> cuando <code>num_insumos &lt; 2</code>, los cuales fueron recodificados en la etapa anterior como una categoría explícita.</p>
+</div>
+<div id="advertencias-sobre-inconsistencias-detectadas" class="section level3 hasAnchor" number="4.2.5">
+<h3><span class="header-section-number">4.2.5</span> Advertencias sobre inconsistencias detectadas<a href="metodologia.html#advertencias-sobre-inconsistencias-detectadas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Durante la inspección preliminar del dataset se identificaron tres aspectos que conviene declarar antes del análisis exploratorio, para evitar interpretaciones erróneas en etapas posteriores.</p>
+<p>Primero, la variable <code>cantidad_insumo_2</code> reporta el valor cero cuando <code>num_insumos</code> toma valores 0 o 1, es decir, cuando estructuralmente no existe un segundo insumo. Estos ceros no constituyen mediciones de cantidad consumida sino indicadores de ausencia de la categoría, y deben distinguirse de los ceros que pudieran reportarse como cantidad consumida real. La misma consideración aplica a <code>cantidad_insumo_1</code> cuando <code>num_insumos = 0</code>. Para los análisis posteriores, los estadísticos descriptivos sobre cantidades de insumo se calcularán condicionando sobre la presencia efectiva del insumo correspondiente.</p>
+<p>Segundo, las cantidades de insumo (<code>cantidad_insumo_1</code> y <code>cantidad_insumo_2</code>) presentan magnitudes muy heterogéneas entre observaciones (por ejemplo, valores de 6, 1.5, 0.5 frente a 0.05), lo que sugiere que insumos distintos se miden en unidades distintas (kilogramos, litros, unidades). Esta limitación impide construir una métrica agregada de “cantidad total de insumo” sin normalización previa por tipo de insumo, decisión que se documentará en el capítulo de análisis exploratorio.</p>
+<p>Tercero, los costos <code>costo_transformacion</code> y <code>costo_insumo</code> se interpretan como unidades monetarias por unidad de producto producida, conforme a la definición del ERP. Esta unidad permite comparaciones directas entre órdenes de cualquier tamaño de lote, sin necesidad de transformaciones por escala de producción.</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="objetivos.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="diccionario-de-campos.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "serif",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": {},
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  },
+  "toolbar": {
+    "position": "static"
+  }
+});
+});
+</script>
+
+</body>
+
+</html>
