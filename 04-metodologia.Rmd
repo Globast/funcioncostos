@@ -4,13 +4,17 @@
 
 Este trabajo corresponde a un **estudio observacional, retrospectivo y transversal** sobre el proceso productivo de cápsulas duras de una empresa farmacéutica colombiana. Es observacional porque no se manipulan variables sobre el proceso; retrospectivo porque utiliza registros generados durante operaciones ya ejecutadas; y transversal porque captura información de un período acotado sin seguimiento longitudinal de unidades individuales.
 
-La **población objetivo** son todas las órdenes de producción ejecutadas en el proceso de fabricación de cápsulas durante el régimen operativo vigente. La **muestra** está conformada por 406 órdenes de producción registradas en el sistema ERP durante el período de estudio, extraídas mediante consultas SQL sobre las tablas transaccionales de órdenes, consumos y tiempos, junto con la tabla de costos por período y el maestro de productos. La consolidación se realizó en Excel y posteriormente se exportó a formato CSV para garantizar reproducibilidad y trazabilidad.
+La **muestra** está conformada por 406 órdenes de producción registradas en el sistema ERP durante el período de estudio, extraídas mediante consultas SQL sobre las tablas transaccionales de órdenes, consumos y tiempos, junto con la tabla de costos por período y el maestro de productos. La consolidación se realizó en Excel y posteriormente se exportó a formato CSV para garantizar reproducibilidad y trazabilidad.
 
-Sobre la **representatividad de la muestra**, se asume que las 406 órdenes constituyen una muestra representativa del proceso productivo bajo el régimen operativo vigente, en la medida en que cubren la variedad de productos, equipos, modalidades y tamaños de lote habituales del proceso. Esta representatividad se evaluará empíricamente en el capítulo de análisis exploratorio mediante la verificación de la cobertura de niveles en cada variable categórica.
+Las 406 órdenes constituyen una muestra representativa del proceso productivo, en la medida en que cubren variedad de productos, equipos, modalidades y tamaños de lote habituales del proceso. 
 
-Las **limitaciones conocidas del dataset** que conviene declarar de entrada son las siguientes. Primero, el dataset no incluye órdenes anuladas, abortadas o reprocesadas, lo que genera una potencial subestimación de la variabilidad real del costo. Segundo, la calidad del registro depende de la disciplina del operario en el momento de cierre de la orden en el ERP, lo cual introduce una fuente de error de medición no cuantificable a priori. Tercero, las cantidades de insumo se reportan en unidades que pueden diferir entre tipos de insumo (kg, L, unidades), lo cual limita la posibilidad de agregarlas en una métrica única. Cuarto, los costos están expresados en unidades monetarias por unidad de producto y reflejan la tarifa interna de costeo del período, sin ajuste por inflación intra-período.
+**Limitaciones conocidad del dataset:**
+*Sesgo de selección:* Se excluyen registros de órdenes anuladas, abortadas o reprocesadas, limitándose exclusivamente a procesos completados.
+*Variabilidad operativa:* La calidad del registro depende de la disciplina del operario en el momento de cierre de la orden en el ERP, lo cual introduce una fuente de error de medición no cuantificable a priori.
+*Imprecisión en consumos:* Los insumos se registran en litros (equivalentes a un envase estándar). Las fracciones menores se estiman visualmente ante la falta de un proceso de pesaje, lo que afecta la precisión de las cantidades reportadas.
+*Base de valoración:* Los costos se expresan en unidades monetarias por producto, calculados según la tarifa de costeo del periodo reportado.
 
-Sobre los **aspectos éticos y de confidencialidad**, los datos provienen de operaciones industriales reales y contienen información sensible para la empresa. Por esta razón, los identificadores de producto, máquina e insumo fueron anonimizados en origen mediante codificación alfanumérica que preserva la estructura analítica sin revelar identidades comerciales. Los costos se mantienen en su escala original por requerirlo el análisis estadístico, pero se reportan sin referencia a tarifas externas o márgenes.
+**Aspectos éticos y de confidencialidad**, los datos provienen de operaciones industriales reales y contienen información sensible para la empresa. Por esta razón, los identificadores de producto, máquina e insumo fueron anonimizados en origen mediante codificación alfanumérica que preserva la estructura analítica sin revelar identidades comerciales. 
 
 El **software utilizado** es R versión 4 o superior, con los paquetes `tidyverse` para manipulación y visualización, `Amelia` para diagnóstico de valores faltantes, `janitor` como guardia defensiva en limpieza de nombres, `kableExtra` para presentación de tablas, y `patchwork` y `gridExtra` para composición de gráficos. Todos los análisis son completamente reproducibles a partir del código fuente disponible en el repositorio.
 
@@ -23,9 +27,8 @@ library(tidyverse)
 library(janitor)
 library(Amelia)
 
-datos <- read_csv2("data/data_costos.csv", 
-                  locale = locale(encoding = "UTF-8"),
-                  show_col_types = FALSE) %>%
+datos <- read_csv("data/data_costos.csv", 
+                  locale = locale(encoding = "UTF-8") %>%
   clean_names()
 ```
 
