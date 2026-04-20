@@ -70,11 +70,13 @@ n_vars <- ncol(datos)
 conteo_na <- datos %>% 
   summarise(across(everything(), ~ sum(is.na(.)))) %>% 
   pivot_longer(everything(), names_to = "variable", values_to = "n_na")
-view(conteo_na)
+
 
 total_na <- conteo_na %>% 
   filter(n_na > 0)
 total_na <- sum(conteo_na$n_na)
+view(total_na)
+
 ```
 
 El conteo absoluto muestra un total de `r total_na` valores faltantes distribuidos en 2 variables del data set (`insumo_1` e `insumo_2`). 
@@ -105,7 +107,7 @@ missmap(datos, main = "Mapa de valores faltantes",
 ```
 
 
-- La variable `insumo_1` concentra `r n_na_insumo_1` ausencias. 
+- La variable `insumo_1` concentra `r n_na_insumo_1` ausencias.
 - La variable `insumo_2` concentra `r n_na_insumo_2` ausencias, equivalentes al `r pct_na_insumo_2`% de las `r n_filas_inicial` órdenes. Conforme a las consultas SQL de origen, estos `NA` no representan datos perdidos sino la ausencia estructural de un segundo insumo cuando `num_insumos < 2`. 
 El resto de variables del dataset no presenta valores faltantes, lo cual es consistente con el proceso de consolidación desde las tablas transaccionales del ERP.
 
