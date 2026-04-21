@@ -46,8 +46,9 @@ datos %>%
     Q3      = quantile(costo_transformacion, 0.75),
     IQR     = IQR(costo_transformacion)
   ) -> resumen_ct
-knitr::kable(resumen_ct, caption = "Clasificación operativa de las órdenes con valores cero") %>%
-  kableExtra::kable_styling(full_width = FALSE) %>% 
+
+knitr::kable(resumen_ct, caption = "Resumen del costo de transformacion") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
 
 
 ```
