@@ -895,6 +895,16 @@ resumen_bivariado_cc <- datos %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
+El tipo de equipo A1, presenta un costo medio de aproximadamente 33 UM/unidad, con una dispersión moderada. Su mediana cercana a 30 confirma que el comportamiento típico está bien representado y relativamente estable. Esto lo posiciona como el estándar operativo del sistema.
+
+El tipo de equipo B2 muestra un patrón muy similar a A1, aunque con costos ligeramente menores y menor variabilidad. La cercanía entre media y mediana sugiere estabilidad, pero su menor tamaño muestral limita la robustez de la comparación.
+
+El caso de C3 es claramente distinto. Presenta costos significativamente más altos (media superior a 64) y mayor dispersión. Además, el rango intercuartílico es amplio, lo que indica que no solo es costoso, sino también variable. Esto apunta a un proceso con alta complejidad o baja eficiencia estructural.
+
+El tipo de equipo D4 tiene costos notablemente bajos (media cercana a 9). La dispersión es reducida y el comportamiento es consistente. Este equipo representa una operación altamente eficiente y controlada, con baja variabilidad. qué prácticas operativas permiten ese nivel de eficiencia y si son replicables.
+
+El costo de transformación está determinado por el tipo de equipo, y la magnitud de las diferencias es significativa.
+
 ```{r bivariado-ci-tipoequipo}
 resumen_bivariado_ci <- datos %>%
   group_by(tipo_equipo) %>%
@@ -914,7 +924,15 @@ resumen_bivariado_ci <- datos %>%
     knitr::kable(resumen_bivariado_ci , caption = "Resumen Bivariado costos de insumo") %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
+El comportamiento de los costos de insumo por tipo de equipo muestra una estructura menos homogénea que la observada en costos de transformación. Aquí no solo cambian los niveles, sino también la forma de la distribución.
 
+Los equipos A1 y B2 presentan patrones similares: medias cercanas a 5 UM/unidad y medianas ligeramente inferiores. Esto indica una leve asimetría positiva, consistente con la presencia de algunos valores altos, pero en general con un comportamiento relativamente estable. El rango intercuartílico es moderado, lo que sugiere que el consumo de insumos en estos equipos es predecible y controlado.
+
+El equipo C3 nuevamente se diferencia de forma clara. La media (≈11.25) es más del doble que en A1 y B2, y la dispersión es considerable. Además, la mediana se mantiene alta, lo que indica que no se trata solo de valores extremos, sino de un nivel estructuralmente elevado. Este patrón sugiere que C3 no solo es más costoso en transformación, sino también en insumos, lo que refuerza la idea de un proceso intrínsecamente más intensivo o menos eficiente.
+
+El caso de D4 es el más interesante. Aunque presenta la media más baja (≈3.58), su desviación estándar es alta y supera incluso a la media. La mediana (≈1.64) está muy por debajo de la media, lo que indica una asimetría extrema. Esto implica que la mayoría de los casos tienen costos bajos, pero existen algunos valores muy altos (máximo ≈46) que distorsionan el promedio. En otras palabras, D4 es generalmente eficiente, pero con episodios puntuales de alto consumo.
+
+En conjunto, los costos de insumo muestran mayor sensibilidad a eventos extremos y menor estabilidad que los costos de transformación, especialmente en ciertos equipos.
 
 
 ### Boxplots por tipo de equipo
@@ -940,29 +958,12 @@ box_ci_te <- datos %>%
   theme_bw() +
   facet_grid(. ~ "Costo de insumo por tipo de equipo")
 
-box_ctot_mod <- datos %>%
-  ggplot(aes(x = modalidad_proceso, y = costo_unitario_total)) +
-  geom_boxplot(fill = "#bcbddc", outlier.colour = "red", outlier.shape = 16) +
-  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "#4d004b") +
-  labs(x = "Modalidad de proceso",
-       y = "Costo unitario total (UM/unidad)") +
-  theme_bw() +
-  facet_grid(. ~ "Costo unitario total por modalidad de proceso")
-
-
-box_ct_te + box_ci_te + box_ctot_mod 
+box_ct_te + box_ci_te 
 ```
 
 
-El tipo de equipo A1, presenta un costo medio de aproximadamente 33 UM/unidad, con una dispersión moderada. Su mediana cercana a 30 confirma que el comportamiento típico está bien representado y relativamente estable. Esto lo posiciona como el estándar operativo del sistema.
 
-El tipo de equipo B2 muestra un patrón muy similar a A1, aunque con costos ligeramente menores y menor variabilidad. La cercanía entre media y mediana sugiere estabilidad, pero su menor tamaño muestral limita la robustez de la comparación.
 
-El caso de C3 es claramente distinto. Presenta costos significativamente más altos (media superior a 64) y mayor dispersión. Además, el rango intercuartílico es amplio, lo que indica que no solo es costoso, sino también variable. Esto apunta a un proceso con alta complejidad o baja eficiencia estructural.
-
-El tipo de equipo D4 tiene costos notablemente bajos (media cercana a 9). La dispersión es reducida y el comportamiento es consistente. Este equipo representa una operación altamente eficiente y controlada, con baja variabilidad. qué prácticas operativas permiten ese nivel de eficiencia y si son replicables.
-
-El costo de transformación está determinado por el tipo de equipo, y la magnitud de las diferencias es significativa.
 
 
 ### Tablas resumen por numero de insumos

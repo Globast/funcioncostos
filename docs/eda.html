@@ -2552,6 +2552,11 @@ D4
 </tr>
 </tbody>
 </table>
+<p>El tipo de equipo A1, presenta un costo medio de aproximadamente 33 UM/unidad, con una dispersión moderada. Su mediana cercana a 30 confirma que el comportamiento típico está bien representado y relativamente estable. Esto lo posiciona como el estándar operativo del sistema.</p>
+<p>El tipo de equipo B2 muestra un patrón muy similar a A1, aunque con costos ligeramente menores y menor variabilidad. La cercanía entre media y mediana sugiere estabilidad, pero su menor tamaño muestral limita la robustez de la comparación.</p>
+<p>El caso de C3 es claramente distinto. Presenta costos significativamente más altos (media superior a 64) y mayor dispersión. Además, el rango intercuartílico es amplio, lo que indica que no solo es costoso, sino también variable. Esto apunta a un proceso con alta complejidad o baja eficiencia estructural.</p>
+<p>El tipo de equipo D4 tiene costos notablemente bajos (media cercana a 9). La dispersión es reducida y el comportamiento es consistente. Este equipo representa una operación altamente eficiente y controlada, con baja variabilidad. qué prácticas operativas permiten ese nivel de eficiencia y si son replicables.</p>
+<p>El costo de transformación está determinado por el tipo de equipo, y la magnitud de las diferencias es significativa.</p>
 <div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="eda.html#cb42-1" tabindex="-1"></a>resumen_bivariado_ci <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
 <span id="cb42-2"><a href="eda.html#cb42-2" tabindex="-1"></a>  <span class="fu">group_by</span>(tipo_equipo) <span class="sc">%&gt;%</span></span>
 <span id="cb42-3"><a href="eda.html#cb42-3" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
@@ -2738,6 +2743,11 @@ D4
 </tr>
 </tbody>
 </table>
+<p>El comportamiento de los costos de insumo por tipo de equipo muestra una estructura menos homogénea que la observada en costos de transformación. Aquí no solo cambian los niveles, sino también la forma de la distribución.</p>
+<p>Los equipos A1 y B2 presentan patrones similares: medias cercanas a 5 UM/unidad y medianas ligeramente inferiores. Esto indica una leve asimetría positiva, consistente con la presencia de algunos valores altos, pero en general con un comportamiento relativamente estable. El rango intercuartílico es moderado, lo que sugiere que el consumo de insumos en estos equipos es predecible y controlado.</p>
+<p>El equipo C3 nuevamente se diferencia de forma clara. La media (≈11.25) es más del doble que en A1 y B2, y la dispersión es considerable. Además, la mediana se mantiene alta, lo que indica que no se trata solo de valores extremos, sino de un nivel estructuralmente elevado. Este patrón sugiere que C3 no solo es más costoso en transformación, sino también en insumos, lo que refuerza la idea de un proceso intrínsecamente más intensivo o menos eficiente.</p>
+<p>El caso de D4 es el más interesante. Aunque presenta la media más baja (≈3.58), su desviación estándar es alta y supera incluso a la media. La mediana (≈1.64) está muy por debajo de la media, lo que indica una asimetría extrema. Esto implica que la mayoría de los casos tienen costos bajos, pero existen algunos valores muy altos (máximo ≈46) que distorsionan el promedio. En otras palabras, D4 es generalmente eficiente, pero con episodios puntuales de alto consumo.</p>
+<p>En conjunto, los costos de insumo muestran mayor sensibilidad a eventos extremos y menor estabilidad que los costos de transformación, especialmente en ciertos equipos.</p>
 </div>
 <div id="boxplots-por-tipo-de-equipo" class="section level3 hasAnchor" number="6.5.2">
 <h3><span class="header-section-number">6.5.2</span> Boxplots por tipo de equipo<a href="eda.html#boxplots-por-tipo-de-equipo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -2760,23 +2770,8 @@ D4
 <span id="cb43-17"><a href="eda.html#cb43-17" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb43-18"><a href="eda.html#cb43-18" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Costo de insumo por tipo de equipo&quot;</span>)</span>
 <span id="cb43-19"><a href="eda.html#cb43-19" tabindex="-1"></a></span>
-<span id="cb43-20"><a href="eda.html#cb43-20" tabindex="-1"></a>box_ctot_mod <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
-<span id="cb43-21"><a href="eda.html#cb43-21" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> modalidad_proceso, <span class="at">y =</span> costo_unitario_total)) <span class="sc">+</span></span>
-<span id="cb43-22"><a href="eda.html#cb43-22" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#bcbddc&quot;</span>, <span class="at">outlier.colour =</span> <span class="st">&quot;red&quot;</span>, <span class="at">outlier.shape =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
-<span id="cb43-23"><a href="eda.html#cb43-23" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">shape =</span> <span class="dv">18</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">&quot;#4d004b&quot;</span>) <span class="sc">+</span></span>
-<span id="cb43-24"><a href="eda.html#cb43-24" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Modalidad de proceso&quot;</span>,</span>
-<span id="cb43-25"><a href="eda.html#cb43-25" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Costo unitario total (UM/unidad)&quot;</span>) <span class="sc">+</span></span>
-<span id="cb43-26"><a href="eda.html#cb43-26" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb43-27"><a href="eda.html#cb43-27" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Costo unitario total por modalidad de proceso&quot;</span>)</span>
-<span id="cb43-28"><a href="eda.html#cb43-28" tabindex="-1"></a></span>
-<span id="cb43-29"><a href="eda.html#cb43-29" tabindex="-1"></a></span>
-<span id="cb43-30"><a href="eda.html#cb43-30" tabindex="-1"></a>box_ct_te <span class="sc">+</span> box_ci_te <span class="sc">+</span> box_ctot_mod </span></code></pre></div>
+<span id="cb43-20"><a href="eda.html#cb43-20" tabindex="-1"></a>box_ct_te <span class="sc">+</span> box_ci_te </span></code></pre></div>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/boxequipo-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
-<p>El tipo de equipo A1, presenta un costo medio de aproximadamente 33 UM/unidad, con una dispersión moderada. Su mediana cercana a 30 confirma que el comportamiento típico está bien representado y relativamente estable. Esto lo posiciona como el estándar operativo del sistema.</p>
-<p>El tipo de equipo B2 muestra un patrón muy similar a A1, aunque con costos ligeramente menores y menor variabilidad. La cercanía entre media y mediana sugiere estabilidad, pero su menor tamaño muestral limita la robustez de la comparación.</p>
-<p>El caso de C3 es claramente distinto. Presenta costos significativamente más altos (media superior a 64) y mayor dispersión. Además, el rango intercuartílico es amplio, lo que indica que no solo es costoso, sino también variable. Esto apunta a un proceso con alta complejidad o baja eficiencia estructural.</p>
-<p>El tipo de equipo D4 tiene costos notablemente bajos (media cercana a 9). La dispersión es reducida y el comportamiento es consistente. Este equipo representa una operación altamente eficiente y controlada, con baja variabilidad. qué prácticas operativas permiten ese nivel de eficiencia y si son replicables.</p>
-<p>El costo de transformación está determinado por el tipo de equipo, y la magnitud de las diferencias es significativa.</p>
 </div>
 <div id="tablas-resumen-por-numero-de-insumos" class="section level3 hasAnchor" number="6.5.3">
 <h3><span class="header-section-number">6.5.3</span> Tablas resumen por numero de insumos<a href="eda.html#tablas-resumen-por-numero-de-insumos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
