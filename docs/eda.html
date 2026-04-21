@@ -3061,23 +3061,929 @@ IQR
 <span id="cb47-10"><a href="eda.html#cb47-10" tabindex="-1"></a>            <span class="at">sep =</span> <span class="st">&quot; + &quot;</span>)</span>
 <span id="cb47-11"><a href="eda.html#cb47-11" tabindex="-1"></a>    )</span>
 <span id="cb47-12"><a href="eda.html#cb47-12" tabindex="-1"></a>  )</span></code></pre></div>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="eda.html#cb48-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
-<span id="cb48-2"><a href="eda.html#cb48-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> comb_insumos, <span class="at">y =</span> costo_transformacion)) <span class="sc">+</span></span>
-<span id="cb48-3"><a href="eda.html#cb48-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#2c7fb8&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb48-4"><a href="eda.html#cb48-4" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">shape =</span> <span class="dv">18</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
-<span id="cb48-5"><a href="eda.html#cb48-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Combinación de insumos&quot;</span>,</span>
-<span id="cb48-6"><a href="eda.html#cb48-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Costo de transformación&quot;</span>) <span class="sc">+</span></span>
-<span id="cb48-7"><a href="eda.html#cb48-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb48-8"><a href="eda.html#cb48-8" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="eda.html#cb48-1" tabindex="-1"></a>resumen_bivariado_ct_comb <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb48-2"><a href="eda.html#cb48-2" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb48-3"><a href="eda.html#cb48-3" tabindex="-1"></a>    <span class="at">comb_insumos =</span> <span class="fu">if_else</span>(</span>
+<span id="cb48-4"><a href="eda.html#cb48-4" tabindex="-1"></a>      num_insumos <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb48-5"><a href="eda.html#cb48-5" tabindex="-1"></a>      insumo_1,</span>
+<span id="cb48-6"><a href="eda.html#cb48-6" tabindex="-1"></a>      <span class="fu">paste</span>(<span class="fu">pmin</span>(insumo_1, insumo_2),</span>
+<span id="cb48-7"><a href="eda.html#cb48-7" tabindex="-1"></a>            <span class="fu">pmax</span>(insumo_1, insumo_2),</span>
+<span id="cb48-8"><a href="eda.html#cb48-8" tabindex="-1"></a>            <span class="at">sep =</span> <span class="st">&quot; + &quot;</span>)</span>
+<span id="cb48-9"><a href="eda.html#cb48-9" tabindex="-1"></a>    )</span>
+<span id="cb48-10"><a href="eda.html#cb48-10" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb48-11"><a href="eda.html#cb48-11" tabindex="-1"></a>  <span class="fu">group_by</span>(comb_insumos) <span class="sc">%&gt;%</span></span>
+<span id="cb48-12"><a href="eda.html#cb48-12" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb48-13"><a href="eda.html#cb48-13" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(costo_transformacion),</span>
+<span id="cb48-14"><a href="eda.html#cb48-14" tabindex="-1"></a>    <span class="at">media =</span> <span class="fu">mean</span>(costo_transformacion),</span>
+<span id="cb48-15"><a href="eda.html#cb48-15" tabindex="-1"></a>    <span class="at">ds =</span> <span class="fu">sd</span>(costo_transformacion),</span>
+<span id="cb48-16"><a href="eda.html#cb48-16" tabindex="-1"></a>    <span class="st">`</span><span class="at">50%</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">median</span>(costo_transformacion),</span>
+<span id="cb48-17"><a href="eda.html#cb48-17" tabindex="-1"></a>    <span class="at">minimo =</span> <span class="fu">min</span>(costo_transformacion),</span>
+<span id="cb48-18"><a href="eda.html#cb48-18" tabindex="-1"></a>    <span class="at">maximo =</span> <span class="fu">max</span>(costo_transformacion),</span>
+<span id="cb48-19"><a href="eda.html#cb48-19" tabindex="-1"></a>    <span class="at">Q1 =</span> <span class="fu">quantile</span>(costo_transformacion, <span class="fl">0.25</span>),</span>
+<span id="cb48-20"><a href="eda.html#cb48-20" tabindex="-1"></a>    <span class="at">Q3 =</span> <span class="fu">quantile</span>(costo_transformacion, <span class="fl">0.75</span>),</span>
+<span id="cb48-21"><a href="eda.html#cb48-21" tabindex="-1"></a>    <span class="at">IQR =</span> <span class="fu">IQR</span>(costo_transformacion),</span>
+<span id="cb48-22"><a href="eda.html#cb48-22" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span></span>
+<span id="cb48-23"><a href="eda.html#cb48-23" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb48-24"><a href="eda.html#cb48-24" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n))</span>
+<span id="cb48-25"><a href="eda.html#cb48-25" tabindex="-1"></a></span>
+<span id="cb48-26"><a href="eda.html#cb48-26" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(resumen_bivariado_ct_comb,</span>
+<span id="cb48-27"><a href="eda.html#cb48-27" tabindex="-1"></a>             <span class="at">caption =</span> <span class="st">&quot;Resumen bivariado: costo de transformación por combinación de insumos&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb48-28"><a href="eda.html#cb48-28" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+(#tab:bivariado_insumos_ct)(#tab:bivariado_insumos_ct)Resumen bivariado: costo de transformación por combinación de insumos
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+comb_insumos
+</th>
+<th style="text-align:right;">
+n
+</th>
+<th style="text-align:right;">
+media
+</th>
+<th style="text-align:right;">
+ds
+</th>
+<th style="text-align:right;">
+50%
+</th>
+<th style="text-align:right;">
+minimo
+</th>
+<th style="text-align:right;">
+maximo
+</th>
+<th style="text-align:right;">
+Q1
+</th>
+<th style="text-align:right;">
+Q3
+</th>
+<th style="text-align:right;">
+IQR
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+B_T
+</td>
+<td style="text-align:right;">
+105
+</td>
+<td style="text-align:right;">
+25.95904
+</td>
+<td style="text-align:right;">
+12.532473
+</td>
+<td style="text-align:right;">
+24.59985
+</td>
+<td style="text-align:right;">
+4.682246
+</td>
+<td style="text-align:right;">
+84.18187
+</td>
+<td style="text-align:right;">
+19.54855
+</td>
+<td style="text-align:right;">
+29.90916
+</td>
+<td style="text-align:right;">
+10.36061
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+N_T
+</td>
+<td style="text-align:right;">
+90
+</td>
+<td style="text-align:right;">
+24.93647
+</td>
+<td style="text-align:right;">
+13.893908
+</td>
+<td style="text-align:right;">
+28.71944
+</td>
+<td style="text-align:right;">
+2.766110
+</td>
+<td style="text-align:right;">
+51.70280
+</td>
+<td style="text-align:right;">
+10.02047
+</td>
+<td style="text-align:right;">
+33.97152
+</td>
+<td style="text-align:right;">
+23.95105
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B_T + B_T
+</td>
+<td style="text-align:right;">
+68
+</td>
+<td style="text-align:right;">
+32.89068
+</td>
+<td style="text-align:right;">
+13.534314
+</td>
+<td style="text-align:right;">
+30.61388
+</td>
+<td style="text-align:right;">
+8.470757
+</td>
+<td style="text-align:right;">
+92.17387
+</td>
+<td style="text-align:right;">
+24.75328
+</td>
+<td style="text-align:right;">
+35.92508
+</td>
+<td style="text-align:right;">
+11.17180
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+N_O
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+38.84408
+</td>
+<td style="text-align:right;">
+17.518310
+</td>
+<td style="text-align:right;">
+39.62476
+</td>
+<td style="text-align:right;">
+4.876358
+</td>
+<td style="text-align:right;">
+97.18480
+</td>
+<td style="text-align:right;">
+30.54663
+</td>
+<td style="text-align:right;">
+49.24566
+</td>
+<td style="text-align:right;">
+18.69903
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+N_T + N_T
+</td>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:right;">
+34.33653
+</td>
+<td style="text-align:right;">
+10.631400
+</td>
+<td style="text-align:right;">
+29.61012
+</td>
+<td style="text-align:right;">
+22.615879
+</td>
+<td style="text-align:right;">
+63.29975
+</td>
+<td style="text-align:right;">
+27.77304
+</td>
+<td style="text-align:right;">
+39.77638
+</td>
+<td style="text-align:right;">
+12.00334
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A_T
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+26.66165
+</td>
+<td style="text-align:right;">
+15.675503
+</td>
+<td style="text-align:right;">
+26.97337
+</td>
+<td style="text-align:right;">
+4.966210
+</td>
+<td style="text-align:right;">
+80.57443
+</td>
+<td style="text-align:right;">
+15.72755
+</td>
+<td style="text-align:right;">
+33.23653
+</td>
+<td style="text-align:right;">
+17.50898
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A_T + A_T
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+47.48990
+</td>
+<td style="text-align:right;">
+15.940468
+</td>
+<td style="text-align:right;">
+46.40283
+</td>
+<td style="text-align:right;">
+26.452568
+</td>
+<td style="text-align:right;">
+91.71969
+</td>
+<td style="text-align:right;">
+36.02094
+</td>
+<td style="text-align:right;">
+55.12366
+</td>
+<td style="text-align:right;">
+19.10272
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+V_T
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+19.52873
+</td>
+<td style="text-align:right;">
+9.086631
+</td>
+<td style="text-align:right;">
+18.81039
+</td>
+<td style="text-align:right;">
+8.906497
+</td>
+<td style="text-align:right;">
+37.13100
+</td>
+<td style="text-align:right;">
+11.22462
+</td>
+<td style="text-align:right;">
+25.84136
+</td>
+<td style="text-align:right;">
+14.61675
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+N_O + N_O
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+37.66861
+</td>
+<td style="text-align:right;">
+16.403701
+</td>
+<td style="text-align:right;">
+33.14837
+</td>
+<td style="text-align:right;">
+23.854440
+</td>
+<td style="text-align:right;">
+86.75365
+</td>
+<td style="text-align:right;">
+27.79064
+</td>
+<td style="text-align:right;">
+41.56653
+</td>
+<td style="text-align:right;">
+13.77589
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+R_T
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+40.60376
+</td>
+<td style="text-align:right;">
+20.992829
+</td>
+<td style="text-align:right;">
+42.31702
+</td>
+<td style="text-align:right;">
+8.756984
+</td>
+<td style="text-align:right;">
+76.49633
+</td>
+<td style="text-align:right;">
+26.15528
+</td>
+<td style="text-align:right;">
+51.01074
+</td>
+<td style="text-align:right;">
+24.85546
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+R_T + R_T
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+50.58548
+</td>
+<td style="text-align:right;">
+20.132498
+</td>
+<td style="text-align:right;">
+39.59964
+</td>
+<td style="text-align:right;">
+38.335764
+</td>
+<td style="text-align:right;">
+73.82103
+</td>
+<td style="text-align:right;">
+38.96770
+</td>
+<td style="text-align:right;">
+56.71034
+</td>
+<td style="text-align:right;">
+17.74263
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+V_T + V_T
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+24.44872
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+24.44872
+</td>
+<td style="text-align:right;">
+24.448719
+</td>
+<td style="text-align:right;">
+24.44872
+</td>
+<td style="text-align:right;">
+24.44872
+</td>
+<td style="text-align:right;">
+24.44872
+</td>
+<td style="text-align:right;">
+0.00000
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="eda.html#cb49-1" tabindex="-1"></a>resumen_bivariado_ci_comb <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb49-2"><a href="eda.html#cb49-2" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb49-3"><a href="eda.html#cb49-3" tabindex="-1"></a>    <span class="at">comb_insumos =</span> <span class="fu">if_else</span>(</span>
+<span id="cb49-4"><a href="eda.html#cb49-4" tabindex="-1"></a>      num_insumos <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb49-5"><a href="eda.html#cb49-5" tabindex="-1"></a>      insumo_1,</span>
+<span id="cb49-6"><a href="eda.html#cb49-6" tabindex="-1"></a>      <span class="fu">paste</span>(<span class="fu">pmin</span>(insumo_1, insumo_2),</span>
+<span id="cb49-7"><a href="eda.html#cb49-7" tabindex="-1"></a>            <span class="fu">pmax</span>(insumo_1, insumo_2),</span>
+<span id="cb49-8"><a href="eda.html#cb49-8" tabindex="-1"></a>            <span class="at">sep =</span> <span class="st">&quot; + &quot;</span>)</span>
+<span id="cb49-9"><a href="eda.html#cb49-9" tabindex="-1"></a>    )</span>
+<span id="cb49-10"><a href="eda.html#cb49-10" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb49-11"><a href="eda.html#cb49-11" tabindex="-1"></a>  <span class="fu">group_by</span>(comb_insumos) <span class="sc">%&gt;%</span></span>
+<span id="cb49-12"><a href="eda.html#cb49-12" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb49-13"><a href="eda.html#cb49-13" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(costo_insumo),</span>
+<span id="cb49-14"><a href="eda.html#cb49-14" tabindex="-1"></a>    <span class="at">media =</span> <span class="fu">mean</span>(costo_insumo),</span>
+<span id="cb49-15"><a href="eda.html#cb49-15" tabindex="-1"></a>    <span class="at">ds =</span> <span class="fu">sd</span>(costo_insumo),</span>
+<span id="cb49-16"><a href="eda.html#cb49-16" tabindex="-1"></a>    <span class="st">`</span><span class="at">50%</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">median</span>(costo_insumo),</span>
+<span id="cb49-17"><a href="eda.html#cb49-17" tabindex="-1"></a>    <span class="at">minimo =</span> <span class="fu">min</span>(costo_insumo),</span>
+<span id="cb49-18"><a href="eda.html#cb49-18" tabindex="-1"></a>    <span class="at">maximo =</span> <span class="fu">max</span>(costo_insumo),</span>
+<span id="cb49-19"><a href="eda.html#cb49-19" tabindex="-1"></a>    <span class="at">Q1 =</span> <span class="fu">quantile</span>(costo_insumo, <span class="fl">0.25</span>),</span>
+<span id="cb49-20"><a href="eda.html#cb49-20" tabindex="-1"></a>    <span class="at">Q3 =</span> <span class="fu">quantile</span>(costo_insumo, <span class="fl">0.75</span>),</span>
+<span id="cb49-21"><a href="eda.html#cb49-21" tabindex="-1"></a>    <span class="at">IQR =</span> <span class="fu">IQR</span>(costo_insumo),</span>
+<span id="cb49-22"><a href="eda.html#cb49-22" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span></span>
+<span id="cb49-23"><a href="eda.html#cb49-23" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb49-24"><a href="eda.html#cb49-24" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n))</span>
+<span id="cb49-25"><a href="eda.html#cb49-25" tabindex="-1"></a></span>
+<span id="cb49-26"><a href="eda.html#cb49-26" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(resumen_bivariado_ci_comb,</span>
+<span id="cb49-27"><a href="eda.html#cb49-27" tabindex="-1"></a>             <span class="at">caption =</span> <span class="st">&quot;Resumen bivariado: costo de insumo por combinación de insumos&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb49-28"><a href="eda.html#cb49-28" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+(#tab:bivariado_insumos_ci)(#tab:bivariado_insumos_ci)Resumen bivariado: costo de insumo por combinación de insumos
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+comb_insumos
+</th>
+<th style="text-align:right;">
+n
+</th>
+<th style="text-align:right;">
+media
+</th>
+<th style="text-align:right;">
+ds
+</th>
+<th style="text-align:right;">
+50%
+</th>
+<th style="text-align:right;">
+minimo
+</th>
+<th style="text-align:right;">
+maximo
+</th>
+<th style="text-align:right;">
+Q1
+</th>
+<th style="text-align:right;">
+Q3
+</th>
+<th style="text-align:right;">
+IQR
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+B_T
+</td>
+<td style="text-align:right;">
+105
+</td>
+<td style="text-align:right;">
+4.954782
+</td>
+<td style="text-align:right;">
+2.683444
+</td>
+<td style="text-align:right;">
+4.513479
+</td>
+<td style="text-align:right;">
+0.5520079
+</td>
+<td style="text-align:right;">
+18.166888
+</td>
+<td style="text-align:right;">
+3.258260
+</td>
+<td style="text-align:right;">
+6.030814
+</td>
+<td style="text-align:right;">
+2.772555
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+N_T
+</td>
+<td style="text-align:right;">
+90
+</td>
+<td style="text-align:right;">
+2.374096
+</td>
+<td style="text-align:right;">
+2.242728
+</td>
+<td style="text-align:right;">
+1.571920
+</td>
+<td style="text-align:right;">
+0.0136519
+</td>
+<td style="text-align:right;">
+12.628002
+</td>
+<td style="text-align:right;">
+1.063772
+</td>
+<td style="text-align:right;">
+3.048878
+</td>
+<td style="text-align:right;">
+1.985106
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B_T + B_T
+</td>
+<td style="text-align:right;">
+68
+</td>
+<td style="text-align:right;">
+4.639497
+</td>
+<td style="text-align:right;">
+2.614686
+</td>
+<td style="text-align:right;">
+4.128904
+</td>
+<td style="text-align:right;">
+1.2160056
+</td>
+<td style="text-align:right;">
+17.180955
+</td>
+<td style="text-align:right;">
+3.105095
+</td>
+<td style="text-align:right;">
+5.719555
+</td>
+<td style="text-align:right;">
+2.614460
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+N_O
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+7.001819
+</td>
+<td style="text-align:right;">
+4.591816
+</td>
+<td style="text-align:right;">
+5.553498
+</td>
+<td style="text-align:right;">
+0.2722807
+</td>
+<td style="text-align:right;">
+17.516200
+</td>
+<td style="text-align:right;">
+4.079710
+</td>
+<td style="text-align:right;">
+8.204592
+</td>
+<td style="text-align:right;">
+4.124883
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+N_T + N_T
+</td>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:right;">
+8.378922
+</td>
+<td style="text-align:right;">
+4.874306
+</td>
+<td style="text-align:right;">
+6.705052
+</td>
+<td style="text-align:right;">
+1.4579804
+</td>
+<td style="text-align:right;">
+17.794077
+</td>
+<td style="text-align:right;">
+5.136256
+</td>
+<td style="text-align:right;">
+12.058943
+</td>
+<td style="text-align:right;">
+6.922687
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A_T
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+5.606482
+</td>
+<td style="text-align:right;">
+2.980466
+</td>
+<td style="text-align:right;">
+5.052333
+</td>
+<td style="text-align:right;">
+1.3755140
+</td>
+<td style="text-align:right;">
+15.226761
+</td>
+<td style="text-align:right;">
+3.656522
+</td>
+<td style="text-align:right;">
+6.674983
+</td>
+<td style="text-align:right;">
+3.018461
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A_T + A_T
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+7.925486
+</td>
+<td style="text-align:right;">
+8.375472
+</td>
+<td style="text-align:right;">
+4.914191
+</td>
+<td style="text-align:right;">
+2.9485143
+</td>
+<td style="text-align:right;">
+36.705510
+</td>
+<td style="text-align:right;">
+4.153945
+</td>
+<td style="text-align:right;">
+7.773071
+</td>
+<td style="text-align:right;">
+3.619127
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+V_T
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+7.105614
+</td>
+<td style="text-align:right;">
+11.590688
+</td>
+<td style="text-align:right;">
+3.653877
+</td>
+<td style="text-align:right;">
+0.5267213
+</td>
+<td style="text-align:right;">
+46.218837
+</td>
+<td style="text-align:right;">
+2.308317
+</td>
+<td style="text-align:right;">
+6.446939
+</td>
+<td style="text-align:right;">
+4.138623
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+N_O + N_O
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+7.733757
+</td>
+<td style="text-align:right;">
+5.495172
+</td>
+<td style="text-align:right;">
+6.700155
+</td>
+<td style="text-align:right;">
+1.8927720
+</td>
+<td style="text-align:right;">
+21.803883
+</td>
+<td style="text-align:right;">
+3.666882
+</td>
+<td style="text-align:right;">
+10.246939
+</td>
+<td style="text-align:right;">
+6.580057
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+R_T
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+6.590609
+</td>
+<td style="text-align:right;">
+4.046299
+</td>
+<td style="text-align:right;">
+6.007918
+</td>
+<td style="text-align:right;">
+1.9795106
+</td>
+<td style="text-align:right;">
+13.548842
+</td>
+<td style="text-align:right;">
+4.052712
+</td>
+<td style="text-align:right;">
+7.418879
+</td>
+<td style="text-align:right;">
+3.366167
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+R_T + R_T
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+7.233445
+</td>
+<td style="text-align:right;">
+7.354823
+</td>
+<td style="text-align:right;">
+3.483188
+</td>
+<td style="text-align:right;">
+2.5097037
+</td>
+<td style="text-align:right;">
+15.707444
+</td>
+<td style="text-align:right;">
+2.996446
+</td>
+<td style="text-align:right;">
+9.595316
+</td>
+<td style="text-align:right;">
+6.598870
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+V_T + V_T
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4.730357
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+4.730357
+</td>
+<td style="text-align:right;">
+4.7303569
+</td>
+<td style="text-align:right;">
+4.730357
+</td>
+<td style="text-align:right;">
+4.730357
+</td>
+<td style="text-align:right;">
+4.730357
+</td>
+<td style="text-align:right;">
+0.000000
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="eda.html#cb50-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb50-2"><a href="eda.html#cb50-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> comb_insumos, <span class="at">y =</span> costo_transformacion)) <span class="sc">+</span></span>
+<span id="cb50-3"><a href="eda.html#cb50-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#2c7fb8&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb50-4"><a href="eda.html#cb50-4" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">shape =</span> <span class="dv">18</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb50-5"><a href="eda.html#cb50-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Combinación de insumos&quot;</span>,</span>
+<span id="cb50-6"><a href="eda.html#cb50-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Costo de transformación&quot;</span>) <span class="sc">+</span></span>
+<span id="cb50-7"><a href="eda.html#cb50-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb50-8"><a href="eda.html#cb50-8" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box-insumo-comb-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="eda.html#cb49-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
-<span id="cb49-2"><a href="eda.html#cb49-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> comb_insumos, <span class="at">y =</span> costo_insumo)) <span class="sc">+</span></span>
-<span id="cb49-3"><a href="eda.html#cb49-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#7fc97f&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb49-4"><a href="eda.html#cb49-4" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">shape =</span> <span class="dv">18</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
-<span id="cb49-5"><a href="eda.html#cb49-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Combinación de insumos&quot;</span>,</span>
-<span id="cb49-6"><a href="eda.html#cb49-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Costo de insumo&quot;</span>) <span class="sc">+</span></span>
-<span id="cb49-7"><a href="eda.html#cb49-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb49-8"><a href="eda.html#cb49-8" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="eda.html#cb51-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb51-2"><a href="eda.html#cb51-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> comb_insumos, <span class="at">y =</span> costo_insumo)) <span class="sc">+</span></span>
+<span id="cb51-3"><a href="eda.html#cb51-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#7fc97f&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb51-4"><a href="eda.html#cb51-4" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">shape =</span> <span class="dv">18</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb51-5"><a href="eda.html#cb51-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Combinación de insumos&quot;</span>,</span>
+<span id="cb51-6"><a href="eda.html#cb51-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Costo de insumo&quot;</span>) <span class="sc">+</span></span>
+<span id="cb51-7"><a href="eda.html#cb51-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb51-8"><a href="eda.html#cb51-8" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box-insumo-comb-2.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
 <p><strong>Ejercicio.</strong> Replicar el análisis bivariado anterior para las variables categóricas <code>categoria_producto</code>, <code>num_insumos</code>, <code>insumo_1</code> e <code>insumo_2</code>, e interpretar los patrones observados con respecto a las tres variables respuesta.</p>
 </div>
@@ -3085,38 +3991,38 @@ IQR
 <div id="variables-derivadas" class="section level2 hasAnchor" number="6.6">
 <h2><span class="header-section-number">6.6</span> Variables derivadas<a href="eda.html#variables-derivadas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Se construye la variable derivada <code>velocidad_produccion</code> como el cociente entre <code>volumen_lote</code> y <code>duracion_proceso</code>, expresada en unidades por hora. Esta métrica resume la productividad del proceso por orden y se incluye aquí porque su interpretación requiere haber analizado antes las dos variables que la componen.</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="eda.html#cb50-1" tabindex="-1"></a>datos <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
-<span id="cb50-2"><a href="eda.html#cb50-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">velocidad_produccion =</span> volumen_lote <span class="sc">/</span> duracion_proceso)</span></code></pre></div>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="eda.html#cb51-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
-<span id="cb51-2"><a href="eda.html#cb51-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb51-3"><a href="eda.html#cb51-3" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(velocidad_produccion),</span>
-<span id="cb51-4"><a href="eda.html#cb51-4" tabindex="-1"></a>    <span class="at">media =</span> <span class="fu">mean</span>(velocidad_produccion),</span>
-<span id="cb51-5"><a href="eda.html#cb51-5" tabindex="-1"></a>    <span class="at">ds =</span> <span class="fu">sd</span>(velocidad_produccion),</span>
-<span id="cb51-6"><a href="eda.html#cb51-6" tabindex="-1"></a>    <span class="st">`</span><span class="at">50%</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">median</span>(velocidad_produccion),</span>
-<span id="cb51-7"><a href="eda.html#cb51-7" tabindex="-1"></a>    <span class="at">minimo =</span> <span class="fu">min</span>(velocidad_produccion),</span>
-<span id="cb51-8"><a href="eda.html#cb51-8" tabindex="-1"></a>    <span class="at">maximo =</span> <span class="fu">max</span>(velocidad_produccion),</span>
-<span id="cb51-9"><a href="eda.html#cb51-9" tabindex="-1"></a>    <span class="at">Q1 =</span> <span class="fu">quantile</span>(velocidad_produccion, <span class="fl">0.25</span>),</span>
-<span id="cb51-10"><a href="eda.html#cb51-10" tabindex="-1"></a>    <span class="at">Q3 =</span> <span class="fu">quantile</span>(velocidad_produccion, <span class="fl">0.75</span>),</span>
-<span id="cb51-11"><a href="eda.html#cb51-11" tabindex="-1"></a>    <span class="at">IQR =</span> <span class="fu">IQR</span>(velocidad_produccion)</span>
-<span id="cb51-12"><a href="eda.html#cb51-12" tabindex="-1"></a>  ) <span class="ot">-&gt;</span> resumen_vp</span>
-<span id="cb51-13"><a href="eda.html#cb51-13" tabindex="-1"></a>resumen_vp</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="eda.html#cb52-1" tabindex="-1"></a>datos <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb52-2"><a href="eda.html#cb52-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">velocidad_produccion =</span> volumen_lote <span class="sc">/</span> duracion_proceso)</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="eda.html#cb53-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb53-2"><a href="eda.html#cb53-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb53-3"><a href="eda.html#cb53-3" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(velocidad_produccion),</span>
+<span id="cb53-4"><a href="eda.html#cb53-4" tabindex="-1"></a>    <span class="at">media =</span> <span class="fu">mean</span>(velocidad_produccion),</span>
+<span id="cb53-5"><a href="eda.html#cb53-5" tabindex="-1"></a>    <span class="at">ds =</span> <span class="fu">sd</span>(velocidad_produccion),</span>
+<span id="cb53-6"><a href="eda.html#cb53-6" tabindex="-1"></a>    <span class="st">`</span><span class="at">50%</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">median</span>(velocidad_produccion),</span>
+<span id="cb53-7"><a href="eda.html#cb53-7" tabindex="-1"></a>    <span class="at">minimo =</span> <span class="fu">min</span>(velocidad_produccion),</span>
+<span id="cb53-8"><a href="eda.html#cb53-8" tabindex="-1"></a>    <span class="at">maximo =</span> <span class="fu">max</span>(velocidad_produccion),</span>
+<span id="cb53-9"><a href="eda.html#cb53-9" tabindex="-1"></a>    <span class="at">Q1 =</span> <span class="fu">quantile</span>(velocidad_produccion, <span class="fl">0.25</span>),</span>
+<span id="cb53-10"><a href="eda.html#cb53-10" tabindex="-1"></a>    <span class="at">Q3 =</span> <span class="fu">quantile</span>(velocidad_produccion, <span class="fl">0.75</span>),</span>
+<span id="cb53-11"><a href="eda.html#cb53-11" tabindex="-1"></a>    <span class="at">IQR =</span> <span class="fu">IQR</span>(velocidad_produccion)</span>
+<span id="cb53-12"><a href="eda.html#cb53-12" tabindex="-1"></a>  ) <span class="ot">-&gt;</span> resumen_vp</span>
+<span id="cb53-13"><a href="eda.html#cb53-13" tabindex="-1"></a>resumen_vp</span></code></pre></div>
 <pre><code>## # A tibble: 1 × 9
 ##       n media    ds `50%` minimo maximo    Q1    Q3   IQR
 ##   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1   395  27.4  20.0  21.7   5.54   187.  16.6  27.1  10.5</code></pre>
 <p>La velocidad de producción media es de 27.4 unidades/hora, con un valor 50% de 21.7 unidades/hora y un rango entre 5.5 y 186.9. Esta variable se utilizará en el capítulo de análisis inferencial para evaluar su asociación con el costo de transformación como proxy de eficiencia del proceso.</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="eda.html#cb53-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
-<span id="cb53-2"><a href="eda.html#cb53-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> velocidad_produccion)) <span class="sc">+</span></span>
-<span id="cb53-3"><a href="eda.html#cb53-3" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
-<span id="cb53-4"><a href="eda.html#cb53-4" tabindex="-1"></a>                 <span class="at">bins =</span> <span class="dv">30</span>,</span>
-<span id="cb53-5"><a href="eda.html#cb53-5" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">&quot;#ff7f0e&quot;</span>,</span>
-<span id="cb53-6"><a href="eda.html#cb53-6" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;white&quot;</span>,</span>
-<span id="cb53-7"><a href="eda.html#cb53-7" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb53-8"><a href="eda.html#cb53-8" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">&quot;#d95f02&quot;</span>, <span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
-<span id="cb53-9"><a href="eda.html#cb53-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Velocidad de producción (unidades/hora)&quot;</span>,</span>
-<span id="cb53-10"><a href="eda.html#cb53-10" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Densidad&quot;</span>) <span class="sc">+</span></span>
-<span id="cb53-11"><a href="eda.html#cb53-11" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb53-12"><a href="eda.html#cb53-12" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Distribución de la velocidad de producción&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="eda.html#cb55-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb55-2"><a href="eda.html#cb55-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> velocidad_produccion)) <span class="sc">+</span></span>
+<span id="cb55-3"><a href="eda.html#cb55-3" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
+<span id="cb55-4"><a href="eda.html#cb55-4" tabindex="-1"></a>                 <span class="at">bins =</span> <span class="dv">30</span>,</span>
+<span id="cb55-5"><a href="eda.html#cb55-5" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">&quot;#ff7f0e&quot;</span>,</span>
+<span id="cb55-6"><a href="eda.html#cb55-6" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb55-7"><a href="eda.html#cb55-7" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb55-8"><a href="eda.html#cb55-8" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">&quot;#d95f02&quot;</span>, <span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb55-9"><a href="eda.html#cb55-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Velocidad de producción (unidades/hora)&quot;</span>,</span>
+<span id="cb55-10"><a href="eda.html#cb55-10" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Densidad&quot;</span>) <span class="sc">+</span></span>
+<span id="cb55-11"><a href="eda.html#cb55-11" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb55-12"><a href="eda.html#cb55-12" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Distribución de la velocidad de producción&quot;</span>)</span></code></pre></div>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/hist-vp-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
 
 </div>

@@ -1062,6 +1062,70 @@ datos <- datos %>%
 
 ```
 
+```{r bivariado_insumos_ct}
+resumen_bivariado_ct_comb <- datos %>%
+  mutate(
+    comb_insumos = if_else(
+      num_insumos == 1,
+      insumo_1,
+      paste(pmin(insumo_1, insumo_2),
+            pmax(insumo_1, insumo_2),
+            sep = " + ")
+    )
+  ) %>%
+  group_by(comb_insumos) %>%
+  summarise(
+    n = length(costo_transformacion),
+    media = mean(costo_transformacion),
+    ds = sd(costo_transformacion),
+    `50%` = median(costo_transformacion),
+    minimo = min(costo_transformacion),
+    maximo = max(costo_transformacion),
+    Q1 = quantile(costo_transformacion, 0.25),
+    Q3 = quantile(costo_transformacion, 0.75),
+    IQR = IQR(costo_transformacion),
+    .groups = "drop"
+  ) %>%
+  arrange(desc(n))
+
+knitr::kable(resumen_bivariado_ct_comb,
+             caption = "Resumen bivariado: costo de transformación por combinación de insumos") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+
+```
+
+```{r bivariado_insumos_ci}
+resumen_bivariado_ci_comb <- datos %>%
+  mutate(
+    comb_insumos = if_else(
+      num_insumos == 1,
+      insumo_1,
+      paste(pmin(insumo_1, insumo_2),
+            pmax(insumo_1, insumo_2),
+            sep = " + ")
+    )
+  ) %>%
+  group_by(comb_insumos) %>%
+  summarise(
+    n = length(costo_insumo),
+    media = mean(costo_insumo),
+    ds = sd(costo_insumo),
+    `50%` = median(costo_insumo),
+    minimo = min(costo_insumo),
+    maximo = max(costo_insumo),
+    Q1 = quantile(costo_insumo, 0.25),
+    Q3 = quantile(costo_insumo, 0.75),
+    IQR = IQR(costo_insumo),
+    .groups = "drop"
+  ) %>%
+  arrange(desc(n))
+
+knitr::kable(resumen_bivariado_ci_comb,
+             caption = "Resumen bivariado: costo de insumo por combinación de insumos") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+
+```
+
 ```{r box-insumo-comb}
 datos %>%
   ggplot(aes(x = comb_insumos, y = costo_transformacion)) +
