@@ -109,10 +109,6 @@ knitr::kable(tabla_na, caption = "Variables con valores NA") %>%
   kableExtra::column_spec(2, width = "12em")
 ```
 
-```{r na-mapa, fig.width=10, fig.height=5}
-missmap(datos, main = "Mapa de valores faltantes", 
-        col = c("#d62728", "#1f77b4"), legend = TRUE)
-```
 
 El conteo absoluto muestra un total de `r total_na` valores NA distribuidos en `r n_vars_con_na` variables del dataset. La variable `insumo_2` concentra `r n_na_insumo_2` ausencias, equivalentes al `r pct_na_insumo_2`% de las `r n_filas_inicial` órdenes; conforme a las consultas SQL de origen, estos NA no representan datos perdidos sino la ausencia estructural de un segundo insumo cuando `num_insumos < 2`, y se recodifican en la sección 4.2.4 como una categoría explícita. La variable `insumo_1` presenta `r n_na_insumo_1` ausencias, las cuales se investigan en la siguiente sección junto con los valores cero, dado que ambos fenómenos tienden a coincidir en los mismos registros.
 
