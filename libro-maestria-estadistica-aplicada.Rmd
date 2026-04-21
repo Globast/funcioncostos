@@ -505,6 +505,20 @@ Sin embargo, los extremos revela algo distinto. Mientras el valor mínimo (`r ro
 En términos prácticos, esto significa que la mayoría de los procesos operan en niveles de costo relativamente estables, pero existen casos puntuales significativamente más costosos. Estos valores extremos pueden responder a procesos más complejos o a posibles inconsistencias en los datos, por lo que requieren un análisis específico antes de su inclusión en modelos o decisiones operativas.
 
 ```{r hist-ct, fig.width=9, fig.height=4.5}
+library(dplyr)
+library(ggplot2)
+library(tibble)
+
+lineas <- tibble(
+  estadistico = c("Media", "Mediana", "Q1", "Q3"),
+  valor = c(
+    resumen_ct$media,
+    resumen_ct$`50%`,
+    as.numeric(resumen_ct$Q1),
+    as.numeric(resumen_ct$Q3)
+  )
+)
+
 datos %>%
   ggplot(aes(x = costo_transformacion)) +
   geom_histogram(aes(y = after_stat(density)),
@@ -512,21 +526,35 @@ datos %>%
                  fill = "#2c7fb8",
                  color = "white",
                  alpha = 0.6) +
-  geom_density(color = "darkblue", linewidth = 1.2) +
+  geom_density(linewidth = 1.2) +
+  
+  geom_vline(data = lineas,
+             aes(xintercept = valor, color = estadistico, linetype = estadistico),
+             linewidth = 0.9) +
 
-  # Líneas verticales
-  geom_vline(xintercept = resumen_ct$media,   linetype = "dashed",  linewidth = 0.8) +
-  geom_vline(xintercept = resumen_ct$`50%`,   linetype = "dashed",  linewidth = 0.8) +
-  geom_vline(xintercept = resumen_ct$minimo,  linetype = "dotdash", linewidth = 0.7) +
-  geom_vline(xintercept = resumen_ct$maximo,  linetype = "dotdash", linewidth = 0.7) +
-  geom_vline(xintercept = as.numeric(resumen_ct$Q1), linetype = "dotted", linewidth = 0.8) +
-  geom_vline(xintercept = as.numeric(resumen_ct$Q3), linetype = "dotted", linewidth = 0.8) +
+  scale_color_manual(values = c(
+    "Media"   = "#551196",
+    "Mediana" = "#1a9850",
+    "Q1"      = "#f46d43",
+    "Q3"      = "#a71c1c"
+  )) +
+  scale_linetype_manual(values = c(
+    "Media"   = "longdash",
+    "Mediana" = "longdash",
+    "Q1"      = "dotted",
+    "Q3"      = "dotted"
+  )) +
 
   labs(x = "Costo de transformación (UM/unidad)",
-       y = "Densidad") +
+       y = "Densidad",
+       color = "Estadístico",
+       linetype = "Estadístico") +
   theme_bw() +
+  theme(legend.position = "right") +
   facet_grid(. ~ "Distribución del costo de transformación")
 ```
+
+
 
 El histograma confirma  lo observado en las estadísticas descriptivas. El núcleo de la distribución se concentra claramente alrededor de r round(ct_media,2), con una densidad máxima cercana a los 25–30 UM. Esta región coincide con la mediana (r round(ct_med,2)) y el rango intercuartílico, lo que indica que el comportamiento típico del proceso está bien definido y es relativamente estable.
 
