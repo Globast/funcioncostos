@@ -186,6 +186,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.5.1" data-path="eda.html"><a href="eda.html#tablas-resumen-por-tipo-de-equipo"><i class="fa fa-check"></i><b>6.5.1</b> Tablas resumen por tipo de equipo</a></li>
 <li class="chapter" data-level="6.5.2" data-path="eda.html"><a href="eda.html#boxplots-por-tipo-de-equipo"><i class="fa fa-check"></i><b>6.5.2</b> Boxplots por tipo de equipo</a></li>
 <li class="chapter" data-level="6.5.3" data-path="eda.html"><a href="eda.html#tablas-resumen-por-numero-de-insumos"><i class="fa fa-check"></i><b>6.5.3</b> Tablas resumen por numero de insumos</a></li>
+<li class="chapter" data-level="6.5.4" data-path="eda.html"><a href="eda.html#analisis-por-tipo-de-insumo"><i class="fa fa-check"></i><b>6.5.4</b> Analisis por tipo de insumo</a></li>
 </ul></li>
 <li class="chapter" data-level="6.6" data-path="eda.html"><a href="eda.html#variables-derivadas"><i class="fa fa-check"></i><b>6.6</b> Variables derivadas</a></li>
 </ul></li>
@@ -2743,11 +2744,9 @@ D4
 </tr>
 </tbody>
 </table>
-<p>El comportamiento de los costos de insumo por tipo de equipo muestra una estructura menos homogénea que la observada en costos de transformación. Aquí no solo cambian los niveles, sino también la forma de la distribución.</p>
-<p>Los equipos A1 y B2 presentan patrones similares: medias cercanas a 5 UM/unidad y medianas ligeramente inferiores. Esto indica una leve asimetría positiva, consistente con la presencia de algunos valores altos, pero en general con un comportamiento relativamente estable. El rango intercuartílico es moderado, lo que sugiere que el consumo de insumos en estos equipos es predecible y controlado.</p>
-<p>El equipo C3 nuevamente se diferencia de forma clara. La media (≈11.25) es más del doble que en A1 y B2, y la dispersión es considerable. Además, la mediana se mantiene alta, lo que indica que no se trata solo de valores extremos, sino de un nivel estructuralmente elevado. Este patrón sugiere que C3 no solo es más costoso en transformación, sino también en insumos, lo que refuerza la idea de un proceso intrínsecamente más intensivo o menos eficiente.</p>
-<p>El caso de D4 es el más interesante. Aunque presenta la media más baja (≈3.58), su desviación estándar es alta y supera incluso a la media. La mediana (≈1.64) está muy por debajo de la media, lo que indica una asimetría extrema. Esto implica que la mayoría de los casos tienen costos bajos, pero existen algunos valores muy altos (máximo ≈46) que distorsionan el promedio. En otras palabras, D4 es generalmente eficiente, pero con episodios puntuales de alto consumo.</p>
-<p>En conjunto, los costos de insumo muestran mayor sensibilidad a eventos extremos y menor estabilidad que los costos de transformación, especialmente en ciertos equipos.</p>
+<p>Los tipos de equipos A1 y B2 presentan patrones similares: medias cercanas a 5 UM/unidad y medianas ligeramente inferiores. El rango intercuartílico es moderado, sugiriendo que el consumo de insumos en estos equipos es predecible y controlado.</p>
+<p>El tipo de equipo C3 nuevamente se diferencia de forma clara. La media (≈11.25) es más del doble que en A1 y B2, y la dispersión es considerable. Además, la mediana se mantiene alta. Costoso tanto en transformación como en insumos, es menos eficiente.</p>
+<p>El tipo de equipo D4 Presenta la media más baja (≈3.58) pero su desviación estándar es alta y supera incluso a la media. La mediana (≈1.64) está muy por debajo de la media, lo que indica una asimetría extrema. D4 es generalmente eficiente, pero con episodios puntuales de alto consumo.</p>
 </div>
 <div id="boxplots-por-tipo-de-equipo" class="section level3 hasAnchor" number="6.5.2">
 <h3><span class="header-section-number">6.5.2</span> Boxplots por tipo de equipo<a href="eda.html#boxplots-por-tipo-de-equipo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -2772,6 +2771,7 @@ D4
 <span id="cb43-19"><a href="eda.html#cb43-19" tabindex="-1"></a></span>
 <span id="cb43-20"><a href="eda.html#cb43-20" tabindex="-1"></a>box_ct_te <span class="sc">+</span> box_ci_te </span></code></pre></div>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/boxequipo-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<p>Los boxplots confirman visualmente lo que ya sugerían los resúmenes numéricos: el tipo de equipo introduce regímenes claramente diferenciados de costos, tanto en transformación como en insumos.</p>
 </div>
 <div id="tablas-resumen-por-numero-de-insumos" class="section level3 hasAnchor" number="6.5.3">
 <h3><span class="header-section-number">6.5.3</span> Tablas resumen por numero de insumos<a href="eda.html#tablas-resumen-por-numero-de-insumos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -3040,44 +3040,83 @@ IQR
 <span id="cb46-19"><a href="eda.html#cb46-19" tabindex="-1"></a></span>
 <span id="cb46-20"><a href="eda.html#cb46-20" tabindex="-1"></a>box_ct_insumo <span class="sc">+</span> box_ci_insumo </span></code></pre></div>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/boxinsumo-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<p>En costos de transformación, el paso de uno a dos insumos implica un incremento claro en la media (de aproximadamente 27.3 a 35.8), acompañado de un desplazamiento de la mediana en la misma dirección. Esto indica que el efecto no está impulsado por valores extremos, sino por un cambio en el comportamiento central de la distribución. La desviación estándar se mantiene prácticamente constante, lo que sugiere que la variabilidad absoluta no aumenta, pero el IQR se reduce en el caso de dos insumos. Esto implica que, aunque el nivel de costo es mayor, la distribución es relativamente más compacta en su rango intercuartílico.</p>
+<p>En costos de insumo, el patrón es análogo pero más moderado. La media aumenta de 4.55 a 6.15, y la mediana también se desplaza hacia arriba. Sin embargo, la dispersión crece ligeramente, reflejada en una mayor desviación estándar. La similitud en los IQR indica que la variabilidad central es comparable, pero los valores extremos tienen mayor peso en el caso de dos insumos.</p>
+<p>El número de insumos actúa como una variable explicativa relevante que introduce un cambio de nivel en los costos, pero no altera sustancialmente la forma de la distribución. Esto es consistente con un efecto aditivo más que multiplicativo.</p>
+<p>Trabajar con dos insumos es sistemáticamente más costoso, tanto en transformación como en materiales. La variabilidad no aumenta de forma proporcional al costo. Esto significa que el sistema es capaz de operar con dos insumos de forma relativamente controlada, pero a un costo superior. No es un problema de desorden operativo, es un problema de diseño del proceso.</p>
+<p>Cada vez que se introduce un segundo insumo, se está aceptando un costo mayor de forma sistemática. Aquí el problema pasa a ser comercial. ¿ese costo adicional se está trasladando al cliente?</p>
+<p>Es claro que el segundo insumo incrementa el consumo de materiales y el costo de transformación , entonces debe reflejarse en un recargo explícito o una estructura de precios diferenciada. de lo contrario se está subsidiando complejidad.</p>
+</div>
+<div id="analisis-por-tipo-de-insumo" class="section level3 hasAnchor" number="6.5.4">
+<h3><span class="header-section-number">6.5.4</span> Analisis por tipo de insumo<a href="eda.html#analisis-por-tipo-de-insumo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="eda.html#cb47-1" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb47-2"><a href="eda.html#cb47-2" tabindex="-1"></a></span>
+<span id="cb47-3"><a href="eda.html#cb47-3" tabindex="-1"></a>datos <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb47-4"><a href="eda.html#cb47-4" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb47-5"><a href="eda.html#cb47-5" tabindex="-1"></a>    <span class="at">comb_insumos =</span> <span class="fu">if_else</span>(</span>
+<span id="cb47-6"><a href="eda.html#cb47-6" tabindex="-1"></a>      num_insumos <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb47-7"><a href="eda.html#cb47-7" tabindex="-1"></a>      insumo_1,</span>
+<span id="cb47-8"><a href="eda.html#cb47-8" tabindex="-1"></a>      <span class="fu">paste</span>(<span class="fu">pmin</span>(insumo_1, insumo_2),</span>
+<span id="cb47-9"><a href="eda.html#cb47-9" tabindex="-1"></a>            <span class="fu">pmax</span>(insumo_1, insumo_2),</span>
+<span id="cb47-10"><a href="eda.html#cb47-10" tabindex="-1"></a>            <span class="at">sep =</span> <span class="st">&quot; + &quot;</span>)</span>
+<span id="cb47-11"><a href="eda.html#cb47-11" tabindex="-1"></a>    )</span>
+<span id="cb47-12"><a href="eda.html#cb47-12" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="eda.html#cb48-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb48-2"><a href="eda.html#cb48-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> comb_insumos, <span class="at">y =</span> costo_transformacion)) <span class="sc">+</span></span>
+<span id="cb48-3"><a href="eda.html#cb48-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#2c7fb8&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb48-4"><a href="eda.html#cb48-4" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">shape =</span> <span class="dv">18</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb48-5"><a href="eda.html#cb48-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Combinación de insumos&quot;</span>,</span>
+<span id="cb48-6"><a href="eda.html#cb48-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Costo de transformación&quot;</span>) <span class="sc">+</span></span>
+<span id="cb48-7"><a href="eda.html#cb48-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb48-8"><a href="eda.html#cb48-8" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box-insumo-comb-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="eda.html#cb49-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb49-2"><a href="eda.html#cb49-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> comb_insumos, <span class="at">y =</span> costo_insumo)) <span class="sc">+</span></span>
+<span id="cb49-3"><a href="eda.html#cb49-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#7fc97f&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb49-4"><a href="eda.html#cb49-4" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">shape =</span> <span class="dv">18</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb49-5"><a href="eda.html#cb49-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Combinación de insumos&quot;</span>,</span>
+<span id="cb49-6"><a href="eda.html#cb49-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Costo de insumo&quot;</span>) <span class="sc">+</span></span>
+<span id="cb49-7"><a href="eda.html#cb49-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb49-8"><a href="eda.html#cb49-8" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box-insumo-comb-2.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
 <p><strong>Ejercicio.</strong> Replicar el análisis bivariado anterior para las variables categóricas <code>categoria_producto</code>, <code>num_insumos</code>, <code>insumo_1</code> e <code>insumo_2</code>, e interpretar los patrones observados con respecto a las tres variables respuesta.</p>
 </div>
 </div>
 <div id="variables-derivadas" class="section level2 hasAnchor" number="6.6">
 <h2><span class="header-section-number">6.6</span> Variables derivadas<a href="eda.html#variables-derivadas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Se construye la variable derivada <code>velocidad_produccion</code> como el cociente entre <code>volumen_lote</code> y <code>duracion_proceso</code>, expresada en unidades por hora. Esta métrica resume la productividad del proceso por orden y se incluye aquí porque su interpretación requiere haber analizado antes las dos variables que la componen.</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="eda.html#cb47-1" tabindex="-1"></a>datos <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
-<span id="cb47-2"><a href="eda.html#cb47-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">velocidad_produccion =</span> volumen_lote <span class="sc">/</span> duracion_proceso)</span></code></pre></div>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="eda.html#cb48-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
-<span id="cb48-2"><a href="eda.html#cb48-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb48-3"><a href="eda.html#cb48-3" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(velocidad_produccion),</span>
-<span id="cb48-4"><a href="eda.html#cb48-4" tabindex="-1"></a>    <span class="at">media =</span> <span class="fu">mean</span>(velocidad_produccion),</span>
-<span id="cb48-5"><a href="eda.html#cb48-5" tabindex="-1"></a>    <span class="at">ds =</span> <span class="fu">sd</span>(velocidad_produccion),</span>
-<span id="cb48-6"><a href="eda.html#cb48-6" tabindex="-1"></a>    <span class="st">`</span><span class="at">50%</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">median</span>(velocidad_produccion),</span>
-<span id="cb48-7"><a href="eda.html#cb48-7" tabindex="-1"></a>    <span class="at">minimo =</span> <span class="fu">min</span>(velocidad_produccion),</span>
-<span id="cb48-8"><a href="eda.html#cb48-8" tabindex="-1"></a>    <span class="at">maximo =</span> <span class="fu">max</span>(velocidad_produccion),</span>
-<span id="cb48-9"><a href="eda.html#cb48-9" tabindex="-1"></a>    <span class="at">Q1 =</span> <span class="fu">quantile</span>(velocidad_produccion, <span class="fl">0.25</span>),</span>
-<span id="cb48-10"><a href="eda.html#cb48-10" tabindex="-1"></a>    <span class="at">Q3 =</span> <span class="fu">quantile</span>(velocidad_produccion, <span class="fl">0.75</span>),</span>
-<span id="cb48-11"><a href="eda.html#cb48-11" tabindex="-1"></a>    <span class="at">IQR =</span> <span class="fu">IQR</span>(velocidad_produccion)</span>
-<span id="cb48-12"><a href="eda.html#cb48-12" tabindex="-1"></a>  ) <span class="ot">-&gt;</span> resumen_vp</span>
-<span id="cb48-13"><a href="eda.html#cb48-13" tabindex="-1"></a>resumen_vp</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="eda.html#cb50-1" tabindex="-1"></a>datos <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb50-2"><a href="eda.html#cb50-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">velocidad_produccion =</span> volumen_lote <span class="sc">/</span> duracion_proceso)</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="eda.html#cb51-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb51-2"><a href="eda.html#cb51-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb51-3"><a href="eda.html#cb51-3" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(velocidad_produccion),</span>
+<span id="cb51-4"><a href="eda.html#cb51-4" tabindex="-1"></a>    <span class="at">media =</span> <span class="fu">mean</span>(velocidad_produccion),</span>
+<span id="cb51-5"><a href="eda.html#cb51-5" tabindex="-1"></a>    <span class="at">ds =</span> <span class="fu">sd</span>(velocidad_produccion),</span>
+<span id="cb51-6"><a href="eda.html#cb51-6" tabindex="-1"></a>    <span class="st">`</span><span class="at">50%</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">median</span>(velocidad_produccion),</span>
+<span id="cb51-7"><a href="eda.html#cb51-7" tabindex="-1"></a>    <span class="at">minimo =</span> <span class="fu">min</span>(velocidad_produccion),</span>
+<span id="cb51-8"><a href="eda.html#cb51-8" tabindex="-1"></a>    <span class="at">maximo =</span> <span class="fu">max</span>(velocidad_produccion),</span>
+<span id="cb51-9"><a href="eda.html#cb51-9" tabindex="-1"></a>    <span class="at">Q1 =</span> <span class="fu">quantile</span>(velocidad_produccion, <span class="fl">0.25</span>),</span>
+<span id="cb51-10"><a href="eda.html#cb51-10" tabindex="-1"></a>    <span class="at">Q3 =</span> <span class="fu">quantile</span>(velocidad_produccion, <span class="fl">0.75</span>),</span>
+<span id="cb51-11"><a href="eda.html#cb51-11" tabindex="-1"></a>    <span class="at">IQR =</span> <span class="fu">IQR</span>(velocidad_produccion)</span>
+<span id="cb51-12"><a href="eda.html#cb51-12" tabindex="-1"></a>  ) <span class="ot">-&gt;</span> resumen_vp</span>
+<span id="cb51-13"><a href="eda.html#cb51-13" tabindex="-1"></a>resumen_vp</span></code></pre></div>
 <pre><code>## # A tibble: 1 × 9
 ##       n media    ds `50%` minimo maximo    Q1    Q3   IQR
 ##   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1   395  27.4  20.0  21.7   5.54   187.  16.6  27.1  10.5</code></pre>
 <p>La velocidad de producción media es de 27.4 unidades/hora, con un valor 50% de 21.7 unidades/hora y un rango entre 5.5 y 186.9. Esta variable se utilizará en el capítulo de análisis inferencial para evaluar su asociación con el costo de transformación como proxy de eficiencia del proceso.</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="eda.html#cb50-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
-<span id="cb50-2"><a href="eda.html#cb50-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> velocidad_produccion)) <span class="sc">+</span></span>
-<span id="cb50-3"><a href="eda.html#cb50-3" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
-<span id="cb50-4"><a href="eda.html#cb50-4" tabindex="-1"></a>                 <span class="at">bins =</span> <span class="dv">30</span>,</span>
-<span id="cb50-5"><a href="eda.html#cb50-5" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">&quot;#ff7f0e&quot;</span>,</span>
-<span id="cb50-6"><a href="eda.html#cb50-6" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;white&quot;</span>,</span>
-<span id="cb50-7"><a href="eda.html#cb50-7" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb50-8"><a href="eda.html#cb50-8" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">&quot;#d95f02&quot;</span>, <span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
-<span id="cb50-9"><a href="eda.html#cb50-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Velocidad de producción (unidades/hora)&quot;</span>,</span>
-<span id="cb50-10"><a href="eda.html#cb50-10" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Densidad&quot;</span>) <span class="sc">+</span></span>
-<span id="cb50-11"><a href="eda.html#cb50-11" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb50-12"><a href="eda.html#cb50-12" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Distribución de la velocidad de producción&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="eda.html#cb53-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb53-2"><a href="eda.html#cb53-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> velocidad_produccion)) <span class="sc">+</span></span>
+<span id="cb53-3"><a href="eda.html#cb53-3" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
+<span id="cb53-4"><a href="eda.html#cb53-4" tabindex="-1"></a>                 <span class="at">bins =</span> <span class="dv">30</span>,</span>
+<span id="cb53-5"><a href="eda.html#cb53-5" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">&quot;#ff7f0e&quot;</span>,</span>
+<span id="cb53-6"><a href="eda.html#cb53-6" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb53-7"><a href="eda.html#cb53-7" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb53-8"><a href="eda.html#cb53-8" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">&quot;#d95f02&quot;</span>, <span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb53-9"><a href="eda.html#cb53-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Velocidad de producción (unidades/hora)&quot;</span>,</span>
+<span id="cb53-10"><a href="eda.html#cb53-10" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Densidad&quot;</span>) <span class="sc">+</span></span>
+<span id="cb53-11"><a href="eda.html#cb53-11" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb53-12"><a href="eda.html#cb53-12" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Distribución de la velocidad de producción&quot;</span>)</span></code></pre></div>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/hist-vp-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
 
 </div>

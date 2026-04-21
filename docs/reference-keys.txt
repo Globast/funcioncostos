@@ -49,6 +49,7 @@ análisis-bivariado-variables-respuesta-vs-predictoras-categóricas
 tablas-resumen-por-tipo-de-equipo
 boxplots-por-tipo-de-equipo
 tablas-resumen-por-numero-de-insumos
+analisis-por-tipo-de-insumo
 variables-derivadas
 pruebas-de-hipótesis-sin-desarrollar
 prueba-t-de-dos-muestras
