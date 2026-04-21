@@ -152,6 +152,10 @@ datos %>%
 ```
 
 El histograma y el boxplot evidencian una distribución asimétrica hacia valores altos, con presencia de órdenes extremas que se destacan sobre el bigote superior. La distancia entre la media y el 50% sugiere que la media está influida por la cola derecha, por lo que los análisis inferenciales posteriores deben contemplar transformaciones o pruebas robustas.
+El bigote superior se extiende hasta un cierto punto, pero inmediatamente aparecen múltiples observaciones por encima, marcadas en rojo. Estos son outliers superiores, y no son pocos ni aislados: forman un grupo visible. 
+Existe una subpoblación de costos altos. Es decir no son casos extremos que sean puntuales.
+En contraste, en la parte inferior no se observan outliers relevantes. El mínimo está dentro del rango esperado
+El boxplot no solo confirma la dispersión, sino que evidencia que el fenómeno clave no es la variabilidad general, sino la existencia de una dinámica diferenciada en costos altos, que requiere segmentación o modelado específico.
 
 ### costo_insumo
 
@@ -168,7 +172,9 @@ datos %>%
     Q3      = quantile(costo_insumo, 0.75),
     IQR     = IQR(costo_insumo)
   ) -> resumen_ci
-resumen_ci
+
+knitr::kable(resumen_ci, caption = "Resumen del costo de insumo") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
 ```
 
 ```{r resumen-ci-calc, echo=FALSE}
@@ -182,6 +188,13 @@ ci_cv     <- ci_ds / ci_media * 100
 ```
 
 El costo de insumo promedio es de `r round(ci_media, 2)` UM/unidad (DS = `r round(ci_ds, 2)` UM/unidad), con un coeficiente de variación de `r round(ci_cv, 1)`%. El 50% de las órdenes tiene un costo de insumo por debajo de `r round(ci_med, 2)` UM/unidad, con un mínimo de `r round(ci_min, 2)` y un máximo de `r round(ci_max, 2)` UM/unidad. El rango intercuartílico es de `r round(ci_iqr, 2)` UM/unidad.
+El comportamiento típico se concentra en valores bajos. La mayoría de los insumos se ubican en niveles reducidos de costo, mientras que la media (r round(ci_media,2)) es superior, lo que evidencia la influencia de valores más altos sobre el promedio. Esta diferencia confirma una asimetría positiva: pocos insumos concentran costos considerablemente mayores.
+El rango intercuartílico (r round(ci_iqr,2)) delimita el comportamiento típico: el 50% central de los costos se sitúa en un intervalo relativamente acotado, lo que sugiere que existe un conjunto dominante de insumos de bajo costo. Sin embargo, este núcleo convive con una cola derecha extensa.
+En resumen: 
+- comportamiento homogéneo
+- un grupo mayoritario de insumos de bajo costo
+- un conjunto reducido de insumos de costo medio
+- pocos insumos de alto impacto económico
 
 ```{r hist-box-ci, fig.width=11, fig.height=4.5}
 p_hist_ci <- datos %>%
