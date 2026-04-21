@@ -31,119 +31,7 @@ datos <- datos %>%
   mutate(costo_unitario_total = costo_transformacion + costo_insumo)
 ```
 
-### costo_unitario_total
 
-La variable `costo_unitario_total` se deriva como la suma de `costo_transformacion` y `costo_insumo`, y representa el costo total por unidad de producto.
-
-```{r resumen-ctot, echo=TRUE}
-datos %>%
-  summarise(
-    n       = length(costo_unitario_total),
-    media   = mean(costo_unitario_total),
-    ds      = sd(costo_unitario_total),
-    `50%`   = median(costo_unitario_total),
-    minimo  = min(costo_unitario_total),
-    maximo  = max(costo_unitario_total),
-    Q1      = quantile(costo_unitario_total, 0.25),
-    Q3      = quantile(costo_unitario_total, 0.75),
-    IQR     = IQR(costo_unitario_total)
-  ) -> resumen_ctot
-knitr::kable(resumen_ctot, caption = "Resumen del costo unitario total") %>%
-  kableExtra::kable_styling(full_width = FALSE) 
-```
-
-```{r resumen-ctot-calc, echo=FALSE}
-cu_media  <- resumen_ctot$media
-cu_ds     <- resumen_ctot$ds
-cu_med    <- resumen_ctot$`50%`
-cu_min    <- resumen_ctot$minimo
-cu_max    <- resumen_ctot$maximo
-cu_iqr    <- resumen_ctot$IQR
-cu_cv     <- cu_ds / cu_media * 100
-
-prop_ct <- round(ct_media / cu_media * 100, 1)
-prop_ci <- round(ci_media / cu_media * 100, 1)
-```
-
-El costo unitario total promedio es de `r round(cu_media, 2)` UM/unidad , la cercanía relativa entre ambas indica que, aunque existe asimetría, el núcleo del sistema está bien definido. Sin embargo, la media se mantiene por encima de la mediana, lo que confirma la presencia de una cola derecha..
-Un coeficiente de variación de `r round(cu_cv, 1)`% (DS = `r round(cu_ds, 2)`), la variabilidad del costo total no es despreciable . De este promedio, el `r prop_ct`% corresponde al costo de transformación y el `r prop_ci`% al costo de insumo. 
-El 50% de las órdenes presenta un costo unitario total por debajo de `r round(cu_med, 2)` UM/unidad, con un rango entre `r round(cu_min, 2)` y `r round(cu_max, 2)`.
-El boxplot confirma la presencia de outliers superiores múltiples, no aislados. Estos valores altos no corresponden a ruido aleatorio, sino a una fracción del sistema que sistemáticamente incurre en costos elevados.
-
-Desde la descomposición del costo total:
-
-El costo de transformación representa aproximadamente r prop_ct% del total
-El costo de insumos representa aproximadamente r prop_ci%
-
-Esto implica que el componente dominante del costo total es el proceso de transformación, mientras que los insumos, aunque más variables, tienen menor peso relativo en el agregado.
-
-Interpretación estructural:
-
-Existe un núcleo estable de costos totales, bien representado por la mediana y el IQR.
-La variabilidad del sistema está influida por eventos de alto costo, principalmente en la cola derecha.
-El costo total hereda la asimetría de sus componentes, pero la amplifica al agregarlos.
-
-Lectura final:
-
-El sistema productivo opera mayoritariamente en un rango de costos relativamente estable, pero está condicionado por una fracción de casos con costos significativamente más altos. Estos casos no son marginales y deben interpretarse como parte de la estructura del proceso, no como anomalías aisladas. La clave analítica no está en el promedio, sino en entender qué condiciones generan esos costos elevados y cómo se relacionan con los componentes del costo total.
-
-
-```{r hist-box-ctot, fig.width=11, fig.height=4.5}
-
-lineas <- tibble(
-  estadistico = c("Media", "Mediana", "Q1", "Q3"),
-  valor = c(
-    resumen_ctot$media,
-    resumen_ctot$`50%`,
-    as.numeric(resumen_ctot$Q1),
-    as.numeric(resumen_ctot$Q3)
-  )
-)
-p_hist_ct <- datos %>%
-  ggplot(aes(x = costo_unitario_total)) +
-  geom_histogram(aes(y = after_stat(density)),
-                 bins = 30,
-                 fill = "#ACAEAF",
-                 color = "white",
-                 alpha = 0.6) +
-  geom_density(color = "#4d004b", linewidth = 1.2) +
-
-  
-  geom_vline(data = lineas,
-             aes(xintercept = valor, color = estadistico, linetype = estadistico),
-             linewidth = 0.9) +
-  scale_color_manual(values = c(
-    "Media"   = "#551196",
-    "Mediana" = "#1a9850",
-    "Q1"      = "#f46d43",
-    "Q3"      = "#a71c1c"
-  )) +
-  scale_linetype_manual(values = c(
-    "Media"   = "longdash",
-    "Mediana" = "longdash",
-    "Q1"      = "dotted",
-    "Q3"      = "dotted"
-  )) +
-  labs(x = "Costo unitario total (UM/unidad)",
-       y = "Densidad",
-       color = "Estadístico",
-       linetype = "Estadístico") +
-  theme_bw() +
-  theme(legend.position = "right") +
-  facet_grid(. ~ "Distribución del costo unitario total")
-  
-p_box_ct <- datos %>%
-  ggplot(aes(x = "", y = costo_unitario_total)) +
-  geom_boxplot(fill = "#ACAEAF", color = "#616161", outlier.color = "red") +
-  stat_summary(fun = mean, geom = "point", shape = 20, size = 3, color = "black") +
-  labs(x = "", y = "Costo unitario total (UM/unidad)") +
-  theme_bw() +
-  facet_grid(. ~ "Boxplot del costo unitario total")
-
-p_hist_ct + p_box_ct
-```
-
-El costo unitario total hereda la asimetría de sus dos componentes. La estructura de costos está dominada por el componente de transformación, que representa aproximadamente `r prop_ct`% del costo total promedio, frente al `r prop_ci`% del costo de insumo.
 
 ### costo_transformacion
 
@@ -311,6 +199,16 @@ En resumen:
 - pocos insumos de alto impacto económico
 
 ```{r hist-box-ci, fig.width=11, fig.height=4.5}
+
+lineas <- tibble(
+  estadistico = c("Media", "Mediana", "Q1", "Q3"),
+  valor = c(
+    resumen_ci$media,
+    resumen_ci$`50%`,
+    as.numeric(resumen_ci$Q1),
+    as.numeric(resumen_ci$Q3)
+  )
+)
 p_hist_ci <- datos %>%
   ggplot(aes(x = costo_insumo)) +
   geom_histogram(aes(y = after_stat(density)),
@@ -319,9 +217,30 @@ p_hist_ci <- datos %>%
                  color = "#616161",
                  alpha = 0.6) +
   geom_density(color = "darkgreen", linewidth = 1.2) +
-  labs(x = "Costo de insumo (UM/unidad)", y = "Densidad") +
+   
+  geom_vline(data = lineas,
+             aes(xintercept = valor, color = estadistico, linetype = estadistico),
+             linewidth = 0.9) +
+  scale_color_manual(values = c(
+    "Media"   = "#551196",
+    "Mediana" = "#1a9850",
+    "Q1"      = "#f46d43",
+    "Q3"      = "#a71c1c"
+  )) +
+  scale_linetype_manual(values = c(
+    "Media"   = "longdash",
+    "Mediana" = "longdash",
+    "Q1"      = "dotted",
+    "Q3"      = "dotted"
+  )) +
+  labs(x = "Costo de insumo (UM/unidad)",
+       y = "Densidad",
+       color = "Estadístico",
+       linetype = "Estadístico") +
   theme_bw() +
+  theme(legend.position = "right") +
   facet_grid(. ~ "Distribución del costo de insumo")
+
 
 p_box_ci <- datos %>%
   ggplot(aes(x = "", y = costo_insumo)) +
@@ -334,7 +253,119 @@ p_box_ci <- datos %>%
 p_hist_ci + p_box_ci
 ```
 
+### costo_unitario_total
 
+La variable `costo_unitario_total` se deriva como la suma de `costo_transformacion` y `costo_insumo`, y representa el costo total por unidad de producto.
+
+```{r resumen-ctot, echo=TRUE}
+datos %>%
+  summarise(
+    n       = length(costo_unitario_total),
+    media   = mean(costo_unitario_total),
+    ds      = sd(costo_unitario_total),
+    `50%`   = median(costo_unitario_total),
+    minimo  = min(costo_unitario_total),
+    maximo  = max(costo_unitario_total),
+    Q1      = quantile(costo_unitario_total, 0.25),
+    Q3      = quantile(costo_unitario_total, 0.75),
+    IQR     = IQR(costo_unitario_total)
+  ) -> resumen_ctot
+knitr::kable(resumen_ctot, caption = "Resumen del costo unitario total") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
+```
+
+```{r resumen-ctot-calc, echo=FALSE}
+cu_media  <- resumen_ctot$media
+cu_ds     <- resumen_ctot$ds
+cu_med    <- resumen_ctot$`50%`
+cu_min    <- resumen_ctot$minimo
+cu_max    <- resumen_ctot$maximo
+cu_iqr    <- resumen_ctot$IQR
+cu_cv     <- cu_ds / cu_media * 100
+
+prop_ct <- round(ct_media / cu_media * 100, 1)
+prop_ci <- round(ci_media / cu_media * 100, 1)
+```
+
+El costo unitario total promedio es de `r round(cu_media, 2)` UM/unidad , la cercanía relativa entre ambas indica que, aunque existe asimetría, el núcleo del sistema está bien definido. Sin embargo, la media se mantiene por encima de la mediana, lo que confirma la presencia de una cola derecha..
+Un coeficiente de variación de `r round(cu_cv, 1)`% (DS = `r round(cu_ds, 2)`), la variabilidad del costo total no es despreciable . De este promedio, el `r prop_ct`% corresponde al costo de transformación y el `r prop_ci`% al costo de insumo. 
+El 50% de las órdenes presenta un costo unitario total por debajo de `r round(cu_med, 2)` UM/unidad, con un rango entre `r round(cu_min, 2)` y `r round(cu_max, 2)`.
+El boxplot confirma la presencia de outliers superiores múltiples, no aislados. Estos valores altos no corresponden a ruido aleatorio, sino a una fracción del sistema que sistemáticamente incurre en costos elevados.
+
+Desde la descomposición del costo total:
+
+El costo de transformación representa aproximadamente r prop_ct% del total
+El costo de insumos representa aproximadamente r prop_ci%
+
+Esto implica que el componente dominante del costo total es el proceso de transformación, mientras que los insumos, aunque más variables, tienen menor peso relativo en el agregado.
+
+Interpretación estructural:
+
+Existe un núcleo estable de costos totales, bien representado por la mediana y el IQR.
+La variabilidad del sistema está influida por eventos de alto costo, principalmente en la cola derecha.
+El costo total hereda la asimetría de sus componentes, pero la amplifica al agregarlos.
+
+Lectura final:
+
+El sistema productivo opera mayoritariamente en un rango de costos relativamente estable, pero está condicionado por una fracción de casos con costos significativamente más altos. Estos casos no son marginales y deben interpretarse como parte de la estructura del proceso, no como anomalías aisladas. La clave analítica no está en el promedio, sino en entender qué condiciones generan esos costos elevados y cómo se relacionan con los componentes del costo total.
+
+
+```{r hist-box-ctot, fig.width=11, fig.height=4.5}
+
+lineas <- tibble(
+  estadistico = c("Media", "Mediana", "Q1", "Q3"),
+  valor = c(
+    resumen_ctot$media,
+    resumen_ctot$`50%`,
+    as.numeric(resumen_ctot$Q1),
+    as.numeric(resumen_ctot$Q3)
+  )
+)
+p_hist_ct <- datos %>%
+  ggplot(aes(x = costo_unitario_total)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 30,
+                 fill = "#ACAEAF",
+                 color = "white",
+                 alpha = 0.6) +
+  geom_density(color = "#4d004b", linewidth = 1.2) +
+
+  
+  geom_vline(data = lineas,
+             aes(xintercept = valor, color = estadistico, linetype = estadistico),
+             linewidth = 0.9) +
+  scale_color_manual(values = c(
+    "Media"   = "#551196",
+    "Mediana" = "#1a9850",
+    "Q1"      = "#f46d43",
+    "Q3"      = "#a71c1c"
+  )) +
+  scale_linetype_manual(values = c(
+    "Media"   = "longdash",
+    "Mediana" = "longdash",
+    "Q1"      = "dotted",
+    "Q3"      = "dotted"
+  )) +
+  labs(x = "Costo unitario total (UM/unidad)",
+       y = "Densidad",
+       color = "Estadístico",
+       linetype = "Estadístico") +
+  theme_bw() +
+  theme(legend.position = "right") +
+  facet_grid(. ~ "Distribución del costo unitario total")
+  
+p_box_ct <- datos %>%
+  ggplot(aes(x = "", y = costo_unitario_total)) +
+  geom_boxplot(fill = "#ACAEAF", color = "#616161", outlier.color = "red") +
+  stat_summary(fun = mean, geom = "point", shape = 20, size = 3, color = "black") +
+  labs(x = "", y = "Costo unitario total (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Boxplot del costo unitario total")
+
+p_hist_ct + p_box_ct
+```
+
+El costo unitario total hereda la asimetría de sus dos componentes. La estructura de costos está dominada por el componente de transformación, que representa aproximadamente `r prop_ct`% del costo total promedio, frente al `r prop_ci`% del costo de insumo.
 
 ## Análisis univariado de variables numéricas predictoras
 
