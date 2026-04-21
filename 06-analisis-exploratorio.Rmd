@@ -622,7 +622,7 @@ La construcción de los gráficos de barras para las variables categóricas rest
 ## Análisis bivariado: variables respuesta vs predictoras numéricas
 
 
-## Correlacion Pearson
+### Correlacion Pearson
 
 ```{r matriz-correlacion}
 matriz_correlacion <- datos %>%
@@ -667,18 +667,86 @@ El sistema ya muestra señales de eficiencia cuando opera a escala, pero pierde 
 
 
 ### Diagramas de dispersión
+```{r scatter-prioritarios, fig.width=12, fig.height=16, warning=FALSE, message=FALSE}
+library(dplyr)
+library(ggplot2)
+library(patchwork)
 
-```{r scatter-vol-ct, fig.width=9, fig.height=4.5}
-datos %>%
-  ggplot(aes(x = volumen_lote, y = costo_transformacion)) +
-  geom_point(alpha = 0.4, color = "#1E90FF") +
-  geom_smooth(method = "lm", formula = y ~ x, se = FALSE, color = "red") +
-  labs(x = "Volumen de lote (unidades)",
-       y = "Costo de transformación (UM/unidad)") +
-  theme_bw() +
-  facet_grid(. ~ "Dispersión entre volumen_lote y costo_transformacion")
+# Función auxiliar para construir gráficos de dispersión
+graf_disp <- function(data, x, y, xlab, ylab, titulo, color = "#1E90FF") {
+  ggplot(data, aes(x = {{ x }}, y = {{ y }})) +
+    geom_point(alpha = 0.4, color = color) +
+    geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.9) +
+    labs(x = xlab, y = ylab, title = titulo) +
+    theme_bw() +
+    theme(
+      plot.title = element_text(size = 10, face = "bold"),
+      axis.title = element_text(size = 9)
+    )
+}
+
+# Nivel 1
+p1 <- graf_disp(
+  datos, volumen_lote, costo_transformacion,
+  "Volumen de lote", "Costo de transformación (UM/unidad)",
+  "Volumen de lote vs costo de transformación"
+)
+
+p2 <- graf_disp(
+  datos, volumen_lote, costo_unitario_total,
+  "Volumen de lote", "Costo unitario total (UM/unidad)",
+  "Volumen de lote vs costo unitario total"
+)
+
+p3 <- graf_disp(
+  datos, duracion_proceso, costo_transformacion,
+  "Duración del proceso (horas)", "Costo de transformación (UM/unidad)",
+  "Duración del proceso vs costo de transformación"
+)
+
+# Nivel 2
+p4 <- graf_disp(
+  datos, volumen_lote, duracion_proceso,
+  "Volumen de lote", "Duración del proceso (horas)",
+  "Volumen de lote vs duración del proceso"
+)
+
+p5 <- graf_disp(
+  datos, volumen_lote, cantidad_insumo_1,
+  "Volumen de lote", "Cantidad de insumo 1",
+  "Volumen de lote vs cantidad de insumo 1"
+)
+
+p6 <- graf_disp(
+  datos, duracion_proceso, cantidad_insumo_1,
+  "Duración del proceso (horas)", "Cantidad de insumo 1",
+  "Duración del proceso vs cantidad de insumo 1"
+)
+
+# Nivel 3
+p7 <- datos %>%
+  filter(num_insumos == 2) %>%
+  graf_disp(
+    duracion_proceso, cantidad_insumo_2,
+    "Duración del proceso (horas)", "Cantidad de insumo 2",
+    "Duración del proceso vs cantidad de insumo 2"
+  )
+
+p8 <- datos %>%
+  filter(num_insumos == 2) %>%
+  graf_disp(
+    costo_insumo, cantidad_insumo_2,
+    "Costo de insumo (UM/unidad)", "Cantidad de insumo 2",
+    "Costo de insumo vs cantidad de insumo 2"
+  )
+
+# Organización en dos columnas
+(p1 + p2) /
+(p3 + p4) /
+(p5 + p6) /
+(p7 + p8)
+
 ```
-
 El diagrama de dispersión revela una relación clara entre escala de producción y costo unitario de transformación.
 A medida que aumenta el volumen del lote, el costo de transformación por unidad disminuye. Este patrón es consistente con un fenómeno de economías de escala: procesos más grandes diluyen costos fijos y mejoran la eficiencia operativa.
 Sin embargo, la relación no es perfectamente lineal ni fuerte. La nube de puntos muestra una alta dispersión, especialmente en volúmenes bajos y medios. Para un mismo nivel de volumen (por ejemplo, entre 1000 y 3000 unidades), el costo puede variar ampliamente. Esto implica que el volumen explica solo una parte de la variabilidad.
@@ -692,17 +760,6 @@ Este patrón sugiere heterocedasticidad: la variabilidad del costo depende del v
  Existe una relación inversa consistente con economías de escala, pero con alta variabilidad residual. 
  Esto indica que el análisis o modelado del costo debe incorporar el volumen como variable clave, pero también considerar otros factores estructurales que explican la dispersión observada.
 
-```{r scatter-dur-ct, fig.width=9, fig.height=4.5}
-datos %>%
-  ggplot(aes(x = duracion_proceso, y = costo_transformacion)) +
-  geom_point(alpha = 0.4, color = "#1E90FF") +
-  geom_smooth(method = "lm", formula = y ~ x, se = FALSE, color = "red") +
-  labs(x = "Duración del proceso (horas)",
-       y = "Costo de transformación (UM/unidad)") +
-  theme_bw() +
-  facet_grid(. ~ "Dispersión entre duracion_proceso y costo_transformacion")
-```
-
 El diagrama muestra una relación distinta a la observada con el volumen, la pendiente es positiva, pero débil.
 A medida que aumenta la duración del proceso, el costo de transformación unitario tiende a incrementarse.
 
@@ -710,37 +767,12 @@ La nube de puntos es ampliamente dispersa en casi todo el rango. Para duraciones
 
 el volumen explica eficiencia, la duración refleja esfuerzo, pero ninguno por sí solo determina el costo.
 
-```{r scatter-dur-cut, fig.width=9, fig.height=4.5}
-datos %>%
-  ggplot(aes(x = duracion_proceso, y = costo_unitario_total)) +
-  geom_point(alpha = 0.4, color = "#1E90FF") +
-  geom_smooth(method = "lm", formula = y ~ x, se = FALSE, color = "red") +
-  labs(x = "Duración del proceso (horas)",
-       y = "Costo unitario  (UM/unidad)") +
-  theme_bw() +
-  facet_grid(. ~ "Dispersión entre duracion_proceso y costo_unitario_total")
-```
-
-
-
-```{r scatter-cantidad-cut, fig.width=9, fig.height=4.5}
-
-datos %>%
-mutate(cantidad_total_insumo = cantidad_insumo_1 + cantidad_insumo_2) %>%
-  ggplot(aes(x = cantidad_total_insumo, y = costo_unitario_total)) +
-  geom_point(alpha = 0.4, color = "#1E90FF") +
-  geom_smooth(method = "lm", formula = y ~ x, se = FALSE, color = "red") +
-  labs(x = "Cantidad total de insumo",
-       y = "Costo unitario  (UM/unidad)") +
-  theme_bw() +
-  facet_grid(. ~ "Dispersión entre cantidad_total_insumo y costo_unitario_total")
-```
-
 La matriz de correlación de Pearson aplicada a estas variables ofrece una primera lectura de las relaciones. 
 No obstante, al contrastar estos resultados con los gráficos de dispersión y las distribuciones observadas, se evidencia que dichas relaciones no son estrictamente lineales ni homogéneas en todo el rango. 
 La presencia de asimetrías marcadas, colas largas y valores atípicos —especialmente en costos y volumen— introduce inestabilidad en los coeficientes de Pearson, que pueden subestimar o distorsionar la intensidad real de las asociaciones. 
 En este contexto, variables como volumen_lote, duracion_proceso y cantidad_insumo_1 muestran patrones monótonos claros, pero no proporcionales, lo que limita la capacidad de Pearson para describirlas adecuadamente. Por esta razón, la matriz de Spearman se vuelve necesaria, ya que captura la dirección y consistencia de estas relaciones sin depender de la linealidad, proporcionando una representación más robusta del comportamiento conjunto del sistema productivo.
 
+### Matriz Spearman
 ```{r matriz-spearman}
 matriz_spearman <- datos %>%
   select(costo_transformacion, costo_insumo, costo_unitario_total,
@@ -797,9 +829,68 @@ Finalmente, la no linealidad observada implica que modelos simples no capturan e
 La conclusión es que el sistema es consistente en su dirección de comportamiento, pero irregular en su intensidad. La optimización no se logra con reglas generales, sino identificando y explotando las condiciones donde el sistema es más eficiente.
 
 
-Las matrices de correlación se presentan en paralelo (Pearson y Spearman) siguiendo la recomendación metodológica de distinguir asociaciones lineales de asociaciones monótonas. Las correlaciones altas entre pares de predictoras deben considerarse en el capítulo de inferencia para evitar problemas de multicolinealidad.
+```{r scatter-costos-predictoras, fig.width=12, fig.height=10, warning=FALSE, message=FALSE}
+library(dplyr)
+library(ggplot2)
+library(patchwork)
 
-**Ejercicio.** Construir los diagramas de dispersión para `costo_insumo` y `costo_unitario_total` frente a las cuatro predictoras numéricas, e interpretar las asociaciones observadas con apoyo en las matrices de correlación.
+# función base
+graf_disp <- function(data, x, y, xlab, ylab, titulo, color = "#1E90FF") {
+  ggplot(data, aes(x = {{ x }}, y = {{ y }})) +
+    geom_point(alpha = 0.4, color = color) +
+    geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.9) +
+    labs(x = xlab, y = ylab, title = titulo) +
+    theme_bw() +
+    theme(plot.title = element_text(size = 10, face = "bold"))
+}
+
+# costo_insumo vs predictoras
+p1 <- graf_disp(datos, volumen_lote, costo_insumo,
+                "Volumen de lote", "Costo de insumo",
+                "costo_insumo vs volumen_lote")
+
+p2 <- graf_disp(datos, duracion_proceso, costo_insumo,
+                "Duración del proceso", "Costo de insumo",
+                "costo_insumo vs duracion_proceso")
+
+p3 <- graf_disp(datos, cantidad_insumo_1, costo_insumo,
+                "Cantidad insumo 1", "Costo de insumo",
+                "costo_insumo vs cantidad_insumo_1")+
+                geom_smooth(method = "lm", se = FALSE, color = "darkgreen", linetype = "dashed")
+
+p4 <- datos %>%
+  filter(num_insumos == 2) %>%
+  graf_disp(cantidad_insumo_2, costo_insumo,
+            "Cantidad insumo 2", "Costo de insumo",
+            "costo_insumo vs cantidad_insumo_2")
+
+# costo_unitario_total vs predictoras
+p5 <- graf_disp(datos, volumen_lote, costo_unitario_total,
+                "Volumen de lote", "Costo unitario total",
+                "costo_unitario_total vs volumen_lote")
+
+p6 <- graf_disp(datos, duracion_proceso, costo_unitario_total,
+                "Duración del proceso", "Costo unitario total",
+                "costo_unitario_total vs duracion_proceso")
+
+p7 <- graf_disp(datos, cantidad_insumo_1, costo_unitario_total,
+                "Cantidad insumo 1", "Costo unitario total",
+                "costo_unitario_total vs cantidad_insumo_1")
+
+p8 <- datos %>%
+  filter(num_insumos == 2) %>%
+  graf_disp(cantidad_insumo_2, costo_unitario_total,
+            "Cantidad insumo 2", "Costo unitario total",
+            "costo_unitario_total vs cantidad_insumo_2")
+
+# layout 2 columnas
+(p1 + p2) /
+(p3 + p4) /
+(p5 + p6) /
+(p7 + p8)
+
+```
+
 
 ## Análisis bivariado: variables respuesta vs predictoras categóricas
 

@@ -39,6 +39,7 @@ análisis-univariado-de-variables-categóricas-predictoras
 análisis-bivariado-variables-respuesta-vs-predictoras-numéricas
 correlacion-pearson
 diagramas-de-dispersión
+matriz-spearman
 análisis-bivariado-variables-respuesta-vs-predictoras-categóricas
 tablas-resumen-por-tipo-de-equipo
 boxplots-por-tipo-de-equipo
