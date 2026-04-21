@@ -918,7 +918,8 @@ resumen_bivariado_ci <- datos %>%
 ### Boxplots por tipo de equipo
 
 ```{r boxequipo, fig.width=9, fig.height=4.5}
-box-ct-te <-datos %>%
+
+box_ct_te <-datos %>%
   ggplot(aes(x = tipo_equipo, y = costo_transformacion)) +
   geom_boxplot(fill = "#87CEFA", outlier.colour = "red", outlier.shape = 16) +
   stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "darkblue") +
@@ -928,7 +929,7 @@ box-ct-te <-datos %>%
   facet_grid(. ~ "Costo de transformación por tipo de equipo")
 
 
-box-ci-te <- datos %>%
+box_ci_te <- datos %>%
   ggplot(aes(x = tipo_equipo, y = costo_insumo)) +
   geom_boxplot(fill = "#b2df8a", outlier.colour = "red", outlier.shape = 16) +
   stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "darkgreen") +
@@ -937,7 +938,7 @@ box-ci-te <- datos %>%
   theme_bw() +
   facet_grid(. ~ "Costo de insumo por tipo de equipo")
 
-box-ctot-mod <- datos %>%
+box_ctot_mod <- datos %>%
   ggplot(aes(x = modalidad_proceso, y = costo_unitario_total)) +
   geom_boxplot(fill = "#bcbddc", outlier.colour = "red", outlier.shape = 16) +
   stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "#4d004b") +
@@ -947,8 +948,10 @@ box-ctot-mod <- datos %>%
   facet_grid(. ~ "Costo unitario total por modalidad de proceso")
 
 
-box-ct-te+box-ci-te +box-ctot-mod 
+box_ct_te + box_ci_te + box_ctot_mod 
 ```
+
+### Boxplots por tipo de equipo
 
 **Ejercicio.** Replicar el análisis bivariado anterior para las variables categóricas `categoria_producto`, `num_insumos`, `insumo_1` e `insumo_2`, e interpretar los patrones observados con respecto a las tres variables respuesta.
 
