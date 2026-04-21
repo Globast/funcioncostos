@@ -1,14 +1,3 @@
 # Resumen
 
-Este documento presenta una estructura reproducible para una entrega académica de maestría en Estadística Aplicada. El propósito del libro es documentar de manera ordenada el problema, los datos, la metodología, el análisis exploratorio, las pruebas de hipótesis, los modelos estadísticos y las conclusiones.
-
-La lógica de trabajo es la siguiente:
-
-1. cargar los datos desde la carpeta `data/`;
-2. limpiar nombres y revisar calidad de la información;
-3. explorar patrones descriptivos;
-4. contrastar hipótesis;
-5. ajustar modelos;
-6. comunicar resultados con tablas, figuras y referencias.
-
-Este enfoque permite mantener una trazabilidad completa del análisis y facilita la reproducción de los resultados.
+SIN INICIAR

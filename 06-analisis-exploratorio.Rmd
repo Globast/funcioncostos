@@ -1,7 +1,6 @@
 # Análisis Exploratorio de Datos {#eda}
 
-El Análisis Exploratorio de Datos (EDA) tiene como propósito describir el comportamiento de las variables del estudio mediante resúmenes numéricos y representaciones gráficas, identificar patrones de variabilidad, detectar posibles valores atípicos y formular hipótesis que orienten el análisis inferencial posterior. En este capítulo se analizan las variables respuesta (`costo_transformacion`, `costo_insumo` y su agregado `costo_unitario_total`) y las variables predictoras del dataset depurado en el capítulo de metodología.
-
+El Análisis Exploratorio de Datos (EDA) busca dar una primera lectura al comportamiento de las variables del estudio, apoyándose tanto en resúmenes numéricos como en representaciones gráficas. A partir de esto, se pretende reconocer cómo varían los datos, ubicar posibles valores atípicos y, sobre todo, plantear hipótesis que después puedan examinarse con mayor rigor en el análisis inferencial.
 ## Carga del dataset analítico
 
 Se carga el dataset depurado y con tipos ajustados. El archivo RDS preserva los factores, el factor ordenado `num_insumos` y la recodificación de `insumo_2`, de modo que este capítulo puede ejecutarse de forma autónoma.
@@ -47,7 +46,10 @@ datos %>%
     Q3      = quantile(costo_transformacion, 0.75),
     IQR     = IQR(costo_transformacion)
   ) -> resumen_ct
-resumen_ct
+knitr::kable(resumen_ct, caption = "Clasificación operativa de las órdenes con valores cero") %>%
+  kableExtra::kable_styling(full_width = FALSE) %>% 
+
+
 ```
 
 ```{r resumen-ct-calc, echo=FALSE}
