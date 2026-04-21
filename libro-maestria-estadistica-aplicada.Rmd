@@ -1267,68 +1267,6 @@ Finalmente, la no linealidad observada implica que modelos simples no capturan e
 La conclusión es que el sistema es consistente en su dirección de comportamiento, pero irregular en su intensidad. La optimización no se logra con reglas generales, sino identificando y explotando las condiciones donde el sistema es más eficiente.
 
 
-```{r scatter-costos-predictoras, fig.width=12, fig.height=10, warning=FALSE, message=FALSE}
-library(dplyr)
-library(ggplot2)
-library(patchwork)
-
-# función base
-graf_disp <- function(data, x, y, xlab, ylab, titulo, color = "#1E90FF") {
-  ggplot(data, aes(x = {{ x }}, y = {{ y }})) +
-    geom_point(alpha = 0.4, color = color) +
-    geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.9) +
-    labs(x = xlab, y = ylab, title = titulo) +
-    theme_bw() +
-    theme(plot.title = element_text(size = 10, face = "bold"))
-}
-
-# costo_insumo vs predictoras
-p1 <- graf_disp(datos, volumen_lote, costo_insumo,
-                "Volumen de lote", "Costo de insumo",
-                "costo_insumo vs volumen_lote")
-
-p2 <- graf_disp(datos, duracion_proceso, costo_insumo,
-                "Duración del proceso", "Costo de insumo",
-                "costo_insumo vs duracion_proceso")
-
-p3 <- graf_disp(datos, cantidad_insumo_1, costo_insumo,
-                "Cantidad insumo 1", "Costo de insumo",
-                "costo_insumo vs cantidad_insumo_1")+
-                geom_smooth(method = "lm", se = FALSE, color = "darkgreen", linetype = "dashed")
-
-p4 <- datos %>%
-  filter(num_insumos == 2) %>%
-  graf_disp(cantidad_insumo_2, costo_insumo,
-            "Cantidad insumo 2", "Costo de insumo",
-            "costo_insumo vs cantidad_insumo_2")
-
-# costo_unitario_total vs predictoras
-p5 <- graf_disp(datos, volumen_lote, costo_unitario_total,
-                "Volumen de lote", "Costo unitario total",
-                "costo_unitario_total vs volumen_lote")
-
-p6 <- graf_disp(datos, duracion_proceso, costo_unitario_total,
-                "Duración del proceso", "Costo unitario total",
-                "costo_unitario_total vs duracion_proceso")
-
-p7 <- graf_disp(datos, cantidad_insumo_1, costo_unitario_total,
-                "Cantidad insumo 1", "Costo unitario total",
-                "costo_unitario_total vs cantidad_insumo_1")
-
-p8 <- datos %>%
-  filter(num_insumos == 2) %>%
-  graf_disp(cantidad_insumo_2, costo_unitario_total,
-            "Cantidad insumo 2", "Costo unitario total",
-            "costo_unitario_total vs cantidad_insumo_2")
-
-# layout 2 columnas
-(p1 + p2) /
-(p3 + p4) /
-(p5 + p6) /
-(p7 + p8)
-
-```
-
 ### Normalidad (Shapiro-Wilk)
 ```{r normalidad, fig.width=12, fig.height=10, warning=FALSE, message=FALSE}
 ### Pruebas de Normalidad
