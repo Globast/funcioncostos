@@ -915,6 +915,8 @@ resumen_bivariado_ci <- datos %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
+
+
 ### Boxplots por tipo de equipo
 
 ```{r boxequipo, fig.width=9, fig.height=4.5}
@@ -950,6 +952,18 @@ box_ctot_mod <- datos %>%
 
 box_ct_te + box_ci_te + box_ctot_mod 
 ```
+
+
+El tipo de equipo A1, presenta un costo medio de aproximadamente 33 UM/unidad, con una dispersión moderada. Su mediana cercana a 30 confirma que el comportamiento típico está bien representado y relativamente estable. Esto lo posiciona como el estándar operativo del sistema.
+
+El tipo de equipo B2 muestra un patrón muy similar a A1, aunque con costos ligeramente menores y menor variabilidad. La cercanía entre media y mediana sugiere estabilidad, pero su menor tamaño muestral limita la robustez de la comparación.
+
+El caso de C3 es claramente distinto. Presenta costos significativamente más altos (media superior a 64) y mayor dispersión. Además, el rango intercuartílico es amplio, lo que indica que no solo es costoso, sino también variable. Esto apunta a un proceso con alta complejidad o baja eficiencia estructural.
+
+El tipo de equipo D4 tiene costos notablemente bajos (media cercana a 9). La dispersión es reducida y el comportamiento es consistente. Este equipo representa una operación altamente eficiente y controlada, con baja variabilidad. qué prácticas operativas permiten ese nivel de eficiencia y si son replicables.
+
+El costo de transformación está determinado por el tipo de equipo, y la magnitud de las diferencias es significativa.
+
 
 ### Tablas resumen por numero de insumos
 
