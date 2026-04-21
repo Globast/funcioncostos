@@ -551,21 +551,21 @@ p_ci2_hist <- datos %>%
 ## Análisis univariado de variables categóricas predictoras
 
 ```{r tabla-categoricas}
-vars_cat <- c("tipo_equipo", "equipo_id", "categoria_producto",
+vars_cat <- c("tipo_equipo", "equipo_id", "categoria_producto", 
               "modalidad_proceso", "num_insumos", "insumo_1", "insumo_2")
 
 tabla_cat <- map_dfr(vars_cat, function(v) {
   datos %>%
     count(.data[[v]], name = "Frecuencia") %>%
     mutate(
-      Porcentaje = round(Frecuencia / sum(Frecuencia) * 100, 2),
+      Porcentaje = (Frecuencia / sum(Frecuencia)) * 100,
       Variable = v,
       Categoria = as.character(.data[[v]])
     ) %>%
-    select(Variable, Categoria, Frecuencia, Porcentaje)%>%
-  mutate(across(where(is.numeric) & !n, ~ round(.x, 2)))
-})
-
+    select(Variable, Categoria, Frecuencia, Porcentaje)
+}) %>%
+  mutate(Porcentaje = round(Porcentaje, 2))
+  
 knitr::kable(tabla_cat, caption = "Resumen descriptivo de las variables categóricas seleccionadas") %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
