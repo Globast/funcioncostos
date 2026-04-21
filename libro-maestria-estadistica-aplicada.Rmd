@@ -1352,19 +1352,6 @@ ggplot(datos, aes(x = volumen_lote, y = costo_transformacion)) +
 
 ```
 
-
-```{r qq_plot}
-vars %>%
-  pivot_longer(everything()) %>%
-  ggplot(aes(sample = value)) +
-  stat_qq() +
-  stat_qq_line(color = "red") +
-  facet_wrap(~name, scales = "free") +
-  theme_bw()
-  )
-```
-
-
 ```{r outliers}
 
 datos %>%
