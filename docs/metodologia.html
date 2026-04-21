@@ -945,7 +945,7 @@ Recursos consumidos asumidos como merma; no se asignaron al producto conforme
 </div>
 <div id="eliminación-de-registros-inválidos" class="section level4 hasAnchor" number="4.2.3.4">
 <h4><span class="header-section-number">4.2.3.4</span> Eliminación de registros inválidos<a href="metodologia.html#eliminaci%C3%B3n-de-registros-inv%C3%A1lidos" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Dado que las tres categorías causales convergen en un rasgo común —ausencia de costo de insumo asignable al producto conforme— la variable <code>costo_insumo == 0</code> captura exactamente las 9 órdenes a eliminar y se adopta como criterio único de filtrado. Este criterio es preferible a un filtro compuesto porque es más parsimonioso y tiene una interpretación operativa directa: toda orden de producción válida debe registrar un costo de insumo mayor que cero, independientemente de si el cero proviene de error de digitación, orden no ejecutada o producción no conforme.</p>
+<p>Dado que las tres categorías causales convergen en un rasgo común —ausencia de costo de insumo asignable al producto conforme— la variable <code>costo_insumo == 0</code> se adopta como criterio de filtrado.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="metodologia.html#cb14-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
 <span id="cb14-2"><a href="metodologia.html#cb14-2" tabindex="-1"></a>  <span class="fu">count</span>(costo_insumo <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb14-3"><a href="metodologia.html#cb14-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">porcentaje =</span> <span class="fu">round</span>(n <span class="sc">/</span> <span class="fu">sum</span>(n) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>))</span></code></pre></div>
@@ -971,14 +971,14 @@ Recursos consumidos asumidos como merma; no se asignaron al producto conforme
 <p>Sobre el dataset ya depurado se ajustan los tipos de las variables cuya representación por defecto no corresponde a su naturaleza analítica:</p>
 <ul>
 <li>La variable <code>periodo</code> viene como entero <code>YYYYMM</code>; en análisis posteriores se podrá convertir a fecha para análisis de temporalidad, pero en el presente estudio se conserva como texto, dado que no se realizarán análisis de series de tiempo.</li>
-<li>La variable <code>num_insumos</code>, restringida a los valores 0, 1 y 2, se trata como factor ordenado.</li>
+<li>La variable <code>num_insumos</code>, restringida a los valores 1 y 2, se trata como factor ordenado.</li>
 <li>Las variables <code>tipo_equipo</code>, <code>categoria_producto</code>, <code>equipo_id</code>, <code>modalidad_proceso</code>, <code>insumo_1</code> e <code>insumo_2</code> se convierten a factor para los análisis inferenciales posteriores.</li>
 <li>La variable <code>insumo_2</code> requiere además una recodificación explícita de los valores faltantes a la categoría <code>sin_segundo_insumo</code>, dado que el NA no representa un dato perdido sino una característica estructural de la orden (cuando <code>num_insumos &lt; 2</code>).</li>
 </ul>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="metodologia.html#cb18-1" tabindex="-1"></a>datos <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
 <span id="cb18-2"><a href="metodologia.html#cb18-2" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb18-3"><a href="metodologia.html#cb18-3" tabindex="-1"></a>    <span class="at">periodo            =</span> <span class="fu">as.character</span>(periodo),</span>
-<span id="cb18-4"><a href="metodologia.html#cb18-4" tabindex="-1"></a>    <span class="at">num_insumos        =</span> <span class="fu">factor</span>(num_insumos, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>), <span class="at">ordered =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb18-4"><a href="metodologia.html#cb18-4" tabindex="-1"></a>    <span class="at">num_insumos        =</span> <span class="fu">factor</span>(num_insumos, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">ordered =</span> <span class="cn">TRUE</span>),</span>
 <span id="cb18-5"><a href="metodologia.html#cb18-5" tabindex="-1"></a>    <span class="at">tipo_equipo        =</span> <span class="fu">as.factor</span>(tipo_equipo),</span>
 <span id="cb18-6"><a href="metodologia.html#cb18-6" tabindex="-1"></a>    <span class="at">categoria_producto =</span> <span class="fu">as.factor</span>(categoria_producto),</span>
 <span id="cb18-7"><a href="metodologia.html#cb18-7" tabindex="-1"></a>    <span class="at">equipo_id          =</span> <span class="fu">as.factor</span>(equipo_id),</span>
@@ -998,7 +998,7 @@ Recursos consumidos asumidos como merma; no se asignaron al producto conforme
 ##  $ equipo_id           : Factor w/ 12 levels &quot;M02&quot;,&quot;M04&quot;,&quot;M05&quot;,..: 4 1 9 8 1 1 1 1 1 6 ...
 ##  $ tipo_equipo         : Factor w/ 4 levels &quot;A1&quot;,&quot;B2&quot;,&quot;C3&quot;,..: 1 2 1 1 2 2 2 2 2 3 ...
 ##  $ categoria_producto  : Factor w/ 7 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,..: 7 5 5 5 5 5 5 5 5 4 ...
-##  $ num_insumos         : Ord.factor w/ 3 levels &quot;0&quot;&lt;&quot;1&quot;&lt;&quot;2&quot;: 2 3 2 2 3 3 3 3 2 2 ...
+##  $ num_insumos         : Ord.factor w/ 2 levels &quot;1&quot;&lt;&quot;2&quot;: 1 2 1 1 2 2 2 2 1 1 ...
 ##  $ insumo_1            : Factor w/ 6 levels &quot;A_T&quot;,&quot;B_T&quot;,&quot;N_O&quot;,..: 2 2 3 2 2 2 2 2 5 3 ...
 ##  $ insumo_2            : Factor w/ 7 levels &quot;A_T&quot;,&quot;B_T&quot;,&quot;N_O&quot;,..: 6 4 6 6 7 7 7 7 6 6 ...
 ##  $ cantidad_insumo_1   : num [1:395] 6 1.5 0.5 2 2 2 2 2 1.3 2.5 ...

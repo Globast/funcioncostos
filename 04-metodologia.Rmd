@@ -177,7 +177,8 @@ Las tres categorías representan configuraciones no válidas para el análisis d
 
 #### Eliminación de registros inválidos
 
-Dado que las tres categorías causales convergen en un rasgo común —ausencia de costo de insumo asignable al producto conforme— la variable `costo_insumo == 0` captura exactamente las `r n_casos_cero` órdenes a eliminar y se adopta como criterio único de filtrado. Este criterio es preferible a un filtro compuesto porque es más parsimonioso y tiene una interpretación operativa directa: toda orden de producción válida debe registrar un costo de insumo mayor que cero, independientemente de si el cero proviene de error de digitación, orden no ejecutada o producción no conforme.
+Dado que las tres categorías causales convergen en un rasgo común —ausencia de costo de insumo asignable al producto conforme— la variable `costo_insumo == 0`  se adopta como criterio de filtrado.
+
 
 ```{r verificar-criterio}
 datos %>%
@@ -203,7 +204,7 @@ Se eliminaron `r n_eliminadas` órdenes (`r pct_eliminadas`% del total) con `cos
 Sobre el dataset ya depurado se ajustan los tipos de las variables cuya representación por defecto no corresponde a su naturaleza analítica:
 
 - La variable `periodo` viene como entero `YYYYMM`; en análisis posteriores se podrá convertir a fecha para análisis de temporalidad, pero en el presente estudio se conserva como texto, dado que no se realizarán análisis de series de tiempo.
-- La variable `num_insumos`, restringida a los valores 0, 1 y 2, se trata como factor ordenado.
+- La variable `num_insumos`, restringida a los valores 1 y 2, se trata como factor ordenado.
 - Las variables `tipo_equipo`, `categoria_producto`, `equipo_id`, `modalidad_proceso`, `insumo_1` e `insumo_2` se convierten a factor para los análisis inferenciales posteriores.
 - La variable `insumo_2` requiere además una recodificación explícita de los valores faltantes a la categoría `sin_segundo_insumo`, dado que el NA no representa un dato perdido sino una característica estructural de la orden (cuando `num_insumos < 2`).
 
@@ -211,7 +212,7 @@ Sobre el dataset ya depurado se ajustan los tipos de las variables cuya represen
 datos <- datos %>%
   mutate(
     periodo            = as.character(periodo),
-    num_insumos        = factor(num_insumos, levels = c(0, 1, 2), ordered = TRUE),
+    num_insumos        = factor(num_insumos, levels = c(1, 2), ordered = TRUE),
     tipo_equipo        = as.factor(tipo_equipo),
     categoria_producto = as.factor(categoria_producto),
     equipo_id          = as.factor(equipo_id),
