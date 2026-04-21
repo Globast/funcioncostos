@@ -1015,6 +1015,11 @@ Recursos consumidos asumidos como merma; no se asignaron al producto conforme
 <li>Los costos costo_transformacion y costo_insumo están definidos como valores monetarios por unidad de producto. Permitiendo comparar directamente entre órdenes, sin importar el tamaño del lote, ya que no requieren ajustes por escala de producción.</li>
 </ul>
 <p>El dataset con el que se trabajará está compuesto por r n_filas_final órdenes de producción. Sobre esta base se desarrollan los análisis exploratorios e inferenciales de los siguientes capítulos.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="metodologia.html#cb20-1" tabindex="-1"></a><span class="co"># Para auditoría y reproducibilidad externa</span></span>
+<span id="cb20-2"><a href="metodologia.html#cb20-2" tabindex="-1"></a><span class="fu">write_csv2</span>(datos, <span class="st">&quot;data/data_costos_limpio.csv&quot;</span>)</span>
+<span id="cb20-3"><a href="metodologia.html#cb20-3" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="metodologia.html#cb20-4" tabindex="-1"></a><span class="co"># Para cargar rápido en capítulos posteriores preservando tipos</span></span>
+<span id="cb20-5"><a href="metodologia.html#cb20-5" tabindex="-1"></a><span class="fu">saveRDS</span>(datos, <span class="st">&quot;data/data_costos_limpio.rds&quot;</span>)</span></code></pre></div>
 
 </div>
 </div>

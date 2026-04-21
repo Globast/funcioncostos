@@ -235,7 +235,7 @@ Antes de entrar al análisis exploratorio, vale la pena dejar claros algunos pun
 
 El dataset con el que se trabajará está compuesto por r n_filas_final órdenes de producción. Sobre esta base se desarrollan los análisis exploratorios e inferenciales de los siguientes capítulos.
 
-```{r conversion-tipos}
+```{r exportardataset}
 # Para auditoría y reproducibilidad externa
 write_csv2(datos, "data/data_costos_limpio.csv")
 
