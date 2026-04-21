@@ -447,22 +447,9 @@ El resumen conjunto permite leer la estructura operativa del sistema en término
 Volumen de lote,  es la variable más heterogénea. La media supera claramente a la mediana, lo que indica asimetría positiva. El rango es muy amplio (100 a 13300) y el IQR (2063) es elevado, señal de que incluso el comportamiento “típico” presenta alta dispersión. el proceso opera con lotes muy dispares, dependiendo de los pedidos de los clientes , el proceso es make to order.  No hay un tamaño estándar dominante.
 Duración del proceso, es heterogéneo también pero más controlado. La media es superior a la mediana, nuevamente cola derecha. El IQR muestra que la mitad de los procesos se concentra entre 60 y 150 horas, lo que define un rango operativo razonablemente estable. Sin embargo, el máximo de 482 horas apunta a procesos excepcionalmente largos.
 Cantidad de insumo 1, comportamiento más discreto y concentrado. La mediana es 2 y el IQR es 2, lo que indica que la mayoría de los casos utiliza entre 1 y 3 unidades. La media (2.29) ligeramente superior a la mediana sugiere algunos valores altos, pero sin una dispersión extrema. Esta variable refleja un consumo relativamente estable y predecible, con variaciones moderadas.
+Cantidad de insumo 2: Tiene menor número de observaciones, no todos las ordenes llevan insumo 2. Su mediana es 1 y el IQR es 1.25, lo que muestra una concentración aún mayor que en el insumo 1. La dispersión es baja y los valores extremos (máximo 7) son menos pronunciados. Esto sugiere que el segundo insumo actúa como un componente opcional o complementario, con consumo bajo y controlado.
 
-Cantidad de insumo 2
-Tiene menor número de observaciones (n = 124), lo que indica que no está presente en todos los procesos. Su mediana es 1 y el IQR es 1.25, lo que muestra una concentración aún mayor que en el insumo 1. La dispersión es baja y los valores extremos (máximo 7) son menos pronunciados. Esto sugiere que el segundo insumo actúa como un componente opcional o complementario, con consumo bajo y controlado.
-
-Lectura integrada
-
-El sistema es altamente variable en escala (volumen), moderadamente variable en tiempo y relativamente estable en consumo de insumos.
-La asimetría positiva es consistente en todas las variables, lo que indica la presencia de eventos de alta intensidad (lotes grandes, procesos largos, consumos altos), aunque no dominan el comportamiento típico.
-Existe una clara diferenciación funcional:
-el volumen introduce heterogeneidad estructural
-la duración refleja complejidad operativa
-los insumos muestran regularidad en la ejecución
-
-Conclusión
-
-El sistema no es homogéneo: combina variabilidad estructural en producción con regularidad en consumo de recursos. La principal fuente de heterogeneidad no está en los insumos, sino en el tamaño de los lotes y la duración de los procesos. Esto sugiere que cualquier modelamiento o mejora operativa debe centrarse en segmentar por escala de producción y complejidad del proceso, más que en el consumo de insumos.
+La principal fuente de heterogeneidad no está en los insumos, sino en el tamaño de los lotes y la duración de los procesos. Esto sugiere que cualquier modelamiento o mejora operativa debe centrarse en segmentar por escala de producción y complejidad del proceso, más que en el consumo de insumos.
 
 
 ```{r box-num-predictoras, fig.width=11, fig.height=7}
@@ -501,7 +488,7 @@ p_ci2 <- datos %>%
 (p_vol + p_dur) / (p_ci1 + p_ci2)
 ```
 
-La interpretación detallada de cada distribución queda como ejercicio del lector. Los puntos clave a destacar son la amplitud de rango de `volumen_lote`, la presencia de colas en `duracion_proceso`, y la heterogeneidad de escala en las cantidades de insumo, consistente con la advertencia del capítulo de metodología sobre la posible diferencia de unidades entre tipos de insumo.
+**Visualmente, la fuente real de heterogeneidad no está en los insumos, sino en cómo y cuánto se produce. Esto implica que cualquier análisis o modelo que ignore la escala (volumen) o la complejidad (duración) va a estar mal especificado.**
 
 ## Análisis univariado de variables categóricas predictoras
 
