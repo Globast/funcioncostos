@@ -488,6 +488,64 @@ p_ci2 <- datos %>%
 (p_vol + p_dur) / (p_ci1 + p_ci2)
 ```
 
+```{r hist-num-predictoras, fig.width=11, fig.height=7}
+library(ggplot2)
+library(dplyr)
+library(patchwork)
+
+p_vol_hist <- datos %>%
+  ggplot(aes(x = volumen_lote)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 30,
+                 fill = "#1f77b4",
+                 color = "white",
+                 alpha = 0.7) +
+  geom_density(linewidth = 1.2) +
+  labs(title = "Distribución del volumen de lote",
+       x = "Unidades", y = "Densidad") +
+  theme_bw()
+
+p_dur_hist <- datos %>%
+  ggplot(aes(x = duracion_proceso)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 30,
+                 fill = "#2ca02c",
+                 color = "white",
+                 alpha = 0.7) +
+  geom_density(linewidth = 1.2) +
+  labs(title = "Distribución de la duración de proceso",
+       x = "Horas", y = "Densidad") +
+  theme_bw()
+
+p_ci1_hist <- datos %>%
+  filter(num_insumos >= 1) %>%
+  ggplot(aes(x = cantidad_insumo_1)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 25,
+                 fill = "#ff7f0e",
+                 color = "white",
+                 alpha = 0.7) +
+  geom_density(linewidth = 1.2) +
+  labs(title = "Cantidad de insumo 1 (órdenes con insumo)",
+       x = "Litros equivalentes", y = "Densidad") +
+  theme_bw()
+
+p_ci2_hist <- datos %>%
+  filter(num_insumos == 2) %>%
+  ggplot(aes(x = cantidad_insumo_2)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 20,
+                 fill = "#9467bd",
+                 color = "white",
+                 alpha = 0.7) +
+  geom_density(linewidth = 1.2) +
+  labs(title = "Cantidad de insumo 2 (órdenes con segundo insumo)",
+       x = "Litros equivalentes", y = "Densidad") +
+  theme_bw()
+
+(p_vol_hist + p_dur_hist) / (p_ci1_hist + p_ci2_hist)
+```
+
 **Visualmente, la fuente real de heterogeneidad no está en los insumos, sino en cómo y cuánto se produce. Esto implica que cualquier análisis o modelo que ignore la escala (volumen) o la complejidad (duración) va a estar mal especificado.**
 
 ## Análisis univariado de variables categóricas predictoras
