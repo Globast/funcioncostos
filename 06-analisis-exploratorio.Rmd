@@ -87,7 +87,7 @@ lineas <- tibble(
   )
 )
 
-datos %>%
+p_hist_cc<-datos %>%
   ggplot(aes(x = costo_transformacion)) +
   geom_histogram(aes(y = after_stat(density)),
                  bins = 30,
@@ -120,6 +120,18 @@ datos %>%
   theme_bw() +
   theme(legend.position = "right") +
   facet_grid(. ~ "Distribución del costo de transformación")
+
+p_box_cc<-datos %>%
+  ggplot(aes(x = "", y = costo_transformacion)) +
+  geom_boxplot(fill = "#ACAEAF", color = "#616161", outlier.color = "red") +
+  stat_summary(fun = mean, geom = "point", shape = 20, size = 3, color = "black") +
+  labs(x = "",
+       y = "Costo de transformación (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Boxplot del costo de transformación")
+
+p_hist_cc + p_box_cc
+
 ```
 
 
@@ -143,14 +155,7 @@ La posible multimodalidad sugiere heterogeneidad no explicada → variables como
 En términos operativos, el sistema no solo presenta variabilidad, sino también estructura interna: no es un proceso homogéneo, sino una mezcla de dinámicas distintas que conviene separar antes de cualquier inferencia o optimización.
 
 ```{r box-ct, fig.width=7, fig.height=4}
-datos %>%
-  ggplot(aes(x = "", y = costo_transformacion)) +
-  geom_boxplot(fill = "#ACAEAF", color = "#616161", outlier.color = "red") +
-  stat_summary(fun = mean, geom = "point", shape = 20, size = 3, color = "black") +
-  labs(x = "",
-       y = "Costo de transformación (UM/unidad)") +
-  theme_bw() +
-  facet_grid(. ~ "Boxplot del costo de transformación")
+
 ```
 
 El histograma y el boxplot evidencian una distribución asimétrica hacia valores altos, con presencia de órdenes extremas que se destacan sobre el bigote superior. La distancia entre la media y el 50% sugiere que la media está influida por la cola derecha, por lo que los análisis inferenciales posteriores deben contemplar transformaciones o pruebas robustas.
@@ -431,10 +436,34 @@ datos %>%
   mutate(variable = "cantidad_insumo_2") -> var_num_ci2
 
 resumen_num_predictoras <- bind_rows(var_num_vol, var_num_dur, var_num_ci1, var_num_ci2) %>%
-  select(variable, everything())
+  select(variable, everything())%>%
+  mutate(across(where(is.numeric) & !n, ~ round(.x, 2)))
 knitr::kable(resumen_num_predictoras, caption = "Resumen descriptivo de las variables numéricas seleccionadas") %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
+
+El resumen conjunto permite leer la estructura operativa del sistema en términos de escala (volumen), intensidad (tiempo) y consumo (insumos). No son variables independientes: describen distintas dimensiones del mismo proceso productivo.
+
+Volumen de lote,  es la variable más heterogénea. La media supera claramente a la mediana, lo que indica asimetría positiva. El rango es muy amplio (100 a 13300) y el IQR (2063) es elevado, señal de que incluso el comportamiento “típico” presenta alta dispersión. el proceso opera con lotes muy dispares, dependiendo de los pedidos de los clientes , el proceso es make to order.  No hay un tamaño estándar dominante.
+Duración del proceso, es heterogéneo también pero más controlado. La media es superior a la mediana, nuevamente cola derecha. El IQR muestra que la mitad de los procesos se concentra entre 60 y 150 horas, lo que define un rango operativo razonablemente estable. Sin embargo, el máximo de 482 horas apunta a procesos excepcionalmente largos.
+Cantidad de insumo 1, comportamiento más discreto y concentrado. La mediana es 2 y el IQR es 2, lo que indica que la mayoría de los casos utiliza entre 1 y 3 unidades. La media (2.29) ligeramente superior a la mediana sugiere algunos valores altos, pero sin una dispersión extrema. Esta variable refleja un consumo relativamente estable y predecible, con variaciones moderadas.
+
+Cantidad de insumo 2
+Tiene menor número de observaciones (n = 124), lo que indica que no está presente en todos los procesos. Su mediana es 1 y el IQR es 1.25, lo que muestra una concentración aún mayor que en el insumo 1. La dispersión es baja y los valores extremos (máximo 7) son menos pronunciados. Esto sugiere que el segundo insumo actúa como un componente opcional o complementario, con consumo bajo y controlado.
+
+Lectura integrada
+
+El sistema es altamente variable en escala (volumen), moderadamente variable en tiempo y relativamente estable en consumo de insumos.
+La asimetría positiva es consistente en todas las variables, lo que indica la presencia de eventos de alta intensidad (lotes grandes, procesos largos, consumos altos), aunque no dominan el comportamiento típico.
+Existe una clara diferenciación funcional:
+el volumen introduce heterogeneidad estructural
+la duración refleja complejidad operativa
+los insumos muestran regularidad en la ejecución
+
+Conclusión
+
+El sistema no es homogéneo: combina variabilidad estructural en producción con regularidad en consumo de recursos. La principal fuente de heterogeneidad no está en los insumos, sino en el tamaño de los lotes y la duración de los procesos. Esto sugiere que cualquier modelamiento o mejora operativa debe centrarse en segmentar por escala de producción y complejidad del proceso, más que en el consumo de insumos.
+
 
 ```{r box-num-predictoras, fig.width=11, fig.height=7}
 p_vol <- datos %>%
