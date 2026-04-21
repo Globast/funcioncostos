@@ -9,6 +9,8 @@ tab:resumen-ci
 tab:resumen-ctot
 tab:resumen-num-predictoras
 tab:tabla-categoricas
+tab:matriz-correlacion
+tab:matriz-spearman
 resumen
 introducción
 objetivos-en-construcccion

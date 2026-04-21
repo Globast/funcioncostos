@@ -590,26 +590,10 @@ n_niveles_cat   <- datos %>% distinct(categoria_producto) %>% nrow()
 
 El tipo de equipo dominante es `r te_dom_cat`, que concentra el `r te_dom_pct`% de las órdenes. La variable `equipo_id` tiene `r n_niveles_equipo` niveles distintos y `categoria_producto` tiene `r n_niveles_cat` niveles, lo cual exigirá tratamiento cuidadoso en los análisis inferenciales posteriores para evitar celdas con pocas observaciones.
 
-```{r bar-num-insumos, fig.width=8, fig.height=4.5}
-tabla_ni <- tabla_cat %>%
-  filter(Variable == "num_insumos") %>%
-  mutate(Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)"))
-
-tabla_ni %>%
-  ggplot(aes(x = Categoria, y = Frecuencia)) +
-  geom_col(fill = "#008B8B", width = 0.6) +
-  geom_text(aes(label = Etiqueta), vjust = -0.5, size = 4) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
-  labs(x = "Número de insumos", y = "Frecuencia (Porcentaje)") +
-  theme_bw(base_size = 13) +
-  facet_wrap(~ "Distribución de la variable num_insumos")
-```
-
 ```{r bar-categoricas-grid, fig.width=12, fig.height=16}
 library(dplyr)
 library(ggplot2)
 
-# 1. Preparación de etiquetas para todas las variables
 tabla_plot <- tabla_cat %>%
   mutate(Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)"))
 
@@ -629,7 +613,6 @@ ggplot(tabla_plot, aes(x = Categoria, y = Frecuencia)) +
     strip.background = element_rect(fill = "#2c3e50"),
     strip.text = element_text(color = "white", fontface = "bold")
   ) +
-  # Facetado dinámico: 2 columnas, escalas independientes para cada eje X
   facet_wrap(~ Variable, ncol = 2, scales = "free")
 ```
 
@@ -651,6 +634,19 @@ datos %>%
   facet_grid(. ~ "Dispersión entre volumen_lote y costo_transformacion")
 ```
 
+El diagrama de dispersión revela una relación clara entre escala de producción y costo unitario de transformación.
+A medida que aumenta el volumen del lote, el costo de transformación por unidad disminuye. Este patrón es consistente con un fenómeno de economías de escala: procesos más grandes diluyen costos fijos y mejoran la eficiencia operativa.
+Sin embargo, la relación no es perfectamente lineal ni fuerte. La nube de puntos muestra una alta dispersión, especialmente en volúmenes bajos y medios. Para un mismo nivel de volumen (por ejemplo, entre 1000 y 3000 unidades), el costo puede variar ampliamente. Esto implica que el volumen explica solo una parte de la variabilidad.
+
+En los volúmenes bajos se observa mayor dispersión, aparecen costos altos (incluso superiores a 80–90), el sistema es menos eficiente y más inestable.
+
+En los volúmenes altos, los costos tienden a concentrarse en niveles bajos, la variabilidad disminuye, la operación se vuelve más predecible
+
+Este patrón sugiere heterocedasticidad: la variabilidad del costo depende del volumen.
+
+ Existe una relación inversa consistente con economías de escala, pero con alta variabilidad residual. 
+ Esto indica que el análisis o modelado del costo debe incorporar el volumen como variable clave, pero también considerar otros factores estructurales que explican la dispersión observada.
+
 ```{r scatter-dur-ct, fig.width=9, fig.height=4.5}
 datos %>%
   ggplot(aes(x = duracion_proceso, y = costo_transformacion)) +
@@ -662,25 +658,34 @@ datos %>%
   facet_grid(. ~ "Dispersión entre duracion_proceso y costo_transformacion")
 ```
 
+
+
 ### Correlaciones
 
 ```{r matriz-correlacion}
-datos %>%
+matriz_correlacion <- datos %>%
   select(costo_transformacion, costo_insumo, costo_unitario_total,
          volumen_lote, duracion_proceso,
          cantidad_insumo_1, cantidad_insumo_2) %>%
   cor(use = "pairwise.complete.obs", method = "pearson") %>%
   round(3)
+
+knitr::kable(matriz_correlacion , caption = "Matriz de correlación de Pearson") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
 ```
 
 ```{r matriz-spearman}
-datos %>%
+matriz_spearman <- datos %>%
   select(costo_transformacion, costo_insumo, costo_unitario_total,
          volumen_lote, duracion_proceso,
          cantidad_insumo_1, cantidad_insumo_2) %>%
   cor(use = "pairwise.complete.obs", method = "spearman") %>%
   round(3)
+
+knitr::kable(matriz_spearman , caption = "Matriz de correlación de Spearman") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
 ```
+
 
 Las matrices de correlación se presentan en paralelo (Pearson y Spearman) siguiendo la recomendación metodológica de distinguir asociaciones lineales de asociaciones monótonas. Las correlaciones altas entre pares de predictoras deben considerarse en el capítulo de inferencia para evitar problemas de multicolinealidad.
 
