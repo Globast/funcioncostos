@@ -658,6 +658,24 @@ datos %>%
   facet_grid(. ~ "Dispersión entre duracion_proceso y costo_transformacion")
 ```
 
+El diagrama muestra una relación distinta a la observada con el volumen, la pendiente es positiva, pero débil.
+A medida que aumenta la duración del proceso, el costo de transformación unitario tiende a incrementarse.
+
+La nube de puntos es ampliamente dispersa en casi todo el rango. Para duraciones similares (por ejemplo, entre 80 y 150 horas), los costos pueden variar de forma considerable. Esto indica que la duración, aunque relevante, no explica por sí sola el costo.
+
+el volumen explica eficiencia, la duración refleja esfuerzo, pero ninguno por sí solo determina el costo.
+
+```{r scatter-dur-cut, fig.width=9, fig.height=4.5}
+datos %>%
+  ggplot(aes(x = duracion_proceso, y = costo_unitario_total)) +
+  geom_point(alpha = 0.4, color = "#1E90FF") +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE, color = "red") +
+  labs(x = "Duración del proceso (horas)",
+       y = "Costo de transformación (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Dispersión entre duracion_proceso y costo_unitario_total")
+```
+
 
 
 ### Correlaciones

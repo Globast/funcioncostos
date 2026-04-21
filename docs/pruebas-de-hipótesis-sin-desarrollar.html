@@ -224,18 +224,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>En esta sección se presenta un ejemplo de contraste de medias. Si la base contiene las variables <code>mpg</code> y <code>am</code>, se compara el rendimiento promedio entre dos grupos.</p>
 <div id="prueba-t-de-dos-muestras" class="section level2 hasAnchor" number="7.1">
 <h2><span class="header-section-number">7.1</span> Prueba t de dos muestras<a href="pruebas-de-hipótesis-sin-desarrollar.html#prueba-t-de-dos-muestras" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="pruebas-de-hipótesis-sin-desarrollar.html#cb49-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">all</span>(<span class="fu">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;am&quot;</span>) <span class="sc">%in%</span> <span class="fu">names</span>(datos))) {</span>
-<span id="cb49-2"><a href="pruebas-de-hipótesis-sin-desarrollar.html#cb49-2" tabindex="-1"></a></span>
-<span id="cb49-3"><a href="pruebas-de-hipótesis-sin-desarrollar.html#cb49-3" tabindex="-1"></a>  datos_prueba <span class="ot">&lt;-</span> datos <span class="sc">|&gt;</span></span>
-<span id="cb49-4"><a href="pruebas-de-hipótesis-sin-desarrollar.html#cb49-4" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(mpg), <span class="sc">!</span><span class="fu">is.na</span>(am)) <span class="sc">|&gt;</span></span>
-<span id="cb49-5"><a href="pruebas-de-hipótesis-sin-desarrollar.html#cb49-5" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">am =</span> <span class="fu">as.factor</span>(am))</span>
-<span id="cb49-6"><a href="pruebas-de-hipótesis-sin-desarrollar.html#cb49-6" tabindex="-1"></a></span>
-<span id="cb49-7"><a href="pruebas-de-hipótesis-sin-desarrollar.html#cb49-7" tabindex="-1"></a>  prueba_t <span class="ot">&lt;-</span> <span class="fu">t.test</span>(mpg <span class="sc">~</span> am, <span class="at">data =</span> datos_prueba)</span>
-<span id="cb49-8"><a href="pruebas-de-hipótesis-sin-desarrollar.html#cb49-8" tabindex="-1"></a></span>
-<span id="cb49-9"><a href="pruebas-de-hipótesis-sin-desarrollar.html#cb49-9" tabindex="-1"></a>  broom<span class="sc">::</span><span class="fu">tidy</span>(prueba_t) <span class="sc">|&gt;</span></span>
-<span id="cb49-10"><a href="pruebas-de-hipótesis-sin-desarrollar.html#cb49-10" tabindex="-1"></a>    knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Resultado de la prueba t de diferencia de medias.&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb49-11"><a href="pruebas-de-hipótesis-sin-desarrollar.html#cb49-11" tabindex="-1"></a>    kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb49-12"><a href="pruebas-de-hipótesis-sin-desarrollar.html#cb49-12" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="pruebas-de-hipótesis-sin-desarrollar.html#cb50-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">all</span>(<span class="fu">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;am&quot;</span>) <span class="sc">%in%</span> <span class="fu">names</span>(datos))) {</span>
+<span id="cb50-2"><a href="pruebas-de-hipótesis-sin-desarrollar.html#cb50-2" tabindex="-1"></a></span>
+<span id="cb50-3"><a href="pruebas-de-hipótesis-sin-desarrollar.html#cb50-3" tabindex="-1"></a>  datos_prueba <span class="ot">&lt;-</span> datos <span class="sc">|&gt;</span></span>
+<span id="cb50-4"><a href="pruebas-de-hipótesis-sin-desarrollar.html#cb50-4" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(mpg), <span class="sc">!</span><span class="fu">is.na</span>(am)) <span class="sc">|&gt;</span></span>
+<span id="cb50-5"><a href="pruebas-de-hipótesis-sin-desarrollar.html#cb50-5" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">am =</span> <span class="fu">as.factor</span>(am))</span>
+<span id="cb50-6"><a href="pruebas-de-hipótesis-sin-desarrollar.html#cb50-6" tabindex="-1"></a></span>
+<span id="cb50-7"><a href="pruebas-de-hipótesis-sin-desarrollar.html#cb50-7" tabindex="-1"></a>  prueba_t <span class="ot">&lt;-</span> <span class="fu">t.test</span>(mpg <span class="sc">~</span> am, <span class="at">data =</span> datos_prueba)</span>
+<span id="cb50-8"><a href="pruebas-de-hipótesis-sin-desarrollar.html#cb50-8" tabindex="-1"></a></span>
+<span id="cb50-9"><a href="pruebas-de-hipótesis-sin-desarrollar.html#cb50-9" tabindex="-1"></a>  broom<span class="sc">::</span><span class="fu">tidy</span>(prueba_t) <span class="sc">|&gt;</span></span>
+<span id="cb50-10"><a href="pruebas-de-hipótesis-sin-desarrollar.html#cb50-10" tabindex="-1"></a>    knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Resultado de la prueba t de diferencia de medias.&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb50-11"><a href="pruebas-de-hipótesis-sin-desarrollar.html#cb50-11" tabindex="-1"></a>    kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb50-12"><a href="pruebas-de-hipótesis-sin-desarrollar.html#cb50-12" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="interpretación-base" class="section level2 hasAnchor" number="7.2">
 <h2><span class="header-section-number">7.2</span> Interpretación base<a href="pruebas-de-hipótesis-sin-desarrollar.html#interpretaci%C3%B3n-base" class="anchor-section" aria-label="Anchor link to header"></a></h2>
