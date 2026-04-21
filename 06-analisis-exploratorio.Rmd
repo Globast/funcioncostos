@@ -1091,43 +1091,37 @@ knitr::kable(resumen_bivariado_ct_comb,
 ```
 
 ```{r bivariado_insumos_ci}
+
 resumen_bivariado_ci_comb <- datos %>%
   mutate(
     insumo_combinado = pmap_chr(list(insumo_1, insumo_2), function(x, y) {
-      # 1. Creamos un vector con ambos insumos
-      # 2. Ordenamos alfabéticamente
-      # 3. Concatenamos con un separador
-      paste(sort(c(as.character(x), as.character(y))), collapse = " + ")
+      # Creamos vector, quitamos NAs para evitar concatenar "NA", ordenamos y unimos
+      elementos <- c(as.character(x), as.character(y))
+      elementos <- elementos[!is.na(elementos)]
+      paste(sort(elementos), collapse = " + ")
     })
-  )%>%
-  group_by(insumo_combinado) %>%
-  summarise(
-    n = length(costo_insumo),
-    media = mean(costo_insumo),
-    ds = sd(costo_insumo),
-    `50%` = median(costo_insumo),
-            pmax(insumo_1, insumo_2),
-            sep = " + ")
-    )
   ) %>%
   group_by(insumo_combinado) %>%
   summarise(
-    n = length(costo_insumo),
-    media = mean(costo_insumo),
-    ds = sd(costo_insumo),
-    `50%` = median(costo_insumo),
-    minimo = min(costo_insumo),
-    maximo = max(costo_insumo),
-    Q1 = quantile(costo_insumo, 0.25),
-    Q3 = quantile(costo_insumo, 0.75),
-    IQR = IQR(costo_insumo),
+    n = n(),
+    media = mean(costo_insumo, na.rm = TRUE),
+    ds = sd(costo_insumo, na.rm = TRUE),
+    `50%` = median(costo_insumo, na.rm = TRUE),
+    minimo = min(costo_insumo, na.rm = TRUE),
+    maximo = max(costo_insumo, na.rm = TRUE),
+    Q1 = quantile(costo_insumo, 0.25, na.rm = TRUE),
+    Q3 = quantile(costo_insumo, 0.75, na.rm = TRUE),
+    IQR = IQR(costo_insumo, na.rm = TRUE),
     .groups = "drop"
   ) %>%
+  # Redondeo a dos decimales para columnas numéricas
+  mutate(across(where(is.numeric) & !n, ~ round(.x, 2))) %>%
   arrange(desc(n))
 
-knitr::kable(resumen_bivariado_ci_comb,
+# Presentación de la tabla
+knitr::kable(resumen_bivariado_ci_comb, 
              caption = "Resumen bivariado: costo de insumo por combinación de insumos") %>%
-  kableExtra::kable_styling(full_width = FALSE)
+  kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover", "condensed"))
 
 ```
 
