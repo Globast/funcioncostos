@@ -1154,7 +1154,7 @@ box_comb_insumos_ci <- datos %>%
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-  box_comb_insumos_ct  + box_comb_insumos_ci
+  box_comb_insumos_ct  / box_comb_insumos_ci
 ```
 
 **Ejercicio.** Replicar el análisis bivariado anterior para las variables categóricas `categoria_producto`, `num_insumos`, `insumo_1` e `insumo_2`, e interpretar los patrones observados con respecto a las tres variables respuesta.
