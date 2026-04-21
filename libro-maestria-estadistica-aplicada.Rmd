@@ -1113,7 +1113,7 @@ datos %>%
 
 
 ```{r scatter-cantidad-cut, fig.width=9, fig.height=4.5}
-cantidad_total_insumo = cantidad_insumo_1 + cantidad_insumo_2
+cantidad_total_insumo == cantidad_insumo_1 + cantidad_insumo_2
 datos %>%
   ggplot(aes(x = cantidad_total_insumo, y = costo_unitario_total)) +
   geom_point(alpha = 0.4, color = "#1E90FF") +
