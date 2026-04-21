@@ -237,7 +237,8 @@ datos %>%
     Q3      = quantile(costo_unitario_total, 0.75),
     IQR     = IQR(costo_unitario_total)
   ) -> resumen_ctot
-resumen_ctot
+knitr::kable(resumen_ctot, caption = "Resumen del costo unitario total") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
 ```
 
 ```{r resumen-ctot-calc, echo=FALSE}
@@ -286,66 +287,33 @@ El costo unitario total hereda la asimetría de sus dos componentes. La estructu
 Las variables numéricas predictoras son `volumen_lote`, `duracion_proceso`, `cantidad_insumo_1` y `cantidad_insumo_2`. Para las cantidades de insumo, los estadísticos descriptivos se calculan condicionando sobre la presencia efectiva del insumo correspondiente, conforme a la advertencia estructural documentada en el capítulo de metodología.
 
 ```{r resumen-num-predictoras}
-datos %>%
-  summarise(
-    n = length(volumen_lote),
-    media = mean(volumen_lote),
-    ds = sd(volumen_lote),
-    `50%` = median(volumen_lote),
-    minimo = min(volumen_lote),
-    maximo = max(volumen_lote),
-    Q1 = quantile(volumen_lote, 0.25),
-    Q3 = quantile(volumen_lote, 0.75),
-    IQR = IQR(volumen_lote)
+tabla_resumen_num <- bind_rows(var_num_vol, var_num_dur, var_num_ci1, var_num_ci2) %>%
+  select(variable, everything()) %>%
+  mutate(
+    across(c(media, ds, `50%`, minimo, maximo, Q1, Q3, IQR), ~ round(., 2))
   ) %>%
-  mutate(variable = "volumen_lote") -> var_num_vol
+  rename(
+    Variable = variable,
+    n = n,
+    Media = media,
+    `Desv. est.` = ds,
+    Mediana = `50%`,
+    Mínimo = minimo,
+    Máximo = maximo
+  )
 
-datos %>%
-  summarise(
-    n = length(duracion_proceso),
-    media = mean(duracion_proceso),
-    ds = sd(duracion_proceso),
-    `50%` = median(duracion_proceso),
-    minimo = min(duracion_proceso),
-    maximo = max(duracion_proceso),
-    Q1 = quantile(duracion_proceso, 0.25),
-    Q3 = quantile(duracion_proceso, 0.75),
-    IQR = IQR(duracion_proceso)
+knitr::kable(
+  tabla_resumen_num,
+  caption = "Resumen descriptivo de las variables numéricas seleccionadas",
+  align = c("l", "c", "c", "c", "c", "c", "c", "c", "c", "c")
+) %>%
+  kableExtra::kable_styling(
+    full_width = FALSE,
+    bootstrap_options = c("striped", "hover", "condensed"),
+    position = "left"
   ) %>%
-  mutate(variable = "duracion_proceso") -> var_num_dur
-
-datos %>%
-  filter(num_insumos >= 1) %>%
-  summarise(
-    n = length(cantidad_insumo_1),
-    media = mean(cantidad_insumo_1),
-    ds = sd(cantidad_insumo_1),
-    `50%` = median(cantidad_insumo_1),
-    minimo = min(cantidad_insumo_1),
-    maximo = max(cantidad_insumo_1),
-    Q1 = quantile(cantidad_insumo_1, 0.25),
-    Q3 = quantile(cantidad_insumo_1, 0.75),
-    IQR = IQR(cantidad_insumo_1)
-  ) %>%
-  mutate(variable = "cantidad_insumo_1") -> var_num_ci1
-
-datos %>%
-  filter(num_insumos == 2) %>%
-  summarise(
-    n = length(cantidad_insumo_2),
-    media = mean(cantidad_insumo_2),
-    ds = sd(cantidad_insumo_2),
-    `50%` = median(cantidad_insumo_2),
-    minimo = min(cantidad_insumo_2),
-    maximo = max(cantidad_insumo_2),
-    Q1 = quantile(cantidad_insumo_2, 0.25),
-    Q3 = quantile(cantidad_insumo_2, 0.75),
-    IQR = IQR(cantidad_insumo_2)
-  ) %>%
-  mutate(variable = "cantidad_insumo_2") -> var_num_ci2
-
-bind_rows(var_num_vol, var_num_dur, var_num_ci1, var_num_ci2) %>%
-  select(variable, everything())
+  kableExtra::column_spec(1, width = "14em") %>%
+  kableExtra::column_spec(2:10, width = "7em")
 ```
 
 ```{r box-num-predictoras, fig.width=11, fig.height=7}
