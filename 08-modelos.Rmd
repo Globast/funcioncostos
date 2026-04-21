@@ -1,4 +1,4 @@
-# Modelos
+# Modelos SIN DESARROLLAR
 
 En esta sección se ajusta un modelo lineal simple como ejemplo base. Si la base contiene `mpg`, `wt` y `hp`, se usa esa especificación.
 

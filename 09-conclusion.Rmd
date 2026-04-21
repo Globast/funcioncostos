@@ -1,10 +1,1 @@
 # Conclusión
-
-La estructura propuesta permite transformar un análisis estadístico en un producto académico ordenado, reproducible y publicable. El valor de este enfoque no está solo en la salida HTML, sino en la disciplina metodológica que impone:
-
-1. cada resultado proviene de código ejecutable;
-2. cada tabla y figura se actualiza al recompilar;
-3. la documentación queda integrada al análisis;
-4. la publicación final puede compartirse por URL.
-
-En la versión definitiva del proyecto, esta sección debe sintetizar hallazgos, limitaciones, alcances y líneas de trabajo futuras.

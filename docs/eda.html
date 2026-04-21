@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="es" xml:lang="es">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capítulo 6 Análisis Exploratorio de Datos | Análisis exploratorio e inferencial</title>
+  <meta name="description" content="Libro académico elaborado en bookdown para Maestría en Estadística Aplicada." />
+  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capítulo 6 Análisis Exploratorio de Datos | Análisis exploratorio e inferencial" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Libro académico elaborado en bookdown para Maestría en Estadística Aplicada." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capítulo 6 Análisis Exploratorio de Datos | Análisis exploratorio e inferencial" />
+  
+  <meta name="twitter:description" content="Libro académico elaborado en bookdown para Maestría en Estadística Aplicada." />
+  
+
+<meta name="author" content="Gloria Bastidas" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="diccionario-de-campos.html"/>
+<link rel="next" href="pruebas-de-hipótesis-sin-desarrollar.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Libro Académico</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Portada</a></li>
+<li class="chapter" data-level="" data-path="prefacio.html"><a href="prefacio.html"><i class="fa fa-check"></i>Prefacio</a></li>
+<li class="chapter" data-level="1" data-path="resumen.html"><a href="resumen.html"><i class="fa fa-check"></i><b>1</b> Resumen</a></li>
+<li class="chapter" data-level="2" data-path="introducción.html"><a href="introducción.html"><i class="fa fa-check"></i><b>2</b> Introducción</a></li>
+<li class="chapter" data-level="3" data-path="objetivos.html"><a href="objetivos.html"><i class="fa fa-check"></i><b>3</b> Objetivos</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="objetivos.html"><a href="objetivos.html#objetivo-general"><i class="fa fa-check"></i><b>3.1</b> Objetivo general</a></li>
+<li class="chapter" data-level="3.2" data-path="objetivos.html"><a href="objetivos.html#objetivos-espec%C3%ADficos"><i class="fa fa-check"></i><b>3.2</b> Objetivos específicos</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="metodologia.html"><a href="metodologia.html"><i class="fa fa-check"></i><b>4</b> Metodología</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="metodologia.html"><a href="metodologia.html#dise%C3%B1o-del-estudio"><i class="fa fa-check"></i><b>4.1</b> Diseño del estudio</a></li>
+<li class="chapter" data-level="4.2" data-path="metodologia.html"><a href="metodologia.html#extracci%C3%B3n-transformaci%C3%B3n-y-carga-etl"><i class="fa fa-check"></i><b>4.2</b> Extracción, transformación y carga (ETL)</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="metodologia.html"><a href="metodologia.html#carga-del-conjunto-de-datos"><i class="fa fa-check"></i><b>4.2.1</b> Carga del conjunto de datos</a></li>
+<li class="chapter" data-level="4.2.2" data-path="metodologia.html"><a href="metodologia.html#verificaci%C3%B3n-de-la-lectura"><i class="fa fa-check"></i><b>4.2.2</b> Verificación de la lectura</a></li>
+<li class="chapter" data-level="4.2.3" data-path="metodologia.html"><a href="metodologia.html#revisi%C3%B3n-de-integridad-de-datos"><i class="fa fa-check"></i><b>4.2.3</b> Revisión de integridad de datos</a></li>
+<li class="chapter" data-level="4.2.4" data-path="metodologia.html"><a href="metodologia.html#conversi%C3%B3n-de-tipos"><i class="fa fa-check"></i><b>4.2.4</b> Conversión de tipos</a></li>
+<li class="chapter" data-level="4.2.5" data-path="metodologia.html"><a href="metodologia.html#consideraciones-estructurales-para-el-an%C3%A1lisis"><i class="fa fa-check"></i><b>4.2.5</b> Consideraciones estructurales para el análisis</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="diccionario-de-campos.html"><a href="diccionario-de-campos.html"><i class="fa fa-check"></i><b>5</b> Diccionario de campos</a></li>
+<li class="chapter" data-level="6" data-path="eda.html"><a href="eda.html"><i class="fa fa-check"></i><b>6</b> Análisis Exploratorio de Datos</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="eda.html"><a href="eda.html#carga-del-dataset-anal%C3%ADtico"><i class="fa fa-check"></i><b>6.1</b> Carga del dataset analítico</a></li>
+<li class="chapter" data-level="6.2" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-univariado-de-las-variables-respuesta"><i class="fa fa-check"></i><b>6.2</b> Análisis univariado de las variables respuesta</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="eda.html"><a href="eda.html#costo_transformacion"><i class="fa fa-check"></i><b>6.2.1</b> costo_transformacion</a></li>
+<li class="chapter" data-level="6.2.2" data-path="eda.html"><a href="eda.html#costo_insumo"><i class="fa fa-check"></i><b>6.2.2</b> costo_insumo</a></li>
+<li class="chapter" data-level="6.2.3" data-path="eda.html"><a href="eda.html#costo_unitario_total"><i class="fa fa-check"></i><b>6.2.3</b> costo_unitario_total</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-univariado-de-variables-num%C3%A9ricas-predictoras"><i class="fa fa-check"></i><b>6.3</b> Análisis univariado de variables numéricas predictoras</a></li>
+<li class="chapter" data-level="6.4" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-univariado-de-variables-categ%C3%B3ricas-predictoras"><i class="fa fa-check"></i><b>6.4</b> Análisis univariado de variables categóricas predictoras</a></li>
+<li class="chapter" data-level="6.5" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-bivariado-variables-respuesta-vs-predictoras-num%C3%A9ricas"><i class="fa fa-check"></i><b>6.5</b> Análisis bivariado: variables respuesta vs predictoras numéricas</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="eda.html"><a href="eda.html#diagramas-de-dispersi%C3%B3n"><i class="fa fa-check"></i><b>6.5.1</b> Diagramas de dispersión</a></li>
+<li class="chapter" data-level="6.5.2" data-path="eda.html"><a href="eda.html#correlaciones"><i class="fa fa-check"></i><b>6.5.2</b> Correlaciones</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-bivariado-variables-respuesta-vs-predictoras-categ%C3%B3ricas"><i class="fa fa-check"></i><b>6.6</b> Análisis bivariado: variables respuesta vs predictoras categóricas</a>
+<ul>
+<li class="chapter" data-level="6.6.1" data-path="eda.html"><a href="eda.html#tablas-resumen-por-tipo-de-equipo"><i class="fa fa-check"></i><b>6.6.1</b> Tablas resumen por tipo de equipo</a></li>
+<li class="chapter" data-level="6.6.2" data-path="eda.html"><a href="eda.html#boxplots-por-tipo-de-equipo"><i class="fa fa-check"></i><b>6.6.2</b> Boxplots por tipo de equipo</a></li>
+</ul></li>
+<li class="chapter" data-level="6.7" data-path="eda.html"><a href="eda.html#variables-derivadas"><i class="fa fa-check"></i><b>6.7</b> Variables derivadas</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="pruebas-de-hipótesis-sin-desarrollar.html"><a href="pruebas-de-hipótesis-sin-desarrollar.html"><i class="fa fa-check"></i><b>7</b> Pruebas de Hipótesis SIN DESARROLLAR</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="pruebas-de-hipótesis-sin-desarrollar.html"><a href="pruebas-de-hipótesis-sin-desarrollar.html#prueba-t-de-dos-muestras"><i class="fa fa-check"></i><b>7.1</b> Prueba t de dos muestras</a></li>
+<li class="chapter" data-level="7.2" data-path="pruebas-de-hipótesis-sin-desarrollar.html"><a href="pruebas-de-hipótesis-sin-desarrollar.html#interpretaci%C3%B3n-base"><i class="fa fa-check"></i><b>7.2</b> Interpretación base</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="modelos-sin-desarrollar.html"><a href="modelos-sin-desarrollar.html"><i class="fa fa-check"></i><b>8</b> Modelos SIN DESARROLLAR</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="modelos-sin-desarrollar.html"><a href="modelos-sin-desarrollar.html#ajuste-del-modelo"><i class="fa fa-check"></i><b>8.1</b> Ajuste del modelo</a></li>
+<li class="chapter" data-level="8.2" data-path="modelos-sin-desarrollar.html"><a href="modelos-sin-desarrollar.html#medidas-de-ajuste"><i class="fa fa-check"></i><b>8.2</b> Medidas de ajuste</a></li>
+<li class="chapter" data-level="8.3" data-path="modelos-sin-desarrollar.html"><a href="modelos-sin-desarrollar.html#gr%C3%A1fico-de-observados-vs-ajustados"><i class="fa fa-check"></i><b>8.3</b> Gráfico de observados vs ajustados</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="conclusión.html"><a href="conclusión.html"><i class="fa fa-check"></i><b>9</b> Conclusión</a></li>
+<li class="chapter" data-level="10" data-path="bibliografía.html"><a href="bibliografía.html"><i class="fa fa-check"></i><b>10</b> Bibliografía</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/">Publicado con GitHub Pages</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Análisis exploratorio e inferencial</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="eda" class="section level1 hasAnchor" number="6">
+<h1><span class="header-section-number">Capítulo 6</span> Análisis Exploratorio de Datos<a href="eda.html#eda" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>El Análisis Exploratorio de Datos (EDA) tiene como propósito describir el comportamiento de las variables del estudio mediante resúmenes numéricos y representaciones gráficas, identificar patrones de variabilidad, detectar posibles valores atípicos y formular hipótesis que orienten el análisis inferencial posterior. En este capítulo se analizan las variables respuesta (<code>costo_transformacion</code>, <code>costo_insumo</code> y su agregado <code>costo_unitario_total</code>) y las variables predictoras del dataset depurado en el capítulo de metodología.</p>
+<div id="carga-del-dataset-analítico" class="section level2 hasAnchor" number="6.1">
+<h2><span class="header-section-number">6.1</span> Carga del dataset analítico<a href="eda.html#carga-del-dataset-anal%C3%ADtico" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Se carga el dataset depurado y con tipos ajustados. El archivo RDS preserva los factores, el factor ordenado <code>num_insumos</code> y la recodificación de <code>insumo_2</code>, de modo que este capítulo puede ejecutarse de forma autónoma.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="eda.html#cb21-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb21-2"><a href="eda.html#cb21-2" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb21-3"><a href="eda.html#cb21-3" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
+<span id="cb21-4"><a href="eda.html#cb21-4" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb21-5"><a href="eda.html#cb21-5" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb21-6"><a href="eda.html#cb21-6" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="eda.html#cb21-7" tabindex="-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/data_costos_limpio.rds&quot;</span>)</span></code></pre></div>
+<p>El dataset analítico contiene 395 órdenes de producción y 16 variables.</p>
+</div>
+<div id="análisis-univariado-de-las-variables-respuesta" class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> Análisis univariado de las variables respuesta<a href="eda.html#an%C3%A1lisis-univariado-de-las-variables-respuesta" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Las tres variables respuesta del estudio son <code>costo_transformacion</code> (costo de conversión por unidad producida), <code>costo_insumo</code> (costo de materias primas por unidad producida) y su agregado <code>costo_unitario_total</code>. Se analizan en paralelo porque responden a lógicas operativas distintas: el costo de transformación refleja eficiencia de máquina y proceso, mientras que el costo de insumo refleja decisiones de formulación y consumo de materias primas.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="eda.html#cb22-1" tabindex="-1"></a>datos <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="eda.html#cb22-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">costo_unitario_total =</span> costo_transformacion <span class="sc">+</span> costo_insumo)</span></code></pre></div>
+<div id="costo_transformacion" class="section level3 hasAnchor" number="6.2.1">
+<h3><span class="header-section-number">6.2.1</span> costo_transformacion<a href="eda.html#costo_transformacion" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="eda.html#cb23-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb23-2"><a href="eda.html#cb23-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb23-3"><a href="eda.html#cb23-3" tabindex="-1"></a>    <span class="at">n       =</span> <span class="fu">length</span>(costo_transformacion),</span>
+<span id="cb23-4"><a href="eda.html#cb23-4" tabindex="-1"></a>    <span class="at">media   =</span> <span class="fu">mean</span>(costo_transformacion),</span>
+<span id="cb23-5"><a href="eda.html#cb23-5" tabindex="-1"></a>    <span class="at">ds      =</span> <span class="fu">sd</span>(costo_transformacion),</span>
+<span id="cb23-6"><a href="eda.html#cb23-6" tabindex="-1"></a>    <span class="st">`</span><span class="at">50%</span><span class="st">`</span>   <span class="ot">=</span> <span class="fu">median</span>(costo_transformacion),</span>
+<span id="cb23-7"><a href="eda.html#cb23-7" tabindex="-1"></a>    <span class="at">minimo  =</span> <span class="fu">min</span>(costo_transformacion),</span>
+<span id="cb23-8"><a href="eda.html#cb23-8" tabindex="-1"></a>    <span class="at">maximo  =</span> <span class="fu">max</span>(costo_transformacion),</span>
+<span id="cb23-9"><a href="eda.html#cb23-9" tabindex="-1"></a>    <span class="at">Q1      =</span> <span class="fu">quantile</span>(costo_transformacion, <span class="fl">0.25</span>),</span>
+<span id="cb23-10"><a href="eda.html#cb23-10" tabindex="-1"></a>    <span class="at">Q3      =</span> <span class="fu">quantile</span>(costo_transformacion, <span class="fl">0.75</span>),</span>
+<span id="cb23-11"><a href="eda.html#cb23-11" tabindex="-1"></a>    <span class="at">IQR     =</span> <span class="fu">IQR</span>(costo_transformacion)</span>
+<span id="cb23-12"><a href="eda.html#cb23-12" tabindex="-1"></a>  ) <span class="ot">-&gt;</span> resumen_ct</span>
+<span id="cb23-13"><a href="eda.html#cb23-13" tabindex="-1"></a>resumen_ct</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 9
+##       n media    ds `50%` minimo maximo    Q1    Q3   IQR
+##   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1   395  29.9  15.3  29.1   2.77   97.2  21.9  36.4  14.5</code></pre>
+<p>La variable <code>costo_transformacion</code> se analizó a partir de 395 órdenes de producción. Se obtuvo un costo medio de conversión por unidad de 29.94 UM/unidad (DS = 15.26 UM/unidad), con un coeficiente de variación de 51%. El 50% de las órdenes presenta un costo de conversión por debajo de 29.09 UM/unidad. El mínimo registrado fue de 2.77 UM/unidad y el máximo alcanzó 97.18 UM/unidad, con un rango intercuartílico de 14.54 UM/unidad, lo que indica una dispersión considerable entre órdenes.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="eda.html#cb25-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb25-2"><a href="eda.html#cb25-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> costo_transformacion)) <span class="sc">+</span></span>
+<span id="cb25-3"><a href="eda.html#cb25-3" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
+<span id="cb25-4"><a href="eda.html#cb25-4" tabindex="-1"></a>                 <span class="at">bins =</span> <span class="dv">30</span>,</span>
+<span id="cb25-5"><a href="eda.html#cb25-5" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">&quot;#2c7fb8&quot;</span>,</span>
+<span id="cb25-6"><a href="eda.html#cb25-6" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb25-7"><a href="eda.html#cb25-7" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb25-8"><a href="eda.html#cb25-8" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb25-9"><a href="eda.html#cb25-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Costo de transformación (UM/unidad)&quot;</span>,</span>
+<span id="cb25-10"><a href="eda.html#cb25-10" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Densidad&quot;</span>) <span class="sc">+</span></span>
+<span id="cb25-11"><a href="eda.html#cb25-11" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb25-12"><a href="eda.html#cb25-12" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Distribución del costo de transformación&quot;</span>)</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/hist-ct-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="eda.html#cb26-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="eda.html#cb26-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> costo_transformacion)) <span class="sc">+</span></span>
+<span id="cb26-3"><a href="eda.html#cb26-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#a6cee3&quot;</span>, <span class="at">color =</span> <span class="st">&quot;#1f78b4&quot;</span>, <span class="at">outlier.color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb26-4"><a href="eda.html#cb26-4" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">shape =</span> <span class="dv">20</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb26-5"><a href="eda.html#cb26-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb26-6"><a href="eda.html#cb26-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Costo de transformación (UM/unidad)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb26-7"><a href="eda.html#cb26-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb26-8"><a href="eda.html#cb26-8" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Boxplot del costo de transformación&quot;</span>)</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box-ct-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<p>El histograma y el boxplot evidencian una distribución asimétrica hacia valores altos, con presencia de órdenes extremas que se destacan sobre el bigote superior. La distancia entre la media y el 50% sugiere que la media está influida por la cola derecha, por lo que los análisis inferenciales posteriores deben contemplar transformaciones o pruebas robustas.</p>
+</div>
+<div id="costo_insumo" class="section level3 hasAnchor" number="6.2.2">
+<h3><span class="header-section-number">6.2.2</span> costo_insumo<a href="eda.html#costo_insumo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="eda.html#cb27-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb27-2"><a href="eda.html#cb27-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb27-3"><a href="eda.html#cb27-3" tabindex="-1"></a>    <span class="at">n       =</span> <span class="fu">length</span>(costo_insumo),</span>
+<span id="cb27-4"><a href="eda.html#cb27-4" tabindex="-1"></a>    <span class="at">media   =</span> <span class="fu">mean</span>(costo_insumo),</span>
+<span id="cb27-5"><a href="eda.html#cb27-5" tabindex="-1"></a>    <span class="at">ds      =</span> <span class="fu">sd</span>(costo_insumo),</span>
+<span id="cb27-6"><a href="eda.html#cb27-6" tabindex="-1"></a>    <span class="st">`</span><span class="at">50%</span><span class="st">`</span>   <span class="ot">=</span> <span class="fu">median</span>(costo_insumo),</span>
+<span id="cb27-7"><a href="eda.html#cb27-7" tabindex="-1"></a>    <span class="at">minimo  =</span> <span class="fu">min</span>(costo_insumo),</span>
+<span id="cb27-8"><a href="eda.html#cb27-8" tabindex="-1"></a>    <span class="at">maximo  =</span> <span class="fu">max</span>(costo_insumo),</span>
+<span id="cb27-9"><a href="eda.html#cb27-9" tabindex="-1"></a>    <span class="at">Q1      =</span> <span class="fu">quantile</span>(costo_insumo, <span class="fl">0.25</span>),</span>
+<span id="cb27-10"><a href="eda.html#cb27-10" tabindex="-1"></a>    <span class="at">Q3      =</span> <span class="fu">quantile</span>(costo_insumo, <span class="fl">0.75</span>),</span>
+<span id="cb27-11"><a href="eda.html#cb27-11" tabindex="-1"></a>    <span class="at">IQR     =</span> <span class="fu">IQR</span>(costo_insumo)</span>
+<span id="cb27-12"><a href="eda.html#cb27-12" tabindex="-1"></a>  ) <span class="ot">-&gt;</span> resumen_ci</span>
+<span id="cb27-13"><a href="eda.html#cb27-13" tabindex="-1"></a>resumen_ci</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 9
+##       n media    ds `50%` minimo maximo    Q1    Q3   IQR
+##   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1   395  5.05  4.42  4.18 0.0137   46.2  2.43  6.21  3.78</code></pre>
+<p>El costo de insumo promedio es de 5.05 UM/unidad (DS = 4.42 UM/unidad), con un coeficiente de variación de 87.5%. El 50% de las órdenes tiene un costo de insumo por debajo de 4.18 UM/unidad, con un mínimo de 0.01 y un máximo de 46.22 UM/unidad. El rango intercuartílico es de 3.78 UM/unidad.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="eda.html#cb29-1" tabindex="-1"></a>p_hist_ci <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="eda.html#cb29-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> costo_insumo)) <span class="sc">+</span></span>
+<span id="cb29-3"><a href="eda.html#cb29-3" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
+<span id="cb29-4"><a href="eda.html#cb29-4" tabindex="-1"></a>                 <span class="at">bins =</span> <span class="dv">30</span>,</span>
+<span id="cb29-5"><a href="eda.html#cb29-5" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">&quot;#2ca02c&quot;</span>,</span>
+<span id="cb29-6"><a href="eda.html#cb29-6" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb29-7"><a href="eda.html#cb29-7" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb29-8"><a href="eda.html#cb29-8" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb29-9"><a href="eda.html#cb29-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Costo de insumo (UM/unidad)&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Densidad&quot;</span>) <span class="sc">+</span></span>
+<span id="cb29-10"><a href="eda.html#cb29-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb29-11"><a href="eda.html#cb29-11" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Distribución del costo de insumo&quot;</span>)</span>
+<span id="cb29-12"><a href="eda.html#cb29-12" tabindex="-1"></a></span>
+<span id="cb29-13"><a href="eda.html#cb29-13" tabindex="-1"></a>p_box_ci <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb29-14"><a href="eda.html#cb29-14" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> costo_insumo)) <span class="sc">+</span></span>
+<span id="cb29-15"><a href="eda.html#cb29-15" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#b2df8a&quot;</span>, <span class="at">color =</span> <span class="st">&quot;#33a02c&quot;</span>, <span class="at">outlier.color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb29-16"><a href="eda.html#cb29-16" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">shape =</span> <span class="dv">20</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb29-17"><a href="eda.html#cb29-17" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Costo de insumo (UM/unidad)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb29-18"><a href="eda.html#cb29-18" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb29-19"><a href="eda.html#cb29-19" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Boxplot del costo de insumo&quot;</span>)</span>
+<span id="cb29-20"><a href="eda.html#cb29-20" tabindex="-1"></a></span>
+<span id="cb29-21"><a href="eda.html#cb29-21" tabindex="-1"></a>p_hist_ci <span class="sc">+</span> p_box_ci</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/hist-box-ci-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="costo_unitario_total" class="section level3 hasAnchor" number="6.2.3">
+<h3><span class="header-section-number">6.2.3</span> costo_unitario_total<a href="eda.html#costo_unitario_total" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>La variable <code>costo_unitario_total</code> se deriva como la suma de <code>costo_transformacion</code> y <code>costo_insumo</code>, y representa el costo total por unidad de producto conforme a la definición del ERP.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="eda.html#cb30-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb30-2"><a href="eda.html#cb30-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb30-3"><a href="eda.html#cb30-3" tabindex="-1"></a>    <span class="at">n       =</span> <span class="fu">length</span>(costo_unitario_total),</span>
+<span id="cb30-4"><a href="eda.html#cb30-4" tabindex="-1"></a>    <span class="at">media   =</span> <span class="fu">mean</span>(costo_unitario_total),</span>
+<span id="cb30-5"><a href="eda.html#cb30-5" tabindex="-1"></a>    <span class="at">ds      =</span> <span class="fu">sd</span>(costo_unitario_total),</span>
+<span id="cb30-6"><a href="eda.html#cb30-6" tabindex="-1"></a>    <span class="st">`</span><span class="at">50%</span><span class="st">`</span>   <span class="ot">=</span> <span class="fu">median</span>(costo_unitario_total),</span>
+<span id="cb30-7"><a href="eda.html#cb30-7" tabindex="-1"></a>    <span class="at">minimo  =</span> <span class="fu">min</span>(costo_unitario_total),</span>
+<span id="cb30-8"><a href="eda.html#cb30-8" tabindex="-1"></a>    <span class="at">maximo  =</span> <span class="fu">max</span>(costo_unitario_total),</span>
+<span id="cb30-9"><a href="eda.html#cb30-9" tabindex="-1"></a>    <span class="at">Q1      =</span> <span class="fu">quantile</span>(costo_unitario_total, <span class="fl">0.25</span>),</span>
+<span id="cb30-10"><a href="eda.html#cb30-10" tabindex="-1"></a>    <span class="at">Q3      =</span> <span class="fu">quantile</span>(costo_unitario_total, <span class="fl">0.75</span>),</span>
+<span id="cb30-11"><a href="eda.html#cb30-11" tabindex="-1"></a>    <span class="at">IQR     =</span> <span class="fu">IQR</span>(costo_unitario_total)</span>
+<span id="cb30-12"><a href="eda.html#cb30-12" tabindex="-1"></a>  ) <span class="ot">-&gt;</span> resumen_ctot</span>
+<span id="cb30-13"><a href="eda.html#cb30-13" tabindex="-1"></a>resumen_ctot</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 9
+##       n media    ds `50%` minimo maximo    Q1    Q3   IQR
+##   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1   395  35.0  17.3  33.6   4.30   112.  25.6  41.7  16.1</code></pre>
+<p>El costo unitario total promedio es de 34.99 UM/unidad (DS = 17.29), con un coeficiente de variación de 49.4%. De este promedio, el 85.6% corresponde al costo de transformación y el 14.4% al costo de insumo. El 50% de las órdenes presenta un costo unitario total por debajo de 33.64 UM/unidad, con un rango entre 4.3 y 111.72.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="eda.html#cb32-1" tabindex="-1"></a>p_hist_ct <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb32-2"><a href="eda.html#cb32-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> costo_unitario_total)) <span class="sc">+</span></span>
+<span id="cb32-3"><a href="eda.html#cb32-3" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
+<span id="cb32-4"><a href="eda.html#cb32-4" tabindex="-1"></a>                 <span class="at">bins =</span> <span class="dv">30</span>,</span>
+<span id="cb32-5"><a href="eda.html#cb32-5" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">&quot;#8856a7&quot;</span>,</span>
+<span id="cb32-6"><a href="eda.html#cb32-6" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb32-7"><a href="eda.html#cb32-7" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb32-8"><a href="eda.html#cb32-8" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">&quot;#4d004b&quot;</span>, <span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb32-9"><a href="eda.html#cb32-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Costo unitario total (UM/unidad)&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Densidad&quot;</span>) <span class="sc">+</span></span>
+<span id="cb32-10"><a href="eda.html#cb32-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb32-11"><a href="eda.html#cb32-11" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Distribución del costo unitario total&quot;</span>)</span>
+<span id="cb32-12"><a href="eda.html#cb32-12" tabindex="-1"></a></span>
+<span id="cb32-13"><a href="eda.html#cb32-13" tabindex="-1"></a>p_box_ct <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb32-14"><a href="eda.html#cb32-14" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> costo_unitario_total)) <span class="sc">+</span></span>
+<span id="cb32-15"><a href="eda.html#cb32-15" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#bcbddc&quot;</span>, <span class="at">color =</span> <span class="st">&quot;#756bb1&quot;</span>, <span class="at">outlier.color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb32-16"><a href="eda.html#cb32-16" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">shape =</span> <span class="dv">20</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb32-17"><a href="eda.html#cb32-17" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Costo unitario total (UM/unidad)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb32-18"><a href="eda.html#cb32-18" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb32-19"><a href="eda.html#cb32-19" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Boxplot del costo unitario total&quot;</span>)</span>
+<span id="cb32-20"><a href="eda.html#cb32-20" tabindex="-1"></a></span>
+<span id="cb32-21"><a href="eda.html#cb32-21" tabindex="-1"></a>p_hist_ct <span class="sc">+</span> p_box_ct</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/hist-box-ctot-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<p>El costo unitario total hereda la asimetría de sus dos componentes. La estructura de costos está dominada por el componente de transformación, que representa aproximadamente 85.6% del costo total promedio, frente al 14.4% del costo de insumo.</p>
+</div>
+</div>
+<div id="análisis-univariado-de-variables-numéricas-predictoras" class="section level2 hasAnchor" number="6.3">
+<h2><span class="header-section-number">6.3</span> Análisis univariado de variables numéricas predictoras<a href="eda.html#an%C3%A1lisis-univariado-de-variables-num%C3%A9ricas-predictoras" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Las variables numéricas predictoras son <code>volumen_lote</code>, <code>duracion_proceso</code>, <code>cantidad_insumo_1</code> y <code>cantidad_insumo_2</code>. Para las cantidades de insumo, los estadísticos descriptivos se calculan condicionando sobre la presencia efectiva del insumo correspondiente, conforme a la advertencia estructural documentada en el capítulo de metodología.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="eda.html#cb33-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb33-2"><a href="eda.html#cb33-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb33-3"><a href="eda.html#cb33-3" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(volumen_lote),</span>
+<span id="cb33-4"><a href="eda.html#cb33-4" tabindex="-1"></a>    <span class="at">media =</span> <span class="fu">mean</span>(volumen_lote),</span>
+<span id="cb33-5"><a href="eda.html#cb33-5" tabindex="-1"></a>    <span class="at">ds =</span> <span class="fu">sd</span>(volumen_lote),</span>
+<span id="cb33-6"><a href="eda.html#cb33-6" tabindex="-1"></a>    <span class="st">`</span><span class="at">50%</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">median</span>(volumen_lote),</span>
+<span id="cb33-7"><a href="eda.html#cb33-7" tabindex="-1"></a>    <span class="at">minimo =</span> <span class="fu">min</span>(volumen_lote),</span>
+<span id="cb33-8"><a href="eda.html#cb33-8" tabindex="-1"></a>    <span class="at">maximo =</span> <span class="fu">max</span>(volumen_lote),</span>
+<span id="cb33-9"><a href="eda.html#cb33-9" tabindex="-1"></a>    <span class="at">Q1 =</span> <span class="fu">quantile</span>(volumen_lote, <span class="fl">0.25</span>),</span>
+<span id="cb33-10"><a href="eda.html#cb33-10" tabindex="-1"></a>    <span class="at">Q3 =</span> <span class="fu">quantile</span>(volumen_lote, <span class="fl">0.75</span>),</span>
+<span id="cb33-11"><a href="eda.html#cb33-11" tabindex="-1"></a>    <span class="at">IQR =</span> <span class="fu">IQR</span>(volumen_lote)</span>
+<span id="cb33-12"><a href="eda.html#cb33-12" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb33-13"><a href="eda.html#cb33-13" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">variable =</span> <span class="st">&quot;volumen_lote&quot;</span>) <span class="ot">-&gt;</span> var_num_vol</span>
+<span id="cb33-14"><a href="eda.html#cb33-14" tabindex="-1"></a></span>
+<span id="cb33-15"><a href="eda.html#cb33-15" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb33-16"><a href="eda.html#cb33-16" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb33-17"><a href="eda.html#cb33-17" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(duracion_proceso),</span>
+<span id="cb33-18"><a href="eda.html#cb33-18" tabindex="-1"></a>    <span class="at">media =</span> <span class="fu">mean</span>(duracion_proceso),</span>
+<span id="cb33-19"><a href="eda.html#cb33-19" tabindex="-1"></a>    <span class="at">ds =</span> <span class="fu">sd</span>(duracion_proceso),</span>
+<span id="cb33-20"><a href="eda.html#cb33-20" tabindex="-1"></a>    <span class="st">`</span><span class="at">50%</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">median</span>(duracion_proceso),</span>
+<span id="cb33-21"><a href="eda.html#cb33-21" tabindex="-1"></a>    <span class="at">minimo =</span> <span class="fu">min</span>(duracion_proceso),</span>
+<span id="cb33-22"><a href="eda.html#cb33-22" tabindex="-1"></a>    <span class="at">maximo =</span> <span class="fu">max</span>(duracion_proceso),</span>
+<span id="cb33-23"><a href="eda.html#cb33-23" tabindex="-1"></a>    <span class="at">Q1 =</span> <span class="fu">quantile</span>(duracion_proceso, <span class="fl">0.25</span>),</span>
+<span id="cb33-24"><a href="eda.html#cb33-24" tabindex="-1"></a>    <span class="at">Q3 =</span> <span class="fu">quantile</span>(duracion_proceso, <span class="fl">0.75</span>),</span>
+<span id="cb33-25"><a href="eda.html#cb33-25" tabindex="-1"></a>    <span class="at">IQR =</span> <span class="fu">IQR</span>(duracion_proceso)</span>
+<span id="cb33-26"><a href="eda.html#cb33-26" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb33-27"><a href="eda.html#cb33-27" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">variable =</span> <span class="st">&quot;duracion_proceso&quot;</span>) <span class="ot">-&gt;</span> var_num_dur</span>
+<span id="cb33-28"><a href="eda.html#cb33-28" tabindex="-1"></a></span>
+<span id="cb33-29"><a href="eda.html#cb33-29" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb33-30"><a href="eda.html#cb33-30" tabindex="-1"></a>  <span class="fu">filter</span>(num_insumos <span class="sc">&gt;=</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb33-31"><a href="eda.html#cb33-31" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb33-32"><a href="eda.html#cb33-32" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(cantidad_insumo_1),</span>
+<span id="cb33-33"><a href="eda.html#cb33-33" tabindex="-1"></a>    <span class="at">media =</span> <span class="fu">mean</span>(cantidad_insumo_1),</span>
+<span id="cb33-34"><a href="eda.html#cb33-34" tabindex="-1"></a>    <span class="at">ds =</span> <span class="fu">sd</span>(cantidad_insumo_1),</span>
+<span id="cb33-35"><a href="eda.html#cb33-35" tabindex="-1"></a>    <span class="st">`</span><span class="at">50%</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">median</span>(cantidad_insumo_1),</span>
+<span id="cb33-36"><a href="eda.html#cb33-36" tabindex="-1"></a>    <span class="at">minimo =</span> <span class="fu">min</span>(cantidad_insumo_1),</span>
+<span id="cb33-37"><a href="eda.html#cb33-37" tabindex="-1"></a>    <span class="at">maximo =</span> <span class="fu">max</span>(cantidad_insumo_1),</span>
+<span id="cb33-38"><a href="eda.html#cb33-38" tabindex="-1"></a>    <span class="at">Q1 =</span> <span class="fu">quantile</span>(cantidad_insumo_1, <span class="fl">0.25</span>),</span>
+<span id="cb33-39"><a href="eda.html#cb33-39" tabindex="-1"></a>    <span class="at">Q3 =</span> <span class="fu">quantile</span>(cantidad_insumo_1, <span class="fl">0.75</span>),</span>
+<span id="cb33-40"><a href="eda.html#cb33-40" tabindex="-1"></a>    <span class="at">IQR =</span> <span class="fu">IQR</span>(cantidad_insumo_1)</span>
+<span id="cb33-41"><a href="eda.html#cb33-41" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb33-42"><a href="eda.html#cb33-42" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">variable =</span> <span class="st">&quot;cantidad_insumo_1&quot;</span>) <span class="ot">-&gt;</span> var_num_ci1</span>
+<span id="cb33-43"><a href="eda.html#cb33-43" tabindex="-1"></a></span>
+<span id="cb33-44"><a href="eda.html#cb33-44" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb33-45"><a href="eda.html#cb33-45" tabindex="-1"></a>  <span class="fu">filter</span>(num_insumos <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb33-46"><a href="eda.html#cb33-46" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb33-47"><a href="eda.html#cb33-47" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(cantidad_insumo_2),</span>
+<span id="cb33-48"><a href="eda.html#cb33-48" tabindex="-1"></a>    <span class="at">media =</span> <span class="fu">mean</span>(cantidad_insumo_2),</span>
+<span id="cb33-49"><a href="eda.html#cb33-49" tabindex="-1"></a>    <span class="at">ds =</span> <span class="fu">sd</span>(cantidad_insumo_2),</span>
+<span id="cb33-50"><a href="eda.html#cb33-50" tabindex="-1"></a>    <span class="st">`</span><span class="at">50%</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">median</span>(cantidad_insumo_2),</span>
+<span id="cb33-51"><a href="eda.html#cb33-51" tabindex="-1"></a>    <span class="at">minimo =</span> <span class="fu">min</span>(cantidad_insumo_2),</span>
+<span id="cb33-52"><a href="eda.html#cb33-52" tabindex="-1"></a>    <span class="at">maximo =</span> <span class="fu">max</span>(cantidad_insumo_2),</span>
+<span id="cb33-53"><a href="eda.html#cb33-53" tabindex="-1"></a>    <span class="at">Q1 =</span> <span class="fu">quantile</span>(cantidad_insumo_2, <span class="fl">0.25</span>),</span>
+<span id="cb33-54"><a href="eda.html#cb33-54" tabindex="-1"></a>    <span class="at">Q3 =</span> <span class="fu">quantile</span>(cantidad_insumo_2, <span class="fl">0.75</span>),</span>
+<span id="cb33-55"><a href="eda.html#cb33-55" tabindex="-1"></a>    <span class="at">IQR =</span> <span class="fu">IQR</span>(cantidad_insumo_2)</span>
+<span id="cb33-56"><a href="eda.html#cb33-56" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb33-57"><a href="eda.html#cb33-57" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">variable =</span> <span class="st">&quot;cantidad_insumo_2&quot;</span>) <span class="ot">-&gt;</span> var_num_ci2</span>
+<span id="cb33-58"><a href="eda.html#cb33-58" tabindex="-1"></a></span>
+<span id="cb33-59"><a href="eda.html#cb33-59" tabindex="-1"></a><span class="fu">bind_rows</span>(var_num_vol, var_num_dur, var_num_ci1, var_num_ci2) <span class="sc">%&gt;%</span></span>
+<span id="cb33-60"><a href="eda.html#cb33-60" tabindex="-1"></a>  <span class="fu">select</span>(variable, <span class="fu">everything</span>())</span></code></pre></div>
+<pre><code>## # A tibble: 4 × 10
+##   variable              n  media     ds `50%` minimo maximo      Q1    Q3    IQR
+##   &lt;chr&gt;             &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+## 1 volumen_lote        395 2.74e3 2.35e3  1989 100     13300 1226     3289 2.06e3
+## 2 duracion_proceso    395 1.16e2 8.26e1   100   3       482   60      150 9   e1
+## 3 cantidad_insumo_1   395 2.29e0 1.90e0     2   0.05     14    1        3 2   e0
+## 4 cantidad_insumo_2   124 1.43e0 1.08e0     1   0.05      7    0.75     2 1.25e0</code></pre>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="eda.html#cb35-1" tabindex="-1"></a>p_vol <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb35-2"><a href="eda.html#cb35-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> volumen_lote)) <span class="sc">+</span></span>
+<span id="cb35-3"><a href="eda.html#cb35-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#1f77b4&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb35-4"><a href="eda.html#cb35-4" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">shape =</span> <span class="dv">18</span>, <span class="at">size =</span> <span class="dv">4</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb35-5"><a href="eda.html#cb35-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Distribución del volumen de lote&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Unidades&quot;</span>, <span class="at">x =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb35-6"><a href="eda.html#cb35-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb35-7"><a href="eda.html#cb35-7" tabindex="-1"></a></span>
+<span id="cb35-8"><a href="eda.html#cb35-8" tabindex="-1"></a>p_dur <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb35-9"><a href="eda.html#cb35-9" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> duracion_proceso)) <span class="sc">+</span></span>
+<span id="cb35-10"><a href="eda.html#cb35-10" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#2ca02c&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb35-11"><a href="eda.html#cb35-11" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">shape =</span> <span class="dv">18</span>, <span class="at">size =</span> <span class="dv">4</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb35-12"><a href="eda.html#cb35-12" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Distribución de la duración de proceso&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Horas&quot;</span>, <span class="at">x =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb35-13"><a href="eda.html#cb35-13" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb35-14"><a href="eda.html#cb35-14" tabindex="-1"></a></span>
+<span id="cb35-15"><a href="eda.html#cb35-15" tabindex="-1"></a>p_ci1 <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb35-16"><a href="eda.html#cb35-16" tabindex="-1"></a>  <span class="fu">filter</span>(num_insumos <span class="sc">&gt;=</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb35-17"><a href="eda.html#cb35-17" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> cantidad_insumo_1)) <span class="sc">+</span></span>
+<span id="cb35-18"><a href="eda.html#cb35-18" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#ff7f0e&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb35-19"><a href="eda.html#cb35-19" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">shape =</span> <span class="dv">18</span>, <span class="at">size =</span> <span class="dv">4</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb35-20"><a href="eda.html#cb35-20" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Cantidad de insumo 1 (órdenes con insumo)&quot;</span>,</span>
+<span id="cb35-21"><a href="eda.html#cb35-21" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Litros equivalentes&quot;</span>, <span class="at">x =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb35-22"><a href="eda.html#cb35-22" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb35-23"><a href="eda.html#cb35-23" tabindex="-1"></a></span>
+<span id="cb35-24"><a href="eda.html#cb35-24" tabindex="-1"></a>p_ci2 <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb35-25"><a href="eda.html#cb35-25" tabindex="-1"></a>  <span class="fu">filter</span>(num_insumos <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb35-26"><a href="eda.html#cb35-26" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> cantidad_insumo_2)) <span class="sc">+</span></span>
+<span id="cb35-27"><a href="eda.html#cb35-27" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#9467bd&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb35-28"><a href="eda.html#cb35-28" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">shape =</span> <span class="dv">18</span>, <span class="at">size =</span> <span class="dv">4</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb35-29"><a href="eda.html#cb35-29" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Cantidad de insumo 2 (órdenes con segundo insumo)&quot;</span>,</span>
+<span id="cb35-30"><a href="eda.html#cb35-30" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Litros equivalentes&quot;</span>, <span class="at">x =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb35-31"><a href="eda.html#cb35-31" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb35-32"><a href="eda.html#cb35-32" tabindex="-1"></a></span>
+<span id="cb35-33"><a href="eda.html#cb35-33" tabindex="-1"></a>(p_vol <span class="sc">+</span> p_dur) <span class="sc">/</span> (p_ci1 <span class="sc">+</span> p_ci2)</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box-num-predictoras-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<p>La interpretación detallada de cada distribución queda como ejercicio del lector. Los puntos clave a destacar son la amplitud de rango de <code>volumen_lote</code>, la presencia de colas en <code>duracion_proceso</code>, y la heterogeneidad de escala en las cantidades de insumo, consistente con la advertencia del capítulo de metodología sobre la posible diferencia de unidades entre tipos de insumo.</p>
+</div>
+<div id="análisis-univariado-de-variables-categóricas-predictoras" class="section level2 hasAnchor" number="6.4">
+<h2><span class="header-section-number">6.4</span> Análisis univariado de variables categóricas predictoras<a href="eda.html#an%C3%A1lisis-univariado-de-variables-categ%C3%B3ricas-predictoras" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="eda.html#cb36-1" tabindex="-1"></a>vars_cat <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;tipo_equipo&quot;</span>, <span class="st">&quot;equipo_id&quot;</span>, <span class="st">&quot;categoria_producto&quot;</span>,</span>
+<span id="cb36-2"><a href="eda.html#cb36-2" tabindex="-1"></a>              <span class="st">&quot;modalidad_proceso&quot;</span>, <span class="st">&quot;num_insumos&quot;</span>, <span class="st">&quot;insumo_1&quot;</span>, <span class="st">&quot;insumo_2&quot;</span>)</span>
+<span id="cb36-3"><a href="eda.html#cb36-3" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="eda.html#cb36-4" tabindex="-1"></a>tabla_cat <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(vars_cat, <span class="cf">function</span>(v) {</span>
+<span id="cb36-5"><a href="eda.html#cb36-5" tabindex="-1"></a>  datos <span class="sc">%&gt;%</span></span>
+<span id="cb36-6"><a href="eda.html#cb36-6" tabindex="-1"></a>    <span class="fu">count</span>(.data[[v]], <span class="at">name =</span> <span class="st">&quot;Frecuencia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb36-7"><a href="eda.html#cb36-7" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb36-8"><a href="eda.html#cb36-8" tabindex="-1"></a>      <span class="at">Porcentaje =</span> <span class="fu">round</span>(Frecuencia <span class="sc">/</span> <span class="fu">sum</span>(Frecuencia) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>),</span>
+<span id="cb36-9"><a href="eda.html#cb36-9" tabindex="-1"></a>      <span class="at">Variable =</span> v,</span>
+<span id="cb36-10"><a href="eda.html#cb36-10" tabindex="-1"></a>      <span class="at">Categoria =</span> <span class="fu">as.character</span>(.data[[v]])</span>
+<span id="cb36-11"><a href="eda.html#cb36-11" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
+<span id="cb36-12"><a href="eda.html#cb36-12" tabindex="-1"></a>    <span class="fu">select</span>(Variable, Categoria, Frecuencia, Porcentaje)</span>
+<span id="cb36-13"><a href="eda.html#cb36-13" tabindex="-1"></a>})</span>
+<span id="cb36-14"><a href="eda.html#cb36-14" tabindex="-1"></a></span>
+<span id="cb36-15"><a href="eda.html#cb36-15" tabindex="-1"></a>tabla_cat</span></code></pre></div>
+<pre><code>## # A tibble: 41 × 4
+##    Variable    Categoria Frecuencia Porcentaje
+##    &lt;chr&gt;       &lt;chr&gt;          &lt;int&gt;      &lt;dbl&gt;
+##  1 tipo_equipo A1               287      72.7 
+##  2 tipo_equipo B2                45      11.4 
+##  3 tipo_equipo C3                 8       2.03
+##  4 tipo_equipo D4                55      13.9 
+##  5 equipo_id   M02               45      11.4 
+##  6 equipo_id   M04                4       1.01
+##  7 equipo_id   M05               31       7.85
+##  8 equipo_id   M08               34       8.61
+##  9 equipo_id   M09               40      10.1 
+## 10 equipo_id   M11                4       1.01
+## # ℹ 31 more rows</code></pre>
+<p>El tipo de equipo dominante es A1, que concentra el 72.66% de las órdenes. La variable <code>equipo_id</code> tiene 12 niveles distintos y <code>categoria_producto</code> tiene 7 niveles, lo cual exigirá tratamiento cuidadoso en los análisis inferenciales posteriores para evitar celdas con pocas observaciones.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="eda.html#cb38-1" tabindex="-1"></a>tabla_te <span class="ot">&lt;-</span> tabla_cat <span class="sc">%&gt;%</span></span>
+<span id="cb38-2"><a href="eda.html#cb38-2" tabindex="-1"></a>  <span class="fu">filter</span>(Variable <span class="sc">==</span> <span class="st">&quot;tipo_equipo&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb38-3"><a href="eda.html#cb38-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Etiqueta =</span> <span class="fu">paste0</span>(Frecuencia, <span class="st">&quot; (&quot;</span>, Porcentaje, <span class="st">&quot;%)&quot;</span>))</span>
+<span id="cb38-4"><a href="eda.html#cb38-4" tabindex="-1"></a></span>
+<span id="cb38-5"><a href="eda.html#cb38-5" tabindex="-1"></a>tabla_te <span class="sc">%&gt;%</span></span>
+<span id="cb38-6"><a href="eda.html#cb38-6" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Categoria, <span class="at">y =</span> Frecuencia)) <span class="sc">+</span></span>
+<span id="cb38-7"><a href="eda.html#cb38-7" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">&quot;#008B8B&quot;</span>, <span class="at">width =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb38-8"><a href="eda.html#cb38-8" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> Etiqueta), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb38-9"><a href="eda.html#cb38-9" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.15</span>))) <span class="sc">+</span></span>
+<span id="cb38-10"><a href="eda.html#cb38-10" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Tipo de equipo&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Frecuencia (Porcentaje)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb38-11"><a href="eda.html#cb38-11" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb38-12"><a href="eda.html#cb38-12" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> <span class="st">&quot;Distribución de la variable tipo_equipo&quot;</span>)</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/bar-tipo-equipo-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="eda.html#cb39-1" tabindex="-1"></a>tabla_mod <span class="ot">&lt;-</span> tabla_cat <span class="sc">%&gt;%</span></span>
+<span id="cb39-2"><a href="eda.html#cb39-2" tabindex="-1"></a>  <span class="fu">filter</span>(Variable <span class="sc">==</span> <span class="st">&quot;modalidad_proceso&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb39-3"><a href="eda.html#cb39-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Etiqueta =</span> <span class="fu">paste0</span>(Frecuencia, <span class="st">&quot; (&quot;</span>, Porcentaje, <span class="st">&quot;%)&quot;</span>))</span>
+<span id="cb39-4"><a href="eda.html#cb39-4" tabindex="-1"></a></span>
+<span id="cb39-5"><a href="eda.html#cb39-5" tabindex="-1"></a>tabla_mod <span class="sc">%&gt;%</span></span>
+<span id="cb39-6"><a href="eda.html#cb39-6" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Categoria, <span class="at">y =</span> Frecuencia)) <span class="sc">+</span></span>
+<span id="cb39-7"><a href="eda.html#cb39-7" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">&quot;#008B8B&quot;</span>, <span class="at">width =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb39-8"><a href="eda.html#cb39-8" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> Etiqueta), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb39-9"><a href="eda.html#cb39-9" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.15</span>))) <span class="sc">+</span></span>
+<span id="cb39-10"><a href="eda.html#cb39-10" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Modalidad de proceso&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Frecuencia (Porcentaje)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb39-11"><a href="eda.html#cb39-11" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb39-12"><a href="eda.html#cb39-12" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> <span class="st">&quot;Distribución de la variable modalidad_proceso&quot;</span>)</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/bar-modalidad-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="eda.html#cb40-1" tabindex="-1"></a>tabla_ni <span class="ot">&lt;-</span> tabla_cat <span class="sc">%&gt;%</span></span>
+<span id="cb40-2"><a href="eda.html#cb40-2" tabindex="-1"></a>  <span class="fu">filter</span>(Variable <span class="sc">==</span> <span class="st">&quot;num_insumos&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb40-3"><a href="eda.html#cb40-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Etiqueta =</span> <span class="fu">paste0</span>(Frecuencia, <span class="st">&quot; (&quot;</span>, Porcentaje, <span class="st">&quot;%)&quot;</span>))</span>
+<span id="cb40-4"><a href="eda.html#cb40-4" tabindex="-1"></a></span>
+<span id="cb40-5"><a href="eda.html#cb40-5" tabindex="-1"></a>tabla_ni <span class="sc">%&gt;%</span></span>
+<span id="cb40-6"><a href="eda.html#cb40-6" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Categoria, <span class="at">y =</span> Frecuencia)) <span class="sc">+</span></span>
+<span id="cb40-7"><a href="eda.html#cb40-7" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">&quot;#008B8B&quot;</span>, <span class="at">width =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb40-8"><a href="eda.html#cb40-8" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> Etiqueta), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb40-9"><a href="eda.html#cb40-9" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.15</span>))) <span class="sc">+</span></span>
+<span id="cb40-10"><a href="eda.html#cb40-10" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Número de insumos&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Frecuencia (Porcentaje)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb40-11"><a href="eda.html#cb40-11" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb40-12"><a href="eda.html#cb40-12" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> <span class="st">&quot;Distribución de la variable num_insumos&quot;</span>)</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/bar-num-insumos-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<p>La construcción de los gráficos de barras para las variables categóricas restantes (<code>equipo_id</code>, <code>categoria_producto</code>, <code>insumo_1</code>, <code>insumo_2</code>) se deja como ejercicio, empleando el mismo patrón de <code>geom_col</code> con etiquetas.</p>
+</div>
+<div id="análisis-bivariado-variables-respuesta-vs-predictoras-numéricas" class="section level2 hasAnchor" number="6.5">
+<h2><span class="header-section-number">6.5</span> Análisis bivariado: variables respuesta vs predictoras numéricas<a href="eda.html#an%C3%A1lisis-bivariado-variables-respuesta-vs-predictoras-num%C3%A9ricas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="diagramas-de-dispersión" class="section level3 hasAnchor" number="6.5.1">
+<h3><span class="header-section-number">6.5.1</span> Diagramas de dispersión<a href="eda.html#diagramas-de-dispersi%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="eda.html#cb41-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb41-2"><a href="eda.html#cb41-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> volumen_lote, <span class="at">y =</span> costo_transformacion)) <span class="sc">+</span></span>
+<span id="cb41-3"><a href="eda.html#cb41-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">&quot;#1E90FF&quot;</span>) <span class="sc">+</span></span>
+<span id="cb41-4"><a href="eda.html#cb41-4" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">formula =</span> y <span class="sc">~</span> x, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb41-5"><a href="eda.html#cb41-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Volumen de lote (unidades)&quot;</span>,</span>
+<span id="cb41-6"><a href="eda.html#cb41-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Costo de transformación (UM/unidad)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb41-7"><a href="eda.html#cb41-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb41-8"><a href="eda.html#cb41-8" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Dispersión entre volumen_lote y costo_transformacion&quot;</span>)</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/scatter-vol-ct-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="eda.html#cb42-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb42-2"><a href="eda.html#cb42-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> duracion_proceso, <span class="at">y =</span> costo_transformacion)) <span class="sc">+</span></span>
+<span id="cb42-3"><a href="eda.html#cb42-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">&quot;#1E90FF&quot;</span>) <span class="sc">+</span></span>
+<span id="cb42-4"><a href="eda.html#cb42-4" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">formula =</span> y <span class="sc">~</span> x, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb42-5"><a href="eda.html#cb42-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Duración del proceso (horas)&quot;</span>,</span>
+<span id="cb42-6"><a href="eda.html#cb42-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Costo de transformación (UM/unidad)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb42-7"><a href="eda.html#cb42-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb42-8"><a href="eda.html#cb42-8" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Dispersión entre duracion_proceso y costo_transformacion&quot;</span>)</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/scatter-dur-ct-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="correlaciones" class="section level3 hasAnchor" number="6.5.2">
+<h3><span class="header-section-number">6.5.2</span> Correlaciones<a href="eda.html#correlaciones" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="eda.html#cb43-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb43-2"><a href="eda.html#cb43-2" tabindex="-1"></a>  <span class="fu">select</span>(costo_transformacion, costo_insumo, costo_unitario_total,</span>
+<span id="cb43-3"><a href="eda.html#cb43-3" tabindex="-1"></a>         volumen_lote, duracion_proceso,</span>
+<span id="cb43-4"><a href="eda.html#cb43-4" tabindex="-1"></a>         cantidad_insumo_1, cantidad_insumo_2) <span class="sc">%&gt;%</span></span>
+<span id="cb43-5"><a href="eda.html#cb43-5" tabindex="-1"></a>  <span class="fu">cor</span>(<span class="at">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>, <span class="at">method =</span> <span class="st">&quot;pearson&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb43-6"><a href="eda.html#cb43-6" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">3</span>)</span></code></pre></div>
+<pre><code>##                      costo_transformacion costo_insumo costo_unitario_total
+## costo_transformacion                1.000        0.344                0.971
+## costo_insumo                        0.344        1.000                0.560
+## costo_unitario_total                0.971        0.560                1.000
+## volumen_lote                       -0.350       -0.294               -0.384
+## duracion_proceso                    0.220       -0.087                0.172
+## cantidad_insumo_1                  -0.031        0.134                0.007
+## cantidad_insumo_2                   0.178        0.213                0.211
+##                      volumen_lote duracion_proceso cantidad_insumo_1
+## costo_transformacion       -0.350            0.220            -0.031
+## costo_insumo               -0.294           -0.087             0.134
+## costo_unitario_total       -0.384            0.172             0.007
+## volumen_lote                1.000            0.662             0.607
+## duracion_proceso            0.662            1.000             0.670
+## cantidad_insumo_1           0.607            0.670             1.000
+## cantidad_insumo_2           0.093            0.339             0.367
+##                      cantidad_insumo_2
+## costo_transformacion             0.178
+## costo_insumo                     0.213
+## costo_unitario_total             0.211
+## volumen_lote                     0.093
+## duracion_proceso                 0.339
+## cantidad_insumo_1                0.367
+## cantidad_insumo_2                1.000</code></pre>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="eda.html#cb45-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb45-2"><a href="eda.html#cb45-2" tabindex="-1"></a>  <span class="fu">select</span>(costo_transformacion, costo_insumo, costo_unitario_total,</span>
+<span id="cb45-3"><a href="eda.html#cb45-3" tabindex="-1"></a>         volumen_lote, duracion_proceso,</span>
+<span id="cb45-4"><a href="eda.html#cb45-4" tabindex="-1"></a>         cantidad_insumo_1, cantidad_insumo_2) <span class="sc">%&gt;%</span></span>
+<span id="cb45-5"><a href="eda.html#cb45-5" tabindex="-1"></a>  <span class="fu">cor</span>(<span class="at">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>, <span class="at">method =</span> <span class="st">&quot;spearman&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb45-6"><a href="eda.html#cb45-6" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">3</span>)</span></code></pre></div>
+<pre><code>##                      costo_transformacion costo_insumo costo_unitario_total
+## costo_transformacion                1.000        0.361                0.961
+## costo_insumo                        0.361        1.000                0.547
+## costo_unitario_total                0.961        0.547                1.000
+## volumen_lote                       -0.269       -0.300               -0.318
+## duracion_proceso                    0.280       -0.031                0.222
+## cantidad_insumo_1                   0.019        0.290                0.069
+## cantidad_insumo_2                   0.264        0.248                0.288
+##                      volumen_lote duracion_proceso cantidad_insumo_1
+## costo_transformacion       -0.269            0.280             0.019
+## costo_insumo               -0.300           -0.031             0.290
+## costo_unitario_total       -0.318            0.222             0.069
+## volumen_lote                1.000            0.780             0.685
+## duracion_proceso            0.780            1.000             0.696
+## cantidad_insumo_1           0.685            0.696             1.000
+## cantidad_insumo_2           0.153            0.304             0.287
+##                      cantidad_insumo_2
+## costo_transformacion             0.264
+## costo_insumo                     0.248
+## costo_unitario_total             0.288
+## volumen_lote                     0.153
+## duracion_proceso                 0.304
+## cantidad_insumo_1                0.287
+## cantidad_insumo_2                1.000</code></pre>
+<p>Las matrices de correlación se presentan en paralelo (Pearson y Spearman) siguiendo la recomendación metodológica de distinguir asociaciones lineales de asociaciones monótonas. Las correlaciones altas entre pares de predictoras deben considerarse en el capítulo de inferencia para evitar problemas de multicolinealidad.</p>
+<p><strong>Ejercicio.</strong> Construir los diagramas de dispersión para <code>costo_insumo</code> y <code>costo_unitario_total</code> frente a las cuatro predictoras numéricas, e interpretar las asociaciones observadas con apoyo en las matrices de correlación.</p>
+</div>
+</div>
+<div id="análisis-bivariado-variables-respuesta-vs-predictoras-categóricas" class="section level2 hasAnchor" number="6.6">
+<h2><span class="header-section-number">6.6</span> Análisis bivariado: variables respuesta vs predictoras categóricas<a href="eda.html#an%C3%A1lisis-bivariado-variables-respuesta-vs-predictoras-categ%C3%B3ricas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="tablas-resumen-por-tipo-de-equipo" class="section level3 hasAnchor" number="6.6.1">
+<h3><span class="header-section-number">6.6.1</span> Tablas resumen por tipo de equipo<a href="eda.html#tablas-resumen-por-tipo-de-equipo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="eda.html#cb47-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb47-2"><a href="eda.html#cb47-2" tabindex="-1"></a>  <span class="fu">group_by</span>(tipo_equipo) <span class="sc">%&gt;%</span></span>
+<span id="cb47-3"><a href="eda.html#cb47-3" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb47-4"><a href="eda.html#cb47-4" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(costo_transformacion),</span>
+<span id="cb47-5"><a href="eda.html#cb47-5" tabindex="-1"></a>    <span class="at">media =</span> <span class="fu">mean</span>(costo_transformacion),</span>
+<span id="cb47-6"><a href="eda.html#cb47-6" tabindex="-1"></a>    <span class="at">ds =</span> <span class="fu">sd</span>(costo_transformacion),</span>
+<span id="cb47-7"><a href="eda.html#cb47-7" tabindex="-1"></a>    <span class="st">`</span><span class="at">50%</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">median</span>(costo_transformacion),</span>
+<span id="cb47-8"><a href="eda.html#cb47-8" tabindex="-1"></a>    <span class="at">minimo =</span> <span class="fu">min</span>(costo_transformacion),</span>
+<span id="cb47-9"><a href="eda.html#cb47-9" tabindex="-1"></a>    <span class="at">maximo =</span> <span class="fu">max</span>(costo_transformacion),</span>
+<span id="cb47-10"><a href="eda.html#cb47-10" tabindex="-1"></a>    <span class="at">Q1 =</span> <span class="fu">quantile</span>(costo_transformacion, <span class="fl">0.25</span>),</span>
+<span id="cb47-11"><a href="eda.html#cb47-11" tabindex="-1"></a>    <span class="at">Q3 =</span> <span class="fu">quantile</span>(costo_transformacion, <span class="fl">0.75</span>),</span>
+<span id="cb47-12"><a href="eda.html#cb47-12" tabindex="-1"></a>    <span class="at">IQR =</span> <span class="fu">IQR</span>(costo_transformacion),</span>
+<span id="cb47-13"><a href="eda.html#cb47-13" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span></span>
+<span id="cb47-14"><a href="eda.html#cb47-14" tabindex="-1"></a>  )</span></code></pre></div>
+<pre><code>## # A tibble: 4 × 10
+##   tipo_equipo     n media    ds `50%` minimo maximo    Q1    Q3   IQR
+##   &lt;fct&gt;       &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 A1            287 33.0  12.7  30.4    5.09   92.2 25.3   38.3 13.0 
+## 2 B2             45 29.9  11.2  28.9   12.0    75.7 22.3   33.1 10.9 
+## 3 C3              8 64.4  19.2  58.8   39.7    97.2 51.8   75.6 23.8 
+## 4 D4             55  8.82  3.54  8.46   2.77   22.0  6.03  10.9  4.83</code></pre>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="eda.html#cb49-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb49-2"><a href="eda.html#cb49-2" tabindex="-1"></a>  <span class="fu">group_by</span>(tipo_equipo) <span class="sc">%&gt;%</span></span>
+<span id="cb49-3"><a href="eda.html#cb49-3" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb49-4"><a href="eda.html#cb49-4" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(costo_insumo),</span>
+<span id="cb49-5"><a href="eda.html#cb49-5" tabindex="-1"></a>    <span class="at">media =</span> <span class="fu">mean</span>(costo_insumo),</span>
+<span id="cb49-6"><a href="eda.html#cb49-6" tabindex="-1"></a>    <span class="at">ds =</span> <span class="fu">sd</span>(costo_insumo),</span>
+<span id="cb49-7"><a href="eda.html#cb49-7" tabindex="-1"></a>    <span class="st">`</span><span class="at">50%</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">median</span>(costo_insumo),</span>
+<span id="cb49-8"><a href="eda.html#cb49-8" tabindex="-1"></a>    <span class="at">minimo =</span> <span class="fu">min</span>(costo_insumo),</span>
+<span id="cb49-9"><a href="eda.html#cb49-9" tabindex="-1"></a>    <span class="at">maximo =</span> <span class="fu">max</span>(costo_insumo),</span>
+<span id="cb49-10"><a href="eda.html#cb49-10" tabindex="-1"></a>    <span class="at">Q1 =</span> <span class="fu">quantile</span>(costo_insumo, <span class="fl">0.25</span>),</span>
+<span id="cb49-11"><a href="eda.html#cb49-11" tabindex="-1"></a>    <span class="at">Q3 =</span> <span class="fu">quantile</span>(costo_insumo, <span class="fl">0.75</span>),</span>
+<span id="cb49-12"><a href="eda.html#cb49-12" tabindex="-1"></a>    <span class="at">IQR =</span> <span class="fu">IQR</span>(costo_insumo),</span>
+<span id="cb49-13"><a href="eda.html#cb49-13" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span></span>
+<span id="cb49-14"><a href="eda.html#cb49-14" tabindex="-1"></a>  )</span></code></pre></div>
+<pre><code>## # A tibble: 4 × 10
+##   tipo_equipo     n media    ds `50%` minimo maximo    Q1    Q3   IQR
+##   &lt;fct&gt;       &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 A1            287  5.17  3.90  4.30 0.105    36.7  2.77  6.41  3.64
+## 2 B2             45  4.99  3.26  4.51 0.552    15.2  3.18  5.67  2.49
+## 3 C3              8 11.3   6.10 11.4  2.40     18.2  7.31 16.4   9.05
+## 4 D4             55  3.58  6.36  1.64 0.0137   46.2  1.13  4.23  3.10</code></pre>
+</div>
+<div id="boxplots-por-tipo-de-equipo" class="section level3 hasAnchor" number="6.6.2">
+<h3><span class="header-section-number">6.6.2</span> Boxplots por tipo de equipo<a href="eda.html#boxplots-por-tipo-de-equipo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="eda.html#cb51-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb51-2"><a href="eda.html#cb51-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> tipo_equipo, <span class="at">y =</span> costo_transformacion)) <span class="sc">+</span></span>
+<span id="cb51-3"><a href="eda.html#cb51-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#87CEFA&quot;</span>, <span class="at">outlier.colour =</span> <span class="st">&quot;red&quot;</span>, <span class="at">outlier.shape =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb51-4"><a href="eda.html#cb51-4" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">shape =</span> <span class="dv">18</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">&quot;darkblue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb51-5"><a href="eda.html#cb51-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Tipo de equipo&quot;</span>,</span>
+<span id="cb51-6"><a href="eda.html#cb51-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Costo de transformación (UM/unidad)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb51-7"><a href="eda.html#cb51-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb51-8"><a href="eda.html#cb51-8" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Costo de transformación por tipo de equipo&quot;</span>)</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box-ct-te-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="eda.html#cb52-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb52-2"><a href="eda.html#cb52-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> tipo_equipo, <span class="at">y =</span> costo_insumo)) <span class="sc">+</span></span>
+<span id="cb52-3"><a href="eda.html#cb52-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#b2df8a&quot;</span>, <span class="at">outlier.colour =</span> <span class="st">&quot;red&quot;</span>, <span class="at">outlier.shape =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb52-4"><a href="eda.html#cb52-4" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">shape =</span> <span class="dv">18</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">&quot;darkgreen&quot;</span>) <span class="sc">+</span></span>
+<span id="cb52-5"><a href="eda.html#cb52-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Tipo de equipo&quot;</span>,</span>
+<span id="cb52-6"><a href="eda.html#cb52-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Costo de insumo (UM/unidad)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb52-7"><a href="eda.html#cb52-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb52-8"><a href="eda.html#cb52-8" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Costo de insumo por tipo de equipo&quot;</span>)</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box-ci-te-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="eda.html#cb53-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb53-2"><a href="eda.html#cb53-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> modalidad_proceso, <span class="at">y =</span> costo_unitario_total)) <span class="sc">+</span></span>
+<span id="cb53-3"><a href="eda.html#cb53-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#bcbddc&quot;</span>, <span class="at">outlier.colour =</span> <span class="st">&quot;red&quot;</span>, <span class="at">outlier.shape =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb53-4"><a href="eda.html#cb53-4" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">shape =</span> <span class="dv">18</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">&quot;#4d004b&quot;</span>) <span class="sc">+</span></span>
+<span id="cb53-5"><a href="eda.html#cb53-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Modalidad de proceso&quot;</span>,</span>
+<span id="cb53-6"><a href="eda.html#cb53-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Costo unitario total (UM/unidad)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb53-7"><a href="eda.html#cb53-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb53-8"><a href="eda.html#cb53-8" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Costo unitario total por modalidad de proceso&quot;</span>)</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box-ctot-mod-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<p><strong>Ejercicio.</strong> Replicar el análisis bivariado anterior para las variables categóricas <code>categoria_producto</code>, <code>num_insumos</code>, <code>insumo_1</code> e <code>insumo_2</code>, e interpretar los patrones observados con respecto a las tres variables respuesta.</p>
+</div>
+</div>
+<div id="variables-derivadas" class="section level2 hasAnchor" number="6.7">
+<h2><span class="header-section-number">6.7</span> Variables derivadas<a href="eda.html#variables-derivadas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Se construye la variable derivada <code>velocidad_produccion</code> como el cociente entre <code>volumen_lote</code> y <code>duracion_proceso</code>, expresada en unidades por hora. Esta métrica resume la productividad del proceso por orden y se incluye aquí porque su interpretación requiere haber analizado antes las dos variables que la componen.</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="eda.html#cb54-1" tabindex="-1"></a>datos <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb54-2"><a href="eda.html#cb54-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">velocidad_produccion =</span> volumen_lote <span class="sc">/</span> duracion_proceso)</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="eda.html#cb55-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb55-2"><a href="eda.html#cb55-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb55-3"><a href="eda.html#cb55-3" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(velocidad_produccion),</span>
+<span id="cb55-4"><a href="eda.html#cb55-4" tabindex="-1"></a>    <span class="at">media =</span> <span class="fu">mean</span>(velocidad_produccion),</span>
+<span id="cb55-5"><a href="eda.html#cb55-5" tabindex="-1"></a>    <span class="at">ds =</span> <span class="fu">sd</span>(velocidad_produccion),</span>
+<span id="cb55-6"><a href="eda.html#cb55-6" tabindex="-1"></a>    <span class="st">`</span><span class="at">50%</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">median</span>(velocidad_produccion),</span>
+<span id="cb55-7"><a href="eda.html#cb55-7" tabindex="-1"></a>    <span class="at">minimo =</span> <span class="fu">min</span>(velocidad_produccion),</span>
+<span id="cb55-8"><a href="eda.html#cb55-8" tabindex="-1"></a>    <span class="at">maximo =</span> <span class="fu">max</span>(velocidad_produccion),</span>
+<span id="cb55-9"><a href="eda.html#cb55-9" tabindex="-1"></a>    <span class="at">Q1 =</span> <span class="fu">quantile</span>(velocidad_produccion, <span class="fl">0.25</span>),</span>
+<span id="cb55-10"><a href="eda.html#cb55-10" tabindex="-1"></a>    <span class="at">Q3 =</span> <span class="fu">quantile</span>(velocidad_produccion, <span class="fl">0.75</span>),</span>
+<span id="cb55-11"><a href="eda.html#cb55-11" tabindex="-1"></a>    <span class="at">IQR =</span> <span class="fu">IQR</span>(velocidad_produccion)</span>
+<span id="cb55-12"><a href="eda.html#cb55-12" tabindex="-1"></a>  ) <span class="ot">-&gt;</span> resumen_vp</span>
+<span id="cb55-13"><a href="eda.html#cb55-13" tabindex="-1"></a>resumen_vp</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 9
+##       n media    ds `50%` minimo maximo    Q1    Q3   IQR
+##   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1   395  27.4  20.0  21.7   5.54   187.  16.6  27.1  10.5</code></pre>
+<p>La velocidad de producción media es de 27.4 unidades/hora, con un valor 50% de 21.7 unidades/hora y un rango entre 5.5 y 186.9. Esta variable se utilizará en el capítulo de análisis inferencial para evaluar su asociación con el costo de transformación como proxy de eficiencia del proceso.</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="eda.html#cb57-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb57-2"><a href="eda.html#cb57-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> velocidad_produccion)) <span class="sc">+</span></span>
+<span id="cb57-3"><a href="eda.html#cb57-3" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
+<span id="cb57-4"><a href="eda.html#cb57-4" tabindex="-1"></a>                 <span class="at">bins =</span> <span class="dv">30</span>,</span>
+<span id="cb57-5"><a href="eda.html#cb57-5" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">&quot;#ff7f0e&quot;</span>,</span>
+<span id="cb57-6"><a href="eda.html#cb57-6" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb57-7"><a href="eda.html#cb57-7" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb57-8"><a href="eda.html#cb57-8" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">&quot;#d95f02&quot;</span>, <span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb57-9"><a href="eda.html#cb57-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Velocidad de producción (unidades/hora)&quot;</span>,</span>
+<span id="cb57-10"><a href="eda.html#cb57-10" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Densidad&quot;</span>) <span class="sc">+</span></span>
+<span id="cb57-11"><a href="eda.html#cb57-11" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb57-12"><a href="eda.html#cb57-12" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Distribución de la velocidad de producción&quot;</span>)</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/hist-vp-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="diccionario-de-campos.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="pruebas-de-hipótesis-sin-desarrollar.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "serif",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": {},
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  },
+  "toolbar": {
+    "position": "static"
+  }
+});
+});
+</script>
+
+</body>
+
+</html>

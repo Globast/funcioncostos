@@ -1,63 +1,562 @@
-# Análisis Exploratorio
+# Análisis Exploratorio de Datos {#eda}
 
-prueba
-## Tabla descriptiva
+El Análisis Exploratorio de Datos (EDA) tiene como propósito describir el comportamiento de las variables del estudio mediante resúmenes numéricos y representaciones gráficas, identificar patrones de variabilidad, detectar posibles valores atípicos y formular hipótesis que orienten el análisis inferencial posterior. En este capítulo se analizan las variables respuesta (`costo_transformacion`, `costo_insumo` y su agregado `costo_unitario_total`) y las variables predictoras del dataset depurado en el capítulo de metodología.
 
-```{r tabla-descriptiva}
-tabla_descriptiva <- datos |>
-  dplyr::select(where(is.numeric)) |>
-  summary()
+## Carga del dataset analítico
 
-tabla_descriptiva
+Se carga el dataset depurado y con tipos ajustados. El archivo RDS preserva los factores, el factor ordenado `num_insumos` y la recodificación de `insumo_2`, de modo que este capítulo puede ejecutarse de forma autónoma.
+
+```{r eda-setup, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(patchwork)
+library(gridExtra)
+library(knitr)
+library(kableExtra)
+
+datos <- readRDS("data/data_costos_limpio.rds")
 ```
 
-## Promedios por grupos
-
-Si existe la variable `cyl`, se construye una tabla de medias por grupo.
-
-```{r medias-grupo}
-if ("cyl" %in% names(datos) && "mpg" %in% names(datos)) {
-  tabla_mpg <- datos |>
-    dplyr::group_by(cyl) |>
-    dplyr::summarise(
-      n = dplyr::n(),
-      media_mpg = mean(mpg, na.rm = TRUE),
-      sd_mpg = sd(mpg, na.rm = TRUE)
-    )
-
-  knitr::kable(tabla_mpg, caption = "Resumen de mpg por número de cilindros.") |>
-    kableExtra::kable_styling(full_width = FALSE)
-}
+```{r eda-dims, echo=FALSE}
+n_obs <- nrow(datos)
+n_vars <- ncol(datos)
 ```
 
-## Histograma
+El dataset analítico contiene `r n_obs` órdenes de producción y `r n_vars` variables.
 
-```{r histograma, fig.cap="Distribución de una variable numérica seleccionada."}
-var_num <- names(datos)[sapply(datos, is.numeric)][1]
+## Análisis univariado de las variables respuesta
 
-ggplot(datos, aes(x = .data[[var_num]])) +
-  geom_histogram(bins = 12) +
-  labs(
-    title = paste("Histograma de", var_num),
-    x = var_num,
-    y = "Frecuencia"
-  ) +
-  theme_minimal()
+Las tres variables respuesta del estudio son `costo_transformacion` (costo de conversión por unidad producida), `costo_insumo` (costo de materias primas por unidad producida) y su agregado `costo_unitario_total`. Se analizan en paralelo porque responden a lógicas operativas distintas: el costo de transformación refleja eficiencia de máquina y proceso, mientras que el costo de insumo refleja decisiones de formulación y consumo de materias primas.
+
+```{r costo-total-derivado}
+datos <- datos %>%
+  mutate(costo_unitario_total = costo_transformacion + costo_insumo)
 ```
 
-## Diagrama de dispersión
+### costo_transformacion
 
-```{r dispersion, fig.cap="Relación entre dos variables numéricas."}
-vars_num <- names(datos)[sapply(datos, is.numeric)]
+```{r resumen-ct, echo=TRUE}
+datos %>%
+  summarise(
+    n       = length(costo_transformacion),
+    media   = mean(costo_transformacion),
+    ds      = sd(costo_transformacion),
+    `50%`   = median(costo_transformacion),
+    minimo  = min(costo_transformacion),
+    maximo  = max(costo_transformacion),
+    Q1      = quantile(costo_transformacion, 0.25),
+    Q3      = quantile(costo_transformacion, 0.75),
+    IQR     = IQR(costo_transformacion)
+  ) -> resumen_ct
+resumen_ct
+```
 
-if (length(vars_num) >= 2) {
-  ggplot(datos, aes(x = .data[[vars_num[1]]], y = .data[[vars_num[2]]])) +
-    geom_point() +
-    labs(
-      title = paste("Dispersión entre", vars_num[1], "y", vars_num[2]),
-      x = vars_num[1],
-      y = vars_num[2]
-    ) +
-    theme_minimal()
-}
+```{r resumen-ct-calc, echo=FALSE}
+ct_media   <- resumen_ct$media
+ct_ds      <- resumen_ct$ds
+ct_med     <- resumen_ct$`50%`
+ct_min     <- resumen_ct$minimo
+ct_max     <- resumen_ct$maximo
+ct_iqr     <- resumen_ct$IQR
+ct_cv      <- ct_ds / ct_media * 100
+```
+
+La variable `costo_transformacion` se analizó a partir de `r n_obs` órdenes de producción. Se obtuvo un costo medio de conversión por unidad de `r round(ct_media, 2)` UM/unidad (DS = `r round(ct_ds, 2)` UM/unidad), con un coeficiente de variación de `r round(ct_cv, 1)`%. El 50% de las órdenes presenta un costo de conversión por debajo de `r round(ct_med, 2)` UM/unidad. El mínimo registrado fue de `r round(ct_min, 2)` UM/unidad y el máximo alcanzó `r round(ct_max, 2)` UM/unidad, con un rango intercuartílico de `r round(ct_iqr, 2)` UM/unidad, lo que indica una dispersión considerable entre órdenes.
+
+```{r hist-ct, fig.width=9, fig.height=4.5}
+datos %>%
+  ggplot(aes(x = costo_transformacion)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 30,
+                 fill = "#2c7fb8",
+                 color = "white",
+                 alpha = 0.6) +
+  geom_density(color = "darkblue", linewidth = 1.2) +
+  labs(x = "Costo de transformación (UM/unidad)",
+       y = "Densidad") +
+  theme_bw() +
+  facet_grid(. ~ "Distribución del costo de transformación")
+```
+
+```{r box-ct, fig.width=7, fig.height=4}
+datos %>%
+  ggplot(aes(x = "", y = costo_transformacion)) +
+  geom_boxplot(fill = "#a6cee3", color = "#1f78b4", outlier.color = "red") +
+  stat_summary(fun = mean, geom = "point", shape = 20, size = 3, color = "black") +
+  labs(x = "",
+       y = "Costo de transformación (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Boxplot del costo de transformación")
+```
+
+El histograma y el boxplot evidencian una distribución asimétrica hacia valores altos, con presencia de órdenes extremas que se destacan sobre el bigote superior. La distancia entre la media y el 50% sugiere que la media está influida por la cola derecha, por lo que los análisis inferenciales posteriores deben contemplar transformaciones o pruebas robustas.
+
+### costo_insumo
+
+```{r resumen-ci, echo=TRUE}
+datos %>%
+  summarise(
+    n       = length(costo_insumo),
+    media   = mean(costo_insumo),
+    ds      = sd(costo_insumo),
+    `50%`   = median(costo_insumo),
+    minimo  = min(costo_insumo),
+    maximo  = max(costo_insumo),
+    Q1      = quantile(costo_insumo, 0.25),
+    Q3      = quantile(costo_insumo, 0.75),
+    IQR     = IQR(costo_insumo)
+  ) -> resumen_ci
+resumen_ci
+```
+
+```{r resumen-ci-calc, echo=FALSE}
+ci_media  <- resumen_ci$media
+ci_ds     <- resumen_ci$ds
+ci_med    <- resumen_ci$`50%`
+ci_min    <- resumen_ci$minimo
+ci_max    <- resumen_ci$maximo
+ci_iqr    <- resumen_ci$IQR
+ci_cv     <- ci_ds / ci_media * 100
+```
+
+El costo de insumo promedio es de `r round(ci_media, 2)` UM/unidad (DS = `r round(ci_ds, 2)` UM/unidad), con un coeficiente de variación de `r round(ci_cv, 1)`%. El 50% de las órdenes tiene un costo de insumo por debajo de `r round(ci_med, 2)` UM/unidad, con un mínimo de `r round(ci_min, 2)` y un máximo de `r round(ci_max, 2)` UM/unidad. El rango intercuartílico es de `r round(ci_iqr, 2)` UM/unidad.
+
+```{r hist-box-ci, fig.width=11, fig.height=4.5}
+p_hist_ci <- datos %>%
+  ggplot(aes(x = costo_insumo)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 30,
+                 fill = "#2ca02c",
+                 color = "white",
+                 alpha = 0.6) +
+  geom_density(color = "darkgreen", linewidth = 1.2) +
+  labs(x = "Costo de insumo (UM/unidad)", y = "Densidad") +
+  theme_bw() +
+  facet_grid(. ~ "Distribución del costo de insumo")
+
+p_box_ci <- datos %>%
+  ggplot(aes(x = "", y = costo_insumo)) +
+  geom_boxplot(fill = "#b2df8a", color = "#33a02c", outlier.color = "red") +
+  stat_summary(fun = mean, geom = "point", shape = 20, size = 3, color = "black") +
+  labs(x = "", y = "Costo de insumo (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Boxplot del costo de insumo")
+
+p_hist_ci + p_box_ci
+```
+
+### costo_unitario_total
+
+La variable `costo_unitario_total` se deriva como la suma de `costo_transformacion` y `costo_insumo`, y representa el costo total por unidad de producto conforme a la definición del ERP.
+
+```{r resumen-ctot, echo=TRUE}
+datos %>%
+  summarise(
+    n       = length(costo_unitario_total),
+    media   = mean(costo_unitario_total),
+    ds      = sd(costo_unitario_total),
+    `50%`   = median(costo_unitario_total),
+    minimo  = min(costo_unitario_total),
+    maximo  = max(costo_unitario_total),
+    Q1      = quantile(costo_unitario_total, 0.25),
+    Q3      = quantile(costo_unitario_total, 0.75),
+    IQR     = IQR(costo_unitario_total)
+  ) -> resumen_ctot
+resumen_ctot
+```
+
+```{r resumen-ctot-calc, echo=FALSE}
+cu_media  <- resumen_ctot$media
+cu_ds     <- resumen_ctot$ds
+cu_med    <- resumen_ctot$`50%`
+cu_min    <- resumen_ctot$minimo
+cu_max    <- resumen_ctot$maximo
+cu_iqr    <- resumen_ctot$IQR
+cu_cv     <- cu_ds / cu_media * 100
+
+prop_ct <- round(ct_media / cu_media * 100, 1)
+prop_ci <- round(ci_media / cu_media * 100, 1)
+```
+
+El costo unitario total promedio es de `r round(cu_media, 2)` UM/unidad (DS = `r round(cu_ds, 2)`), con un coeficiente de variación de `r round(cu_cv, 1)`%. De este promedio, el `r prop_ct`% corresponde al costo de transformación y el `r prop_ci`% al costo de insumo. El 50% de las órdenes presenta un costo unitario total por debajo de `r round(cu_med, 2)` UM/unidad, con un rango entre `r round(cu_min, 2)` y `r round(cu_max, 2)`.
+
+```{r hist-box-ctot, fig.width=11, fig.height=4.5}
+p_hist_ct <- datos %>%
+  ggplot(aes(x = costo_unitario_total)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 30,
+                 fill = "#8856a7",
+                 color = "white",
+                 alpha = 0.6) +
+  geom_density(color = "#4d004b", linewidth = 1.2) +
+  labs(x = "Costo unitario total (UM/unidad)", y = "Densidad") +
+  theme_bw() +
+  facet_grid(. ~ "Distribución del costo unitario total")
+
+p_box_ct <- datos %>%
+  ggplot(aes(x = "", y = costo_unitario_total)) +
+  geom_boxplot(fill = "#bcbddc", color = "#756bb1", outlier.color = "red") +
+  stat_summary(fun = mean, geom = "point", shape = 20, size = 3, color = "black") +
+  labs(x = "", y = "Costo unitario total (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Boxplot del costo unitario total")
+
+p_hist_ct + p_box_ct
+```
+
+El costo unitario total hereda la asimetría de sus dos componentes. La estructura de costos está dominada por el componente de transformación, que representa aproximadamente `r prop_ct`% del costo total promedio, frente al `r prop_ci`% del costo de insumo.
+
+## Análisis univariado de variables numéricas predictoras
+
+Las variables numéricas predictoras son `volumen_lote`, `duracion_proceso`, `cantidad_insumo_1` y `cantidad_insumo_2`. Para las cantidades de insumo, los estadísticos descriptivos se calculan condicionando sobre la presencia efectiva del insumo correspondiente, conforme a la advertencia estructural documentada en el capítulo de metodología.
+
+```{r resumen-num-predictoras}
+datos %>%
+  summarise(
+    n = length(volumen_lote),
+    media = mean(volumen_lote),
+    ds = sd(volumen_lote),
+    `50%` = median(volumen_lote),
+    minimo = min(volumen_lote),
+    maximo = max(volumen_lote),
+    Q1 = quantile(volumen_lote, 0.25),
+    Q3 = quantile(volumen_lote, 0.75),
+    IQR = IQR(volumen_lote)
+  ) %>%
+  mutate(variable = "volumen_lote") -> var_num_vol
+
+datos %>%
+  summarise(
+    n = length(duracion_proceso),
+    media = mean(duracion_proceso),
+    ds = sd(duracion_proceso),
+    `50%` = median(duracion_proceso),
+    minimo = min(duracion_proceso),
+    maximo = max(duracion_proceso),
+    Q1 = quantile(duracion_proceso, 0.25),
+    Q3 = quantile(duracion_proceso, 0.75),
+    IQR = IQR(duracion_proceso)
+  ) %>%
+  mutate(variable = "duracion_proceso") -> var_num_dur
+
+datos %>%
+  filter(num_insumos >= 1) %>%
+  summarise(
+    n = length(cantidad_insumo_1),
+    media = mean(cantidad_insumo_1),
+    ds = sd(cantidad_insumo_1),
+    `50%` = median(cantidad_insumo_1),
+    minimo = min(cantidad_insumo_1),
+    maximo = max(cantidad_insumo_1),
+    Q1 = quantile(cantidad_insumo_1, 0.25),
+    Q3 = quantile(cantidad_insumo_1, 0.75),
+    IQR = IQR(cantidad_insumo_1)
+  ) %>%
+  mutate(variable = "cantidad_insumo_1") -> var_num_ci1
+
+datos %>%
+  filter(num_insumos == 2) %>%
+  summarise(
+    n = length(cantidad_insumo_2),
+    media = mean(cantidad_insumo_2),
+    ds = sd(cantidad_insumo_2),
+    `50%` = median(cantidad_insumo_2),
+    minimo = min(cantidad_insumo_2),
+    maximo = max(cantidad_insumo_2),
+    Q1 = quantile(cantidad_insumo_2, 0.25),
+    Q3 = quantile(cantidad_insumo_2, 0.75),
+    IQR = IQR(cantidad_insumo_2)
+  ) %>%
+  mutate(variable = "cantidad_insumo_2") -> var_num_ci2
+
+bind_rows(var_num_vol, var_num_dur, var_num_ci1, var_num_ci2) %>%
+  select(variable, everything())
+```
+
+```{r box-num-predictoras, fig.width=11, fig.height=7}
+p_vol <- datos %>%
+  ggplot(aes(x = "", y = volumen_lote)) +
+  geom_boxplot(fill = "#1f77b4", alpha = 0.7) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 4, color = "black") +
+  labs(title = "Distribución del volumen de lote", y = "Unidades", x = "") +
+  theme_bw()
+
+p_dur <- datos %>%
+  ggplot(aes(x = "", y = duracion_proceso)) +
+  geom_boxplot(fill = "#2ca02c", alpha = 0.7) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 4, color = "black") +
+  labs(title = "Distribución de la duración de proceso", y = "Horas", x = "") +
+  theme_bw()
+
+p_ci1 <- datos %>%
+  filter(num_insumos >= 1) %>%
+  ggplot(aes(x = "", y = cantidad_insumo_1)) +
+  geom_boxplot(fill = "#ff7f0e", alpha = 0.7) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 4, color = "black") +
+  labs(title = "Cantidad de insumo 1 (órdenes con insumo)",
+       y = "Litros equivalentes", x = "") +
+  theme_bw()
+
+p_ci2 <- datos %>%
+  filter(num_insumos == 2) %>%
+  ggplot(aes(x = "", y = cantidad_insumo_2)) +
+  geom_boxplot(fill = "#9467bd", alpha = 0.7) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 4, color = "black") +
+  labs(title = "Cantidad de insumo 2 (órdenes con segundo insumo)",
+       y = "Litros equivalentes", x = "") +
+  theme_bw()
+
+(p_vol + p_dur) / (p_ci1 + p_ci2)
+```
+
+La interpretación detallada de cada distribución queda como ejercicio del lector. Los puntos clave a destacar son la amplitud de rango de `volumen_lote`, la presencia de colas en `duracion_proceso`, y la heterogeneidad de escala en las cantidades de insumo, consistente con la advertencia del capítulo de metodología sobre la posible diferencia de unidades entre tipos de insumo.
+
+## Análisis univariado de variables categóricas predictoras
+
+```{r tabla-categoricas}
+vars_cat <- c("tipo_equipo", "equipo_id", "categoria_producto",
+              "modalidad_proceso", "num_insumos", "insumo_1", "insumo_2")
+
+tabla_cat <- map_dfr(vars_cat, function(v) {
+  datos %>%
+    count(.data[[v]], name = "Frecuencia") %>%
+    mutate(
+      Porcentaje = round(Frecuencia / sum(Frecuencia) * 100, 2),
+      Variable = v,
+      Categoria = as.character(.data[[v]])
+    ) %>%
+    select(Variable, Categoria, Frecuencia, Porcentaje)
+})
+
+tabla_cat
+```
+
+```{r freq-tipo-equipo-calc, echo=FALSE}
+freq_te <- tabla_cat %>% filter(Variable == "tipo_equipo") %>% arrange(desc(Frecuencia))
+te_dom_cat <- freq_te$Categoria[1]
+te_dom_pct <- freq_te$Porcentaje[1]
+n_niveles_equipo <- datos %>% distinct(equipo_id) %>% nrow()
+n_niveles_cat   <- datos %>% distinct(categoria_producto) %>% nrow()
+```
+
+El tipo de equipo dominante es `r te_dom_cat`, que concentra el `r te_dom_pct`% de las órdenes. La variable `equipo_id` tiene `r n_niveles_equipo` niveles distintos y `categoria_producto` tiene `r n_niveles_cat` niveles, lo cual exigirá tratamiento cuidadoso en los análisis inferenciales posteriores para evitar celdas con pocas observaciones.
+
+```{r bar-tipo-equipo, fig.width=8, fig.height=4.5}
+tabla_te <- tabla_cat %>%
+  filter(Variable == "tipo_equipo") %>%
+  mutate(Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)"))
+
+tabla_te %>%
+  ggplot(aes(x = Categoria, y = Frecuencia)) +
+  geom_col(fill = "#008B8B", width = 0.6) +
+  geom_text(aes(label = Etiqueta), vjust = -0.5, size = 4) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(x = "Tipo de equipo", y = "Frecuencia (Porcentaje)") +
+  theme_bw(base_size = 13) +
+  facet_wrap(~ "Distribución de la variable tipo_equipo")
+```
+
+```{r bar-modalidad, fig.width=8, fig.height=4.5}
+tabla_mod <- tabla_cat %>%
+  filter(Variable == "modalidad_proceso") %>%
+  mutate(Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)"))
+
+tabla_mod %>%
+  ggplot(aes(x = Categoria, y = Frecuencia)) +
+  geom_col(fill = "#008B8B", width = 0.6) +
+  geom_text(aes(label = Etiqueta), vjust = -0.5, size = 4) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(x = "Modalidad de proceso", y = "Frecuencia (Porcentaje)") +
+  theme_bw(base_size = 13) +
+  facet_wrap(~ "Distribución de la variable modalidad_proceso")
+```
+
+```{r bar-num-insumos, fig.width=8, fig.height=4.5}
+tabla_ni <- tabla_cat %>%
+  filter(Variable == "num_insumos") %>%
+  mutate(Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)"))
+
+tabla_ni %>%
+  ggplot(aes(x = Categoria, y = Frecuencia)) +
+  geom_col(fill = "#008B8B", width = 0.6) +
+  geom_text(aes(label = Etiqueta), vjust = -0.5, size = 4) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(x = "Número de insumos", y = "Frecuencia (Porcentaje)") +
+  theme_bw(base_size = 13) +
+  facet_wrap(~ "Distribución de la variable num_insumos")
+```
+
+La construcción de los gráficos de barras para las variables categóricas restantes (`equipo_id`, `categoria_producto`, `insumo_1`, `insumo_2`) se deja como ejercicio, empleando el mismo patrón de `geom_col` con etiquetas.
+
+## Análisis bivariado: variables respuesta vs predictoras numéricas
+
+### Diagramas de dispersión
+
+```{r scatter-vol-ct, fig.width=9, fig.height=4.5}
+datos %>%
+  ggplot(aes(x = volumen_lote, y = costo_transformacion)) +
+  geom_point(alpha = 0.4, color = "#1E90FF") +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE, color = "red") +
+  labs(x = "Volumen de lote (unidades)",
+       y = "Costo de transformación (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Dispersión entre volumen_lote y costo_transformacion")
+```
+
+```{r scatter-dur-ct, fig.width=9, fig.height=4.5}
+datos %>%
+  ggplot(aes(x = duracion_proceso, y = costo_transformacion)) +
+  geom_point(alpha = 0.4, color = "#1E90FF") +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE, color = "red") +
+  labs(x = "Duración del proceso (horas)",
+       y = "Costo de transformación (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Dispersión entre duracion_proceso y costo_transformacion")
+```
+
+### Correlaciones
+
+```{r matriz-correlacion}
+datos %>%
+  select(costo_transformacion, costo_insumo, costo_unitario_total,
+         volumen_lote, duracion_proceso,
+         cantidad_insumo_1, cantidad_insumo_2) %>%
+  cor(use = "pairwise.complete.obs", method = "pearson") %>%
+  round(3)
+```
+
+```{r matriz-spearman}
+datos %>%
+  select(costo_transformacion, costo_insumo, costo_unitario_total,
+         volumen_lote, duracion_proceso,
+         cantidad_insumo_1, cantidad_insumo_2) %>%
+  cor(use = "pairwise.complete.obs", method = "spearman") %>%
+  round(3)
+```
+
+Las matrices de correlación se presentan en paralelo (Pearson y Spearman) siguiendo la recomendación metodológica de distinguir asociaciones lineales de asociaciones monótonas. Las correlaciones altas entre pares de predictoras deben considerarse en el capítulo de inferencia para evitar problemas de multicolinealidad.
+
+**Ejercicio.** Construir los diagramas de dispersión para `costo_insumo` y `costo_unitario_total` frente a las cuatro predictoras numéricas, e interpretar las asociaciones observadas con apoyo en las matrices de correlación.
+
+## Análisis bivariado: variables respuesta vs predictoras categóricas
+
+### Tablas resumen por tipo de equipo
+
+```{r resumen-bivariado-ct}
+datos %>%
+  group_by(tipo_equipo) %>%
+  summarise(
+    n = length(costo_transformacion),
+    media = mean(costo_transformacion),
+    ds = sd(costo_transformacion),
+    `50%` = median(costo_transformacion),
+    minimo = min(costo_transformacion),
+    maximo = max(costo_transformacion),
+    Q1 = quantile(costo_transformacion, 0.25),
+    Q3 = quantile(costo_transformacion, 0.75),
+    IQR = IQR(costo_transformacion),
+    .groups = "drop"
+  )
+```
+
+```{r resumen-bivariado-ci}
+datos %>%
+  group_by(tipo_equipo) %>%
+  summarise(
+    n = length(costo_insumo),
+    media = mean(costo_insumo),
+    ds = sd(costo_insumo),
+    `50%` = median(costo_insumo),
+    minimo = min(costo_insumo),
+    maximo = max(costo_insumo),
+    Q1 = quantile(costo_insumo, 0.25),
+    Q3 = quantile(costo_insumo, 0.75),
+    IQR = IQR(costo_insumo),
+    .groups = "drop"
+  )
+```
+
+### Boxplots por tipo de equipo
+
+```{r box-ct-te, fig.width=9, fig.height=4.5}
+datos %>%
+  ggplot(aes(x = tipo_equipo, y = costo_transformacion)) +
+  geom_boxplot(fill = "#87CEFA", outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "darkblue") +
+  labs(x = "Tipo de equipo",
+       y = "Costo de transformación (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Costo de transformación por tipo de equipo")
+```
+
+```{r box-ci-te, fig.width=9, fig.height=4.5}
+datos %>%
+  ggplot(aes(x = tipo_equipo, y = costo_insumo)) +
+  geom_boxplot(fill = "#b2df8a", outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "darkgreen") +
+  labs(x = "Tipo de equipo",
+       y = "Costo de insumo (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Costo de insumo por tipo de equipo")
+```
+
+```{r box-ctot-mod, fig.width=9, fig.height=4.5}
+datos %>%
+  ggplot(aes(x = modalidad_proceso, y = costo_unitario_total)) +
+  geom_boxplot(fill = "#bcbddc", outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "#4d004b") +
+  labs(x = "Modalidad de proceso",
+       y = "Costo unitario total (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Costo unitario total por modalidad de proceso")
+```
+
+**Ejercicio.** Replicar el análisis bivariado anterior para las variables categóricas `categoria_producto`, `num_insumos`, `insumo_1` e `insumo_2`, e interpretar los patrones observados con respecto a las tres variables respuesta.
+
+## Variables derivadas
+
+Se construye la variable derivada `velocidad_produccion` como el cociente entre `volumen_lote` y `duracion_proceso`, expresada en unidades por hora. Esta métrica resume la productividad del proceso por orden y se incluye aquí porque su interpretación requiere haber analizado antes las dos variables que la componen.
+
+```{r derivadas}
+datos <- datos %>%
+  mutate(velocidad_produccion = volumen_lote / duracion_proceso)
+```
+
+```{r resumen-vp}
+datos %>%
+  summarise(
+    n = length(velocidad_produccion),
+    media = mean(velocidad_produccion),
+    ds = sd(velocidad_produccion),
+    `50%` = median(velocidad_produccion),
+    minimo = min(velocidad_produccion),
+    maximo = max(velocidad_produccion),
+    Q1 = quantile(velocidad_produccion, 0.25),
+    Q3 = quantile(velocidad_produccion, 0.75),
+    IQR = IQR(velocidad_produccion)
+  ) -> resumen_vp
+resumen_vp
+```
+
+```{r resumen-vp-calc, echo=FALSE}
+vp_media <- resumen_vp$media
+vp_med   <- resumen_vp$`50%`
+vp_max   <- resumen_vp$maximo
+vp_min   <- resumen_vp$minimo
+```
+
+La velocidad de producción media es de `r round(vp_media, 1)` unidades/hora, con un valor 50% de `r round(vp_med, 1)` unidades/hora y un rango entre `r round(vp_min, 1)` y `r round(vp_max, 1)`. Esta variable se utilizará en el capítulo de análisis inferencial para evaluar su asociación con el costo de transformación como proxy de eficiencia del proceso.
+
+```{r hist-vp, fig.width=9, fig.height=4.5}
+datos %>%
+  ggplot(aes(x = velocidad_produccion)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 30,
+                 fill = "#ff7f0e",
+                 color = "white",
+                 alpha = 0.6) +
+  geom_density(color = "#d95f02", linewidth = 1.2) +
+  labs(x = "Velocidad de producción (unidades/hora)",
+       y = "Densidad") +
+  theme_bw() +
+  facet_grid(. ~ "Distribución de la velocidad de producción")
 ```

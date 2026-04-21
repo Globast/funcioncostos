@@ -1,4 +1,4 @@
-# Pruebas de Hipótesis
+# Pruebas de Hipótesis SIN DESARROLLAR
 
 En esta sección se presenta un ejemplo de contraste de medias. Si la base contiene las variables `mpg` y `am`, se compara el rendimiento promedio entre dos grupos.
 
