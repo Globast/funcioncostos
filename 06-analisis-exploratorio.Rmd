@@ -1055,7 +1055,7 @@ datos <- datos %>%
       function(x, y, n) {
 
         # Caso 1: solo un insumo → devolver insumo_1
-        if (n == 1 || is.na(y) || y == "" || y == "sin_segundo_insumo") {
+        if (n == 1 || is.na(y) || y == "" || y == "") {
           return(as.character(x))
         }
 
