@@ -228,10 +228,9 @@ Tras la conversión, las variables categóricas quedan representadas como factor
 
 ### Consideraciones estructurales para el análisis
 
-Antes de proceder al análisis exploratorio se documentan dos aspectos estructurales del dataset depurado que, si no se declaran explícitamente, pueden inducir interpretaciones erróneas.
+Antes de entrar al análisis exploratorio, vale la pena dejar claros algunos puntos sobre la estructura del dataset depurado, ya que pueden prestarse a malas interpretaciones.
 
-Primero, la variable `cantidad_insumo_2` reporta el valor cero cuando `num_insumos = 1`, es decir, cuando estructuralmente no existe un segundo insumo. Estos ceros no constituyen mediciones de cantidad consumida, sino indicadores de ausencia de la categoría, y deben distinguirse de los ceros que pudieran reportarse como cantidad consumida real en casos donde el insumo sí esté presente. Para los análisis posteriores, los estadísticos descriptivos sobre cantidades de insumo se calcularán condicionando sobre la presencia efectiva del insumo correspondiente.
+- La variable cantidad_insumo_2 toma el valor cero cuando num_insumos = 1. Esto significa simplemente ese insumo 2 no existe en ese caso. Son ceros “estructurales” . 
+- Los costos costo_transformacion y costo_insumo están definidos como valores monetarios por unidad de producto. Permitiendo comparar directamente entre órdenes, sin importar el tamaño del lote, ya que no requieren ajustes por escala de producción.
 
-Segundo, los costos `costo_transformacion` y `costo_insumo` se interpretan como unidades monetarias por unidad de producto producida, conforme a la definición del ERP. Esta unidad permite comparaciones directas entre órdenes de cualquier tamaño de lote, sin necesidad de transformaciones por escala de producción.
-
-El dataset analítico final está conformado por `r n_filas_final` órdenes de producción, que constituyen la base para el análisis exploratorio e inferencial desarrollado en los capítulos siguientes.
+El dataset con el que se trabajará está compuesto por r n_filas_final órdenes de producción. Sobre esta base se desarrollan los análisis exploratorios e inferenciales de los siguientes capítulos.

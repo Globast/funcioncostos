@@ -1009,10 +1009,12 @@ Recursos consumidos asumidos como merma; no se asignaron al producto conforme
 </div>
 <div id="consideraciones-estructurales-para-el-análisis" class="section level3 hasAnchor" number="4.2.5">
 <h3><span class="header-section-number">4.2.5</span> Consideraciones estructurales para el análisis<a href="metodologia.html#consideraciones-estructurales-para-el-an%C3%A1lisis" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Antes de proceder al análisis exploratorio se documentan dos aspectos estructurales del dataset depurado que, si no se declaran explícitamente, pueden inducir interpretaciones erróneas.</p>
-<p>Primero, la variable <code>cantidad_insumo_2</code> reporta el valor cero cuando <code>num_insumos = 1</code>, es decir, cuando estructuralmente no existe un segundo insumo. Estos ceros no constituyen mediciones de cantidad consumida, sino indicadores de ausencia de la categoría, y deben distinguirse de los ceros que pudieran reportarse como cantidad consumida real en casos donde el insumo sí esté presente. Para los análisis posteriores, los estadísticos descriptivos sobre cantidades de insumo se calcularán condicionando sobre la presencia efectiva del insumo correspondiente.</p>
-<p>Segundo, los costos <code>costo_transformacion</code> y <code>costo_insumo</code> se interpretan como unidades monetarias por unidad de producto producida, conforme a la definición del ERP. Esta unidad permite comparaciones directas entre órdenes de cualquier tamaño de lote, sin necesidad de transformaciones por escala de producción.</p>
-<p>El dataset analítico final está conformado por 395 órdenes de producción, que constituyen la base para el análisis exploratorio e inferencial desarrollado en los capítulos siguientes.</p>
+<p>Antes de entrar al análisis exploratorio, vale la pena dejar claros algunos puntos sobre la estructura del dataset depurado, ya que pueden prestarse a malas interpretaciones.</p>
+<ul>
+<li>La variable cantidad_insumo_2 toma el valor cero cuando num_insumos = 1. Esto significa simplemente ese insumo 2 no existe en ese caso. Son ceros “estructurales” .</li>
+<li>Los costos costo_transformacion y costo_insumo están definidos como valores monetarios por unidad de producto. Permitiendo comparar directamente entre órdenes, sin importar el tamaño del lote, ya que no requieren ajustes por escala de producción.</li>
+</ul>
+<p>El dataset con el que se trabajará está compuesto por r n_filas_final órdenes de producción. Sobre esta base se desarrollan los análisis exploratorios e inferenciales de los siguientes capítulos.</p>
 
 </div>
 </div>
