@@ -1050,12 +1050,22 @@ Es claro que el segundo insumo incrementa el consumo de materiales y el costo de
 
 datos <- datos %>%
   mutate(
-    insumo_combinado = pmap_chr(list(insumo_1, insumo_2), function(x, y) {
-      # 1. Creamos un vector con ambos insumos
-      # 2. Ordenamos alfabéticamente
-      # 3. Concatenamos con un separador
-      paste(sort(c(as.character(x), as.character(y))), collapse = " + ")
-    })
+    insumo_combinado = pmap_chr(
+      list(insumo_1, insumo_2, num_insumos),
+      function(x, y, n) {
+
+        # Caso 1: solo un insumo → devolver insumo_1
+        if (n == 1 || is.na(y) || y == "" || y == "sin_segundo_insumo") {
+          return(as.character(x))
+        }
+
+        # Caso 2: dos insumos → combinación canónica
+        # (elimina duplicados y ordena)
+        insumos <- unique(c(as.character(x), as.character(y)))
+
+        paste(sort(insumos), collapse = " + ")
+      }
+    )
   )
 ```
 
@@ -1126,7 +1136,7 @@ knitr::kable(resumen_bivariado_ci_comb,
 ```
 
 ```{r box-insumo-comb}
-datos %>%
+box_comb_insumos_ct <- datos %>%
   ggplot(aes(x = insumo_combinado, y = costo_transformacion)) +
   geom_boxplot(fill = "#2c7fb8", alpha = 0.7) +
   stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "black") +
@@ -1135,7 +1145,7 @@ datos %>%
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-datos %>%
+box_comb_insumos_ci <- datos %>%
   ggplot(aes(x = insumo_combinado, y = costo_insumo)) +
   geom_boxplot(fill = "#7fc97f", alpha = 0.7) +
   stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "black") +
@@ -1143,6 +1153,8 @@ datos %>%
        y = "Costo de insumo") +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+  box_comb_insumos_ct  + box_comb_insumos_ci
 ```
 
 **Ejercicio.** Replicar el análisis bivariado anterior para las variables categóricas `categoria_producto`, `num_insumos`, `insumo_1` e `insumo_2`, e interpretar los patrones observados con respecto a las tres variables respuesta.
