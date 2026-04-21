@@ -234,3 +234,11 @@ Antes de entrar al análisis exploratorio, vale la pena dejar claros algunos pun
 - Los costos costo_transformacion y costo_insumo están definidos como valores monetarios por unidad de producto. Permitiendo comparar directamente entre órdenes, sin importar el tamaño del lote, ya que no requieren ajustes por escala de producción.
 
 El dataset con el que se trabajará está compuesto por r n_filas_final órdenes de producción. Sobre esta base se desarrollan los análisis exploratorios e inferenciales de los siguientes capítulos.
+
+```{r conversion-tipos}
+# Para auditoría y reproducibilidad externa
+write_csv2(datos, "data/data_costos_limpio.csv")
+
+# Para cargar rápido en capítulos posteriores preservando tipos
+saveRDS(datos, "data/data_costos_limpio.rds")
+```
