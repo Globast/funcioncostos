@@ -37,8 +37,8 @@ costo_unitario_total
 análisis-univariado-de-variables-numéricas-predictoras
 análisis-univariado-de-variables-categóricas-predictoras
 análisis-bivariado-variables-respuesta-vs-predictoras-numéricas
+correlacion-pearson
 diagramas-de-dispersión
-correlaciones
 análisis-bivariado-variables-respuesta-vs-predictoras-categóricas
 tablas-resumen-por-tipo-de-equipo
 boxplots-por-tipo-de-equipo

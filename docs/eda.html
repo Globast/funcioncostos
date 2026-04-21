@@ -174,17 +174,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6.2" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-univariado-de-variables-num%C3%A9ricas-predictoras"><i class="fa fa-check"></i><b>6.2</b> Análisis univariado de variables numéricas predictoras</a></li>
 <li class="chapter" data-level="6.3" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-univariado-de-variables-categ%C3%B3ricas-predictoras"><i class="fa fa-check"></i><b>6.3</b> Análisis univariado de variables categóricas predictoras</a></li>
-<li class="chapter" data-level="6.4" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-bivariado-variables-respuesta-vs-predictoras-num%C3%A9ricas"><i class="fa fa-check"></i><b>6.4</b> Análisis bivariado: variables respuesta vs predictoras numéricas</a>
+<li class="chapter" data-level="6.4" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-bivariado-variables-respuesta-vs-predictoras-num%C3%A9ricas"><i class="fa fa-check"></i><b>6.4</b> Análisis bivariado: variables respuesta vs predictoras numéricas</a></li>
+<li class="chapter" data-level="6.5" data-path="eda.html"><a href="eda.html#correlacion-pearson"><i class="fa fa-check"></i><b>6.5</b> Correlacion Pearson</a>
 <ul>
-<li class="chapter" data-level="6.4.1" data-path="eda.html"><a href="eda.html#diagramas-de-dispersi%C3%B3n"><i class="fa fa-check"></i><b>6.4.1</b> Diagramas de dispersión</a></li>
-<li class="chapter" data-level="6.4.2" data-path="eda.html"><a href="eda.html#correlaciones"><i class="fa fa-check"></i><b>6.4.2</b> Correlaciones</a></li>
+<li class="chapter" data-level="6.5.1" data-path="eda.html"><a href="eda.html#diagramas-de-dispersi%C3%B3n"><i class="fa fa-check"></i><b>6.5.1</b> Diagramas de dispersión</a></li>
 </ul></li>
-<li class="chapter" data-level="6.5" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-bivariado-variables-respuesta-vs-predictoras-categ%C3%B3ricas"><i class="fa fa-check"></i><b>6.5</b> Análisis bivariado: variables respuesta vs predictoras categóricas</a>
+<li class="chapter" data-level="6.6" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-bivariado-variables-respuesta-vs-predictoras-categ%C3%B3ricas"><i class="fa fa-check"></i><b>6.6</b> Análisis bivariado: variables respuesta vs predictoras categóricas</a>
 <ul>
-<li class="chapter" data-level="6.5.1" data-path="eda.html"><a href="eda.html#tablas-resumen-por-tipo-de-equipo"><i class="fa fa-check"></i><b>6.5.1</b> Tablas resumen por tipo de equipo</a></li>
-<li class="chapter" data-level="6.5.2" data-path="eda.html"><a href="eda.html#boxplots-por-tipo-de-equipo"><i class="fa fa-check"></i><b>6.5.2</b> Boxplots por tipo de equipo</a></li>
+<li class="chapter" data-level="6.6.1" data-path="eda.html"><a href="eda.html#tablas-resumen-por-tipo-de-equipo"><i class="fa fa-check"></i><b>6.6.1</b> Tablas resumen por tipo de equipo</a></li>
+<li class="chapter" data-level="6.6.2" data-path="eda.html"><a href="eda.html#boxplots-por-tipo-de-equipo"><i class="fa fa-check"></i><b>6.6.2</b> Boxplots por tipo de equipo</a></li>
 </ul></li>
-<li class="chapter" data-level="6.6" data-path="eda.html"><a href="eda.html#variables-derivadas"><i class="fa fa-check"></i><b>6.6</b> Variables derivadas</a></li>
+<li class="chapter" data-level="6.7" data-path="eda.html"><a href="eda.html#variables-derivadas"><i class="fa fa-check"></i><b>6.7</b> Variables derivadas</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="pruebas-de-hipótesis-sin-desarrollar.html"><a href="pruebas-de-hipótesis-sin-desarrollar.html"><i class="fa fa-check"></i><b>7</b> Pruebas de Hipótesis SIN DESARROLLAR</a>
 <ul>
@@ -1687,69 +1687,18 @@ Cualquier modelo debe considerar tipo_equipo como variable explicativa clave, eq
 </div>
 <div id="análisis-bivariado-variables-respuesta-vs-predictoras-numéricas" class="section level2 hasAnchor" number="6.4">
 <h2><span class="header-section-number">6.4</span> Análisis bivariado: variables respuesta vs predictoras numéricas<a href="eda.html#an%C3%A1lisis-bivariado-variables-respuesta-vs-predictoras-num%C3%A9ricas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="diagramas-de-dispersión" class="section level3 hasAnchor" number="6.4.1">
-<h3><span class="header-section-number">6.4.1</span> Diagramas de dispersión<a href="eda.html#diagramas-de-dispersi%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="eda.html#cb34-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
-<span id="cb34-2"><a href="eda.html#cb34-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> volumen_lote, <span class="at">y =</span> costo_transformacion)) <span class="sc">+</span></span>
-<span id="cb34-3"><a href="eda.html#cb34-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">&quot;#1E90FF&quot;</span>) <span class="sc">+</span></span>
-<span id="cb34-4"><a href="eda.html#cb34-4" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">formula =</span> y <span class="sc">~</span> x, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
-<span id="cb34-5"><a href="eda.html#cb34-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Volumen de lote (unidades)&quot;</span>,</span>
-<span id="cb34-6"><a href="eda.html#cb34-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Costo de transformación (UM/unidad)&quot;</span>) <span class="sc">+</span></span>
-<span id="cb34-7"><a href="eda.html#cb34-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb34-8"><a href="eda.html#cb34-8" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Dispersión entre volumen_lote y costo_transformacion&quot;</span>)</span></code></pre></div>
-<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/scatter-vol-ct-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
-<p>El diagrama de dispersión revela una relación clara entre escala de producción y costo unitario de transformación.
-A medida que aumenta el volumen del lote, el costo de transformación por unidad disminuye. Este patrón es consistente con un fenómeno de economías de escala: procesos más grandes diluyen costos fijos y mejoran la eficiencia operativa.
-Sin embargo, la relación no es perfectamente lineal ni fuerte. La nube de puntos muestra una alta dispersión, especialmente en volúmenes bajos y medios. Para un mismo nivel de volumen (por ejemplo, entre 1000 y 3000 unidades), el costo puede variar ampliamente. Esto implica que el volumen explica solo una parte de la variabilidad.</p>
-<p>En los volúmenes bajos se observa mayor dispersión, aparecen costos altos (incluso superiores a 80–90), el sistema es menos eficiente y más inestable.</p>
-<p>En los volúmenes altos, los costos tienden a concentrarse en niveles bajos, la variabilidad disminuye, la operación se vuelve más predecible</p>
-<p>Este patrón sugiere heterocedasticidad: la variabilidad del costo depende del volumen.</p>
-<p>Existe una relación inversa consistente con economías de escala, pero con alta variabilidad residual.
-Esto indica que el análisis o modelado del costo debe incorporar el volumen como variable clave, pero también considerar otros factores estructurales que explican la dispersión observada.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="eda.html#cb35-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
-<span id="cb35-2"><a href="eda.html#cb35-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> duracion_proceso, <span class="at">y =</span> costo_transformacion)) <span class="sc">+</span></span>
-<span id="cb35-3"><a href="eda.html#cb35-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">&quot;#1E90FF&quot;</span>) <span class="sc">+</span></span>
-<span id="cb35-4"><a href="eda.html#cb35-4" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">formula =</span> y <span class="sc">~</span> x, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
-<span id="cb35-5"><a href="eda.html#cb35-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Duración del proceso (horas)&quot;</span>,</span>
-<span id="cb35-6"><a href="eda.html#cb35-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Costo de transformación (UM/unidad)&quot;</span>) <span class="sc">+</span></span>
-<span id="cb35-7"><a href="eda.html#cb35-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb35-8"><a href="eda.html#cb35-8" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Dispersión entre duracion_proceso y costo_transformacion&quot;</span>)</span></code></pre></div>
-<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/scatter-dur-ct-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
-<p>El diagrama muestra una relación distinta a la observada con el volumen, la pendiente es positiva, pero débil.
-A medida que aumenta la duración del proceso, el costo de transformación unitario tiende a incrementarse.</p>
-<p>La nube de puntos es ampliamente dispersa en casi todo el rango. Para duraciones similares (por ejemplo, entre 80 y 150 horas), los costos pueden variar de forma considerable. Esto indica que la duración, aunque relevante, no explica por sí sola el costo.</p>
-<p>el volumen explica eficiencia, la duración refleja esfuerzo, pero ninguno por sí solo determina el costo.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="eda.html#cb36-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
-<span id="cb36-2"><a href="eda.html#cb36-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> duracion_proceso, <span class="at">y =</span> costo_unitario_total)) <span class="sc">+</span></span>
-<span id="cb36-3"><a href="eda.html#cb36-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">&quot;#1E90FF&quot;</span>) <span class="sc">+</span></span>
-<span id="cb36-4"><a href="eda.html#cb36-4" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">formula =</span> y <span class="sc">~</span> x, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
-<span id="cb36-5"><a href="eda.html#cb36-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Duración del proceso (horas)&quot;</span>,</span>
-<span id="cb36-6"><a href="eda.html#cb36-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Costo unitario  (UM/unidad)&quot;</span>) <span class="sc">+</span></span>
-<span id="cb36-7"><a href="eda.html#cb36-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb36-8"><a href="eda.html#cb36-8" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Dispersión entre duracion_proceso y costo_unitario_total&quot;</span>)</span></code></pre></div>
-<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/scatter-dur-cut-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="eda.html#cb37-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
-<span id="cb37-2"><a href="eda.html#cb37-2" tabindex="-1"></a><span class="fu">mutate</span>(<span class="at">cantidad_total_insumo =</span> cantidad_insumo_1 <span class="sc">+</span> cantidad_insumo_2) <span class="sc">%&gt;%</span></span>
-<span id="cb37-3"><a href="eda.html#cb37-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> cantidad_total_insumo, <span class="at">y =</span> costo_unitario_total)) <span class="sc">+</span></span>
-<span id="cb37-4"><a href="eda.html#cb37-4" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">&quot;#1E90FF&quot;</span>) <span class="sc">+</span></span>
-<span id="cb37-5"><a href="eda.html#cb37-5" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">formula =</span> y <span class="sc">~</span> x, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
-<span id="cb37-6"><a href="eda.html#cb37-6" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Cantidad total de insumo&quot;</span>,</span>
-<span id="cb37-7"><a href="eda.html#cb37-7" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Costo unitario  (UM/unidad)&quot;</span>) <span class="sc">+</span></span>
-<span id="cb37-8"><a href="eda.html#cb37-8" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb37-9"><a href="eda.html#cb37-9" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Dispersión entre cantidad_total_insumo y costo_unitario_total&quot;</span>)</span></code></pre></div>
-<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/scatter-cantidad-cut-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
 </div>
-<div id="correlaciones" class="section level3 hasAnchor" number="6.4.2">
-<h3><span class="header-section-number">6.4.2</span> Correlaciones<a href="eda.html#correlaciones" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="eda.html#cb38-1" tabindex="-1"></a>matriz_correlacion <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
-<span id="cb38-2"><a href="eda.html#cb38-2" tabindex="-1"></a>  <span class="fu">select</span>(costo_transformacion, costo_insumo, costo_unitario_total,</span>
-<span id="cb38-3"><a href="eda.html#cb38-3" tabindex="-1"></a>         volumen_lote, duracion_proceso,</span>
-<span id="cb38-4"><a href="eda.html#cb38-4" tabindex="-1"></a>         cantidad_insumo_1, cantidad_insumo_2) <span class="sc">%&gt;%</span></span>
-<span id="cb38-5"><a href="eda.html#cb38-5" tabindex="-1"></a>  <span class="fu">cor</span>(<span class="at">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>, <span class="at">method =</span> <span class="st">&quot;pearson&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb38-6"><a href="eda.html#cb38-6" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">3</span>)</span>
-<span id="cb38-7"><a href="eda.html#cb38-7" tabindex="-1"></a></span>
-<span id="cb38-8"><a href="eda.html#cb38-8" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(matriz_correlacion , <span class="at">caption =</span> <span class="st">&quot;Matriz de correlación de Pearson&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb38-9"><a href="eda.html#cb38-9" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>) </span></code></pre></div>
+<div id="correlacion-pearson" class="section level2 hasAnchor" number="6.5">
+<h2><span class="header-section-number">6.5</span> Correlacion Pearson<a href="eda.html#correlacion-pearson" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="eda.html#cb34-1" tabindex="-1"></a>matriz_correlacion <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb34-2"><a href="eda.html#cb34-2" tabindex="-1"></a>  <span class="fu">select</span>(costo_transformacion, costo_insumo, costo_unitario_total,</span>
+<span id="cb34-3"><a href="eda.html#cb34-3" tabindex="-1"></a>         volumen_lote, duracion_proceso,</span>
+<span id="cb34-4"><a href="eda.html#cb34-4" tabindex="-1"></a>         cantidad_insumo_1, cantidad_insumo_2) <span class="sc">%&gt;%</span></span>
+<span id="cb34-5"><a href="eda.html#cb34-5" tabindex="-1"></a>  <span class="fu">cor</span>(<span class="at">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>, <span class="at">method =</span> <span class="st">&quot;pearson&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb34-6"><a href="eda.html#cb34-6" tabindex="-1"></a>  <span class="fu">round</span>(<span class="dv">3</span>)</span>
+<span id="cb34-7"><a href="eda.html#cb34-7" tabindex="-1"></a></span>
+<span id="cb34-8"><a href="eda.html#cb34-8" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(matriz_correlacion , <span class="at">caption =</span> <span class="st">&quot;Matriz de correlación de Pearson&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb34-9"><a href="eda.html#cb34-9" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>) </span></code></pre></div>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:matriz-correlacion">Table 6.11: </span><span id="tab:matriz-correlacion">Table 6.12: </span>Matriz de correlación de Pearson
@@ -1983,6 +1932,61 @@ El segundo insumo introduce una dinámica distinta. Sus correlaciones, aunque mo
 <p>Focalizar en el proceso de transformación. Dado su peso en el costo total, cualquier mejora en eficiencia operativa tiene un impacto directo. Esto incluye reducción de tiempos muertos, mejoras en utilización de equipos y eliminación de variabilidad innecesaria.</p>
 <p>Gestionar outliers como categoría propia. Los valores extremos no son errores aislados, son parte del sistema. Representan casos de alta complejidad o ineficiencia. Deben ser identificados, analizados y, si es posible, rediseñados. Ignorarlos distorsiona la toma de decisiones. Sistema mensual de identificación y analisis en profundidad de outlliers.</p>
 <p>El sistema ya muestra señales de eficiencia cuando opera a escala, pero pierde control en condiciones de baja producción y alta variabilidad. La oportunidad está en alinear la operación hacia volúmenes mayores, procesos estandarizados y segmentación inteligente de la producción. La producción es bajo pedido y no hay un tamaño de lote estándar, pero si la oportunidad de establecer tamaños mínimos de producción y/o una politica de precios que incentive la consolidación de pedidos.</p>
+<div id="diagramas-de-dispersión" class="section level3 hasAnchor" number="6.5.1">
+<h3><span class="header-section-number">6.5.1</span> Diagramas de dispersión<a href="eda.html#diagramas-de-dispersi%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="eda.html#cb35-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb35-2"><a href="eda.html#cb35-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> volumen_lote, <span class="at">y =</span> costo_transformacion)) <span class="sc">+</span></span>
+<span id="cb35-3"><a href="eda.html#cb35-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">&quot;#1E90FF&quot;</span>) <span class="sc">+</span></span>
+<span id="cb35-4"><a href="eda.html#cb35-4" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">formula =</span> y <span class="sc">~</span> x, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb35-5"><a href="eda.html#cb35-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Volumen de lote (unidades)&quot;</span>,</span>
+<span id="cb35-6"><a href="eda.html#cb35-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Costo de transformación (UM/unidad)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb35-7"><a href="eda.html#cb35-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb35-8"><a href="eda.html#cb35-8" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Dispersión entre volumen_lote y costo_transformacion&quot;</span>)</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/scatter-vol-ct-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<p>El diagrama de dispersión revela una relación clara entre escala de producción y costo unitario de transformación.
+A medida que aumenta el volumen del lote, el costo de transformación por unidad disminuye. Este patrón es consistente con un fenómeno de economías de escala: procesos más grandes diluyen costos fijos y mejoran la eficiencia operativa.
+Sin embargo, la relación no es perfectamente lineal ni fuerte. La nube de puntos muestra una alta dispersión, especialmente en volúmenes bajos y medios. Para un mismo nivel de volumen (por ejemplo, entre 1000 y 3000 unidades), el costo puede variar ampliamente. Esto implica que el volumen explica solo una parte de la variabilidad.</p>
+<p>En los volúmenes bajos se observa mayor dispersión, aparecen costos altos (incluso superiores a 80–90), el sistema es menos eficiente y más inestable.</p>
+<p>En los volúmenes altos, los costos tienden a concentrarse en niveles bajos, la variabilidad disminuye, la operación se vuelve más predecible</p>
+<p>Este patrón sugiere heterocedasticidad: la variabilidad del costo depende del volumen.</p>
+<p>Existe una relación inversa consistente con economías de escala, pero con alta variabilidad residual.
+Esto indica que el análisis o modelado del costo debe incorporar el volumen como variable clave, pero también considerar otros factores estructurales que explican la dispersión observada.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="eda.html#cb36-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb36-2"><a href="eda.html#cb36-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> duracion_proceso, <span class="at">y =</span> costo_transformacion)) <span class="sc">+</span></span>
+<span id="cb36-3"><a href="eda.html#cb36-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">&quot;#1E90FF&quot;</span>) <span class="sc">+</span></span>
+<span id="cb36-4"><a href="eda.html#cb36-4" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">formula =</span> y <span class="sc">~</span> x, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb36-5"><a href="eda.html#cb36-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Duración del proceso (horas)&quot;</span>,</span>
+<span id="cb36-6"><a href="eda.html#cb36-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Costo de transformación (UM/unidad)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb36-7"><a href="eda.html#cb36-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb36-8"><a href="eda.html#cb36-8" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Dispersión entre duracion_proceso y costo_transformacion&quot;</span>)</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/scatter-dur-ct-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<p>El diagrama muestra una relación distinta a la observada con el volumen, la pendiente es positiva, pero débil.
+A medida que aumenta la duración del proceso, el costo de transformación unitario tiende a incrementarse.</p>
+<p>La nube de puntos es ampliamente dispersa en casi todo el rango. Para duraciones similares (por ejemplo, entre 80 y 150 horas), los costos pueden variar de forma considerable. Esto indica que la duración, aunque relevante, no explica por sí sola el costo.</p>
+<p>el volumen explica eficiencia, la duración refleja esfuerzo, pero ninguno por sí solo determina el costo.</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="eda.html#cb37-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb37-2"><a href="eda.html#cb37-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> duracion_proceso, <span class="at">y =</span> costo_unitario_total)) <span class="sc">+</span></span>
+<span id="cb37-3"><a href="eda.html#cb37-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">&quot;#1E90FF&quot;</span>) <span class="sc">+</span></span>
+<span id="cb37-4"><a href="eda.html#cb37-4" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">formula =</span> y <span class="sc">~</span> x, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb37-5"><a href="eda.html#cb37-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Duración del proceso (horas)&quot;</span>,</span>
+<span id="cb37-6"><a href="eda.html#cb37-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Costo unitario  (UM/unidad)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb37-7"><a href="eda.html#cb37-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb37-8"><a href="eda.html#cb37-8" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Dispersión entre duracion_proceso y costo_unitario_total&quot;</span>)</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/scatter-dur-cut-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="eda.html#cb38-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb38-2"><a href="eda.html#cb38-2" tabindex="-1"></a><span class="fu">mutate</span>(<span class="at">cantidad_total_insumo =</span> cantidad_insumo_1 <span class="sc">+</span> cantidad_insumo_2) <span class="sc">%&gt;%</span></span>
+<span id="cb38-3"><a href="eda.html#cb38-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> cantidad_total_insumo, <span class="at">y =</span> costo_unitario_total)) <span class="sc">+</span></span>
+<span id="cb38-4"><a href="eda.html#cb38-4" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">&quot;#1E90FF&quot;</span>) <span class="sc">+</span></span>
+<span id="cb38-5"><a href="eda.html#cb38-5" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">formula =</span> y <span class="sc">~</span> x, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb38-6"><a href="eda.html#cb38-6" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Cantidad total de insumo&quot;</span>,</span>
+<span id="cb38-7"><a href="eda.html#cb38-7" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Costo unitario  (UM/unidad)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb38-8"><a href="eda.html#cb38-8" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb38-9"><a href="eda.html#cb38-9" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Dispersión entre cantidad_total_insumo y costo_unitario_total&quot;</span>)</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/scatter-cantidad-cut-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<p>La matriz de correlación de Pearson aplicada a estas variables ofrece una primera lectura de las relaciones.
+No obstante, al contrastar estos resultados con los gráficos de dispersión y las distribuciones observadas, se evidencia que dichas relaciones no son estrictamente lineales ni homogéneas en todo el rango.
+La presencia de asimetrías marcadas, colas largas y valores atípicos —especialmente en costos y volumen— introduce inestabilidad en los coeficientes de Pearson, que pueden subestimar o distorsionar la intensidad real de las asociaciones.
+En este contexto, variables como volumen_lote, duracion_proceso y cantidad_insumo_1 muestran patrones monótonos claros, pero no proporcionales, lo que limita la capacidad de Pearson para describirlas adecuadamente. Por esta razón, la matriz de Spearman se vuelve necesaria, ya que captura la dirección y consistencia de estas relaciones sin depender de la linealidad, proporcionando una representación más robusta del comportamiento conjunto del sistema productivo.</p>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="eda.html#cb39-1" tabindex="-1"></a>matriz_spearman <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
 <span id="cb39-2"><a href="eda.html#cb39-2" tabindex="-1"></a>  <span class="fu">select</span>(costo_transformacion, costo_insumo, costo_unitario_total,</span>
 <span id="cb39-3"><a href="eda.html#cb39-3" tabindex="-1"></a>         volumen_lote, duracion_proceso,</span>
@@ -2208,14 +2212,35 @@ cantidad_insumo_2
 </tr>
 </tbody>
 </table>
+<p>La matriz de Spearman permite observar relaciones monótonas, no necesariamente lineales. Esto es clave: aquí interesa si las variables se mueven en la misma dirección, aunque no lo hagan de forma proporcional. Al compararla con Pearson, se obtiene una visión más robusta del sistema.</p>
+<p>Lo primero que se confirma es la relación entre el costo de transformación y el costo total (0.961). Sigue siendo extremadamente alta. Esto refuerza la idea de que el costo total no es una entidad independiente, sino una extensión directa del proceso de transformación.</p>
+<p>El volumen de lote mantiene su relación negativa con los costos (-0.269 con transformación, -0.318 con costo total), aunque más débil que en Pearson. Esto es revelador: la relación no es perfectamente lineal, pero sí consistente en dirección. A mayor volumen, el costo unitario tiende a disminuir, aunque con variabilidad. Es una señal clara de economías de escala, pero con irregularidades.</p>
+<p>El cambio más interesante aparece en la relación entre volumen y duración (0.780), así como con la cantidad de insumo 1 (0.685). Estas correlaciones son más altas que en Pearson, lo que indica que la relación es monótona fuerte pero no lineal. En términos simples: cuando el volumen aumenta, la duración y el consumo también aumentan de forma consistente, aunque no en proporción constante. El sistema escala, pero no de manera uniforme.</p>
+<p>La duración del proceso también muestra una relación más clara con el costo de transformación (0.280 frente a 0.220 en Pearson). Esto sugiere que procesos más largos tienden a ser más costosos, pero la relación no es lineal. Hay tramos donde el costo crece más rápido y otros donde se estabiliza.</p>
+<p>El insumo 1 sigue sin mostrar relación relevante con los costos (0.019 con costo de transformación). Esto confirma que su variabilidad no es determinante en el costo unitario. Sin embargo, su relación con volumen y duración es fuerte, lo que lo posiciona como parte de la dinámica operativa, no económica.</p>
+<p>El insumo 2, en cambio, muestra correlaciones moderadas con varias variables, especialmente con duración (0.304) y costo total (0.288). Esto indica que su presencia introduce complejidad y está asociada a procesos más exigentes.</p>
+<p>La lectura global es que el sistema no responde a relaciones lineales simples. Las variables están conectadas por relaciones de orden: cuando una aumenta, otras tienden a aumentar o disminuir, pero no de forma proporcional. Esto explica la dispersión observada en los gráficos y refuerza la necesidad de modelos más flexibles.</p>
+<p>Análisis como gerente de costos</p>
+<p>El análisis con Spearman confirma el diagnóstico anterior, pero con una implicación operativa más fuerte: las relaciones son estables en dirección, aunque no en magnitud. Esto tiene consecuencias directas para la gestión.</p>
+<p>Primero, la dependencia del costo total respecto al costo de transformación sigue siendo dominante. No hay espacio para ambigüedad: la optimización debe centrarse en el proceso productivo. Ajustes en insumos tendrán impacto limitado si no se interviene la transformación.</p>
+<p>Segundo, el volumen de lote mantiene su rol como principal palanca de eficiencia. Aunque la relación con el costo es menos lineal, sigue siendo negativa. Esto implica que aumentar el volumen reduce el costo unitario, pero el efecto no es constante. Hay tramos donde el beneficio es mayor y otros donde se estabiliza. Esto sugiere la existencia de niveles óptimos de producción, no simplemente “más volumen siempre es mejor”.</p>
+<p>Tercero, la relación fuerte entre volumen, duración y consumo de insumos confirma que el crecimiento operativo implica mayor esfuerzo. El sistema escala, pero lo hace aumentando la carga sobre los recursos. Esto introduce un límite: no todo aumento de volumen es eficiente si la duración y el consumo crecen de forma desproporcionada.</p>
+<p>Cuarto, la duración del proceso tiene un impacto real en el costo, aunque no lineal. Esto indica que existen ineficiencias en ciertos rangos operativos. Algunos procesos largos generan costos elevados, pero otros no. Aquí hay una oportunidad clara: identificar condiciones donde la duración no se traduce en costo y replicarlas.</p>
+<p>Quinto, el segundo insumo aparece nuevamente como factor de complejidad. Su asociación con mayor duración y costo indica que los procesos que lo utilizan requieren gestión diferenciada. No deben tratarse bajo las mismas reglas que los procesos estándar.</p>
+<p>Desde una perspectiva de decisión, esto se traduce en acciones concretas.</p>
+<p>La planificación de producción debe orientarse a operar en rangos de volumen donde el costo unitario se estabiliza o disminuye significativamente. Esto requiere análisis más fino que una simple correlación: identificar puntos de cambio en la eficiencia.</p>
+<p>La gestión del tiempo de proceso debe pasar de descriptiva a prescriptiva. No basta con medir duración, hay que controlar su impacto en el costo. Esto implica estandarización y segmentación por tipo de operación.</p>
+<p>Los procesos que utilizan dos insumos deben ser tratados como una categoría aparte, con métricas y objetivos propios. Su complejidad los hace estructuralmente distintos.</p>
+<p>Finalmente, la no linealidad observada implica que modelos simples no capturan el comportamiento del sistema. Las decisiones basadas en promedios o relaciones lineales pueden ser engañosas. Se requiere segmentación, análisis por rangos y enfoque en condiciones operativas específicas.</p>
+<p>La conclusión es que el sistema es consistente en su dirección de comportamiento, pero irregular en su intensidad. La optimización no se logra con reglas generales, sino identificando y explotando las condiciones donde el sistema es más eficiente.</p>
 <p>Las matrices de correlación se presentan en paralelo (Pearson y Spearman) siguiendo la recomendación metodológica de distinguir asociaciones lineales de asociaciones monótonas. Las correlaciones altas entre pares de predictoras deben considerarse en el capítulo de inferencia para evitar problemas de multicolinealidad.</p>
 <p><strong>Ejercicio.</strong> Construir los diagramas de dispersión para <code>costo_insumo</code> y <code>costo_unitario_total</code> frente a las cuatro predictoras numéricas, e interpretar las asociaciones observadas con apoyo en las matrices de correlación.</p>
 </div>
 </div>
-<div id="análisis-bivariado-variables-respuesta-vs-predictoras-categóricas" class="section level2 hasAnchor" number="6.5">
-<h2><span class="header-section-number">6.5</span> Análisis bivariado: variables respuesta vs predictoras categóricas<a href="eda.html#an%C3%A1lisis-bivariado-variables-respuesta-vs-predictoras-categ%C3%B3ricas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="tablas-resumen-por-tipo-de-equipo" class="section level3 hasAnchor" number="6.5.1">
-<h3><span class="header-section-number">6.5.1</span> Tablas resumen por tipo de equipo<a href="eda.html#tablas-resumen-por-tipo-de-equipo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="análisis-bivariado-variables-respuesta-vs-predictoras-categóricas" class="section level2 hasAnchor" number="6.6">
+<h2><span class="header-section-number">6.6</span> Análisis bivariado: variables respuesta vs predictoras categóricas<a href="eda.html#an%C3%A1lisis-bivariado-variables-respuesta-vs-predictoras-categ%C3%B3ricas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="tablas-resumen-por-tipo-de-equipo" class="section level3 hasAnchor" number="6.6.1">
+<h3><span class="header-section-number">6.6.1</span> Tablas resumen por tipo de equipo<a href="eda.html#tablas-resumen-por-tipo-de-equipo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="eda.html#cb40-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
 <span id="cb40-2"><a href="eda.html#cb40-2" tabindex="-1"></a>  <span class="fu">group_by</span>(tipo_equipo) <span class="sc">%&gt;%</span></span>
 <span id="cb40-3"><a href="eda.html#cb40-3" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
@@ -2259,8 +2284,8 @@ cantidad_insumo_2
 ## 3 C3              8 11.3   6.10 11.4  2.40     18.2  7.31 16.4   9.05
 ## 4 D4             55  3.58  6.36  1.64 0.0137   46.2  1.13  4.23  3.10</code></pre>
 </div>
-<div id="boxplots-por-tipo-de-equipo" class="section level3 hasAnchor" number="6.5.2">
-<h3><span class="header-section-number">6.5.2</span> Boxplots por tipo de equipo<a href="eda.html#boxplots-por-tipo-de-equipo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="boxplots-por-tipo-de-equipo" class="section level3 hasAnchor" number="6.6.2">
+<h3><span class="header-section-number">6.6.2</span> Boxplots por tipo de equipo<a href="eda.html#boxplots-por-tipo-de-equipo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="eda.html#cb44-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
 <span id="cb44-2"><a href="eda.html#cb44-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> tipo_equipo, <span class="at">y =</span> costo_transformacion)) <span class="sc">+</span></span>
 <span id="cb44-3"><a href="eda.html#cb44-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#87CEFA&quot;</span>, <span class="at">outlier.colour =</span> <span class="st">&quot;red&quot;</span>, <span class="at">outlier.shape =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
@@ -2291,8 +2316,8 @@ cantidad_insumo_2
 <p><strong>Ejercicio.</strong> Replicar el análisis bivariado anterior para las variables categóricas <code>categoria_producto</code>, <code>num_insumos</code>, <code>insumo_1</code> e <code>insumo_2</code>, e interpretar los patrones observados con respecto a las tres variables respuesta.</p>
 </div>
 </div>
-<div id="variables-derivadas" class="section level2 hasAnchor" number="6.6">
-<h2><span class="header-section-number">6.6</span> Variables derivadas<a href="eda.html#variables-derivadas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="variables-derivadas" class="section level2 hasAnchor" number="6.7">
+<h2><span class="header-section-number">6.7</span> Variables derivadas<a href="eda.html#variables-derivadas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Se construye la variable derivada <code>velocidad_produccion</code> como el cociente entre <code>volumen_lote</code> y <code>duracion_proceso</code>, expresada en unidades por hora. Esta métrica resume la productividad del proceso por orden y se incluye aquí porque su interpretación requiere haber analizado antes las dos variables que la componen.</p>
 <div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="eda.html#cb47-1" tabindex="-1"></a>datos <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
 <span id="cb47-2"><a href="eda.html#cb47-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">velocidad_produccion =</span> volumen_lote <span class="sc">/</span> duracion_proceso)</span></code></pre></div>

@@ -621,6 +621,51 @@ La construcción de los gráficos de barras para las variables categóricas rest
 
 ## Análisis bivariado: variables respuesta vs predictoras numéricas
 
+
+## Correlacion Pearson
+
+```{r matriz-correlacion}
+matriz_correlacion <- datos %>%
+  select(costo_transformacion, costo_insumo, costo_unitario_total,
+         volumen_lote, duracion_proceso,
+         cantidad_insumo_1, cantidad_insumo_2) %>%
+  cor(use = "pairwise.complete.obs", method = "pearson") %>%
+  round(3)
+
+knitr::kable(matriz_correlacion , caption = "Matriz de correlación de Pearson") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
+```
+
+
+elación casi perfecta entre el costo de transformación y el costo unitario total (0.971). Este resultado no es sorprendente, ambas variables contienen prácticamente la misma información, por lo que analizarlas por separado aporta poco valor adicional.
+
+Las correlaciones entre estas variables son altas y consistentes: volumen de lote, duración del proceso y cantidad de insumo 1.  (todas por encima de 0.6)
+estructura operativa coherente. A mayor volumen, mayor duración, y mayor consumo de insumos. El sistema productivo escala de manera integrada. No solo se produce más, sino que producir más implica procesos más largos y mayor uso de recursos.
+Relaciones con implicación económica: Se confirma la presencia de economías de escala. Es decir, aunque los procesos sean más largos y consuman más insumos en términos absolutos, el costo por unidad disminuye. 
+Relaciones débiles, pero interpretables: Procesos más largos tienden a ser más costosos, pero la variabilidad es alta. La duración no es un determinante directo del costo, sino un indicador parcial de complejidad.
+Relaciones secundarias interesantes: La cantidad de insumo 1 presenta correlaciones prácticamente nulas con los costos unitarios, es relativamente estable y no introduce grandes ineficiencias.
+El segundo insumo introduce una dinámica distinta. Sus correlaciones, aunque moderadas, sugieren que está asociado a procesos más largos y a mayores costos de insumos. No es un componente estructural del sistema, sino un factor de complejidad adicional que aparece en ciertos casos y modifica el comportamiento del proceso. No es el problema central, pero sí un elemento a gestionar.
+
+La evidencia muestra un sistema productivo con dos fuerzas opuestas: la escala reduce el costo unitario, mientras la complejidad operativa lo presiona al alza. El costo total está dominado por la transformación, por lo que cualquier mejora relevante debe ocurrir dentro del proceso productivo, no en los insumos.
+
+El patrón más consistente es el de economías de escala. A mayor volumen de lote, el costo por unidad disminuye de forma sistemática. Esto no es marginal, es estructural. El sistema es más eficiente cuando opera en volúmenes altos. En contraste, los lotes pequeños concentran la mayor variabilidad y los costos más altos. 
+**La fragmentación de la producción está generando ineficiencia.**
+
+Procesos más largos tienden a ser más costosos, pero la relación es débil y altamente dispersa. Esto indica que la duración no está completamente bajo control o que refleja heterogeneidad en la ejecución. Aquí hay un problema de estandarización.
+
+Consolidar volúmenes. La operación debe orientarse a reducir la fragmentación de lotes. Esto implica revisar políticas de programación, tamaños mínimos de producción y planificación de demanda. Cada lote pequeño tiene un costo implícito alto. La optimización aquí es inmediata y medible.
+
+Estandarizar procesos. La alta dispersión en la relación entre duración y costo indica variabilidad operativa. Es necesario identificar qué está generando procesos largos y bajo qué condiciones. Esto requiere segmentar por tipo de equipo, modalidad y producto, y establecer tiempos estándar. Sin control sobre la duración, no hay control sobre el costo.
+
+Segmentar la operación. El sistema no es homogéneo. Existen al menos dos regímenes: producción simple (un insumo, menor complejidad) y producción más compleja (dos insumos, mayor duración). Estos deben gestionarse de forma diferenciada. Aplicar una lógica única a ambos introduce ineficiencia.
+
+Focalizar en el proceso de transformación. Dado su peso en el costo total, cualquier mejora en eficiencia operativa tiene un impacto directo. Esto incluye reducción de tiempos muertos, mejoras en utilización de equipos y eliminación de variabilidad innecesaria.
+
+Gestionar outliers como categoría propia. Los valores extremos no son errores aislados, son parte del sistema. Representan casos de alta complejidad o ineficiencia. Deben ser identificados, analizados y, si es posible, rediseñados. Ignorarlos distorsiona la toma de decisiones. Sistema mensual de identificación y analisis en profundidad de outlliers.
+
+El sistema ya muestra señales de eficiencia cuando opera a escala, pero pierde control en condiciones de baja producción y alta variabilidad. La oportunidad  está en alinear la operación hacia volúmenes mayores, procesos estandarizados y segmentación inteligente de la producción. La producción es bajo pedido y no hay un tamaño de lote estándar, pero si la oportunidad de establecer tamaños mínimos de producción y/o una politica de precios que incentive la consolidación de pedidos.
+
+
 ### Diagramas de dispersión
 
 ```{r scatter-vol-ct, fig.width=9, fig.height=4.5}
@@ -691,50 +736,10 @@ mutate(cantidad_total_insumo = cantidad_insumo_1 + cantidad_insumo_2) %>%
   facet_grid(. ~ "Dispersión entre cantidad_total_insumo y costo_unitario_total")
 ```
 
-
-### Correlaciones
-
-```{r matriz-correlacion}
-matriz_correlacion <- datos %>%
-  select(costo_transformacion, costo_insumo, costo_unitario_total,
-         volumen_lote, duracion_proceso,
-         cantidad_insumo_1, cantidad_insumo_2) %>%
-  cor(use = "pairwise.complete.obs", method = "pearson") %>%
-  round(3)
-
-knitr::kable(matriz_correlacion , caption = "Matriz de correlación de Pearson") %>%
-  kableExtra::kable_styling(full_width = FALSE) 
-```
-
-
-elación casi perfecta entre el costo de transformación y el costo unitario total (0.971). Este resultado no es sorprendente, ambas variables contienen prácticamente la misma información, por lo que analizarlas por separado aporta poco valor adicional.
-
-Las correlaciones entre estas variables son altas y consistentes: volumen de lote, duración del proceso y cantidad de insumo 1.  (todas por encima de 0.6)
-estructura operativa coherente. A mayor volumen, mayor duración, y mayor consumo de insumos. El sistema productivo escala de manera integrada. No solo se produce más, sino que producir más implica procesos más largos y mayor uso de recursos.
-Relaciones con implicación económica: Se confirma la presencia de economías de escala. Es decir, aunque los procesos sean más largos y consuman más insumos en términos absolutos, el costo por unidad disminuye. 
-Relaciones débiles, pero interpretables: Procesos más largos tienden a ser más costosos, pero la variabilidad es alta. La duración no es un determinante directo del costo, sino un indicador parcial de complejidad.
-Relaciones secundarias interesantes: La cantidad de insumo 1 presenta correlaciones prácticamente nulas con los costos unitarios, es relativamente estable y no introduce grandes ineficiencias.
-El segundo insumo introduce una dinámica distinta. Sus correlaciones, aunque moderadas, sugieren que está asociado a procesos más largos y a mayores costos de insumos. No es un componente estructural del sistema, sino un factor de complejidad adicional que aparece en ciertos casos y modifica el comportamiento del proceso. No es el problema central, pero sí un elemento a gestionar.
-
-La evidencia muestra un sistema productivo con dos fuerzas opuestas: la escala reduce el costo unitario, mientras la complejidad operativa lo presiona al alza. El costo total está dominado por la transformación, por lo que cualquier mejora relevante debe ocurrir dentro del proceso productivo, no en los insumos.
-
-El patrón más consistente es el de economías de escala. A mayor volumen de lote, el costo por unidad disminuye de forma sistemática. Esto no es marginal, es estructural. El sistema es más eficiente cuando opera en volúmenes altos. En contraste, los lotes pequeños concentran la mayor variabilidad y los costos más altos. 
-**La fragmentación de la producción está generando ineficiencia.**
-
-Procesos más largos tienden a ser más costosos, pero la relación es débil y altamente dispersa. Esto indica que la duración no está completamente bajo control o que refleja heterogeneidad en la ejecución. Aquí hay un problema de estandarización.
-
-Consolidar volúmenes. La operación debe orientarse a reducir la fragmentación de lotes. Esto implica revisar políticas de programación, tamaños mínimos de producción y planificación de demanda. Cada lote pequeño tiene un costo implícito alto. La optimización aquí es inmediata y medible.
-
-Estandarizar procesos. La alta dispersión en la relación entre duración y costo indica variabilidad operativa. Es necesario identificar qué está generando procesos largos y bajo qué condiciones. Esto requiere segmentar por tipo de equipo, modalidad y producto, y establecer tiempos estándar. Sin control sobre la duración, no hay control sobre el costo.
-
-Segmentar la operación. El sistema no es homogéneo. Existen al menos dos regímenes: producción simple (un insumo, menor complejidad) y producción más compleja (dos insumos, mayor duración). Estos deben gestionarse de forma diferenciada. Aplicar una lógica única a ambos introduce ineficiencia.
-
-Focalizar en el proceso de transformación. Dado su peso en el costo total, cualquier mejora en eficiencia operativa tiene un impacto directo. Esto incluye reducción de tiempos muertos, mejoras en utilización de equipos y eliminación de variabilidad innecesaria.
-
-Gestionar outliers como categoría propia. Los valores extremos no son errores aislados, son parte del sistema. Representan casos de alta complejidad o ineficiencia. Deben ser identificados, analizados y, si es posible, rediseñados. Ignorarlos distorsiona la toma de decisiones. Sistema mensual de identificación y analisis en profundidad de outlliers.
-
-El sistema ya muestra señales de eficiencia cuando opera a escala, pero pierde control en condiciones de baja producción y alta variabilidad. La oportunidad  está en alinear la operación hacia volúmenes mayores, procesos estandarizados y segmentación inteligente de la producción. La producción es bajo pedido y no hay un tamaño de lote estándar, pero si la oportunidad de establecer tamaños mínimos de producción y/o una politica de precios que incentive la consolidación de pedidos.
-
+La matriz de correlación de Pearson aplicada a estas variables ofrece una primera lectura de las relaciones. 
+No obstante, al contrastar estos resultados con los gráficos de dispersión y las distribuciones observadas, se evidencia que dichas relaciones no son estrictamente lineales ni homogéneas en todo el rango. 
+La presencia de asimetrías marcadas, colas largas y valores atípicos —especialmente en costos y volumen— introduce inestabilidad en los coeficientes de Pearson, que pueden subestimar o distorsionar la intensidad real de las asociaciones. 
+En este contexto, variables como volumen_lote, duracion_proceso y cantidad_insumo_1 muestran patrones monótonos claros, pero no proporcionales, lo que limita la capacidad de Pearson para describirlas adecuadamente. Por esta razón, la matriz de Spearman se vuelve necesaria, ya que captura la dirección y consistencia de estas relaciones sin depender de la linealidad, proporcionando una representación más robusta del comportamiento conjunto del sistema productivo.
 
 ```{r matriz-spearman}
 matriz_spearman <- datos %>%
@@ -747,6 +752,49 @@ matriz_spearman <- datos %>%
 knitr::kable(matriz_spearman , caption = "Matriz de correlación de Spearman") %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
+
+
+La matriz de Spearman permite observar relaciones monótonas, no necesariamente lineales. Esto es clave: aquí interesa si las variables se mueven en la misma dirección, aunque no lo hagan de forma proporcional. Al compararla con Pearson, se obtiene una visión más robusta del sistema.
+
+Lo primero que se confirma es la relación entre el costo de transformación y el costo total (0.961). Sigue siendo extremadamente alta. Esto refuerza la idea de que el costo total no es una entidad independiente, sino una extensión directa del proceso de transformación.
+
+El volumen de lote mantiene su relación negativa con los costos (-0.269 con transformación, -0.318 con costo total), aunque más débil que en Pearson. Esto es revelador: la relación no es perfectamente lineal, pero sí consistente en dirección. A mayor volumen, el costo unitario tiende a disminuir, aunque con variabilidad. Es una señal clara de economías de escala, pero con irregularidades.
+
+El cambio más interesante aparece en la relación entre volumen y duración (0.780), así como con la cantidad de insumo 1 (0.685). Estas correlaciones son más altas que en Pearson, lo que indica que la relación es monótona fuerte pero no lineal. En términos simples: cuando el volumen aumenta, la duración y el consumo también aumentan de forma consistente, aunque no en proporción constante. El sistema escala, pero no de manera uniforme.
+
+La duración del proceso también muestra una relación más clara con el costo de transformación (0.280 frente a 0.220 en Pearson). Esto sugiere que procesos más largos tienden a ser más costosos, pero la relación no es lineal. Hay tramos donde el costo crece más rápido y otros donde se estabiliza.
+
+El insumo 1 sigue sin mostrar relación relevante con los costos (0.019 con costo de transformación). Esto confirma que su variabilidad no es determinante en el costo unitario. Sin embargo, su relación con volumen y duración es fuerte, lo que lo posiciona como parte de la dinámica operativa, no económica.
+
+El insumo 2, en cambio, muestra correlaciones moderadas con varias variables, especialmente con duración (0.304) y costo total (0.288). Esto indica que su presencia introduce complejidad y está asociada a procesos más exigentes.
+
+La lectura global es que el sistema no responde a relaciones lineales simples. Las variables están conectadas por relaciones de orden: cuando una aumenta, otras tienden a aumentar o disminuir, pero no de forma proporcional. Esto explica la dispersión observada en los gráficos y refuerza la necesidad de modelos más flexibles.
+
+Análisis como gerente de costos
+
+El análisis con Spearman confirma el diagnóstico anterior, pero con una implicación operativa más fuerte: las relaciones son estables en dirección, aunque no en magnitud. Esto tiene consecuencias directas para la gestión.
+
+Primero, la dependencia del costo total respecto al costo de transformación sigue siendo dominante. No hay espacio para ambigüedad: la optimización debe centrarse en el proceso productivo. Ajustes en insumos tendrán impacto limitado si no se interviene la transformación.
+
+Segundo, el volumen de lote mantiene su rol como principal palanca de eficiencia. Aunque la relación con el costo es menos lineal, sigue siendo negativa. Esto implica que aumentar el volumen reduce el costo unitario, pero el efecto no es constante. Hay tramos donde el beneficio es mayor y otros donde se estabiliza. Esto sugiere la existencia de niveles óptimos de producción, no simplemente “más volumen siempre es mejor”.
+
+Tercero, la relación fuerte entre volumen, duración y consumo de insumos confirma que el crecimiento operativo implica mayor esfuerzo. El sistema escala, pero lo hace aumentando la carga sobre los recursos. Esto introduce un límite: no todo aumento de volumen es eficiente si la duración y el consumo crecen de forma desproporcionada.
+
+Cuarto, la duración del proceso tiene un impacto real en el costo, aunque no lineal. Esto indica que existen ineficiencias en ciertos rangos operativos. Algunos procesos largos generan costos elevados, pero otros no. Aquí hay una oportunidad clara: identificar condiciones donde la duración no se traduce en costo y replicarlas.
+
+Quinto, el segundo insumo aparece nuevamente como factor de complejidad. Su asociación con mayor duración y costo indica que los procesos que lo utilizan requieren gestión diferenciada. No deben tratarse bajo las mismas reglas que los procesos estándar.
+
+Desde una perspectiva de decisión, esto se traduce en acciones concretas.
+
+La planificación de producción debe orientarse a operar en rangos de volumen donde el costo unitario se estabiliza o disminuye significativamente. Esto requiere análisis más fino que una simple correlación: identificar puntos de cambio en la eficiencia.
+
+La gestión del tiempo de proceso debe pasar de descriptiva a prescriptiva. No basta con medir duración, hay que controlar su impacto en el costo. Esto implica estandarización y segmentación por tipo de operación.
+
+Los procesos que utilizan dos insumos deben ser tratados como una categoría aparte, con métricas y objetivos propios. Su complejidad los hace estructuralmente distintos.
+
+Finalmente, la no linealidad observada implica que modelos simples no capturan el comportamiento del sistema. Las decisiones basadas en promedios o relaciones lineales pueden ser engañosas. Se requiere segmentación, análisis por rangos y enfoque en condiciones operativas específicas.
+
+La conclusión es que el sistema es consistente en su dirección de comportamiento, pero irregular en su intensidad. La optimización no se logra con reglas generales, sino identificando y explotando las condiciones donde el sistema es más eficiente.
 
 
 Las matrices de correlación se presentan en paralelo (Pearson y Spearman) siguiendo la recomendación metodológica de distinguir asociaciones lineales de asociaciones monótonas. Las correlaciones altas entre pares de predictoras deben considerarse en el capítulo de inferencia para evitar problemas de multicolinealidad.
