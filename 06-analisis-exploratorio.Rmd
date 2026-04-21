@@ -1134,6 +1134,33 @@ knitr::kable(resumen_bivariado_ci_comb,
   kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover", "condensed"))
 
 ```
+Combinación de insumos introduce estructuras diferenciadas tanto en nivel como en dispersión.
+
+En costos de transformación, las combinaciones simples (B_T, N_T) presentan niveles relativamente similares, con medias cercanas a 25–26. Sin embargo, N_T muestra una dispersión mucho mayor (IQR ≈ 24 frente a ≈ 10 en B_T), lo que indica que su comportamiento es menos estable. Esto sugiere que, aun siendo comparables en nivel medio, no lo son en términos de consistencia.
+
+Cuando se introducen combinaciones con N_O, los costos aumentan de forma sistemática. Tanto N_O + N_T como N_O solo presentan medias superiores a 36–38, lo que implica un cambio estructural en el nivel de costo. Este patrón indica que N_O actúa como un factor de incremento base en el proceso de transformación.
+
+Las combinaciones con R_T son particularmente relevantes. A_T + R_T alcanza valores medios cercanos a 55, con alta dispersión, lo que refleja no solo un costo elevado sino también variabilidad significativa. De forma similar, R_T solo o combinado tiende a elevar tanto el nivel como la incertidumbre del costo.
+
+En contraste, combinaciones como B_T + V_T presentan costos bajos y muy poca dispersión (IQR ≈ 3.9). No todas las combinaciones de dos insumos implican mayor complejidad; algunas mantienen eficiencia operativa.
+
+N_T tiene costos bajos, mientras que combinaciones con N_O elevan significativamente el costo de insumo (media ≈ 8.6). 
+
+La dispersión en algunas combinaciones (por ejemplo, sin_segundo_insumo + V_T) es extremadamente alta, lo que indica presencia de outliers y posibles problemas de registro o condiciones operativas atípicas.
+
+No todos los insumos son equivalentes. Algunos son neutros, otros son caros, y algunos son directamente problemáticos.
+
+El insumo N_O es el principal driver de costo. Cada vez que aparece, el costo de transformación sube de manera consistente. Es un insumo estructuralmente caro. Su uso debe estar plenamente justificado en precio.
+
+El insumo R_T es crítico por otra razón, eleva el costo y también introduce variabilidad, es menos predecible. Este tipo de pedido debe tener recargos por incertidumbre.
+
+El insumo N_T es engañoso. En promedio no es costoso, pero presenta alta dispersión. Esto indica que bajo ciertas condiciones puede volverse problemático. Aquí hay un tema de control operativo.
+
+El insumo B_T es el más estable. Costos moderados y baja variabilidad. Es una base confiable para operación.
+
+El insumo V_T en ciertas combinaciones muestra eficiencia (bajo costo y baja dispersión), pero en otros casos presenta outliers extremos. Esto indica inconsistencia en su manejo.
+
+
 
 ```{r box-insumo-comb}
 box_comb_insumos_ct <- datos %>%

@@ -4039,6 +4039,19 @@ B_T + N_O
 </tr>
 </tbody>
 </table>
+<p>Combinación de insumos introduce estructuras diferenciadas tanto en nivel como en dispersión.</p>
+<p>En costos de transformación, las combinaciones simples (B_T, N_T) presentan niveles relativamente similares, con medias cercanas a 25–26. Sin embargo, N_T muestra una dispersión mucho mayor (IQR ≈ 24 frente a ≈ 10 en B_T), lo que indica que su comportamiento es menos estable. Esto sugiere que, aun siendo comparables en nivel medio, no lo son en términos de consistencia.</p>
+<p>Cuando se introducen combinaciones con N_O, los costos aumentan de forma sistemática. Tanto N_O + N_T como N_O solo presentan medias superiores a 36–38, lo que implica un cambio estructural en el nivel de costo. Este patrón indica que N_O actúa como un factor de incremento base en el proceso de transformación.</p>
+<p>Las combinaciones con R_T son particularmente relevantes. A_T + R_T alcanza valores medios cercanos a 55, con alta dispersión, lo que refleja no solo un costo elevado sino también variabilidad significativa. De forma similar, R_T solo o combinado tiende a elevar tanto el nivel como la incertidumbre del costo.</p>
+<p>En contraste, combinaciones como B_T + V_T presentan costos bajos y muy poca dispersión (IQR ≈ 3.9). No todas las combinaciones de dos insumos implican mayor complejidad; algunas mantienen eficiencia operativa.</p>
+<p>N_T tiene costos bajos, mientras que combinaciones con N_O elevan significativamente el costo de insumo (media ≈ 8.6).</p>
+<p>La dispersión en algunas combinaciones (por ejemplo, sin_segundo_insumo + V_T) es extremadamente alta, lo que indica presencia de outliers y posibles problemas de registro o condiciones operativas atípicas.</p>
+<p>No todos los insumos son equivalentes. Algunos son neutros, otros son caros, y algunos son directamente problemáticos.</p>
+<p>El insumo N_O es el principal driver de costo. Cada vez que aparece, el costo de transformación sube de manera consistente. Es un insumo estructuralmente caro. Su uso debe estar plenamente justificado en precio.</p>
+<p>El insumo R_T es crítico por otra razón, eleva el costo y también introduce variabilidad, es menos predecible. Este tipo de pedido debe tener recargos por incertidumbre.</p>
+<p>El insumo N_T es engañoso. En promedio no es costoso, pero presenta alta dispersión. Esto indica que bajo ciertas condiciones puede volverse problemático. Aquí hay un tema de control operativo.</p>
+<p>El insumo B_T es el más estable. Costos moderados y baja variabilidad. Es una base confiable para operación.</p>
+<p>El insumo V_T en ciertas combinaciones muestra eficiencia (bajo costo y baja dispersión), pero en otros casos presenta outliers extremos. Esto indica inconsistencia en su manejo.</p>
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="eda.html#cb50-1" tabindex="-1"></a>box_comb_insumos_ct <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
 <span id="cb50-2"><a href="eda.html#cb50-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> insumo_combinado, <span class="at">y =</span> costo_transformacion)) <span class="sc">+</span></span>
 <span id="cb50-3"><a href="eda.html#cb50-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#2c7fb8&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
