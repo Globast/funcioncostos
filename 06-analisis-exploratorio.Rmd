@@ -863,10 +863,11 @@ ggplot(datos, aes(x = volumen_lote, y = costo_transformacion)) +
 ```{r outliers}
 
 datos %>%
-  pivot_longer(everything()) %>%
+  select(where(is.numeric)) %>%
+  pivot_longer(everything(), names_to = "variable", values_to = "value") %>%
   ggplot(aes(x = "", y = value)) +
   geom_boxplot() +
-  facet_wrap(~name, scales = "free") +
+  facet_wrap(~variable, scales = "free") +
   theme_bw()
 ```
 
