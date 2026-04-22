@@ -1151,10 +1151,12 @@ saveRDS(datos_principal, "data/data_costos_principal.rds")
 
 n_principal <- nrow(datos_principal)
 ```
-Tras estas exclusiones, el dataset principal queda conformado por r n_principal órdenes (r round(n_principal / n_total * 100, 1)% del total depurado). Sobre este subconjunto se desarrolla el análisis estratificado que sigue.
+Tras estas exclusiones, el dataset principal queda conformado por r n_principal órdenes (`r round(n_principal / n_total * 100, 1`)% del total depurado). Sobre este subconjunto se desarrolla el análisis estratificado que sigue.
 
 6.5 Estructura del espacio operativo sobre el dataset principal
 6.5.1 Mapa de combinaciones
+
+```{r mapa_combinaciones}
 mapa_n <- datos_principal %>%
   count(tipo_equipo, modalidad_proceso, num_insumos) %>%
   pivot_wider(names_from = c(modalidad_proceso, num_insumos),
@@ -1164,7 +1166,8 @@ mapa_n <- datos_principal %>%
 
 kable(mapa_n, caption = "Tamaño muestral por combinación (dataset principal)") %>%
   kable_styling(full_width = FALSE)
-Lectura del mapa.
+```
+
 
 A1 tiene cobertura completa: 60 órdenes en (X, 1), 63 en (X, 2), 118 en (Y, 1), 33 en (Y, 2). Total: 274. Es el único equipo que permite comparar simultáneamente los efectos de modalidad y de número de insumos.
 B2 tiene cobertura en las 4 combinaciones pero con n reducido (7, 13, 18, 6). Permite análisis condicional con cautela.
