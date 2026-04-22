@@ -73,8 +73,6 @@ análisis-bivariado-por-numero-de-insumos-1
 análisis-bivariado-por-tipo-de-insumo-1
 variables-derivadas
 pruebas-de-hipótesis-sin-desarrollar
-prueba-t-de-dos-muestras
-interpretación-base
 modelos-sin-desarrollar
 ajuste-del-modelo
 medidas-de-ajuste

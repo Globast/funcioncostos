@@ -215,11 +215,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="7.6" data-path="eda.html"><a href="eda.html#variables-derivadas"><i class="fa fa-check"></i><b>7.6</b> Variables derivadas</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="pruebas-de-hipótesis-sin-desarrollar.html"><a href="pruebas-de-hipótesis-sin-desarrollar.html"><i class="fa fa-check"></i><b>8</b> Pruebas de Hipótesis SIN DESARROLLAR</a>
-<ul>
-<li class="chapter" data-level="8.1" data-path="pruebas-de-hipótesis-sin-desarrollar.html"><a href="pruebas-de-hipótesis-sin-desarrollar.html#prueba-t-de-dos-muestras"><i class="fa fa-check"></i><b>8.1</b> Prueba t de dos muestras</a></li>
-<li class="chapter" data-level="8.2" data-path="pruebas-de-hipótesis-sin-desarrollar.html"><a href="pruebas-de-hipótesis-sin-desarrollar.html#interpretaci%C3%B3n-base"><i class="fa fa-check"></i><b>8.2</b> Interpretación base</a></li>
-</ul></li>
+<li class="chapter" data-level="8" data-path="pruebas-de-hipótesis-sin-desarrollar.html"><a href="pruebas-de-hipótesis-sin-desarrollar.html"><i class="fa fa-check"></i><b>8</b> Pruebas de Hipótesis SIN DESARROLLAR</a></li>
 <li class="chapter" data-level="9" data-path="modelos-sin-desarrollar.html"><a href="modelos-sin-desarrollar.html"><i class="fa fa-check"></i><b>9</b> Modelos SIN DESARROLLAR</a>
 <ul>
 <li class="chapter" data-level="9.1" data-path="modelos-sin-desarrollar.html"><a href="modelos-sin-desarrollar.html#ajuste-del-modelo"><i class="fa fa-check"></i><b>9.1</b> Ajuste del modelo</a></li>
@@ -253,38 +249,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>En esta sección se ajusta un modelo lineal simple como ejemplo base. Si la base contiene <code>mpg</code>, <code>wt</code> y <code>hp</code>, se usa esa especificación.</p>
 <div id="ajuste-del-modelo" class="section level2 hasAnchor" number="9.1">
 <h2><span class="header-section-number">9.1</span> Ajuste del modelo<a href="modelos-sin-desarrollar.html#ajuste-del-modelo" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="modelos-sin-desarrollar.html#cb92-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">all</span>(<span class="fu">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;wt&quot;</span>, <span class="st">&quot;hp&quot;</span>) <span class="sc">%in%</span> <span class="fu">names</span>(datos))) {</span>
-<span id="cb92-2"><a href="modelos-sin-desarrollar.html#cb92-2" tabindex="-1"></a>  modelo_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> wt <span class="sc">+</span> hp, <span class="at">data =</span> datos)</span>
-<span id="cb92-3"><a href="modelos-sin-desarrollar.html#cb92-3" tabindex="-1"></a></span>
-<span id="cb92-4"><a href="modelos-sin-desarrollar.html#cb92-4" tabindex="-1"></a>  broom<span class="sc">::</span><span class="fu">tidy</span>(modelo_lm) <span class="sc">|&gt;</span></span>
-<span id="cb92-5"><a href="modelos-sin-desarrollar.html#cb92-5" tabindex="-1"></a>    knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Coeficientes del modelo lineal.&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb92-6"><a href="modelos-sin-desarrollar.html#cb92-6" tabindex="-1"></a>    kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb92-7"><a href="modelos-sin-desarrollar.html#cb92-7" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="modelos-sin-desarrollar.html#cb91-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">all</span>(<span class="fu">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;wt&quot;</span>, <span class="st">&quot;hp&quot;</span>) <span class="sc">%in%</span> <span class="fu">names</span>(datos))) {</span>
+<span id="cb91-2"><a href="modelos-sin-desarrollar.html#cb91-2" tabindex="-1"></a>  modelo_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> wt <span class="sc">+</span> hp, <span class="at">data =</span> datos)</span>
+<span id="cb91-3"><a href="modelos-sin-desarrollar.html#cb91-3" tabindex="-1"></a></span>
+<span id="cb91-4"><a href="modelos-sin-desarrollar.html#cb91-4" tabindex="-1"></a>  broom<span class="sc">::</span><span class="fu">tidy</span>(modelo_lm) <span class="sc">|&gt;</span></span>
+<span id="cb91-5"><a href="modelos-sin-desarrollar.html#cb91-5" tabindex="-1"></a>    knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Coeficientes del modelo lineal.&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb91-6"><a href="modelos-sin-desarrollar.html#cb91-6" tabindex="-1"></a>    kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb91-7"><a href="modelos-sin-desarrollar.html#cb91-7" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="medidas-de-ajuste" class="section level2 hasAnchor" number="9.2">
 <h2><span class="header-section-number">9.2</span> Medidas de ajuste<a href="modelos-sin-desarrollar.html#medidas-de-ajuste" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="modelos-sin-desarrollar.html#cb93-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">exists</span>(<span class="st">&quot;modelo_lm&quot;</span>)) {</span>
-<span id="cb93-2"><a href="modelos-sin-desarrollar.html#cb93-2" tabindex="-1"></a>  broom<span class="sc">::</span><span class="fu">glance</span>(modelo_lm) <span class="sc">|&gt;</span></span>
-<span id="cb93-3"><a href="modelos-sin-desarrollar.html#cb93-3" tabindex="-1"></a>    knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Medidas globales de ajuste del modelo lineal.&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb93-4"><a href="modelos-sin-desarrollar.html#cb93-4" tabindex="-1"></a>    kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb93-5"><a href="modelos-sin-desarrollar.html#cb93-5" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="modelos-sin-desarrollar.html#cb92-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">exists</span>(<span class="st">&quot;modelo_lm&quot;</span>)) {</span>
+<span id="cb92-2"><a href="modelos-sin-desarrollar.html#cb92-2" tabindex="-1"></a>  broom<span class="sc">::</span><span class="fu">glance</span>(modelo_lm) <span class="sc">|&gt;</span></span>
+<span id="cb92-3"><a href="modelos-sin-desarrollar.html#cb92-3" tabindex="-1"></a>    knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Medidas globales de ajuste del modelo lineal.&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb92-4"><a href="modelos-sin-desarrollar.html#cb92-4" tabindex="-1"></a>    kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb92-5"><a href="modelos-sin-desarrollar.html#cb92-5" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="gráfico-de-observados-vs-ajustados" class="section level2 hasAnchor" number="9.3">
 <h2><span class="header-section-number">9.3</span> Gráfico de observados vs ajustados<a href="modelos-sin-desarrollar.html#gr%C3%A1fico-de-observados-vs-ajustados" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="modelos-sin-desarrollar.html#cb94-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">exists</span>(<span class="st">&quot;modelo_lm&quot;</span>)) {</span>
-<span id="cb94-2"><a href="modelos-sin-desarrollar.html#cb94-2" tabindex="-1"></a>  datos_ajuste <span class="ot">&lt;-</span> datos <span class="sc">|&gt;</span></span>
-<span id="cb94-3"><a href="modelos-sin-desarrollar.html#cb94-3" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">ajustado =</span> <span class="fu">fitted</span>(modelo_lm))</span>
-<span id="cb94-4"><a href="modelos-sin-desarrollar.html#cb94-4" tabindex="-1"></a></span>
-<span id="cb94-5"><a href="modelos-sin-desarrollar.html#cb94-5" tabindex="-1"></a>  <span class="fu">ggplot</span>(datos_ajuste, <span class="fu">aes</span>(<span class="at">x =</span> ajustado, <span class="at">y =</span> mpg)) <span class="sc">+</span></span>
-<span id="cb94-6"><a href="modelos-sin-desarrollar.html#cb94-6" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb94-7"><a href="modelos-sin-desarrollar.html#cb94-7" tabindex="-1"></a>    <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb94-8"><a href="modelos-sin-desarrollar.html#cb94-8" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
-<span id="cb94-9"><a href="modelos-sin-desarrollar.html#cb94-9" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">&quot;Valores observados frente a ajustados&quot;</span>,</span>
-<span id="cb94-10"><a href="modelos-sin-desarrollar.html#cb94-10" tabindex="-1"></a>      <span class="at">x =</span> <span class="st">&quot;Valor ajustado&quot;</span>,</span>
-<span id="cb94-11"><a href="modelos-sin-desarrollar.html#cb94-11" tabindex="-1"></a>      <span class="at">y =</span> <span class="st">&quot;Valor observado&quot;</span></span>
-<span id="cb94-12"><a href="modelos-sin-desarrollar.html#cb94-12" tabindex="-1"></a>    ) <span class="sc">+</span></span>
-<span id="cb94-13"><a href="modelos-sin-desarrollar.html#cb94-13" tabindex="-1"></a>    <span class="fu">theme_minimal</span>()</span>
-<span id="cb94-14"><a href="modelos-sin-desarrollar.html#cb94-14" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="modelos-sin-desarrollar.html#cb93-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">exists</span>(<span class="st">&quot;modelo_lm&quot;</span>)) {</span>
+<span id="cb93-2"><a href="modelos-sin-desarrollar.html#cb93-2" tabindex="-1"></a>  datos_ajuste <span class="ot">&lt;-</span> datos <span class="sc">|&gt;</span></span>
+<span id="cb93-3"><a href="modelos-sin-desarrollar.html#cb93-3" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">ajustado =</span> <span class="fu">fitted</span>(modelo_lm))</span>
+<span id="cb93-4"><a href="modelos-sin-desarrollar.html#cb93-4" tabindex="-1"></a></span>
+<span id="cb93-5"><a href="modelos-sin-desarrollar.html#cb93-5" tabindex="-1"></a>  <span class="fu">ggplot</span>(datos_ajuste, <span class="fu">aes</span>(<span class="at">x =</span> ajustado, <span class="at">y =</span> mpg)) <span class="sc">+</span></span>
+<span id="cb93-6"><a href="modelos-sin-desarrollar.html#cb93-6" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb93-7"><a href="modelos-sin-desarrollar.html#cb93-7" tabindex="-1"></a>    <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb93-8"><a href="modelos-sin-desarrollar.html#cb93-8" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
+<span id="cb93-9"><a href="modelos-sin-desarrollar.html#cb93-9" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">&quot;Valores observados frente a ajustados&quot;</span>,</span>
+<span id="cb93-10"><a href="modelos-sin-desarrollar.html#cb93-10" tabindex="-1"></a>      <span class="at">x =</span> <span class="st">&quot;Valor ajustado&quot;</span>,</span>
+<span id="cb93-11"><a href="modelos-sin-desarrollar.html#cb93-11" tabindex="-1"></a>      <span class="at">y =</span> <span class="st">&quot;Valor observado&quot;</span></span>
+<span id="cb93-12"><a href="modelos-sin-desarrollar.html#cb93-12" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb93-13"><a href="modelos-sin-desarrollar.html#cb93-13" tabindex="-1"></a>    <span class="fu">theme_minimal</span>()</span>
+<span id="cb93-14"><a href="modelos-sin-desarrollar.html#cb93-14" tabindex="-1"></a>}</span></code></pre></div>
 
 </div>
 </div>

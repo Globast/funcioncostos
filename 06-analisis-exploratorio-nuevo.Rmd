@@ -1058,9 +1058,27 @@ box_ct_equipo + box_ci_equipo
 ```
 
 
+A1 (M08, M09, M13, M14, M15, M16, M17): siete equipos con costo de transformación medio entre 30 y 38 UM/unidad. La variabilidad intra-equipo es alta, pero la variabilidad entre equipos del mismo tipo es modesta. Los siete equipos se comportan como una familia coherente.
+B2 (M02): un único equipo. Su perfil es indistinguible visualmente de los equipos A1. Esto plantea una pregunta operativa relevante: si M02 (B2) opera con costos similares a los siete equipos A1, ¿qué justifica mantener una clasificación tecnológica separada?
+C3 (M04, M11): dos equipos con costos significativamente más altos que el resto, pero muy diferentes entre sí. M04 opera en torno a 79 UM/unidad, M11 en torno a 49 UM/unidad. Tratarlos como un solo grupo "C3" oscurece esta diferencia.
+D4 (M05, M12): dos equipos con costos significativamente más bajos que el resto, también diferentes entre sí. M05 promedia 10 UM/unidad, M12 promedia 7 UM/unidad. La diferencia es proporcionalmente importante.
+
+Interpretación por tipo
+- A1: Los siete equipos  muestran un comportamiento notablemente similar, tanto en costo de transformación como en costo de insumo. Las medias se mueven entre 30 y 38 UM/unidad, los IQR son comparables (10–16 UM), y los outliers superiores aparecen distribuidos de forma similar. M15 destaca ligeramente como el más costoso del grupo (media 38, mediana 35.6), mientras que M13 y M17 son los más bajos. Pero ninguna de estas diferencias es lo suficientemente grande para considerar que los equipos operan en regímenes distintos.
+aunque la media de M15 es la más alta del grupo, su IQR (14.1) no es el más amplio y su distribución no muestra patología visible. El hecho de que M15 promedie ~5 UM/unidad más que M13 podría ser estructural (productos asignados sistemáticamente más complejos) o aleatorio (mezcla particular de órdenes en el período). El EDA no permite distinguir entre las dos hipótesis; un análisis estratificado por categoría_producto sería el siguiente paso.
+- B2:  toda conclusión sobre el "tipo B2" es en realidad una conclusión sobre el equipo M02 específico. Visualmente, M02 es indistinguible del cluster A1: media 29.9, mediana 28.9, IQR 10.9, todos en el rango de los equipos A1.
+
+B2 y A1 son tecnologías similares en costo, y mantenerlas como categorías separadas refleja diferencias técnicas (tamaño, año, fabricante) que no se traducen en costo unitario observable.
+**qué diferencia formalmente a B2 de A1 y si esa diferencia debe seguir siendo una dimensión de análisis.**
+
+- C3 es donde la subdivisión por equipo individual cambia más radicalmente . M04 (n=4) opera con un costo de transformación medio de 79.4 UM/unidad; M11 (n=4) opera con 49.4. La diferencia entre estos dos equipos (30 UM/unidad) es mayor que la diferencia entre A1 y D4 (que es de unas 25 UM). Tratarlos como un grupo "C3" da un promedio de 64.4, que no representa adecuadamente ni a M04 ni a M11. 
+las distribuciones intra-equipo son distintas: M11 tiene un IQR de 3.8 (muy estable dentro de su nivel), mientras que M04 tiene un IQR de 17.0 (alta variabilidad). M04 no solo es más caro: también es menos predecible.
+- D4: M05 y M12 son ambos significativamente más eficientes que el resto del sistema, pero también son distintos entre sí: M05 promedia 10.1 UM/unidad, M12 promedia 7.2. La diferencia absoluta (3 UM/unidad) parece pequeña en el contexto del sistema, pero representa una diferencia relativa del 40% entre ambos equipos.
+En costo de insumo, la diferencia es aún más marcada: M05 con media 5.3, M12 con media 1.4. Sin embargo, M05 muestra una desviación estándar de 8.1 con un máximo de 46.2, lo que indica al menos un outlier extremo. Esto compromete la lectura de M05 — su comportamiento "típico" puede ser muy distinto del que sugiere su media.
+**¿qué hace que M12 sea más eficiente que M05? Si es una diferencia estructural (ejemplo: M12 procesa productos más simples), entonces la diferencia es una composición. Si es una diferencia técnica del equipo (mejor mantenimiento, operario más capacitado, tecnología más nueva), entonces hay una oportunidad de mejora replicable hacia M05.**
 
 
-Un primer análisis bivariado de costos por tipo de equipo (que viene más adelante) muestra diferencias muy grandes:
+En conclusión , el análisis por tipo de equipo muestra diferencias muy grandes:
 
 ```{r res_cost_tipoequipo}
 
@@ -1079,6 +1097,9 @@ tabla_resumen <- datos %>%
 kable(tabla_resumen, caption = "Tabla resumen costos por tipo de equipo") %>%
   kable_styling(full_width = FALSE)
 ```
+
+
+
 Las diferencias son tan marcadas que invitan a preguntar: ¿cada tipo de equipo es realmente comparable con los otros?
 Una tabulación cruzada contesta la pregunta y cambia el análisis:
 
@@ -1100,6 +1121,7 @@ El espacio operativo no es completo. No todos los equipos operan en todas las mo
 **Lo que parecía un dataset plano con 7 variables categóricas independientes es en realidad un sistema con dependencias operativas:**
 - El tipo de equipo determina qué modalidades de proceso son factibles.
 - El tipo de equipo determina el número de insumos.
+
 
 El dataset refleja restricciones técnicas reales de la planta, no una muestra aleatoria de un universo uniforme.
 

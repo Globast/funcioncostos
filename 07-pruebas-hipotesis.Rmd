@@ -1,24 +1,6 @@
 # Pruebas de Hipótesis SIN DESARROLLAR
 
-En esta sección se presenta un ejemplo de contraste de medias. Si la base contiene las variables `mpg` y `am`, se compara el rendimiento promedio entre dos grupos.
 
-## Prueba t de dos muestras
-
-```{r prueba-hipotesis}
-if (all(c("mpg", "am") %in% names(datos))) {
-
-  datos_prueba <- datos |>
-    dplyr::filter(!is.na(mpg), !is.na(am)) |>
-    dplyr::mutate(am = as.factor(am))
-
-  prueba_t <- t.test(mpg ~ am, data = datos_prueba)
-
-  broom::tidy(prueba_t) |>
-    knitr::kable(caption = "Resultado de la prueba t de diferencia de medias.") |>
-    kableExtra::kable_styling(full_width = FALSE)
-}
-```
-
-## Interpretación base
-
-La hipótesis nula plantea igualdad de medias entre grupos. La hipótesis alternativa plantea diferencia de medias. En el trabajo final, la interpretación debe escribirse con base en el valor-p, el intervalo de confianza y el contexto sustantivo del problema.
+La hipótesis "el tipo de equipo afecta el costo" debe reformularse cuando el tipo agrupa equipos heterogéneos. Para C3 y D4, la pregunta correcta es a nivel de equipo individual, no de tipo.
+M02 (único B2) no permite una prueba de "tipo B2 vs tipo A1"; la prueba real es "M02 vs cluster de equipos A1".
+Para A1 con sus siete equipos, una prueba de homogeneidad interna (ANOVA o Kruskal-Wallis sobre los 7 equipos) podría confirmar formalmente que la familia es coherente. Si esa prueba no rechaza, se justifica tratarlos como un solo grupo en análisis posteriores.

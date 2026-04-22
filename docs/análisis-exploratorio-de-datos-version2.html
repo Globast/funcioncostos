@@ -215,11 +215,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="7.6" data-path="eda.html"><a href="eda.html#variables-derivadas"><i class="fa fa-check"></i><b>7.6</b> Variables derivadas</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="pruebas-de-hipótesis-sin-desarrollar.html"><a href="pruebas-de-hipótesis-sin-desarrollar.html"><i class="fa fa-check"></i><b>8</b> Pruebas de Hipótesis SIN DESARROLLAR</a>
-<ul>
-<li class="chapter" data-level="8.1" data-path="pruebas-de-hipótesis-sin-desarrollar.html"><a href="pruebas-de-hipótesis-sin-desarrollar.html#prueba-t-de-dos-muestras"><i class="fa fa-check"></i><b>8.1</b> Prueba t de dos muestras</a></li>
-<li class="chapter" data-level="8.2" data-path="pruebas-de-hipótesis-sin-desarrollar.html"><a href="pruebas-de-hipótesis-sin-desarrollar.html#interpretaci%C3%B3n-base"><i class="fa fa-check"></i><b>8.2</b> Interpretación base</a></li>
-</ul></li>
+<li class="chapter" data-level="8" data-path="pruebas-de-hipótesis-sin-desarrollar.html"><a href="pruebas-de-hipótesis-sin-desarrollar.html"><i class="fa fa-check"></i><b>8</b> Pruebas de Hipótesis SIN DESARROLLAR</a></li>
 <li class="chapter" data-level="9" data-path="modelos-sin-desarrollar.html"><a href="modelos-sin-desarrollar.html"><i class="fa fa-check"></i><b>9</b> Modelos SIN DESARROLLAR</a>
 <ul>
 <li class="chapter" data-level="9.1" data-path="modelos-sin-desarrollar.html"><a href="modelos-sin-desarrollar.html#ajuste-del-modelo"><i class="fa fa-check"></i><b>9.1</b> Ajuste del modelo</a></li>
@@ -4774,6 +4770,23 @@ D4
 <span id="cb48-33"><a href="análisis-exploratorio-de-datos-version2.html#cb48-33" tabindex="-1"></a></span>
 <span id="cb48-34"><a href="análisis-exploratorio-de-datos-version2.html#cb48-34" tabindex="-1"></a>box_ct_equipo <span class="sc">+</span> box_ci_equipo</span></code></pre></div>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box_equipoid-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<p>A1 (M08, M09, M13, M14, M15, M16, M17): siete equipos con costo de transformación medio entre 30 y 38 UM/unidad. La variabilidad intra-equipo es alta, pero la variabilidad entre equipos del mismo tipo es modesta. Los siete equipos se comportan como una familia coherente.
+B2 (M02): un único equipo. Su perfil es indistinguible visualmente de los equipos A1. Esto plantea una pregunta operativa relevante: si M02 (B2) opera con costos similares a los siete equipos A1, ¿qué justifica mantener una clasificación tecnológica separada?
+C3 (M04, M11): dos equipos con costos significativamente más altos que el resto, pero muy diferentes entre sí. M04 opera en torno a 79 UM/unidad, M11 en torno a 49 UM/unidad. Tratarlos como un solo grupo “C3” oscurece esta diferencia.
+D4 (M05, M12): dos equipos con costos significativamente más bajos que el resto, también diferentes entre sí. M05 promedia 10 UM/unidad, M12 promedia 7 UM/unidad. La diferencia es proporcionalmente importante.</p>
+<p>Interpretación por tipo
+- A1: Los siete equipos muestran un comportamiento notablemente similar, tanto en costo de transformación como en costo de insumo. Las medias se mueven entre 30 y 38 UM/unidad, los IQR son comparables (10–16 UM), y los outliers superiores aparecen distribuidos de forma similar. M15 destaca ligeramente como el más costoso del grupo (media 38, mediana 35.6), mientras que M13 y M17 son los más bajos. Pero ninguna de estas diferencias es lo suficientemente grande para considerar que los equipos operan en regímenes distintos.
+aunque la media de M15 es la más alta del grupo, su IQR (14.1) no es el más amplio y su distribución no muestra patología visible. El hecho de que M15 promedie ~5 UM/unidad más que M13 podría ser estructural (productos asignados sistemáticamente más complejos) o aleatorio (mezcla particular de órdenes en el período). El EDA no permite distinguir entre las dos hipótesis; un análisis estratificado por categoría_producto sería el siguiente paso.
+- B2: toda conclusión sobre el “tipo B2” es en realidad una conclusión sobre el equipo M02 específico. Visualmente, M02 es indistinguible del cluster A1: media 29.9, mediana 28.9, IQR 10.9, todos en el rango de los equipos A1.</p>
+<p>B2 y A1 son tecnologías similares en costo, y mantenerlas como categorías separadas refleja diferencias técnicas (tamaño, año, fabricante) que no se traducen en costo unitario observable.
+<strong>qué diferencia formalmente a B2 de A1 y si esa diferencia debe seguir siendo una dimensión de análisis.</strong></p>
+<ul>
+<li>C3 es donde la subdivisión por equipo individual cambia más radicalmente . M04 (n=4) opera con un costo de transformación medio de 79.4 UM/unidad; M11 (n=4) opera con 49.4. La diferencia entre estos dos equipos (30 UM/unidad) es mayor que la diferencia entre A1 y D4 (que es de unas 25 UM). Tratarlos como un grupo “C3” da un promedio de 64.4, que no representa adecuadamente ni a M04 ni a M11.
+las distribuciones intra-equipo son distintas: M11 tiene un IQR de 3.8 (muy estable dentro de su nivel), mientras que M04 tiene un IQR de 17.0 (alta variabilidad). M04 no solo es más caro: también es menos predecible.</li>
+<li>D4: M05 y M12 son ambos significativamente más eficientes que el resto del sistema, pero también son distintos entre sí: M05 promedia 10.1 UM/unidad, M12 promedia 7.2. La diferencia absoluta (3 UM/unidad) parece pequeña en el contexto del sistema, pero representa una diferencia relativa del 40% entre ambos equipos.
+En costo de insumo, la diferencia es aún más marcada: M05 con media 5.3, M12 con media 1.4. Sin embargo, M05 muestra una desviación estándar de 8.1 con un máximo de 46.2, lo que indica al menos un outlier extremo. Esto compromete la lectura de M05 — su comportamiento “típico” puede ser muy distinto del que sugiere su media.
+<strong>¿qué hace que M12 sea más eficiente que M05? Si es una diferencia estructural (ejemplo: M12 procesa productos más simples), entonces la diferencia es una composición. Si es una diferencia técnica del equipo (mejor mantenimiento, operario más capacitado, tecnología más nueva), entonces hay una oportunidad de mejora replicable hacia M05.</strong></li>
+</ul>
 <p>Un primer análisis bivariado de costos por tipo de equipo (que viene más adelante) muestra diferencias muy grandes:</p>
 <div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="análisis-exploratorio-de-datos-version2.html#cb49-1" tabindex="-1"></a>tabla_resumen <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
 <span id="cb49-2"><a href="análisis-exploratorio-de-datos-version2.html#cb49-2" tabindex="-1"></a>  <span class="fu">group_by</span>(tipo_equipo) <span class="sc">%&gt;%</span></span>
