@@ -436,7 +436,7 @@ p_vol <- datos %>%
 
 p_dur <- datos %>%
   ggplot(aes(x = "", y = duracion_proceso)) +
-  geom_boxplot(fill = "#2ca02c", alpha = 0.7) +
+  geom_boxplot(fill = "#1f77b4", alpha = 0.7) +
   stat_summary(fun = mean, geom = "point", shape = 18, size = 4, color = "black") +
   labs(title = "Distribución de la duración de proceso", y = "Horas", x = "") +
   theme_bw()
@@ -444,7 +444,7 @@ p_dur <- datos %>%
 p_ci1 <- datos %>%
   filter(num_insumos >= 1) %>%
   ggplot(aes(x = "", y = cantidad_insumo_1)) +
-  geom_boxplot(fill = "#ff7f0e", alpha = 0.7) +
+  geom_boxplot(fill = "#1f77b4", alpha = 0.7) +
   stat_summary(fun = mean, geom = "point", shape = 18, size = 4, color = "black") +
   labs(title = "Cantidad de insumo 1 (órdenes con insumo)",
        y = "Litros equivalentes", x = "") +
@@ -453,7 +453,7 @@ p_ci1 <- datos %>%
 p_ci2 <- datos %>%
   filter(num_insumos == 2) %>%
   ggplot(aes(x = "", y = cantidad_insumo_2)) +
-  geom_boxplot(fill = "#9467bd", alpha = 0.7) +
+  geom_boxplot(fill = "#1f77b4", alpha = 0.7) +
   stat_summary(fun = mean, geom = "point", shape = 18, size = 4, color = "black") +
   labs(title = "Cantidad de insumo 2 (órdenes con segundo insumo)",
        y = "Litros equivalentes", x = "") +
@@ -483,7 +483,7 @@ p_dur_hist <- datos %>%
   ggplot(aes(x = duracion_proceso)) +
   geom_histogram(aes(y = after_stat(density)),
                  bins = 30,
-                 fill = "#2ca02c",
+                 fill = "#1f77b4",
                  color = "white",
                  alpha = 0.7) +
   geom_density(linewidth = 1.2) +
@@ -496,7 +496,7 @@ p_ci1_hist <- datos %>%
   ggplot(aes(x = cantidad_insumo_1)) +
   geom_histogram(aes(y = after_stat(density)),
                  bins = 25,
-                 fill = "#ff7f0e",
+                 fill = "#1f77b4",
                  color = "white",
                  alpha = 0.7) +
   geom_density(linewidth = 1.2) +
@@ -509,7 +509,7 @@ p_ci2_hist <- datos %>%
   ggplot(aes(x = cantidad_insumo_2)) +
   geom_histogram(aes(y = after_stat(density)),
                  bins = 20,
-                 fill = "#9467bd",
+                 fill = "#1f77b4",
                  color = "white",
                  alpha = 0.7) +
   geom_density(linewidth = 1.2) +
