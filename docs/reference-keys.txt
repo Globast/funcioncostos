@@ -22,7 +22,7 @@ eliminación-de-registros-inválidos
 conversión-de-tipos
 consideraciones-estructurales-para-el-análisis
 diccionario-de-campos
-capítulo-6-análisis-exploratorio-básico
+análisis-exploratorio-básico
 carga-del-dataset-analítico
 análisis-univariado-de-variables-respuesta
 costo-unitario-de-conversión-o-de-transformacion

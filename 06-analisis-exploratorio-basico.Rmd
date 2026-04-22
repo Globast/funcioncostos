@@ -1,6 +1,6 @@
-# Capítulo 6 — Análisis Exploratorio Básico
+# Análisis Exploratorio Básico
 
-## 6.1 Carga del dataset analítico 
+## Carga del dataset analítico 
 Se parte del dataset depurado en el capítulo de metodología (395 órdenes de producción con tipos ajustados). La limpieza previa ya eliminó errores de digitación y validó la integridad de los registros; este capítulo se concentra en entender qué dicen esos datos.
 ```{r ck_eda_setup, message=FALSE, warning=FALSE, echo=FALSE}
 library(tidyverse)
@@ -15,10 +15,10 @@ n_total <- nrow(datos)
 ```
 El dataset contiene `r n_total` órdenes de producción y `r ncol(datos)` variables.
 
-## 6.2 Análisis univariado de variables respuesta
+## Análisis univariado de variables respuesta
 Las tres variables respuesta del estudio son `costo_transformacion` (costo de conversión por unidad producida), `costo_insumo` (costo de materias primas por unidad producida) y su agregado `costo_unitario_total`. Se analizan en paralelo porque responden a lógicas operativas distintas: el costo de transformación refleja eficiencia de máquina y proceso, mientras que el costo de insumo refleja decisiones de formulación y consumo de materias primas.
  
-### 6.2.1 Costo unitario de conversión o de transformacion
+### Costo unitario de conversión o de transformacion
 
 ```{r ck_resumen_ct, echo=FALSE, tab.cap = NULL}
 datos %>%
@@ -133,7 +133,7 @@ Existe una subpoblación de costos altos. Es decir no son casos extremos que sea
 El boxplot confirma la dispersión y evidencia que el fenómeno clave no es la variabilidad general, sino la existencia de una dinámica diferenciada en costos altos, que requiere segmentación o modelado específico.
 
 
-### 6.2.2 Costo unitario de los insumos 
+### Costo unitario de los insumos 
 
 ```{r ck_resumen_ci, echo=FALSE}
 datos %>%
@@ -227,7 +227,7 @@ p_box_ci <- datos %>%
 p_hist_ci + p_box_ci
 ```
 
-### 6.2.3 Costo unitario total
+### Costo unitario total
 
 La variable `costo_unitario_total` se deriva como la suma de `costo_transformacion` y `costo_insumo`, y representa el costo total por unidad de producto.
 
@@ -336,7 +336,7 @@ Una distribución con dos "jorobas" suele indicar que los datos no provienen de 
 Primera hipótesis que emerge. El sistema productivo puede no ser un único proceso homogéneo, sino una mezcla de regímenes operativos con dinámicas de costo distintas. Si esto es cierto, los estadísticos agregados están ocultando diferencias estructurales importantes
 :::
 
-## 6.3 Análisis univariado de predictoras numéricas
+## Análisis univariado de predictoras numéricas
 Las variables numéricas predictoras son `volumen_lote`, `duracion_proceso`, `cantidad_insumo_1` y `cantidad_insumo_2`.
 
 ```{r ck_resumen_num_predictoras, echo=FALSE}
