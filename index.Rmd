@@ -26,8 +26,7 @@ Este libro presenta una estructura reproducible y académica para documentar un 
 
 Se recomienda mantener todos los datos en la carpeta `data/`, todas las imágenes en `images/` y todas las referencias en `references.bib`.
 
-vx
-
+```{r setup, include=FALSE}
 options(scipen = 999)
 
 library(tidyverse)
@@ -38,14 +37,13 @@ library(kableExtra)
 library(broom)
 library(here)
 
-ruta_datos <- "data/datos_ejemplo.csv"
-
-if (file.exists(ruta_datos)) {
-  datos <- readr::read_csv(ruta_datos, show_col_types = FALSE) |>
-    janitor::clean_names()
-} else {
-  datos <- mtcars |>
-    tibble::rownames_to_column("modelo") |>
-    janitor::clean_names()
-}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center",
+  fig.width = 7,
+  fig.height = 4.5,
+  out.width = "90%"
+)
 ```
