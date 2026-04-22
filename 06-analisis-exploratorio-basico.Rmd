@@ -20,7 +20,7 @@ Las tres variables respuesta del estudio son `costo_transformacion` (costo de co
  
 ### 6.2.1 Costo unitario de conversión o de transformacion
 
-```{r ck_resumen_ct, echo=FALSE}
+```{r ck_resumen_ct, echo=FALSE, tab.cap = NULL}
 datos %>%
   summarise(
     n       = length(costo_transformacion),
