@@ -20,7 +20,7 @@ Las tres variables respuesta del estudio son `costo_transformacion` (costo de co
  
 ### Costo unitario de conversión o de transformacion
 
-```{r ck_resumen_ct, echo=FALSE}
+```{r ck-resumen-ct, echo=FALSE}
 datos %>%
   summarise(
     n       = length(costo_transformacion),
@@ -39,6 +39,7 @@ knitr::kable(resumen_ct,
              format = "html",
              table.attr = "class='table'") %>%
   kableExtra::kable_styling(full_width = FALSE) 
+
 ```
 
 ```{r ck_resumen_ct_calc, echo=FALSE}
