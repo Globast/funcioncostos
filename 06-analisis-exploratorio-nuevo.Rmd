@@ -2,7 +2,7 @@
 ### Carga del dataset analítico
 Se parte del dataset depurado en el capítulo de metodología (395 órdenes de producción con tipos ajustados). La limpieza previa ya eliminó errores de digitación y validó la integridad de los registros; este capítulo se concentra en entender qué dicen esos datos.
 
-```{r eda-setup, message=FALSE, warning=FALSE}
+```{r eda_setup, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(patchwork)
 library(gridExtra)
@@ -22,7 +22,7 @@ Las tres variables respuesta del estudio son `costo_transformacion` (costo de co
 
 ### costo_transformacion
 
-```{r resumen-ct, echo=TRUE}
+```{r resumen_ct, echo=TRUE}
 datos %>%
   summarise(
     n       = length(costo_transformacion),
@@ -40,7 +40,7 @@ knitr::kable(resumen_ct, caption = "Resumen del costo de transformacion") %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
-```{r resumen-ct-calc, echo=FALSE}
+```{r resumen_ct_calc, echo=FALSE}
 ct_media   <- resumen_ct$media
 ct_ds      <- resumen_ct$ds
 ct_med     <- resumen_ct$`50%`
@@ -57,7 +57,7 @@ El rango intercuartílico (`r round(ct_iqr,2)`) indica que la mitad central de l
 Sin embargo, los extremos revela algo distinto. Mientras el valor mínimo (`r round(ct_min,2)`) se mantiene dentro de lo esperado, el máximo (`r round(ct_max,2)`) se encuentra considerablemente alejado del resto. Este comportamiento puede sugerir la presencia de valores atípicos en la parte superior de la distribución, generando una cola hacia la derecha.
 En términos prácticos, esto significa que la mayoría de los procesos operan en niveles de costo relativamente estables, pero existen casos puntuales significativamente más costosos. Estos valores extremos pueden responder a procesos más complejos o a posibles inconsistencias en los datos, por lo que requieren un análisis específico antes de su inclusión en modelos o decisiones operativas.
 
-```{r hist-ct, fig.width=9, fig.height=4.5}
+```{r hist_ct, fig.width=9, fig.height=4.5}
 library(dplyr)
 library(ggplot2)
 library(tibble)
@@ -136,7 +136,7 @@ El boxplot confirma la dispersión y evidencia que el fenómeno clave no es la v
 
 ### Costo unitario de los insumos
 
-```{r resumen-ci, echo=TRUE}
+```{r resumen_ci, echo=TRUE}
 datos %>%
   summarise(
     n       = length(costo_insumo),
@@ -154,7 +154,7 @@ knitr::kable(resumen_ci, caption = "Resumen del costo de insumo") %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
-```{r resumen-ci-calc, echo=FALSE}
+```{r resumen_ci_calc, echo=FALSE}
 ci_media  <- resumen_ci$media
 ci_ds     <- resumen_ci$ds
 ci_med    <- resumen_ci$`50%`
@@ -173,7 +173,7 @@ En resumen:
 - un conjunto reducido de insumos de costo medio
 - pocos insumos de alto impacto económico
 
-```{r hist-box-ci, fig.width=11, fig.height=4.5}
+```{r hist_box_ci, fig.width=11, fig.height=4.5}
 
 lineas <- tibble(
   estadistico = c("Media", "Mediana", "Q1", "Q3"),
@@ -232,7 +232,7 @@ p_hist_ci + p_box_ci
 
 La variable `costo_unitario_total` se deriva como la suma de `costo_transformacion` y `costo_insumo`, y representa el costo total por unidad de producto.
 
-```{r resumen-ctot, echo=TRUE}
+```{r resumen_ctot, echo=TRUE}
 datos %>%
   summarise(
     n       = length(costo_unitario_total),
@@ -249,7 +249,7 @@ knitr::kable(resumen_ctot, caption = "Resumen del costo unitario total") %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
-```{r resumen-ctot-calc, echo=FALSE}
+```{r resumen_ctot_calc, echo=FALSE}
 cu_media  <- resumen_ctot$media
 cu_ds     <- resumen_ctot$ds
 cu_med    <- resumen_ctot$`50%`
@@ -274,7 +274,7 @@ Claramente el componente dominante del costo total es el proceso de transformaci
 
 El sistema productivo opera mayoritariamente en un rango de costos relativamente estable, pero está condicionado por una fracción de casos con costos significativamente más altos. Estos casos no son marginales y deben interpretarse como parte de la estructura del proceso, no como anomalías aisladas. La clave analítica no está en el promedio, sino en entender qué condiciones generan esos costos elevados y cómo se relacionan con los componentes del costo total.
 
-```{r hist-box-ctot, fig.width=11, fig.height=4.5}
+```{r hist_box_ctot, fig.width=11, fig.height=4.5}
 
 lineas <- tibble(
   estadistico = c("Media", "Mediana", "Q1", "Q3"),
@@ -340,7 +340,7 @@ El costo unitario total hereda la asimetría de sus dos componentes. Cualquier i
 
 Las variables numéricas predictoras son `volumen_lote`, `duracion_proceso`, `cantidad_insumo_1` y `cantidad_insumo_2`. Para las cantidades de insumo, los estadísticos descriptivos se calculan condicionando sobre la presencia efectiva del insumo correspondiente, conforme a la advertencia estructural documentada en el capítulo de metodología.
 
-```{r resumen-num-predictoras}
+```{r resumen_num_predictoras}
 datos %>%
   summarise(
     n = length(volumen_lote),
@@ -415,7 +415,7 @@ No son variables independientes: describen distintas dimensiones del mismo proce
 La principal fuente de heterogeneidad no está en los insumos, sino en el tamaño de los lotes y la duración de los procesos. Esto sugiere que cualquier modelamiento o mejora operativa debe centrarse en segmentar por escala de producción y complejidad del proceso, más que en el consumo de insumos.
 
 
-```{r box-num-predictoras, fig.width=11, fig.height=7}
+```{r box_num_predictoras, fig.width=11, fig.height=7}
 p_vol <- datos %>%
   ggplot(aes(x = "", y = volumen_lote)) +
   geom_boxplot(fill = "#1f77b4", alpha = 0.7) +
@@ -451,7 +451,7 @@ p_ci2 <- datos %>%
 (p_vol + p_dur) / (p_ci1 + p_ci2)
 ```
 
-```{r hist-num-predictoras, fig.width=11, fig.height=7}
+```{r hist_num_predictoras, fig.width=11, fig.height=7}
 library(ggplot2)
 library(dplyr)
 library(patchwork)
@@ -515,7 +515,7 @@ p_ci2_hist <- datos %>%
 
 ## Análisis univariado de variables categóricas predictoras
 
-```{r tabla-categoricas}
+```{r tabla_categoricas}
 vars_cat <- c("tipo_equipo", "equipo_id", "categoria_producto", 
               "modalidad_proceso", "num_insumos", "insumo_1", "insumo_2")
 
@@ -546,7 +546,7 @@ Cualquier modelo debe considerar tipo_equipo como variable explicativa clave, eq
 
 El sistema está estructurado alrededor de un tipo dominante (A1) y un subconjunto reducido de equipos con alta actividad. La variabilidad observada en costos, duración o volumen probablemente está condicionada por esta estructura, no solo por aleatoriedad.
 
-```{r freq-tipo-equipo-calc, echo=FALSE}
+```{r freq_tipo_equipo_calc, echo=FALSE}
 freq_te <- tabla_cat %>% filter(Variable == "tipo_equipo") %>% arrange(desc(Frecuencia))
 te_dom_cat <- freq_te$Categoria[1]
 te_dom_pct <- freq_te$Porcentaje[1]
@@ -556,7 +556,7 @@ n_niveles_cat   <- datos %>% distinct(categoria_producto) %>% nrow()
 
 El tipo de equipo dominante es `r te_dom_cat`, que concentra el `r te_dom_pct`% de las órdenes. La variable `equipo_id` tiene `r n_niveles_equipo` niveles distintos y `categoria_producto` tiene `r n_niveles_cat` niveles, lo cual exigirá tratamiento cuidadoso en los análisis inferenciales posteriores para evitar celdas con pocas observaciones.
 
-```{r bar-categoricas-grid, fig.width=12, fig.height=16}
+```{r bar_categoricas_grid, fig.width=12, fig.height=16}
 library(dplyr)
 library(ggplot2)
 
