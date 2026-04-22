@@ -897,16 +897,6 @@ resumen_bivariado_cc_modproceso <- datos %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
-El tipo de equipo A1, presenta un costo medio de aproximadamente 33 UM/unidad, con una dispersión moderada. Su mediana cercana a 30 confirma que el comportamiento típico está bien representado y relativamente estable. Esto lo posiciona como el estándar operativo del sistema.
-
-El tipo de equipo B2 muestra un patrón muy similar a A1, aunque con costos ligeramente menores y menor variabilidad. La cercanía entre media y mediana sugiere estabilidad, pero su menor tamaño muestral limita la robustez de la comparación.
-
-El caso de C3 es claramente distinto. Presenta costos significativamente más altos (media superior a 64) y mayor dispersión. Además, el rango intercuartílico es amplio, lo que indica que no solo es costoso, sino también variable. Esto apunta a un proceso con alta complejidad o baja eficiencia estructural.
-
-El tipo de equipo D4 tiene costos notablemente bajos (media cercana a 9). La dispersión es reducida y el comportamiento es consistente. Este equipo representa una operación altamente eficiente y controlada, con baja variabilidad. qué prácticas operativas permiten ese nivel de eficiencia y si son replicables.
-
-El costo de transformación está determinado por el tipo de equipo, y la magnitud de las diferencias es significativa.
-
 ```{r bivariado-ci-modproceso}
 resumen_bivariado_ci_modproceso <- datos %>%
   group_by(modalidad_proceso) %>%
@@ -926,12 +916,6 @@ resumen_bivariado_ci_modproceso <- datos %>%
     knitr::kable(resumen_bivariado_ci_modproceso , caption = "Resumen Bivariado costos de insumo por modalidad de proceso") %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
-
-Los tipos de equipos A1 y B2 presentan patrones similares: medias cercanas a 5 UM/unidad y medianas ligeramente inferiores. El rango intercuartílico es moderado, sugiriendo que el consumo de insumos en estos equipos es predecible y controlado.
-
-El tipo de equipo C3 nuevamente se diferencia de forma clara. La media (≈11.25) es más del doble que en A1 y B2, y la dispersión es considerable. Además, la mediana se mantiene alta. Costoso tanto en transformación como en  insumos, es menos eficiente.
-
-El tipo de equipo D4 Presenta la media más baja (≈3.58) pero su desviación estándar es alta y supera incluso a la media. La mediana (≈1.64) está muy por debajo de la media, lo que indica una asimetría extrema. D4 es generalmente eficiente, pero con episodios puntuales de alto consumo.
 
 
 ```{r boxmod_proceso, fig.width=9, fig.height=4.5}
@@ -958,7 +942,6 @@ box_ci_mod_proceso <- datos %>%
 box_ct_mod_proceso + box_ci_mod_proceso
 ```
 
-Los boxplots confirman visualmente lo que ya sugerían los resúmenes numéricos: el tipo de equipo introduce regímenes claramente diferenciados de costos, tanto en transformación como en insumos.
 
 
 ### Análisis bivariado: tipo de equipo
