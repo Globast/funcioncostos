@@ -12,6 +12,7 @@ rmd_files:
   - "03-objetivos.Rmd"
   - "04-metodologia.Rmd"
   - "05-diccionario-campos.Rmd"
+  - "06-analisis-exploratorio-nuevo.Rmd"
   - "06-analisis-exploratorio.Rmd"
   - "07-pruebas-hipotesis.Rmd"
   - "08-modelos.Rmd"
