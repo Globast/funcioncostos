@@ -237,7 +237,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">6.2.1</span> 6.2.1 Costo unitario de conversión o de transformacion<a href="capítulo-6-análisis-exploratorio-básico.html#costo-unitario-de-conversi%C3%B3n-o-de-transformacion" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-(#tab:resumen_ct)(#tab:resumen_ct)Resumen del costo de transformacion
+(#tab:ck_resumen_ct)(#tab:ck_resumen_ct)Resumen del costo de transformacion
 </caption>
 <thead>
 <tr>
@@ -308,7 +308,7 @@ La desviación estándar alcanza 15.26, lo que equivale a un coeficiente de vari
 El rango intercuartílico (14.54) indica que la mitad central de los datos se sitúa en un intervalo relativamente acotado, lo que describe el comportamiento típico del proceso.
 Sin embargo, los extremos revela algo distinto. Mientras el valor mínimo (2.77) se mantiene dentro de lo esperado, el máximo (97.18) se encuentra considerablemente alejado del resto. Este comportamiento puede sugerir la presencia de valores atípicos en la parte superior de la distribución, generando una cola hacia la derecha.
 En términos prácticos, esto significa que la mayoría de los procesos operan en niveles de costo relativamente estables, pero existen casos puntuales significativamente más costosos. Estos valores extremos pueden responder a procesos más complejos o a posibles inconsistencias en los datos, por lo que requieren un análisis específico antes de su inclusión en modelos o decisiones operativas.</p>
-<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/hist_ct-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/ck_hist_ct-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
 <p>El núcleo de la distribución se concentra claramente alrededor de r round(ct_media,2), con una densidad máxima cercana a los 25–30 UM. Esta región coincide con la mediana (r round(ct_med,2)) y el rango intercuartílico.
 La forma de la distribución no es simétrica. Se observa una cola derecha prolongada, que se extiende hasta valores cercanos a r round(ct_max,0). Esta asimetría implica que, aunque la mayoría de los costos son moderados, existe una proporción pequeña de observaciones con costos significativamente más altos.
 Adicionalmente, aparece un leve segundo abultamiento en valores bajos (≈ 5–15 UM). Esto sugiere la posible existencia de subgrupos dentro del proceso, es decir, no todos los registros provienen del mismo mecanismo generador de costos.</p>
@@ -325,7 +325,7 @@ El boxplot confirma la dispersión y evidencia que el fenómeno clave no es la v
 <h3><span class="header-section-number">6.2.2</span> 6.2.2 Costo unitario de los insumos<a href="capítulo-6-análisis-exploratorio-básico.html#costo-unitario-de-los-insumos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-(#tab:resumen_ci)(#tab:resumen_ci)Resumen del costo de insumo
+(#tab:ck_resumen_ci)(#tab:ck_resumen_ci)Resumen del costo de insumo
 </caption>
 <thead>
 <tr>
@@ -398,14 +398,14 @@ En resumen:
 - un grupo mayoritario de insumos de bajo costo
 - un conjunto reducido de insumos de costo medio
 - pocos insumos de alto impacto económico</p>
-<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/hist_box_ci-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/ck_hist_box_ci-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="costo-unitario-total" class="section level3 hasAnchor" number="6.2.3">
 <h3><span class="header-section-number">6.2.3</span> 6.2.3 Costo unitario total<a href="capítulo-6-análisis-exploratorio-básico.html#costo-unitario-total" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>La variable <code>costo_unitario_total</code> se deriva como la suma de <code>costo_transformacion</code> y <code>costo_insumo</code>, y representa el costo total por unidad de producto.</p>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-(#tab:resumen_ctot)(#tab:resumen_ctot)Resumen del costo unitario total
+(#tab:ck_resumen_ctot)(#tab:ck_resumen_ctot)Resumen del costo unitario total
 </caption>
 <thead>
 <tr>
@@ -479,12 +479,13 @@ El boxplot confirma la presencia de outliers superiores múltiples, no aislados.
 - Costo de insumos representa aproximadamente r prop_ci%
 Claramente el componente dominante del costo total es el proceso de transformación, mientras que los insumos, aunque más variables, tienen menor peso relativo en el agregado.</p>
 <p>El sistema productivo opera mayoritariamente en un rango de costos relativamente estable, pero está condicionado por una fracción de casos con costos significativamente más altos. Estos casos no son marginales y deben interpretarse como parte de la estructura del proceso, no como anomalías aisladas. La clave analítica no está en el promedio, sino en entender qué condiciones generan esos costos elevados y cómo se relacionan con los componentes del costo total.</p>
-<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/hist_box_ctot-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/ck_hist_box_ctot-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
 <p>El costo unitario total hereda la asimetría de sus dos componentes. Cualquier iniciativa de reducción de costos que se concentre solo en el componente de insumos tendrá un techo muy bajo. La palanca real está en la transformación.</p>
-<p>[!NOTE]
-Los tres costos presentan distribuciones asimétricas con cola derecha pronunciada. En costo_transformacion se observa además un leve segundo abultamiento hacia valores bajos (5–15 UM), que rompe el patrón unimodal esperado.
+<div class="alert alert-info">
+<p>Los tres costos presentan distribuciones asimétricas con cola derecha pronunciada. En costo_transformacion se observa además un leve segundo abultamiento hacia valores bajos (5–15 UM), que rompe el patrón unimodal esperado.
 Una distribución con dos “jorobas” suele indicar que los datos no provienen de un proceso único, sino de dos o más procesos distintos mezclados. El promedio se vuelve engañoso porque representa algo que no existe realmente
 Primera hipótesis que emerge. El sistema productivo puede no ser un único proceso homogéneo, sino una mezcla de regímenes operativos con dinámicas de costo distintas. Si esto es cierto, los estadísticos agregados están ocultando diferencias estructurales importantes</p>
+</div>
 </div>
 </div>
 <div id="análisis-univariado-de-predictoras-numéricas" class="section level2 hasAnchor" number="6.3">
@@ -492,7 +493,7 @@ Primera hipótesis que emerge. El sistema productivo puede no ser un único proc
 <p>Las variables numéricas predictoras son <code>volumen_lote</code>, <code>duracion_proceso</code>, <code>cantidad_insumo_1</code> y <code>cantidad_insumo_2</code>.</p>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-(#tab:resumen_num_predictoras)(#tab:resumen_num_predictoras)Resumen descriptivo de las variables numéricas seleccionadas
+(#tab:ck_resumen_num_predictoras)(#tab:ck_resumen_num_predictoras)Resumen descriptivo de las variables numéricas seleccionadas
 </caption>
 <thead>
 <tr>

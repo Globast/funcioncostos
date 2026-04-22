@@ -2,7 +2,7 @@
 
 ## 6.1 Carga del dataset analítico 
 Se parte del dataset depurado en el capítulo de metodología (395 órdenes de producción con tipos ajustados). La limpieza previa ya eliminó errores de digitación y validó la integridad de los registros; este capítulo se concentra en entender qué dicen esos datos.
-```{r eda_setup, message=FALSE, warning=FALSE, echo=FALSE}
+```{r ck_eda_setup, message=FALSE, warning=FALSE, echo=FALSE}
 library(tidyverse)
 library(patchwork)
 library(gridExtra)
@@ -20,7 +20,7 @@ Las tres variables respuesta del estudio son `costo_transformacion` (costo de co
  
 ### 6.2.1 Costo unitario de conversión o de transformacion
 
-```{r resumen_ct, echo=FALSE}
+```{r ck_resumen_ct, echo=FALSE}
 datos %>%
   summarise(
     n       = length(costo_transformacion),
@@ -38,7 +38,7 @@ knitr::kable(resumen_ct, caption = "Resumen del costo de transformacion") %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
-```{r resumen_ct_calc, echo=FALSE}
+```{r ck_resumen_ct_calc, echo=FALSE}
 ct_media   <- resumen_ct$media
 ct_ds      <- resumen_ct$ds
 ct_med     <- resumen_ct$`50%`
@@ -55,7 +55,7 @@ El rango intercuartílico (`r round(ct_iqr,2)`) indica que la mitad central de l
 Sin embargo, los extremos revela algo distinto. Mientras el valor mínimo (`r round(ct_min,2)`) se mantiene dentro de lo esperado, el máximo (`r round(ct_max,2)`) se encuentra considerablemente alejado del resto. Este comportamiento puede sugerir la presencia de valores atípicos en la parte superior de la distribución, generando una cola hacia la derecha.
 En términos prácticos, esto significa que la mayoría de los procesos operan en niveles de costo relativamente estables, pero existen casos puntuales significativamente más costosos. Estos valores extremos pueden responder a procesos más complejos o a posibles inconsistencias en los datos, por lo que requieren un análisis específico antes de su inclusión en modelos o decisiones operativas.
 
-```{r hist_ct, fig.width=9, fig.height=4.5, echo=FALSE}
+```{r ck_hist_ct, fig.width=9, fig.height=4.5, echo=FALSE}
 library(dplyr)
 library(ggplot2)
 library(tibble)
@@ -135,7 +135,7 @@ El boxplot confirma la dispersión y evidencia que el fenómeno clave no es la v
 
 ### 6.2.2 Costo unitario de los insumos 
 
-```{r resumen_ci, echo=FALSE}
+```{r ck_resumen_ci, echo=FALSE}
 datos %>%
   summarise(
     n       = length(costo_insumo),
@@ -153,7 +153,7 @@ knitr::kable(resumen_ci, caption = "Resumen del costo de insumo") %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
-```{r resumen_ci_calc, echo=FALSE}
+```{r ck_resumen_ci_calc, echo=FALSE}
 ci_media  <- resumen_ci$media
 ci_ds     <- resumen_ci$ds
 ci_med    <- resumen_ci$`50%`
@@ -172,7 +172,7 @@ En resumen:
 - un conjunto reducido de insumos de costo medio
 - pocos insumos de alto impacto económico
 
-```{r hist_box_ci, fig.width=11, fig.height=4.5, echo=FALSE}
+```{r ck_hist_box_ci, fig.width=11, fig.height=4.5, echo=FALSE}
 
 lineas <- tibble(
   estadistico = c("Media", "Mediana", "Q1", "Q3"),
@@ -231,7 +231,7 @@ p_hist_ci + p_box_ci
 
 La variable `costo_unitario_total` se deriva como la suma de `costo_transformacion` y `costo_insumo`, y representa el costo total por unidad de producto.
 
-```{r resumen_ctot, echo=TRUE, echo=FALSE}
+```{r ck_resumen_ctot, echo=TRUE, echo=FALSE}
 datos %>%
   summarise(
     n       = length(costo_unitario_total),
@@ -248,7 +248,7 @@ knitr::kable(resumen_ctot, caption = "Resumen del costo unitario total") %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
-```{r resumen_ctot_calc, echo=FALSE}
+```{r ck_resumen_ctot_calc, echo=FALSE}
 cu_media  <- resumen_ctot$media
 cu_ds     <- resumen_ctot$ds
 cu_med    <- resumen_ctot$`50%`
@@ -273,7 +273,7 @@ Claramente el componente dominante del costo total es el proceso de transformaci
 
 El sistema productivo opera mayoritariamente en un rango de costos relativamente estable, pero está condicionado por una fracción de casos con costos significativamente más altos. Estos casos no son marginales y deben interpretarse como parte de la estructura del proceso, no como anomalías aisladas. La clave analítica no está en el promedio, sino en entender qué condiciones generan esos costos elevados y cómo se relacionan con los componentes del costo total.
 
-```{r hist_box_ctot, fig.width=11, fig.height=4.5, echo=FALSE}
+```{r ck_hist_box_ctot, fig.width=11, fig.height=4.5, echo=FALSE}
 
 lineas <- tibble(
   estadistico = c("Media", "Mediana", "Q1", "Q3"),
@@ -330,16 +330,16 @@ p_hist_ct + p_box_ct
 
 El costo unitario total hereda la asimetría de sus dos componentes. Cualquier iniciativa de reducción de costos que se concentre solo en el componente de insumos tendrá un techo muy bajo. La palanca real está en la transformación.
 
-[!NOTE]
+::: {.alert .alert-info}
 Los tres costos presentan distribuciones asimétricas con cola derecha pronunciada. En costo_transformacion se observa además un leve segundo abultamiento hacia valores bajos (5–15 UM), que rompe el patrón unimodal esperado.
 Una distribución con dos "jorobas" suele indicar que los datos no provienen de un proceso único, sino de dos o más procesos distintos mezclados. El promedio se vuelve engañoso porque representa algo que no existe realmente
 Primera hipótesis que emerge. El sistema productivo puede no ser un único proceso homogéneo, sino una mezcla de regímenes operativos con dinámicas de costo distintas. Si esto es cierto, los estadísticos agregados están ocultando diferencias estructurales importantes
-
+:::
 
 ## 6.3 Análisis univariado de predictoras numéricas
 Las variables numéricas predictoras son `volumen_lote`, `duracion_proceso`, `cantidad_insumo_1` y `cantidad_insumo_2`.
 
-```{r resumen_num_predictoras, echo=FALSE}
+```{r ck_resumen_num_predictoras, echo=FALSE}
 datos %>%
   summarise(
     n = length(volumen_lote),
