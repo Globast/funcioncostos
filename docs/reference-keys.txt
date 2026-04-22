@@ -11,6 +11,8 @@ tab:resumen-num-predictoras
 tab:tabla-categoricas
 tab:matriz-correlacion
 tab:matriz-spearman
+tab:bivariado-ct-modproceso
+tab:bivariado-ci-modproceso
 tab:bivariado-ct-tipoequipo
 tab:bivariado-ci-tipoequipo
 tab:bivariado-ct-numinsumos
@@ -46,10 +48,10 @@ diagramas-de-dispersión
 matriz-spearman
 normalidad-shapiro-wilk
 análisis-bivariado-variables-respuesta-vs-predictoras-categóricas
-tablas-resumen-por-tipo-de-equipo
-boxplots-por-tipo-de-equipo
-tablas-resumen-por-numero-de-insumos
-analisis-por-tipo-de-insumo
+análisis-bivariado-modalidad-proceso
+análisis-bivariado-tipo-de-equipo
+análisis-bivariado-por-numero-de-insumos
+análisis-bivariado-por-tipo-de-insumo
 variables-derivadas
 pruebas-de-hipótesis-sin-desarrollar
 prueba-t-de-dos-muestras

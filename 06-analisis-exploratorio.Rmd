@@ -873,7 +873,95 @@ datos %>%
 
 ## Análisis bivariado: variables respuesta vs predictoras categóricas
 
-### Tablas resumen por tipo de equipo
+
+
+### Análisis bivariado: Modalidad proceso
+
+```{r bivariado-ct-modproceso}
+resumen_bivariado_cc_modproceso <- datos %>%
+  group_by(modalidad_proceso) %>%
+  summarise(
+    n = length(costo_transformacion),
+    media = mean(costo_transformacion),
+    ds = sd(costo_transformacion),
+    `50%` = median(costo_transformacion),
+    minimo = min(costo_transformacion),
+    maximo = max(costo_transformacion),
+    Q1 = quantile(costo_transformacion, 0.25),
+    Q3 = quantile(costo_transformacion, 0.75),
+    IQR = IQR(costo_transformacion),
+    .groups = "drop"
+  )
+
+  knitr::kable(resumen_bivariado_cc_modproceso , caption = "Resumen Bivariado costos de transformación por modalidad de proceso") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
+```
+
+El tipo de equipo A1, presenta un costo medio de aproximadamente 33 UM/unidad, con una dispersión moderada. Su mediana cercana a 30 confirma que el comportamiento típico está bien representado y relativamente estable. Esto lo posiciona como el estándar operativo del sistema.
+
+El tipo de equipo B2 muestra un patrón muy similar a A1, aunque con costos ligeramente menores y menor variabilidad. La cercanía entre media y mediana sugiere estabilidad, pero su menor tamaño muestral limita la robustez de la comparación.
+
+El caso de C3 es claramente distinto. Presenta costos significativamente más altos (media superior a 64) y mayor dispersión. Además, el rango intercuartílico es amplio, lo que indica que no solo es costoso, sino también variable. Esto apunta a un proceso con alta complejidad o baja eficiencia estructural.
+
+El tipo de equipo D4 tiene costos notablemente bajos (media cercana a 9). La dispersión es reducida y el comportamiento es consistente. Este equipo representa una operación altamente eficiente y controlada, con baja variabilidad. qué prácticas operativas permiten ese nivel de eficiencia y si son replicables.
+
+El costo de transformación está determinado por el tipo de equipo, y la magnitud de las diferencias es significativa.
+
+```{r bivariado-ci-modproceso}
+resumen_bivariado_ci_modproceso <- datos %>%
+  group_by(modalidad_proceso) %>%
+  summarise(
+    n = length(costo_insumo),
+    media = mean(costo_insumo),
+    ds = sd(costo_insumo),
+    `50%` = median(costo_insumo),
+    minimo = min(costo_insumo),
+    maximo = max(costo_insumo),
+    Q1 = quantile(costo_insumo, 0.25),
+    Q3 = quantile(costo_insumo, 0.75),
+    IQR = IQR(costo_insumo),
+    .groups = "drop"
+  )
+
+    knitr::kable(resumen_bivariado_ci_modproceso , caption = "Resumen Bivariado costos de insumo por modalidad de proceso") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
+```
+
+Los tipos de equipos A1 y B2 presentan patrones similares: medias cercanas a 5 UM/unidad y medianas ligeramente inferiores. El rango intercuartílico es moderado, sugiriendo que el consumo de insumos en estos equipos es predecible y controlado.
+
+El tipo de equipo C3 nuevamente se diferencia de forma clara. La media (≈11.25) es más del doble que en A1 y B2, y la dispersión es considerable. Además, la mediana se mantiene alta. Costoso tanto en transformación como en  insumos, es menos eficiente.
+
+El tipo de equipo D4 Presenta la media más baja (≈3.58) pero su desviación estándar es alta y supera incluso a la media. La mediana (≈1.64) está muy por debajo de la media, lo que indica una asimetría extrema. D4 es generalmente eficiente, pero con episodios puntuales de alto consumo.
+
+
+```{r boxmod_proceso, fig.width=9, fig.height=4.5}
+
+box_ct_mod_proceso <-datos %>%
+  ggplot(aes(x = modalidad_proceso, y = costo_transformacion)) +
+  geom_boxplot(fill = "#87CEFA", outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "darkblue") +
+  labs(x = "Tipo de equipo",
+       y = "Costo de transformación (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Costo de transformación por modalidad de proceso ")
+
+
+box_ci_mod_proceso <- datos %>%
+  ggplot(aes(x = modalidad_proceso, y = costo_insumo)) +
+  geom_boxplot(fill = "#b2df8a", outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "darkgreen") +
+  labs(x = "Modalidad de proceso",
+       y = "Costo de insumo (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Costo de insumo por modalidad de proceso")
+
+box_ct_mod_proceso + box_ci_mod_proceso
+```
+
+Los boxplots confirman visualmente lo que ya sugerían los resúmenes numéricos: el tipo de equipo introduce regímenes claramente diferenciados de costos, tanto en transformación como en insumos.
+
+
+### Análisis bivariado: tipo de equipo
 
 ```{r bivariado-ct-tipoequipo}
 resumen_bivariado_cc <- datos %>%
@@ -932,9 +1020,6 @@ El tipo de equipo C3 nuevamente se diferencia de forma clara. La media (≈11.25
 El tipo de equipo D4 Presenta la media más baja (≈3.58) pero su desviación estándar es alta y supera incluso a la media. La mediana (≈1.64) está muy por debajo de la media, lo que indica una asimetría extrema. D4 es generalmente eficiente, pero con episodios puntuales de alto consumo.
 
 
-
-### Boxplots por tipo de equipo
-
 ```{r boxequipo, fig.width=9, fig.height=4.5}
 
 box_ct_te <-datos %>%
@@ -959,12 +1044,10 @@ box_ci_te <- datos %>%
 box_ct_te + box_ci_te 
 ```
 
-
 Los boxplots confirman visualmente lo que ya sugerían los resúmenes numéricos: el tipo de equipo introduce regímenes claramente diferenciados de costos, tanto en transformación como en insumos.
 
 
-
-### Tablas resumen por numero de insumos
+### Análisis bivariado: por numero de insumos
 
 ```{r bivariado-ct-numinsumos}
 resumen_bivariado_cc <- datos %>%
@@ -1044,7 +1127,7 @@ Cada vez que se introduce un segundo insumo, se está aceptando un costo mayor d
 Es claro que el segundo insumo incrementa el consumo de materiales y el costo de transformación , entonces debe reflejarse en un recargo explícito o una estructura de precios diferenciada. de lo contrario se está subsidiando complejidad.
 
 
-### Analisis por tipo de insumo
+### Análisis bivariado: por tipo de insumo
 
 ```{r combinacion-insumos}
 
@@ -1183,6 +1266,11 @@ box_comb_insumos_ci <- datos %>%
 
   box_comb_insumos_ct  / box_comb_insumos_ci
 ```
+
+
+
+
+
 
 **Ejercicio.** Replicar el análisis bivariado anterior para las variables categóricas `categoria_producto`, `num_insumos`, `insumo_1` e `insumo_2`, e interpretar los patrones observados con respecto a las tres variables respuesta.
 
