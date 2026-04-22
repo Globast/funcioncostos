@@ -432,14 +432,11 @@ kbl(diccionario,
 
 <!--chapter:end:05-diccionario-campos.Rmd-->
 
-# Análisis Exploratorio de Datos {#eda}
-Análisis Exploratorio de Datos — Capítulo 6
-Prefacio para el lector
-Este capítulo cuenta la historia de un dataset que, a primera vista, parecía homogéneo y terminó revelando una estructura mucho más compleja. El recorrido se organiza deliberadamente como una narrativa analítica: comienza con una mirada agregada, detecta señales de heterogeneidad, formula hipótesis, decide profundizar, y termina con una lectura estratificada que cambia radicalmente lo que parecía evidente al inicio.
-El objetivo de esta estructura es doble. Técnicamente, busca demostrar que ciertos hallazgos no pueden obtenerse sin estratificación. Para la dirección financiera, busca traducir esos hallazgos a implicaciones concretas sobre costo, eficiencia y decisiones de gestión.
-
-6.1 Punto de partida: carga del dataset analítico
+# Análisis Exploratorio de Datos Version2
+### Carga del dataset analítico
 Se parte del dataset depurado en el capítulo de metodología (395 órdenes de producción con tipos ajustados). La limpieza previa ya eliminó errores de digitación y validó la integridad de los registros; este capítulo se concentra en entender qué dicen esos datos.
+
+```{r eda-setup, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(patchwork)
 library(gridExtra)
@@ -449,38 +446,619 @@ library(kableExtra)
 datos <- readRDS("data/data_costos_limpio.rds") %>%
   mutate(costo_unitario_total = costo_transformacion + costo_insumo)
 n_total <- nrow(datos)
-El dataset contiene r n_total órdenes de producción y r ncol(datos) variables.
+```
 
-6.2 Primera lectura agregada: lo que parece ser el sistema
-6.2.1 Comportamiento global de los costos
-Tres variables respuesta organizan el análisis: el costo de transformación (eficiencia del proceso productivo), el costo de insumo (eficiencia de materias primas), y el costo unitario total (agregado económico).
-[Aquí van los resúmenes descriptivos y gráficos univariados de costo_transformacion, costo_insumo y costo_unitario_total tal como los traes del capítulo actual.]
-Lectura inicial para la dirección financiera. El sistema productivo, en promedio, opera con un costo unitario cercano a r round(mean(datos$costo_unitario_total), 2) UM/unidad. El componente de transformación representa aproximadamente el 85% del costo total; el de insumos, el 15%. Esta proporción es estructural: cualquier iniciativa de reducción de costos que se concentre solo en el componente de insumos tendrá un techo muy bajo. La palanca real está en la transformación.
-6.2.2 Primera señal de complejidad: los histogramas no son simétricos
-Los tres costos presentan distribuciones asimétricas con cola derecha pronunciada. En costo_transformacion se observa además un leve segundo abultamiento hacia valores bajos (5–15 UM), que rompe el patrón unimodal esperado.
+El dataset contiene `r n_total` órdenes de producción y `r ncol(datos)` variables.
 
-Nota técnica (en lenguaje simple): una distribución con dos "jorobas" suele indicar que los datos no provienen de un proceso único, sino de dos o más procesos distintos mezclados. El promedio se vuelve engañoso porque representa algo que no existe realmente.
 
-Primera hipótesis que emerge. El sistema productivo puede no ser un único proceso homogéneo, sino una mezcla de regímenes operativos con dinámicas de costo distintas. Si esto es cierto, los estadísticos agregados están ocultando diferencias estructurales importantes.
-6.2.3 Variables operativas: escala, tiempo e insumos
-[Resumen descriptivo de volumen_lote, duracion_proceso, cantidad_insumo_1 y cantidad_insumo_2.]
-Implicación para el negocio. El sistema produce lotes de escalas muy distintas (entre 100 y 13.300 unidades), con duraciones que van de 3 a 482 horas. Esta heterogeneidad no es ruido: refleja una lógica de producción "make-to-order" donde cada orden responde a un pedido específico. El tamaño estándar de lote no existe. Esto tiene consecuencias directas: el sistema no puede optimizarse con reglas uniformes; requerirá segmentación por rangos de producción.
+## Análisis univariado de los costos
+Las tres variables respuesta del estudio son `costo_transformacion` (costo de conversión por unidad producida), `costo_insumo` (costo de materias primas por unidad producida) y su agregado `costo_unitario_total`. Se analizan en paralelo porque responden a lógicas operativas distintas: el costo de transformación refleja eficiencia de máquina y proceso, mientras que el costo de insumo refleja decisiones de formulación y consumo de materias primas.
 
-6.3 Segunda mirada: la estructura categórica sugiere algo más
-6.3.1 Distribución de factores
-[Tabla de frecuencias de variables categóricas.]
-Lo relevante de esta tabla. El tipo_equipo A1 concentra el 72.7% de las órdenes. Esto no es un dato neutro: significa que cualquier estadístico global del sistema está dominado por el comportamiento de un solo tipo de equipo. Cuando un análisis habla del "costo promedio del sistema", en realidad habla —en un 73%— del costo promedio de A1.
-6.3.2 La señal crítica: las categorías no son independientes
+### costo_transformacion
+
+```{r resumen-ct, echo=TRUE}
+datos %>%
+  summarise(
+    n       = length(costo_transformacion),
+    media   = mean(costo_transformacion),
+    ds      = sd(costo_transformacion),
+    `50%`   = median(costo_transformacion),
+    minimo  = min(costo_transformacion),
+    maximo  = max(costo_transformacion),
+    Q1      = quantile(costo_transformacion, 0.25),
+    Q3      = quantile(costo_transformacion, 0.75),
+    IQR     = IQR(costo_transformacion)
+  ) -> resumen_ct
+
+knitr::kable(resumen_ct, caption = "Resumen del costo de transformacion") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
+```
+
+```{r resumen-ct-calc, echo=FALSE}
+ct_media   <- resumen_ct$media
+ct_ds      <- resumen_ct$ds
+ct_med     <- resumen_ct$`50%`
+ct_min     <- resumen_ct$minimo
+ct_max     <- resumen_ct$maximo
+ct_iqr     <- resumen_ct$IQR
+ct_cv      <- ct_ds / ct_media * 100
+```
+
+La variable `costo_transformacion` se analizó a partir de `r n_obs` órdenes de producción. 
+Se obtuvo un costo medio de conversión por unidad de `r round(ct_media, 2)` UM/unidad (DS = `r round(ct_ds, 2)` UM/unidad), con un coeficiente de variación de `r round(ct_cv, 1)`%. El 50% de las órdenes presenta un costo de conversión por debajo de `r round(ct_med, 2)` UM/unidad. 
+La desviación estándar alcanza `r round(ct_ds,2)`, lo que equivale a un coeficiente de variación de `r round(ct_cv,1)`%. Quiere decir que los costos fluctúan de manera importante respecto al promedio. 
+El rango intercuartílico (`r round(ct_iqr,2)`) indica que la mitad central de los datos se sitúa en un intervalo relativamente acotado, lo que describe el comportamiento típico del proceso.
+Sin embargo, los extremos revela algo distinto. Mientras el valor mínimo (`r round(ct_min,2)`) se mantiene dentro de lo esperado, el máximo (`r round(ct_max,2)`) se encuentra considerablemente alejado del resto. Este comportamiento puede sugerir la presencia de valores atípicos en la parte superior de la distribución, generando una cola hacia la derecha.
+En términos prácticos, esto significa que la mayoría de los procesos operan en niveles de costo relativamente estables, pero existen casos puntuales significativamente más costosos. Estos valores extremos pueden responder a procesos más complejos o a posibles inconsistencias en los datos, por lo que requieren un análisis específico antes de su inclusión en modelos o decisiones operativas.
+
+```{r hist-ct, fig.width=9, fig.height=4.5}
+library(dplyr)
+library(ggplot2)
+library(tibble)
+
+lineas <- tibble(
+  estadistico = c("Media", "Mediana", "Q1", "Q3"),
+  valor = c(
+    resumen_ct$media,
+    resumen_ct$`50%`,
+    as.numeric(resumen_ct$Q1),
+    as.numeric(resumen_ct$Q3)
+  )
+)
+
+p_hist_cc<-datos %>%
+  ggplot(aes(x = costo_transformacion)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 30,
+                 fill = "#ACAEAF",
+                 color = "#616161",
+                 alpha = 0.6) +
+  geom_density(linewidth = 1.2) +
+  
+  geom_vline(data = lineas,
+             aes(xintercept = valor, color = estadistico, linetype = estadistico),
+             linewidth = 0.9) +
+
+  scale_color_manual(values = c(
+    "Media"   = "#551196",
+    "Mediana" = "#1a9850",
+    "Q1"      = "#f46d43",
+    "Q3"      = "#a71c1c"
+  )) +
+  scale_linetype_manual(values = c(
+    "Media"   = "longdash",
+    "Mediana" = "longdash",
+    "Q1"      = "dotted",
+    "Q3"      = "dotted"
+  )) +
+
+  labs(x = "Costo de transformación (UM/unidad)",
+       y = "Densidad",
+       color = "Estadístico",
+       linetype = "Estadístico") +
+  theme_bw() +
+  theme(legend.position = "right") +
+  facet_grid(. ~ "Distribución del costo de transformación")
+
+p_box_cc<-datos %>%
+  ggplot(aes(x = "", y = costo_transformacion)) +
+  geom_boxplot(fill = "#ACAEAF", color = "#616161", outlier.color = "red") +
+  stat_summary(fun = mean, geom = "point", shape = 20, size = 3, color = "black") +
+  labs(x = "",
+       y = "Costo de transformación (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Boxplot del costo de transformación")
+
+p_hist_cc + p_box_cc
+
+```
+
+El núcleo de la distribución se concentra claramente alrededor de r round(ct_media,2), con una densidad máxima cercana a los 25–30 UM. Esta región coincide con la mediana (r round(ct_med,2)) y el rango intercuartílico.
+La forma de la distribución no es simétrica. Se observa una cola derecha prolongada, que se extiende hasta valores cercanos a r round(ct_max,0). Esta asimetría implica que, aunque la mayoría de los costos son moderados, existe una proporción pequeña de observaciones con costos significativamente más altos.
+Adicionalmente, aparece un leve segundo abultamiento en valores bajos (≈ 5–15 UM). Esto sugiere la posible existencia de subgrupos dentro del proceso, es decir, no todos los registros provienen del mismo mecanismo generador de costos. 
+
+Podrían coexistir:
+- procesos simples o de baja complejidad (costos bajos)
+- procesos estándar (zona central)
+- procesos excepcionales o más complejos (cola derecha)
+
+En términos operativos, el sistema no solo presenta variabilidad, sino también estructura interna: no es un proceso homogéneo, sino una mezcla de dinámicas distintas que conviene separar antes de cualquier inferencia o optimización.
+
+El bigote superior se extiende hasta un cierto punto, pero inmediatamente aparecen múltiples observaciones por encima, marcadas en rojo. Estos son outliers superiores, y no son pocos ni aislados: forman un grupo visible. 
+Existe una subpoblación de costos altos. Es decir no son casos extremos que sean puntuales. En la parte inferior no se observan outliers relevantes. El mínimo está dentro del rango esperado
+El boxplot confirma la dispersión y evidencia que el fenómeno clave no es la variabilidad general, sino la existencia de una dinámica diferenciada en costos altos, que requiere segmentación o modelado específico.
+
+### Costo unitario de los insumos
+
+```{r resumen-ci, echo=TRUE}
+datos %>%
+  summarise(
+    n       = length(costo_insumo),
+    media   = mean(costo_insumo),
+    ds      = sd(costo_insumo),
+    `50%`   = median(costo_insumo),
+    minimo  = min(costo_insumo),
+    maximo  = max(costo_insumo),
+    Q1      = quantile(costo_insumo, 0.25),
+    Q3      = quantile(costo_insumo, 0.75),
+    IQR     = IQR(costo_insumo)
+  ) -> resumen_ci
+
+knitr::kable(resumen_ci, caption = "Resumen del costo de insumo") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
+```
+
+```{r resumen-ci-calc, echo=FALSE}
+ci_media  <- resumen_ci$media
+ci_ds     <- resumen_ci$ds
+ci_med    <- resumen_ci$`50%`
+ci_min    <- resumen_ci$minimo
+ci_max    <- resumen_ci$maximo
+ci_iqr    <- resumen_ci$IQR
+ci_cv     <- ci_ds / ci_media * 100
+```
+
+El costo de insumo promedio es de `r round(ci_media, 2)` UM/unidad (DS = `r round(ci_ds, 2)` UM/unidad), con un coeficiente de variación de `r round(ci_cv, 1)`%. El 50% de las órdenes tiene un costo de insumo por debajo de `r round(ci_med, 2)` UM/unidad, con un mínimo de `r round(ci_min, 2)` y un máximo de `r round(ci_max, 2)` UM/unidad. El rango intercuartílico es de `r round(ci_iqr, 2)` UM/unidad.
+El comportamiento típico se concentra en valores bajos. La mayoría de los insumos se ubican en niveles reducidos de costo, mientras que la media (r round(ci_media,2)) es superior, lo que evidencia la influencia de valores más altos sobre el promedio. Esta diferencia confirma una asimetría positiva: pocos insumos concentran costos considerablemente mayores.
+El rango intercuartílico (r round(ci_iqr,2)) delimita el comportamiento típico: el 50% central de los costos se sitúa en un intervalo relativamente acotado, lo que sugiere que existe un conjunto dominante de insumos de bajo costo. Sin embargo, este núcleo convive con una cola derecha extensa.
+En resumen: 
+- comportamiento homogéneo
+- un grupo mayoritario de insumos de bajo costo
+- un conjunto reducido de insumos de costo medio
+- pocos insumos de alto impacto económico
+
+```{r hist-box-ci, fig.width=11, fig.height=4.5}
+
+lineas <- tibble(
+  estadistico = c("Media", "Mediana", "Q1", "Q3"),
+  valor = c(
+    resumen_ci$media,
+    resumen_ci$`50%`,
+    as.numeric(resumen_ci$Q1),
+    as.numeric(resumen_ci$Q3)
+  )
+)
+p_hist_ci <- datos %>%
+  ggplot(aes(x = costo_insumo)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 30,
+                 fill = "#ACAEAF",
+                 color = "#616161",
+                 alpha = 0.6) +
+  geom_density(color = "darkgreen", linewidth = 1.2) +
+   
+  geom_vline(data = lineas,
+             aes(xintercept = valor, color = estadistico, linetype = estadistico),
+             linewidth = 0.9) +
+  scale_color_manual(values = c(
+    "Media"   = "#551196",
+    "Mediana" = "#1a9850",
+    "Q1"      = "#f46d43",
+    "Q3"      = "#a71c1c"
+  )) +
+  scale_linetype_manual(values = c(
+    "Media"   = "longdash",
+    "Mediana" = "longdash",
+    "Q1"      = "dotted",
+    "Q3"      = "dotted"
+  )) +
+  labs(x = "Costo de insumo (UM/unidad)",
+       y = "Densidad",
+       color = "Estadístico",
+       linetype = "Estadístico") +
+  theme_bw() +
+  theme(legend.position = "right") +
+  facet_grid(. ~ "Distribución del costo de insumo")
+
+
+p_box_ci <- datos %>%
+  ggplot(aes(x = "", y = costo_insumo)) +
+  geom_boxplot(fill = "#ACAEAF", color = "#616161", outlier.color = "red") +
+  stat_summary(fun = mean, geom = "point", shape = 20, size = 3, color = "black") +
+  labs(x = "", y = "Costo de insumo (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Boxplot del costo de insumo")
+
+p_hist_ci + p_box_ci
+```
+
+### Costo unitario total
+
+La variable `costo_unitario_total` se deriva como la suma de `costo_transformacion` y `costo_insumo`, y representa el costo total por unidad de producto.
+
+```{r resumen-ctot, echo=TRUE}
+datos %>%
+  summarise(
+    n       = length(costo_unitario_total),
+    media   = mean(costo_unitario_total),
+    ds      = sd(costo_unitario_total),
+    `50%`   = median(costo_unitario_total),
+    minimo  = min(costo_unitario_total),
+    maximo  = max(costo_unitario_total),
+    Q1      = quantile(costo_unitario_total, 0.25),
+    Q3      = quantile(costo_unitario_total, 0.75),
+    IQR     = IQR(costo_unitario_total)
+  ) -> resumen_ctot
+knitr::kable(resumen_ctot, caption = "Resumen del costo unitario total") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
+```
+
+```{r resumen-ctot-calc, echo=FALSE}
+cu_media  <- resumen_ctot$media
+cu_ds     <- resumen_ctot$ds
+cu_med    <- resumen_ctot$`50%`
+cu_min    <- resumen_ctot$minimo
+cu_max    <- resumen_ctot$maximo
+cu_iqr    <- resumen_ctot$IQR
+cu_cv     <- cu_ds / cu_media * 100
+
+prop_ct <- round(ct_media / cu_media * 100, 1)
+prop_ci <- round(ci_media / cu_media * 100, 1)
+```
+
+El costo unitario total promedio es de `r round(cu_media, 2)` UM/unidad , la cercanía relativa entre ambas indica que, aunque existe asimetría, el núcleo del sistema está bien definido. Sin embargo, la media se mantiene por encima de la mediana, lo que confirma la presencia de una cola derecha..
+Un coeficiente de variación de `r round(cu_cv, 1)`% (DS = `r round(cu_ds, 2)`), la variabilidad del costo total no es despreciable . De este promedio, el `r prop_ct`% corresponde al costo de transformación y el `r prop_ci`% al costo de insumo. 
+El 50% de las órdenes presenta un costo unitario total por debajo de `r round(cu_med, 2)` UM/unidad, con un rango entre `r round(cu_min, 2)` y `r round(cu_max, 2)`.
+El boxplot confirma la presencia de outliers superiores múltiples, no aislados. Estos valores altos no corresponden a ruido aleatorio, sino a una fracción del sistema que sistemáticamente incurre en costos elevados.
+
+Descomposición del costo total:
+- Costo de transformación representa aproximadamente r prop_ct% del total
+- Costo de insumos representa aproximadamente r prop_ci%
+Claramente el componente dominante del costo total es el proceso de transformación, mientras que los insumos, aunque más variables, tienen menor peso relativo en el agregado.
+
+El sistema productivo opera mayoritariamente en un rango de costos relativamente estable, pero está condicionado por una fracción de casos con costos significativamente más altos. Estos casos no son marginales y deben interpretarse como parte de la estructura del proceso, no como anomalías aisladas. La clave analítica no está en el promedio, sino en entender qué condiciones generan esos costos elevados y cómo se relacionan con los componentes del costo total.
+
+```{r hist-box-ctot, fig.width=11, fig.height=4.5}
+
+lineas <- tibble(
+  estadistico = c("Media", "Mediana", "Q1", "Q3"),
+  valor = c(
+    resumen_ctot$media,
+    resumen_ctot$`50%`,
+    as.numeric(resumen_ctot$Q1),
+    as.numeric(resumen_ctot$Q3)
+  )
+)
+p_hist_ct <- datos %>%
+  ggplot(aes(x = costo_unitario_total)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 30,
+                 fill = "#ACAEAF",
+                 color = "white",
+                 alpha = 0.6) +
+  geom_density(color = "#4d004b", linewidth = 1.2) +
+
+  
+  geom_vline(data = lineas,
+             aes(xintercept = valor, color = estadistico, linetype = estadistico),
+             linewidth = 0.9) +
+  scale_color_manual(values = c(
+    "Media"   = "#551196",
+    "Mediana" = "#1a9850",
+    "Q1"      = "#f46d43",
+    "Q3"      = "#a71c1c"
+  )) +
+  scale_linetype_manual(values = c(
+    "Media"   = "longdash",
+    "Mediana" = "longdash",
+    "Q1"      = "dotted",
+    "Q3"      = "dotted"
+  )) +
+  labs(x = "Costo unitario total (UM/unidad)",
+       y = "Densidad",
+       color = "Estadístico",
+       linetype = "Estadístico") +
+  theme_bw() +
+  theme(legend.position = "right") +
+  facet_grid(. ~ "Distribución del costo unitario total")
+  
+p_box_ct <- datos %>%
+  ggplot(aes(x = "", y = costo_unitario_total)) +
+  geom_boxplot(fill = "#ACAEAF", color = "#616161", outlier.color = "red") +
+  stat_summary(fun = mean, geom = "point", shape = 20, size = 3, color = "black") +
+  labs(x = "", y = "Costo unitario total (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Boxplot del costo unitario total")
+
+p_hist_ct + p_box_ct
+```
+
+El costo unitario total hereda la asimetría de sus dos componentes. Cualquier iniciativa de reducción de costos que se concentre solo en el componente de insumos tendrá un techo muy bajo. La palanca real está en la transformación.
+
+## Los histogramas no son simétricos
+**Los tres costos presentan distribuciones asimétricas con cola derecha pronunciada. En costo_transformacion se observa además un leve segundo abultamiento hacia valores bajos (5–15 UM), que rompe el patrón unimodal esperado.**
+**Una distribución con dos "jorobas" suele indicar que los datos no provienen de un proceso único, sino de dos o más procesos distintos mezclados. El promedio se vuelve engañoso porque representa algo que no existe realmente.**
+**Primera hipótesis que emerge. El sistema productivo puede no ser un único proceso homogéneo, sino una mezcla de regímenes operativos con dinámicas de costo distintas. Si esto es cierto, los estadísticos agregados están ocultando diferencias estructurales importantes.**
+
+## Análisis univariado de variables numéricas predictoras
+
+Las variables numéricas predictoras son `volumen_lote`, `duracion_proceso`, `cantidad_insumo_1` y `cantidad_insumo_2`. Para las cantidades de insumo, los estadísticos descriptivos se calculan condicionando sobre la presencia efectiva del insumo correspondiente, conforme a la advertencia estructural documentada en el capítulo de metodología.
+
+```{r resumen-num-predictoras}
+datos %>%
+  summarise(
+    n = length(volumen_lote),
+    media = mean(volumen_lote),
+    ds = sd(voulmen_lote),
+    `50%` = median(volumen_lote),
+    minimo = min(volumen_lote),
+    maximo = max(volumen_lote),
+    Q1 = quantile(volumen_lote, 0.25),
+    Q3 = quantile(volumen_lote, 0.75),
+    IQR = IQR(volumen_lote)
+  ) %>%
+  mutate(variable = "volumen_lote") -> var_num_vol
+
+datos %>%
+  summarise(
+    n = length(duracion_proceso),
+    media = mean(duracion_proceso),
+    ds = sd(duracion_proceso),
+    `50%` = median(duracion_proceso),
+    minimo = min(duracion_proceso),
+    maximo = max(duracion_proceso),
+    Q1 = quantile(duracion_proceso, 0.25),
+    Q3 = quantile(duracion_proceso, 0.75),
+    IQR = IQR(duracion_proceso)
+  ) %>%
+  mutate(variable = "duracion_proceso") -> var_num_dur
+
+datos %>%
+  filter(num_insumos >= 1) %>%
+  summarise(
+    n = length(cantidad_insumo_1),
+    media = mean(cantidad_insumo_1),
+    ds = sd(cantidad_insumo_1),
+    `50%` = median(cantidad_insumo_1),
+    minimo = min(cantidad_insumo_1),
+    maximo = max(cantidad_insumo_1),
+    Q1 = quantile(cantidad_insumo_1, 0.25),
+    Q3 = quantile(cantidad_insumo_1, 0.75),
+    IQR = IQR(cantidad_insumo_1)
+  ) %>%
+  mutate(variable = "cantidad_insumo_1") -> var_num_ci1
+
+datos %>%
+  filter(num_insumos == 2) %>%
+  summarise(
+    n = length(cantidad_insumo_2),
+    media = mean(cantidad_insumo_2),
+    ds = sd(cantidad_insumo_2),
+    `50%` = median(cantidad_insumo_2),
+    minimo = min(cantidad_insumo_2),
+    maximo = max(cantidad_insumo_2),
+    Q1 = quantile(cantidad_insumo_2, 0.25),
+    Q3 = quantile(cantidad_insumo_2, 0.75),
+    IQR = IQR(cantidad_insumo_2)
+  ) %>%
+  mutate(variable = "cantidad_insumo_2") -> var_num_ci2
+
+resumen_num_predictoras <- bind_rows(var_num_vol, var_num_dur, var_num_ci1, var_num_ci2) %>%
+  select(variable, everything())%>%
+  mutate(across(where(is.numeric) & !n, ~ round(.x, 2)))
+knitr::kable(resumen_num_predictoras, caption = "Resumen descriptivo de las variables numéricas seleccionadas") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
+```
+
+No son variables independientes: describen distintas dimensiones del mismo proceso productivo.
+- Volumen de lote,  es la variable más heterogénea. La media supera claramente a la mediana, lo que indica asimetría positiva. El rango es muy amplio (100 a 13300) y el IQR (2063) es elevado, señal de que incluso el comportamiento “típico” presenta alta dispersión. el proceso opera con lotes muy dispares, dependiendo de los pedidos de los clientes , el proceso es make to order.  No hay un tamaño estándar dominante.
+- Duración del proceso, es heterogéneo también pero más controlado. La media es superior a la mediana, nuevamente cola derecha. El IQR muestra que la mitad de los procesos se concentra entre 60 y 150 horas, lo que define un rango operativo razonablemente estable. Sin embargo, el máximo de 482 horas apunta a procesos excepcionalmente largos.
+- Cantidad de insumo 1, comportamiento más discreto y concentrado. La mediana es 2 y el IQR es 2, lo que indica que la mayoría de los casos utiliza entre 1 y 3 unidades. La media (2.29) ligeramente superior a la mediana sugiere algunos valores altos, pero sin una dispersión extrema. Esta variable refleja un consumo relativamente estable y predecible, con variaciones moderadas.
+- Cantidad de insumo 2: Tiene menor número de observaciones, no todos las ordenes llevan insumo 2. Su mediana es 1 y el IQR es 1.25, lo que muestra una concentración aún mayor que en el insumo 1. La dispersión es baja y los valores extremos (máximo 7) son menos pronunciados. Esto sugiere que el segundo insumo actúa como un componente opcional o complementario, con consumo bajo y controlado.
+
+La principal fuente de heterogeneidad no está en los insumos, sino en el tamaño de los lotes y la duración de los procesos. Esto sugiere que cualquier modelamiento o mejora operativa debe centrarse en segmentar por escala de producción y complejidad del proceso, más que en el consumo de insumos.
+
+
+```{r box-num-predictoras, fig.width=11, fig.height=7}
+p_vol <- datos %>%
+  ggplot(aes(x = "", y = volumen_lote)) +
+  geom_boxplot(fill = "#1f77b4", alpha = 0.7) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 4, color = "black") +
+  labs(title = "Distribución del volumen de lote", y = "Unidades", x = "") +
+  theme_bw()
+
+p_dur <- datos %>%
+  ggplot(aes(x = "", y = duracion_proceso)) +
+  geom_boxplot(fill = "#2ca02c", alpha = 0.7) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 4, color = "black") +
+  labs(title = "Distribución de la duración de proceso", y = "Horas", x = "") +
+  theme_bw()
+
+p_ci1 <- datos %>%
+  filter(num_insumos >= 1) %>%
+  ggplot(aes(x = "", y = cantidad_insumo_1)) +
+  geom_boxplot(fill = "#ff7f0e", alpha = 0.7) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 4, color = "black") +
+  labs(title = "Cantidad de insumo 1 (órdenes con insumo)",
+       y = "Litros equivalentes", x = "") +
+  theme_bw()
+
+p_ci2 <- datos %>%
+  filter(num_insumos == 2) %>%
+  ggplot(aes(x = "", y = cantidad_insumo_2)) +
+  geom_boxplot(fill = "#9467bd", alpha = 0.7) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 4, color = "black") +
+  labs(title = "Cantidad de insumo 2 (órdenes con segundo insumo)",
+       y = "Litros equivalentes", x = "") +
+  theme_bw()
+
+(p_vol + p_dur) / (p_ci1 + p_ci2)
+```
+
+```{r hist-num-predictoras, fig.width=11, fig.height=7}
+library(ggplot2)
+library(dplyr)
+library(patchwork)
+
+p_vol_hist <- datos %>%
+  ggplot(aes(x = volumen_lote)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 30,
+                 fill = "#1f77b4",
+                 color = "white",
+                 alpha = 0.7) +
+  geom_density(linewidth = 1.2) +
+  labs(title = "Distribución del volumen de lote",
+       x = "Unidades", y = "Densidad") +
+  theme_bw()
+
+p_dur_hist <- datos %>%
+  ggplot(aes(x = duracion_proceso)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 30,
+                 fill = "#2ca02c",
+                 color = "white",
+                 alpha = 0.7) +
+  geom_density(linewidth = 1.2) +
+  labs(title = "Distribución de la duración de proceso",
+       x = "Horas", y = "Densidad") +
+  theme_bw()
+
+p_ci1_hist <- datos %>%
+  filter(num_insumos >= 1) %>%
+  ggplot(aes(x = cantidad_insumo_1)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 25,
+                 fill = "#ff7f0e",
+                 color = "white",
+                 alpha = 0.7) +
+  geom_density(linewidth = 1.2) +
+  labs(title = "Cantidad de insumo 1 (órdenes con insumo)",
+       x = "Litros equivalentes", y = "Densidad") +
+  theme_bw()
+
+p_ci2_hist <- datos %>%
+  filter(num_insumos == 2) %>%
+  ggplot(aes(x = cantidad_insumo_2)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 20,
+                 fill = "#9467bd",
+                 color = "white",
+                 alpha = 0.7) +
+  geom_density(linewidth = 1.2) +
+  labs(title = "Cantidad de insumo 2 (órdenes con segundo insumo)",
+       x = "Litros equivalentes", y = "Densidad") +
+  theme_bw()
+
+(p_vol_hist + p_dur_hist) / (p_ci1_hist + p_ci2_hist)
+```
+
+**Visualmente, la fuente real de heterogeneidad no está en los insumos, sino en cómo y cuánto se produce. Esto implica que cualquier análisis o modelo que ignore la escala (volumen) o la complejidad (duración) va a estar mal especificado.**
+
+**El sistema produce lotes de escalas muy distintas (entre 100 y 13.300 unidades), con duraciones que van de 3 a 482 horas. Esta heterogeneidad refleja una lógica de producción "make-to-order" donde cada orden responde a un pedido específico. El tamaño estándar de lote no existe. El proceso no puede optimizarse con reglas uniformes; requerirá segmentación por rangos de producción.**
+
+## Análisis univariado de variables categóricas predictoras
+
+```{r tabla-categoricas}
+vars_cat <- c("tipo_equipo", "equipo_id", "categoria_producto", 
+              "modalidad_proceso", "num_insumos", "insumo_1", "insumo_2")
+
+tabla_cat <- map_dfr(vars_cat, function(v) {
+  datos %>%
+    count(.data[[v]], name = "Frecuencia") %>%
+    mutate(
+      Porcentaje = (Frecuencia / sum(Frecuencia)) * 100,
+      Variable = v,
+      Categoria = as.character(.data[[v]])
+    ) %>%
+    select(Variable, Categoria, Frecuencia, Porcentaje)
+}) %>%
+  mutate(Porcentaje = round(Porcentaje, 2))
+
+knitr::kable(tabla_cat, caption = "Resumen descriptivo de las variables categóricas seleccionadas") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
+```
+
+Tipo de equipo: La categoría A1 concentra el 72.7% de las observaciones.  Significa que cualquier estadístico global del sistema está dominado por el comportamiento de un solo tipo de equipo. Cuando un análisis habla del "costo promedio del sistema", en realidad habla —en un 73%— del costo promedio de A1.
+
+Las demás categorías (B2, D4, C3) tienen participaciones mucho menores, lo que implica posible sesgo en análisis globales si no se segmenta y riesgo de conclusiones dominadas por A1.
+C3 (2.03%) es prácticamente marginal.
+Equipo específico (equipo_id): Distribución es más fragmentada, pero aún desigual. algunos equipos concentran entre 8% y 11% (M02, M09, M08), otros son casi irrelevantes (~1%)
+El sistema no es balanceado, fuerte concentración en tipo A1
+Existe heterogeneidad operativa, → distintos equipos tienen niveles de uso muy distintos
+Cualquier modelo debe considerar tipo_equipo como variable explicativa clave, equipo_id puede capturar efectos más finos (variabilidad intra-tipo) , Comparaciones entre categorías pequeñas pueden ser inestables (bajo n)
+
+El sistema está estructurado alrededor de un tipo dominante (A1) y un subconjunto reducido de equipos con alta actividad. La variabilidad observada en costos, duración o volumen probablemente está condicionada por esta estructura, no solo por aleatoriedad.
+
+```{r freq-tipo-equipo-calc, echo=FALSE}
+freq_te <- tabla_cat %>% filter(Variable == "tipo_equipo") %>% arrange(desc(Frecuencia))
+te_dom_cat <- freq_te$Categoria[1]
+te_dom_pct <- freq_te$Porcentaje[1]
+n_niveles_equipo <- datos %>% distinct(equipo_id) %>% nrow()
+n_niveles_cat   <- datos %>% distinct(categoria_producto) %>% nrow()
+```
+
+El tipo de equipo dominante es `r te_dom_cat`, que concentra el `r te_dom_pct`% de las órdenes. La variable `equipo_id` tiene `r n_niveles_equipo` niveles distintos y `categoria_producto` tiene `r n_niveles_cat` niveles, lo cual exigirá tratamiento cuidadoso en los análisis inferenciales posteriores para evitar celdas con pocas observaciones.
+
+```{r bar-categoricas-grid, fig.width=12, fig.height=16}
+library(dplyr)
+library(ggplot2)
+
+tabla_plot <- tabla_cat %>%
+  mutate(Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)"))
+
+# 2. Generación del gráfico facetado (2 columnas x 4 filas)
+ggplot(tabla_plot, aes(x = Categoria, y = Frecuencia)) +
+  geom_col(fill = "#008B8B", width = 0.6) +
+  geom_text(aes(label = Etiqueta), vjust = -0.5, size = 3.5) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.2))) +
+  labs(
+    x = "Categoría", 
+    y = "Frecuencia",
+    title = "Distribución de Variables Categóricas"
+  ) +
+  theme_bw(base_size = 12) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    strip.background = element_rect(fill = "#2c3e50"),
+    strip.text = element_text(color = "white", fontface = "bold")
+  ) +
+  facet_wrap(~ Variable, ncol = 2, scales = "free")
+```
+
+## Análisis bivariado: costos por tipo de equipo 
+
 Un primer análisis bivariado de costos por tipo de equipo (que viene más adelante) muestra diferencias muy grandes:
-tipo_equipocosto_transformación mediocosto_insumo medioA133.05.2B229.95.0C364.411.3D48.83.6
+
+```{r res_cost_tipo_equipo}
+
+tabla_resumen <- datos %>%
+  group_by(tipo_equipo) %>%
+  summarise(
+    costo_transformacion_medio = mean(costo_transformacion),
+    costo_insumo_medio = mean(costo_insumo),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    costo_transformacion_medio = round(costo_transformacion_medio, 1),
+    costo_insumo_medio = round(costo_insumo_medio, 1)
+  )
+tabla_resumen <- datos %>%
+  group_by(tipo_equipo) %>%
+  summarise(
+    costo_transformacion_medio = mean(costo_transformacion),
+    costo_insumo_medio = mean(costo_insumo),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    costo_transformacion_medio = round(costo_transformacion_medio, 1),
+    costo_insumo_medio = round(costo_insumo_medio, 1)
+  )
+
+```
 Las diferencias son tan marcadas que invitan a preguntar: ¿cada tipo de equipo es realmente comparable con los otros?
 Una tabulación cruzada contesta la pregunta y cambia el análisis:
+
+```{r bivariado_cost_tipo_equipo}
+
 tabla_dep <- datos %>%
   count(tipo_equipo, modalidad_proceso, num_insumos) %>%
   arrange(tipo_equipo, modalidad_proceso, num_insumos)
 
 kable(tabla_dep, caption = "Combinaciones observadas (tipo_equipo × modalidad × num_insumos)") %>%
   kable_styling(full_width = FALSE)
+
+```
 La tabla revela un hecho crítico: el espacio operativo no es completo. No todos los equipos operan en todas las modalidades. No todas las modalidades se ejecutan con todos los números de insumos. Las combinaciones son asimétricas y muchas celdas están vacías o con muy pocas observaciones.
 
 6.4 El giro del análisis: el dataset tiene estructura jerárquica
@@ -724,7 +1302,7 @@ datos <- datos %>%
 
 
 
-### costo_transformacion
+### Costo unitario de conversión o de transformación
 
 ```{r resumen-ct, echo=TRUE}
 datos %>%
@@ -845,17 +1423,11 @@ La posible multimodalidad sugiere heterogeneidad no explicada → variables como
 
 En términos operativos, el sistema no solo presenta variabilidad, sino también estructura interna: no es un proceso homogéneo, sino una mezcla de dinámicas distintas que conviene separar antes de cualquier inferencia o optimización.
 
-```{r box-ct, fig.width=7, fig.height=4}
-
-```
-
-El histograma y el boxplot evidencian una distribución asimétrica hacia valores altos, con presencia de órdenes extremas que se destacan sobre el bigote superior. La distancia entre la media y el 50% sugiere que la media está influida por la cola derecha, por lo que los análisis inferenciales posteriores deben contemplar transformaciones o pruebas robustas.
 El bigote superior se extiende hasta un cierto punto, pero inmediatamente aparecen múltiples observaciones por encima, marcadas en rojo. Estos son outliers superiores, y no son pocos ni aislados: forman un grupo visible. 
-Existe una subpoblación de costos altos. Es decir no son casos extremos que sean puntuales.
-En contraste, en la parte inferior no se observan outliers relevantes. El mínimo está dentro del rango esperado
-El boxplot no solo confirma la dispersión, sino que evidencia que el fenómeno clave no es la variabilidad general, sino la existencia de una dinámica diferenciada en costos altos, que requiere segmentación o modelado específico.
+Existe una subpoblación de costos altos. Es decir no son casos extremos que sean puntuales. En la parte inferior no se observan outliers relevantes. El mínimo está dentro del rango esperado
+El boxplot confirma la dispersión y evidencia que el fenómeno clave no es la variabilidad general, sino la existencia de una dinámica diferenciada en costos altos, que requiere segmentación o modelado específico.
 
-### costo_insumo
+### Costo unitario de los insumos
 
 ```{r resumen-ci, echo=TRUE}
 datos %>%
@@ -949,7 +1521,7 @@ p_box_ci <- datos %>%
 p_hist_ci + p_box_ci
 ```
 
-### costo_unitario_total
+### Costo unitario total
 
 La variable `costo_unitario_total` se deriva como la suma de `costo_transformacion` y `costo_insumo`, y representa el costo total por unidad de producto.
 
@@ -988,23 +1560,12 @@ Un coeficiente de variación de `r round(cu_cv, 1)`% (DS = `r round(cu_ds, 2)`),
 El 50% de las órdenes presenta un costo unitario total por debajo de `r round(cu_med, 2)` UM/unidad, con un rango entre `r round(cu_min, 2)` y `r round(cu_max, 2)`.
 El boxplot confirma la presencia de outliers superiores múltiples, no aislados. Estos valores altos no corresponden a ruido aleatorio, sino a una fracción del sistema que sistemáticamente incurre en costos elevados.
 
-Desde la descomposición del costo total:
-
-El costo de transformación representa aproximadamente r prop_ct% del total
-El costo de insumos representa aproximadamente r prop_ci%
-
-Esto implica que el componente dominante del costo total es el proceso de transformación, mientras que los insumos, aunque más variables, tienen menor peso relativo en el agregado.
-
-Interpretación estructural:
-
-Existe un núcleo estable de costos totales, bien representado por la mediana y el IQR.
-La variabilidad del sistema está influida por eventos de alto costo, principalmente en la cola derecha.
-El costo total hereda la asimetría de sus componentes, pero la amplifica al agregarlos.
-
-Lectura final:
+Descomposición del costo total:
+- Costo de transformación representa aproximadamente r prop_ct% del total
+- Costo de insumos representa aproximadamente r prop_ci%
+Claramente el componente dominante del costo total es el proceso de transformación, mientras que los insumos, aunque más variables, tienen menor peso relativo en el agregado.
 
 El sistema productivo opera mayoritariamente en un rango de costos relativamente estable, pero está condicionado por una fracción de casos con costos significativamente más altos. Estos casos no son marginales y deben interpretarse como parte de la estructura del proceso, no como anomalías aisladas. La clave analítica no está en el promedio, sino en entender qué condiciones generan esos costos elevados y cómo se relacionan con los componentes del costo total.
-
 
 ```{r hist-box-ctot, fig.width=11, fig.height=4.5}
 
@@ -1061,7 +1622,7 @@ p_box_ct <- datos %>%
 p_hist_ct + p_box_ct
 ```
 
-El costo unitario total hereda la asimetría de sus dos componentes. La estructura de costos está dominada por el componente de transformación, que representa aproximadamente `r prop_ct`% del costo total promedio, frente al `r prop_ci`% del costo de insumo.
+El costo unitario total hereda la asimetría de sus dos componentes. 
 
 ## Análisis univariado de variables numéricas predictoras
 
@@ -1308,7 +1869,6 @@ ggplot(tabla_plot, aes(x = Categoria, y = Frecuencia)) +
 ```
 
 
-La construcción de los gráficos de barras para las variables categóricas restantes (`equipo_id`, `categoria_producto`, `insumo_1`, `insumo_2`) se deja como ejercicio, empleando el mismo patrón de `geom_col` con etiquetas.
 
 ## Análisis bivariado: variables respuesta vs predictoras numéricas
 

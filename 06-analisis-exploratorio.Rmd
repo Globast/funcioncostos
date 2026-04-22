@@ -33,7 +33,7 @@ datos <- datos %>%
 
 
 
-### costo_transformacion
+### Costo unitario de conversión o de transformación
 
 ```{r resumen-ct, echo=TRUE}
 datos %>%
@@ -154,17 +154,11 @@ La posible multimodalidad sugiere heterogeneidad no explicada → variables como
 
 En términos operativos, el sistema no solo presenta variabilidad, sino también estructura interna: no es un proceso homogéneo, sino una mezcla de dinámicas distintas que conviene separar antes de cualquier inferencia o optimización.
 
-```{r box-ct, fig.width=7, fig.height=4}
-
-```
-
-El histograma y el boxplot evidencian una distribución asimétrica hacia valores altos, con presencia de órdenes extremas que se destacan sobre el bigote superior. La distancia entre la media y el 50% sugiere que la media está influida por la cola derecha, por lo que los análisis inferenciales posteriores deben contemplar transformaciones o pruebas robustas.
 El bigote superior se extiende hasta un cierto punto, pero inmediatamente aparecen múltiples observaciones por encima, marcadas en rojo. Estos son outliers superiores, y no son pocos ni aislados: forman un grupo visible. 
-Existe una subpoblación de costos altos. Es decir no son casos extremos que sean puntuales.
-En contraste, en la parte inferior no se observan outliers relevantes. El mínimo está dentro del rango esperado
-El boxplot no solo confirma la dispersión, sino que evidencia que el fenómeno clave no es la variabilidad general, sino la existencia de una dinámica diferenciada en costos altos, que requiere segmentación o modelado específico.
+Existe una subpoblación de costos altos. Es decir no son casos extremos que sean puntuales. En la parte inferior no se observan outliers relevantes. El mínimo está dentro del rango esperado
+El boxplot confirma la dispersión y evidencia que el fenómeno clave no es la variabilidad general, sino la existencia de una dinámica diferenciada en costos altos, que requiere segmentación o modelado específico.
 
-### costo_insumo
+### Costo unitario de los insumos
 
 ```{r resumen-ci, echo=TRUE}
 datos %>%
@@ -258,7 +252,7 @@ p_box_ci <- datos %>%
 p_hist_ci + p_box_ci
 ```
 
-### costo_unitario_total
+### Costo unitario total
 
 La variable `costo_unitario_total` se deriva como la suma de `costo_transformacion` y `costo_insumo`, y representa el costo total por unidad de producto.
 
@@ -297,23 +291,12 @@ Un coeficiente de variación de `r round(cu_cv, 1)`% (DS = `r round(cu_ds, 2)`),
 El 50% de las órdenes presenta un costo unitario total por debajo de `r round(cu_med, 2)` UM/unidad, con un rango entre `r round(cu_min, 2)` y `r round(cu_max, 2)`.
 El boxplot confirma la presencia de outliers superiores múltiples, no aislados. Estos valores altos no corresponden a ruido aleatorio, sino a una fracción del sistema que sistemáticamente incurre en costos elevados.
 
-Desde la descomposición del costo total:
-
-El costo de transformación representa aproximadamente r prop_ct% del total
-El costo de insumos representa aproximadamente r prop_ci%
-
-Esto implica que el componente dominante del costo total es el proceso de transformación, mientras que los insumos, aunque más variables, tienen menor peso relativo en el agregado.
-
-Interpretación estructural:
-
-Existe un núcleo estable de costos totales, bien representado por la mediana y el IQR.
-La variabilidad del sistema está influida por eventos de alto costo, principalmente en la cola derecha.
-El costo total hereda la asimetría de sus componentes, pero la amplifica al agregarlos.
-
-Lectura final:
+Descomposición del costo total:
+- Costo de transformación representa aproximadamente r prop_ct% del total
+- Costo de insumos representa aproximadamente r prop_ci%
+Claramente el componente dominante del costo total es el proceso de transformación, mientras que los insumos, aunque más variables, tienen menor peso relativo en el agregado.
 
 El sistema productivo opera mayoritariamente en un rango de costos relativamente estable, pero está condicionado por una fracción de casos con costos significativamente más altos. Estos casos no son marginales y deben interpretarse como parte de la estructura del proceso, no como anomalías aisladas. La clave analítica no está en el promedio, sino en entender qué condiciones generan esos costos elevados y cómo se relacionan con los componentes del costo total.
-
 
 ```{r hist-box-ctot, fig.width=11, fig.height=4.5}
 
@@ -370,7 +353,7 @@ p_box_ct <- datos %>%
 p_hist_ct + p_box_ct
 ```
 
-El costo unitario total hereda la asimetría de sus dos componentes. La estructura de costos está dominada por el componente de transformación, que representa aproximadamente `r prop_ct`% del costo total promedio, frente al `r prop_ci`% del costo de insumo.
+El costo unitario total hereda la asimetría de sus dos componentes. 
 
 ## Análisis univariado de variables numéricas predictoras
 
@@ -617,7 +600,6 @@ ggplot(tabla_plot, aes(x = Categoria, y = Frecuencia)) +
 ```
 
 
-La construcción de los gráficos de barras para las variables categóricas restantes (`equipo_id`, `categoria_producto`, `insumo_1`, `insumo_2`) se deja como ejercicio, empleando el mismo patrón de `geom_col` con etiquetas.
 
 ## Análisis bivariado: variables respuesta vs predictoras numéricas
 
