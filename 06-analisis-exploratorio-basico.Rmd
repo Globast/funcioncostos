@@ -5,10 +5,10 @@ Se parte del dataset depurado en el capítulo de metodología (395 órdenes de p
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
-  echo = TRUE,
-  out.width = "100%",
-  fig.width = 12,
-  fig.height = 5,
+  echo = FALSE,      # Oculta el código en todo el documento
+  message = FALSE,   # Oculta mensajes de carga de librerías
+  warning = FALSE,   # Oculta advertencias
+  out.width = "100%",# Gráficas al ancho completo
   fig.align = "center"
 )
 ```
