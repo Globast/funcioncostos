@@ -1133,7 +1133,7 @@ Este tipo de error se llama confusión (confounding) y es una de las trampas cl�
 
 Desde este punto del capítulo, el análisis abandona la lógica "promedio por categoría" y adopta una lógica condicional: cada efecto se evalúa dentro del contexto operativo donde sí hay comparabilidad.
 
-## Decisiones metodológicas derivadas del descubrimiento
+## Decisiones metodológicas derivadas del EDA inicial
 Tras el diagnóstico anterior, se adoptan tres decisiones  que guían el resto del capítulo:
 Decisión 1 — Exclusión de modalidad Z. La modalidad Z corresponde a órdenes excepcionales donde se aplican las modalidades X y Y al mismo producto por solicitud del cliente. Con 14 órdenes distribuidas en 3 celdas (3.5% del dataset), no permite inferencia estadística con potencia suficiente y, al representar una composición de procesos en lugar de una modalidad alternativa, no es conceptualmente comparable con X o Y. Las órdenes con Z se excluyen del análisis principal y se caracterizan brevemente al final del capítulo (sección 6.8).
 Decisión 2 — Exclusión del tipo_equipo C3. C3 tiene solo 8 órdenes (2%), concentradas casi íntegramente en la combinación (X, 1) con un único caso en (X, 2) y cero en modalidad Y. Con este n, los intervalos de confianza son extremadamente amplios y cualquier diferencia observada queda dominada por ruido. C3 se excluye del análisis estratificado y sus estadísticos descriptivos se reportan al final con una advertencia explícita sobre su no comparabilidad.
@@ -1153,8 +1153,8 @@ n_principal <- nrow(datos_principal)
 ```
 Tras estas exclusiones, el dataset principal queda conformado por r n_principal órdenes (`r round(n_principal / n_total * 100, 1`)% del total depurado). Sobre este subconjunto se desarrolla el análisis estratificado que sigue.
 
-6.5 Estructura del espacio operativo sobre el dataset principal
-6.5.1 Mapa de combinaciones
+## Estructura del espacio operativo sobre el dataset principal
+### Mapa de combinaciones
 
 ```{r mapa_combinaciones}
 mapa_n <- datos_principal %>%
