@@ -2,6 +2,17 @@
 
 ## Carga del dataset analítico 
 Se parte del dataset depurado en el capítulo de metodología (395 órdenes de producción con tipos ajustados). La limpieza previa ya eliminó errores de digitación y validó la integridad de los registros; este capítulo se concentra en entender qué dicen esos datos.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  out.width = "100%",
+  fig.width = 12,
+  fig.height = 5,
+  fig.align = "center"
+)
+```
+
 ```{r ck_eda_setup, message=FALSE, warning=FALSE, echo=FALSE}
 library(tidyverse)
 library(patchwork)
