@@ -1118,7 +1118,7 @@ kable(tabla_dep, caption = "Combinaciones observadas con resaltado en ceros") %>
 ```
 El espacio operativo no es completo. No todos los equipos operan en todas las modalidades. No todas las modalidades se ejecutan con todos los números de insumos. Las combinaciones son asimétricas y muchas celdas están vacías o con muy pocas observaciones.
 
-**Lo que parecía un dataset plano con 7 variables categóricas independientes es en realidad un sistema con dependencias operativas:**
+**Lo que parecía un dataset plano co variables categóricas independientes es en realidad un sistema con dependencias operativas:**
 - El tipo de equipo determina qué modalidades de proceso son factibles.
 - El tipo de equipo determina el número de insumos.
 
@@ -1134,10 +1134,12 @@ Este tipo de error se llama confusión (confounding) y es una de las trampas cl�
 Desde este punto del capítulo, el análisis abandona la lógica "promedio por categoría" y adopta una lógica condicional: cada efecto se evalúa dentro del contexto operativo donde sí hay comparabilidad.
 
 ## Decisiones metodológicas derivadas del descubrimiento
-Tras el diagnóstico anterior, se adoptan tres decisiones explícitas que guían el resto del capítulo:
+Tras el diagnóstico anterior, se adoptan tres decisiones  que guían el resto del capítulo:
 Decisión 1 — Exclusión de modalidad Z. La modalidad Z corresponde a órdenes excepcionales donde se aplican las modalidades X y Y al mismo producto por solicitud del cliente. Con 14 órdenes distribuidas en 3 celdas (3.5% del dataset), no permite inferencia estadística con potencia suficiente y, al representar una composición de procesos en lugar de una modalidad alternativa, no es conceptualmente comparable con X o Y. Las órdenes con Z se excluyen del análisis principal y se caracterizan brevemente al final del capítulo (sección 6.8).
 Decisión 2 — Exclusión del tipo_equipo C3. C3 tiene solo 8 órdenes (2%), concentradas casi íntegramente en la combinación (X, 1) con un único caso en (X, 2) y cero en modalidad Y. Con este n, los intervalos de confianza son extremadamente amplios y cualquier diferencia observada queda dominada por ruido. C3 se excluye del análisis estratificado y sus estadísticos descriptivos se reportan al final con una advertencia explícita sobre su no comparabilidad.
 Decisión 3 — Configuración universal. Tras excluir Z y C3, el equipo A1 es el único que cubre las 4 combinaciones (X × Y × 1 × 2), con 274 órdenes. Es la única base analítica donde es posible evaluar de forma limpia los efectos de modalidad y número de insumos. Los análisis multivariados profundos se desarrollarán sobre este subconjunto.
+
+```{r datos_filtrados}
 datos_principal <- datos %>%
   filter(modalidad_proceso != "Z",
          tipo_equipo != "C3") %>%
@@ -1148,6 +1150,7 @@ write_csv2(datos_principal, "data/data_costos_principal.csv")
 saveRDS(datos_principal, "data/data_costos_principal.rds")
 
 n_principal <- nrow(datos_principal)
+```
 Tras estas exclusiones, el dataset principal queda conformado por r n_principal órdenes (r round(n_principal / n_total * 100, 1)% del total depurado). Sobre este subconjunto se desarrolla el análisis estratificado que sigue.
 
 6.5 Estructura del espacio operativo sobre el dataset principal

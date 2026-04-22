@@ -4787,7 +4787,7 @@ las distribuciones intra-equipo son distintas: M11 tiene un IQR de 3.8 (muy esta
 En costo de insumo, la diferencia es aún más marcada: M05 con media 5.3, M12 con media 1.4. Sin embargo, M05 muestra una desviación estándar de 8.1 con un máximo de 46.2, lo que indica al menos un outlier extremo. Esto compromete la lectura de M05 — su comportamiento “típico” puede ser muy distinto del que sugiere su media.
 <strong>¿qué hace que M12 sea más eficiente que M05? Si es una diferencia estructural (ejemplo: M12 procesa productos más simples), entonces la diferencia es una composición. Si es una diferencia técnica del equipo (mejor mantenimiento, operario más capacitado, tecnología más nueva), entonces hay una oportunidad de mejora replicable hacia M05.</strong></li>
 </ul>
-<p>Un primer análisis bivariado de costos por tipo de equipo (que viene más adelante) muestra diferencias muy grandes:</p>
+<p>En conclusión , el análisis por tipo de equipo muestra diferencias muy grandes:</p>
 <div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="análisis-exploratorio-de-datos-version2.html#cb49-1" tabindex="-1"></a>tabla_resumen <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
 <span id="cb49-2"><a href="análisis-exploratorio-de-datos-version2.html#cb49-2" tabindex="-1"></a>  <span class="fu">group_by</span>(tipo_equipo) <span class="sc">%&gt;%</span></span>
 <span id="cb49-3"><a href="análisis-exploratorio-de-datos-version2.html#cb49-3" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
@@ -5238,7 +5238,7 @@ Z
 </tbody>
 </table>
 <p>El espacio operativo no es completo. No todos los equipos operan en todas las modalidades. No todas las modalidades se ejecutan con todos los números de insumos. Las combinaciones son asimétricas y muchas celdas están vacías o con muy pocas observaciones.</p>
-<p><strong>Lo que parecía un dataset plano con 7 variables categóricas independientes es en realidad un sistema con dependencias operativas:</strong>
+<p><strong>Lo que parecía un dataset plano co variables categóricas independientes es en realidad un sistema con dependencias operativas:</strong>
 - El tipo de equipo determina qué modalidades de proceso son factibles.
 - El tipo de equipo determina el número de insumos.</p>
 <p>El dataset refleja restricciones técnicas reales de la planta, no una muestra aleatoria de un universo uniforme.</p>
@@ -5250,19 +5250,21 @@ Z
 </div>
 <div id="decisiones-metodológicas-derivadas-del-descubrimiento" class="section level2 hasAnchor" number="6.6">
 <h2><span class="header-section-number">6.6</span> Decisiones metodológicas derivadas del descubrimiento<a href="análisis-exploratorio-de-datos-version2.html#decisiones-metodol%C3%B3gicas-derivadas-del-descubrimiento" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Tras el diagnóstico anterior, se adoptan tres decisiones explícitas que guían el resto del capítulo:
+<p>Tras el diagnóstico anterior, se adoptan tres decisiones que guían el resto del capítulo:
 Decisión 1 — Exclusión de modalidad Z. La modalidad Z corresponde a órdenes excepcionales donde se aplican las modalidades X y Y al mismo producto por solicitud del cliente. Con 14 órdenes distribuidas en 3 celdas (3.5% del dataset), no permite inferencia estadística con potencia suficiente y, al representar una composición de procesos en lugar de una modalidad alternativa, no es conceptualmente comparable con X o Y. Las órdenes con Z se excluyen del análisis principal y se caracterizan brevemente al final del capítulo (sección 6.8).
 Decisión 2 — Exclusión del tipo_equipo C3. C3 tiene solo 8 órdenes (2%), concentradas casi íntegramente en la combinación (X, 1) con un único caso en (X, 2) y cero en modalidad Y. Con este n, los intervalos de confianza son extremadamente amplios y cualquier diferencia observada queda dominada por ruido. C3 se excluye del análisis estratificado y sus estadísticos descriptivos se reportan al final con una advertencia explícita sobre su no comparabilidad.
-Decisión 3 — Configuración universal. Tras excluir Z y C3, el equipo A1 es el único que cubre las 4 combinaciones (X × Y × 1 × 2), con 274 órdenes. Es la única base analítica donde es posible evaluar de forma limpia los efectos de modalidad y número de insumos. Los análisis multivariados profundos se desarrollarán sobre este subconjunto.
-datos_principal &lt;- datos %&gt;%
-filter(modalidad_proceso != “Z”,
-tipo_equipo != “C3”) %&gt;%
-mutate(modalidad_proceso = droplevels(modalidad_proceso),
-tipo_equipo = droplevels(tipo_equipo))</p>
-<p>write_csv2(datos_principal, “data/data_costos_principal.csv”)
-saveRDS(datos_principal, “data/data_costos_principal.rds”)</p>
-<p>n_principal &lt;- nrow(datos_principal)
-Tras estas exclusiones, el dataset principal queda conformado por r n_principal órdenes (r round(n_principal / n_total * 100, 1)% del total depurado). Sobre este subconjunto se desarrolla el análisis estratificado que sigue.</p>
+Decisión 3 — Configuración universal. Tras excluir Z y C3, el equipo A1 es el único que cubre las 4 combinaciones (X × Y × 1 × 2), con 274 órdenes. Es la única base analítica donde es posible evaluar de forma limpia los efectos de modalidad y número de insumos. Los análisis multivariados profundos se desarrollarán sobre este subconjunto.</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="análisis-exploratorio-de-datos-version2.html#cb51-1" tabindex="-1"></a>datos_principal <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb51-2"><a href="análisis-exploratorio-de-datos-version2.html#cb51-2" tabindex="-1"></a>  <span class="fu">filter</span>(modalidad_proceso <span class="sc">!=</span> <span class="st">&quot;Z&quot;</span>,</span>
+<span id="cb51-3"><a href="análisis-exploratorio-de-datos-version2.html#cb51-3" tabindex="-1"></a>         tipo_equipo <span class="sc">!=</span> <span class="st">&quot;C3&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb51-4"><a href="análisis-exploratorio-de-datos-version2.html#cb51-4" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">modalidad_proceso =</span> <span class="fu">droplevels</span>(modalidad_proceso),</span>
+<span id="cb51-5"><a href="análisis-exploratorio-de-datos-version2.html#cb51-5" tabindex="-1"></a>         <span class="at">tipo_equipo       =</span> <span class="fu">droplevels</span>(tipo_equipo))</span>
+<span id="cb51-6"><a href="análisis-exploratorio-de-datos-version2.html#cb51-6" tabindex="-1"></a></span>
+<span id="cb51-7"><a href="análisis-exploratorio-de-datos-version2.html#cb51-7" tabindex="-1"></a><span class="fu">write_csv2</span>(datos_principal, <span class="st">&quot;data/data_costos_principal.csv&quot;</span>)</span>
+<span id="cb51-8"><a href="análisis-exploratorio-de-datos-version2.html#cb51-8" tabindex="-1"></a><span class="fu">saveRDS</span>(datos_principal, <span class="st">&quot;data/data_costos_principal.rds&quot;</span>)</span>
+<span id="cb51-9"><a href="análisis-exploratorio-de-datos-version2.html#cb51-9" tabindex="-1"></a></span>
+<span id="cb51-10"><a href="análisis-exploratorio-de-datos-version2.html#cb51-10" tabindex="-1"></a>n_principal <span class="ot">&lt;-</span> <span class="fu">nrow</span>(datos_principal)</span></code></pre></div>
+<p>Tras estas exclusiones, el dataset principal queda conformado por r n_principal órdenes (r round(n_principal / n_total * 100, 1)% del total depurado). Sobre este subconjunto se desarrolla el análisis estratificado que sigue.</p>
 <p>6.5 Estructura del espacio operativo sobre el dataset principal
 6.5.1 Mapa de combinaciones
 mapa_n &lt;- datos_principal %&gt;%
