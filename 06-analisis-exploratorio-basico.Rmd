@@ -231,7 +231,7 @@ p_hist_ci + p_box_ci
 
 La variable `costo_unitario_total` se deriva como la suma de `costo_transformacion` y `costo_insumo`, y representa el costo total por unidad de producto.
 
-```{r resumen_ctot, echo=TRUE}
+```{r resumen_ctot, echo=TRUE, echo=FALSE}
 datos %>%
   summarise(
     n       = length(costo_unitario_total),
@@ -273,7 +273,7 @@ Claramente el componente dominante del costo total es el proceso de transformaci
 
 El sistema productivo opera mayoritariamente en un rango de costos relativamente estable, pero está condicionado por una fracción de casos con costos significativamente más altos. Estos casos no son marginales y deben interpretarse como parte de la estructura del proceso, no como anomalías aisladas. La clave analítica no está en el promedio, sino en entender qué condiciones generan esos costos elevados y cómo se relacionan con los componentes del costo total.
 
-```{r hist_box_ctot, fig.width=11, fig.height=4.5}
+```{r hist_box_ctot, fig.width=11, fig.height=4.5, echo=FALSE}
 
 lineas <- tibble(
   estadistico = c("Media", "Mediana", "Q1", "Q3"),
@@ -339,7 +339,7 @@ Primera hipótesis que emerge. El sistema productivo puede no ser un único proc
 ## 6.3 Análisis univariado de predictoras numéricas
 Las variables numéricas predictoras son `volumen_lote`, `duracion_proceso`, `cantidad_insumo_1` y `cantidad_insumo_2`.
 
-```{r resumen_num_predictoras}
+```{r resumen_num_predictoras, echo=FALSE}
 datos %>%
   summarise(
     n = length(volumen_lote),
@@ -414,7 +414,7 @@ No son variables independientes: describen distintas dimensiones del mismo proce
 La principal fuente de heterogeneidad no está en los insumos, sino en el tamaño de los lotes y la duración de los procesos. Esto sugiere que cualquier modelamiento o mejora operativa debe centrarse en segmentar por escala de producción y complejidad del proceso, más que en el consumo de insumos.
 
 
-```{r box_num_predictoras, fig.width=11, fig.height=7}
+```{r box_num_predictoras, fig.width=11, fig.height=7, echo=FALSE}
 p_vol <- datos %>%
   ggplot(aes(x = "", y = volumen_lote)) +
   geom_boxplot(fill = "#1f77b4", alpha = 0.7) +
@@ -450,7 +450,7 @@ p_ci2 <- datos %>%
 (p_vol + p_dur) / (p_ci1 + p_ci2)
 ```
 
-```{r hist_num_predictoras, fig.width=11, fig.height=7}
+```{r hist_num_predictoras, fig.width=11, fig.height=7, echo=FALSE}
 library(ggplot2)
 library(dplyr)
 library(patchwork)
