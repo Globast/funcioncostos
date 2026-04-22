@@ -582,7 +582,520 @@ ggplot(tabla_plot, aes(x = Categoria, y = Frecuencia)) +
   facet_wrap(~ Variable, ncol = 2, scales = "free")
 ```
 
+
+### Análisis bivariado: por numero de insumos
+
+```{r bivariado-ct-numinsumos}
+resumen_bivariado_cc <- datos %>%
+  group_by(num_insumos) %>%
+  summarise(
+    n = length(costo_transformacion),
+    media = mean(costo_transformacion),
+    ds = sd(costo_transformacion),
+    `50%` = median(costo_transformacion),
+    minimo = min(costo_transformacion),
+    maximo = max(costo_transformacion),
+    Q1 = quantile(costo_transformacion, 0.25),
+    Q3 = quantile(costo_transformacion, 0.75),
+    IQR = IQR(costo_transformacion),
+    .groups = "drop"
+  )
+
+  knitr::kable(resumen_bivariado_cc , caption = "Resumen Bivariado costos de transformación") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
+```
+
+```{r bivariado-ci-numinsumos}
+resumen_bivariado_ci <- datos %>%
+  group_by(num_insumos) %>%
+  summarise(
+    n = length(costo_insumo),
+    media = mean(costo_insumo),
+    ds = sd(costo_insumo),
+    `50%` = median(costo_insumo),
+    minimo = min(costo_insumo),
+    maximo = max(costo_insumo),
+    Q1 = quantile(costo_insumo, 0.25),
+    Q3 = quantile(costo_insumo, 0.75),
+    IQR = IQR(costo_insumo),
+    .groups = "drop"
+  )
+
+    knitr::kable(resumen_bivariado_ci , caption = "Resumen Bivariado costos de insumo") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
+```
+
+
+```{r boxinsumo, fig.width=9, fig.height=4.5}
+
+box_ct_insumo <-datos %>%
+  ggplot(aes(x = num_insumos, y = costo_transformacion)) +
+  geom_boxplot(fill = "#87CEFA", outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "darkblue") +
+  labs(x = "Número de insumos",
+       y = "Costo de transformación (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Costo de transformación por número de insumos")
+
+
+box_ci_insumo <- datos %>%
+  ggplot(aes(x = num_insumos, y = costo_insumo)) +
+  geom_boxplot(fill = "#b2df8a", outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "darkgreen") +
+  labs(x = "Número de insumos",
+       y = "Costo de insumo (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Costo de insumo por número de insumos")
+
+box_ct_insumo + box_ci_insumo 
+```
+
+En costos de transformación, el paso de uno a dos insumos implica un incremento claro en la media (de aproximadamente 27.3 a 35.8), acompañado de un desplazamiento de la mediana en la misma dirección. Esto indica que el efecto no está impulsado por valores extremos, sino por un cambio en el comportamiento central de la distribución. La desviación estándar se mantiene prácticamente constante, lo que sugiere que la variabilidad absoluta no aumenta, pero el IQR se reduce en el caso de dos insumos. Esto implica que, aunque el nivel de costo es mayor, la distribución es relativamente más compacta en su rango intercuartílico.
+
+En costos de insumo, el patrón es análogo pero más moderado. La media aumenta de 4.55 a 6.15, y la mediana también se desplaza hacia arriba. Sin embargo, la dispersión crece ligeramente, reflejada en una mayor desviación estándar. La similitud en los IQR indica que la variabilidad central es comparable, pero los valores extremos tienen mayor peso en el caso de dos insumos.
+
+El número de insumos actúa como una variable explicativa relevante que introduce un cambio de nivel en los costos, pero no altera sustancialmente la forma de la distribución. Esto es consistente con un efecto aditivo más que multiplicativo.
+
+Trabajar con dos insumos es sistemáticamente más costoso, tanto en transformación como en materiales. La variabilidad no aumenta de forma proporcional al costo. Esto significa que el sistema es capaz de operar con dos insumos de forma relativamente controlada, pero a un costo superior. No es un problema de desorden operativo, es un problema de diseño del proceso.
+
+Cada vez que se introduce un segundo insumo, se está aceptando un costo mayor de forma sistemática. Aquí el problema pasa a ser comercial. ¿ese costo adicional se está trasladando al cliente?
+
+Es claro que el segundo insumo incrementa el consumo de materiales y el costo de transformación , entonces debe reflejarse en un recargo explícito o una estructura de precios diferenciada. de lo contrario se está subsidiando complejidad.
+
+
+### Análisis bivariado: por tipo de insumo
+
+```{r combinacion-insumos}
+
+datos <- datos %>%
+  mutate(
+    insumo_combinado = pmap_chr(
+      list(insumo_1, insumo_2, num_insumos),
+      function(x, y, n) {
+
+        # Caso 1: solo un insumo → devolver insumo_1
+        if (n == 1 || is.na(y) || y == "" || y == "sin_segundo_insumo") {
+          return(as.character(x))
+        }
+
+        # Caso 2: dos insumos → combinación canónica
+        # (elimina duplicados y ordena)
+        insumos <- unique(c(as.character(x), as.character(y)))
+
+        paste(sort(insumos), collapse = " + ")
+      }
+    )
+  )
+```
+
+```{r bivariado_insumos_ct}
+resumen_bivariado_ct_comb <- datos %>%
+  mutate(
+    insumo_combinado = pmap_chr(list(insumo_1, insumo_2), function(x, y) {
+      # 1. Creamos un vector con ambos insumos
+      # 2. Ordenamos alfabéticamente
+      # 3. Concatenamos con un separador
+      paste(sort(c(as.character(x), as.character(y))), collapse = " + ")
+    })
+  )%>%
+  group_by(insumo_combinado) %>%
+  summarise(
+    n = length(costo_transformacion),
+    media = mean(costo_transformacion),
+    ds = sd(costo_transformacion),
+    `50%` = median(costo_transformacion),
+    minimo = min(costo_transformacion),
+    maximo = max(costo_transformacion),
+    Q1 = quantile(costo_transformacion, 0.25),
+    Q3 = quantile(costo_transformacion, 0.75),
+    IQR = IQR(costo_transformacion),
+    .groups = "drop"
+  ) %>%
+  arrange(desc(n))
+
+knitr::kable(resumen_bivariado_ct_comb,
+             caption = "Resumen bivariado: costo de transformación por combinación de insumos") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+
+```
+
+```{r bivariado_insumos_ci}
+
+resumen_bivariado_ci_comb <- datos %>%
+  mutate(
+    insumo_combinado = pmap_chr(list(insumo_1, insumo_2), function(x, y) {
+      # Creamos vector, quitamos NAs para evitar concatenar "NA", ordenamos y unimos
+      elementos <- c(as.character(x), as.character(y))
+      elementos <- elementos[!is.na(elementos)]
+      paste(sort(elementos), collapse = " + ")
+    })
+  ) %>%
+  group_by(insumo_combinado) %>%
+  summarise(
+    n = n(),
+    media = mean(costo_insumo, na.rm = TRUE),
+    ds = sd(costo_insumo, na.rm = TRUE),
+    `50%` = median(costo_insumo, na.rm = TRUE),
+    minimo = min(costo_insumo, na.rm = TRUE),
+    maximo = max(costo_insumo, na.rm = TRUE),
+    Q1 = quantile(costo_insumo, 0.25, na.rm = TRUE),
+    Q3 = quantile(costo_insumo, 0.75, na.rm = TRUE),
+    IQR = IQR(costo_insumo, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  # Redondeo a dos decimales para columnas numéricas
+  mutate(across(where(is.numeric) & !n, ~ round(.x, 2))) %>%
+  arrange(desc(n))
+
+# Presentación de la tabla
+knitr::kable(resumen_bivariado_ci_comb, 
+             caption = "Resumen bivariado: costo de insumo por combinación de insumos") %>%
+  kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover", "condensed"))
+
+```
+Combinación de insumos introduce estructuras diferenciadas tanto en nivel como en dispersión.
+
+En costos de transformación, las combinaciones simples (B_T, N_T) presentan niveles relativamente similares, con medias cercanas a 25–26. Sin embargo, N_T muestra una dispersión mucho mayor (IQR ≈ 24 frente a ≈ 10 en B_T), lo que indica que su comportamiento es menos estable. Esto sugiere que, aun siendo comparables en nivel medio, no lo son en términos de consistencia.
+
+Cuando se introducen combinaciones con N_O, los costos aumentan de forma sistemática. Tanto N_O + N_T como N_O solo presentan medias superiores a 36–38, lo que implica un cambio estructural en el nivel de costo. Este patrón indica que N_O actúa como un factor de incremento base en el proceso de transformación.
+
+Las combinaciones con R_T son particularmente relevantes. A_T + R_T alcanza valores medios cercanos a 55, con alta dispersión, lo que refleja no solo un costo elevado sino también variabilidad significativa. De forma similar, R_T solo o combinado tiende a elevar tanto el nivel como la incertidumbre del costo.
+
+En contraste, combinaciones como B_T + V_T presentan costos bajos y muy poca dispersión (IQR ≈ 3.9). No todas las combinaciones de dos insumos implican mayor complejidad; algunas mantienen eficiencia operativa.
+
+N_T tiene costos bajos, mientras que combinaciones con N_O elevan significativamente el costo de insumo (media ≈ 8.6). 
+
+La dispersión en algunas combinaciones (por ejemplo, sin_segundo_insumo + V_T) es extremadamente alta, lo que indica presencia de outliers y posibles problemas de registro o condiciones operativas atípicas.
+
+No todos los insumos son equivalentes. Algunos son neutros, otros son caros, y algunos son directamente problemáticos.
+
+El insumo N_O es el principal driver de costo. Cada vez que aparece, el costo de transformación sube de manera consistente. Es un insumo estructuralmente caro. Su uso debe estar plenamente justificado en precio.
+
+El insumo R_T es crítico por otra razón, eleva el costo y también introduce variabilidad, es menos predecible. Este tipo de pedido debe tener recargos por incertidumbre.
+
+El insumo N_T es engañoso. En promedio no es costoso, pero presenta alta dispersión. Esto indica que bajo ciertas condiciones puede volverse problemático. Aquí hay un tema de control operativo.
+
+El insumo B_T es el más estable. Costos moderados y baja variabilidad. Es una base confiable para operación.
+
+El insumo V_T en ciertas combinaciones muestra eficiencia (bajo costo y baja dispersión), pero en otros casos presenta outliers extremos. Esto indica inconsistencia en su manejo.
+
+
+
+```{r box-insumo-comb}
+box_comb_insumos_ct <- datos %>%
+  ggplot(aes(x = insumo_combinado, y = costo_transformacion)) +
+  geom_boxplot(fill = "#2c7fb8", alpha = 0.7) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "black") +
+  labs(x = "Combinación de insumos",
+       y = "Costo de transformación") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+box_comb_insumos_ci <- datos %>%
+  ggplot(aes(x = insumo_combinado, y = costo_insumo)) +
+  geom_boxplot(fill = "#7fc97f", alpha = 0.7) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "black") +
+  labs(x = "Combinación de insumos",
+       y = "Costo de insumo") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+  box_comb_insumos_ct  / box_comb_insumos_ci
+```
+
+
+
 ## Análisis bivariado: costos por tipo de equipo 
+
+
+### Análisis bivariado: Modalidad proceso
+
+```{r bivariado-ct-modproceso}
+resumen_bivariado_cc_modproceso <- datos %>%
+  group_by(modalidad_proceso) %>%
+  summarise(
+    n = length(costo_transformacion),
+    media = mean(costo_transformacion),
+    ds = sd(costo_transformacion),
+    `50%` = median(costo_transformacion),
+    minimo = min(costo_transformacion),
+    maximo = max(costo_transformacion),
+    Q1 = quantile(costo_transformacion, 0.25),
+    Q3 = quantile(costo_transformacion, 0.75),
+    IQR = IQR(costo_transformacion),
+    .groups = "drop"
+  )
+
+  knitr::kable(resumen_bivariado_cc_modproceso , caption = "Resumen Bivariado costos de transformación por modalidad de proceso") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
+```
+
+```{r bivariado-ci-modproceso}
+resumen_bivariado_ci_modproceso <- datos %>%
+  group_by(modalidad_proceso) %>%
+  summarise(
+    n = length(costo_insumo),
+    media = mean(costo_insumo),
+    ds = sd(costo_insumo),
+    `50%` = median(costo_insumo),
+    minimo = min(costo_insumo),
+    maximo = max(costo_insumo),
+    Q1 = quantile(costo_insumo, 0.25),
+    Q3 = quantile(costo_insumo, 0.75),
+    IQR = IQR(costo_insumo),
+    .groups = "drop"
+  )
+
+    knitr::kable(resumen_bivariado_ci_modproceso , caption = "Resumen Bivariado costos de insumo por modalidad de proceso") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
+```
+
+
+```{r boxmod_proceso, fig.width=9, fig.height=4.5}
+
+box_ct_mod_proceso <-datos %>%
+  ggplot(aes(x = modalidad_proceso, y = costo_transformacion)) +
+  geom_boxplot(fill = "#87CEFA", outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "darkblue") +
+  labs(x = "Tipo de equipo",
+       y = "Costo de transformación (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Costo de transformación por modalidad de proceso ")
+
+
+box_ci_mod_proceso <- datos %>%
+  ggplot(aes(x = modalidad_proceso, y = costo_insumo)) +
+  geom_boxplot(fill = "#b2df8a", outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "darkgreen") +
+  labs(x = "Modalidad de proceso",
+       y = "Costo de insumo (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Costo de insumo por modalidad de proceso")
+
+box_ct_mod_proceso + box_ci_mod_proceso
+```
+
+La modalidad Z es una combinación operativa de X y Y. 
+
+En costo de transformación, se observa un gradiente:
+X ≈ 27.9 < Y ≈ 31.4 < Z ≈ 41.6
+La mediana también confirma ese patrón (27.1 → 29.5 → 38.8). 
+
+X tiene alta variabilidad (ds ≈ 17.9, IQR amplio). Es un proceso inestable.
+Y es más controlado (ds ≈ 10.5, IQR más estrecho).
+Z tiene dispersión alta en términos absolutos, pero IQR relativamente contenido. Esto indica que el costo base es alto de forma consistente, no solo por outliers.
+
+En costo de insumo, el patrón es más suave:
+X ≈ 4.80, Y ≈ 5.20, Z ≈ 6.86
+
+Aquí el incremento sí parece más aditivo que estructural. La mediana de Z (≈ 4.98) está cerca de Y, lo que indica que el aumento en la media viene de algunos valores altos (cola derecha). Es decir, el insumo adicional no siempre se usa en la misma intensidad.
+
+Conclusión estadística:
+El sobrecosto de Z proviene principalmente de transformación, no de insumo, y además no es lineal. Es un fenómeno de interacción entre procesos, no de suma simple.
+
+Como gerente de costos
+
+Aquí hay una señal operativa crítica. La modalidad Z (X + Y) no es simplemente “hacer dos cosas”, es hacer dos cosas mal integradas.
+
+El costo de transformación sube de manera desproporcionada. No estás pagando solo más tiempo o más trabajo; estás pagando ineficiencia:
+
+cambios de proceso
+reconfiguración de equipos
+pérdida de continuidad
+posibles reprocesos o esperas
+
+En cambio, el costo de insumo sube poco y de forma relativamente lógica. Eso confirma que el problema no está en materiales, sino en cómo se ejecuta el proceso combinado.
+
+Hay tres implicaciones directas:
+
+Primero, Z está subvalorado si se cotiza como suma de X + Y. El costo real es mayor. Si el pricing no lo recoge, hay margen erosionándose en cada orden Z.
+
+Segundo, el tamaño de muestra de Z es bajo (n = 14). Esto indica que no es el flujo principal, pero justamente por eso suele estar menos estandarizado y más improvisado. Eso explica la ineficiencia.
+
+Tercero, la diferencia entre X y Y también importa: Y es más estable y ligeramente más costoso. X es más volátil. Cuando ambos se combinan, esa variabilidad se amplifica.
+
+Conclusión operativa:
+Z no es un proceso, es una excepción operativa. Y como toda excepción, cuesta más.
+
+Recomendación implícita:
+O se estandariza Z como proceso propio con tiempos y métodos definidos, o se cobra explícitamente como operación especial. De lo contrario, cada orden Z introduce costo oculto que no se está controlando.
+
+### Análisis bivariado: tipo de equipo
+
+```{r bivariado-ct-tipoequipo}
+resumen_bivariado_cc <- datos %>%
+  group_by(tipo_equipo) %>%
+  summarise(
+    n = length(costo_transformacion),
+    media = mean(costo_transformacion),
+    ds = sd(costo_transformacion),
+    `50%` = median(costo_transformacion),
+    minimo = min(costo_transformacion),
+    maximo = max(costo_transformacion),
+    Q1 = quantile(costo_transformacion, 0.25),
+    Q3 = quantile(costo_transformacion, 0.75),
+    IQR = IQR(costo_transformacion),
+    .groups = "drop"
+  )
+
+  knitr::kable(resumen_bivariado_cc , caption = "Resumen Bivariado costos de transformación") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
+```
+
+El tipo de equipo A1, presenta un costo medio de aproximadamente 33 UM/unidad, con una dispersión moderada. Su mediana cercana a 30 confirma que el comportamiento típico está bien representado y relativamente estable. Esto lo posiciona como el estándar operativo del sistema.
+
+El tipo de equipo B2 muestra un patrón muy similar a A1, aunque con costos ligeramente menores y menor variabilidad. La cercanía entre media y mediana sugiere estabilidad, pero su menor tamaño muestral limita la robustez de la comparación.
+
+El caso de C3 es claramente distinto. Presenta costos significativamente más altos (media superior a 64) y mayor dispersión. Además, el rango intercuartílico es amplio, lo que indica que no solo es costoso, sino también variable. Esto apunta a un proceso con alta complejidad o baja eficiencia estructural.
+
+El tipo de equipo D4 tiene costos notablemente bajos (media cercana a 9). La dispersión es reducida y el comportamiento es consistente. Este equipo representa una operación altamente eficiente y controlada, con baja variabilidad. qué prácticas operativas permiten ese nivel de eficiencia y si son replicables.
+
+El costo de transformación está determinado por el tipo de equipo, y la magnitud de las diferencias es significativa.
+
+```{r bivariado-ci-tipoequipo}
+resumen_bivariado_ci <- datos %>%
+  group_by(tipo_equipo) %>%
+  summarise(
+    n = length(costo_insumo),
+    media = mean(costo_insumo),
+    ds = sd(costo_insumo),
+    `50%` = median(costo_insumo),
+    minimo = min(costo_insumo),
+    maximo = max(costo_insumo),
+    Q1 = quantile(costo_insumo, 0.25),
+    Q3 = quantile(costo_insumo, 0.75),
+    IQR = IQR(costo_insumo),
+    .groups = "drop"
+  )
+
+    knitr::kable(resumen_bivariado_ci , caption = "Resumen Bivariado costos de insumo") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
+```
+
+Los tipos de equipos A1 y B2 presentan patrones similares: medias cercanas a 5 UM/unidad y medianas ligeramente inferiores. El rango intercuartílico es moderado, sugiriendo que el consumo de insumos en estos equipos es predecible y controlado.
+
+El tipo de equipo C3 nuevamente se diferencia de forma clara. La media (≈11.25) es más del doble que en A1 y B2, y la dispersión es considerable. Además, la mediana se mantiene alta. Costoso tanto en transformación como en  insumos, es menos eficiente.
+
+El tipo de equipo D4 Presenta la media más baja (≈3.58) pero su desviación estándar es alta y supera incluso a la media. Puede influir que D4 solo opera con un insumo. No puede operar con 2. La mediana (≈1.64) está muy por debajo de la media, lo que indica una asimetría extrema. D4 es generalmente eficiente, pero con episodios puntuales de alto consumo.
+
+
+```{r boxequipo, fig.width=9, fig.height=4.5}
+
+box_ct_te <-datos %>%
+  ggplot(aes(x = tipo_equipo, y = costo_transformacion)) +
+  geom_boxplot(fill = "#87CEFA", outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "darkblue") +
+  labs(x = "Tipo de equipo",
+       y = "Costo de transformación (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Costo de transformación por tipo de equipo")
+
+
+box_ci_te <- datos %>%
+  ggplot(aes(x = tipo_equipo, y = costo_insumo)) +
+  geom_boxplot(fill = "#b2df8a", outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "darkgreen") +
+  labs(x = "Tipo de equipo",
+       y = "Costo de insumo (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Costo de insumo por tipo de equipo")
+
+box_ct_te + box_ci_te 
+```
+
+Los boxplots confirman visualmente lo que ya sugerían los resúmenes numéricos: el tipo de equipo introduce regímenes claramente diferenciados de costos, tanto en transformación como en insumos.
+
+### Análisis bivariado: Equipo_id
+
+```{r bivariado-ct-equipo}
+resumen_bivariado_ct_equipo <- datos %>%
+  group_by(equipo_id, tipo_equipo) %>%
+  summarise(
+    n = length(costo_transformacion),
+    media = mean(costo_transformacion),
+    ds = sd(costo_transformacion),
+    `50%` = median(costo_transformacion),
+    minimo = min(costo_transformacion),
+    maximo = max(costo_transformacion),
+    Q1 = quantile(costo_transformacion, 0.25),
+    Q3 = quantile(costo_transformacion, 0.75),
+    IQR = IQR(costo_transformacion),
+    .groups = "drop"
+  ) %>%
+  arrange(tipo_equipo, equipo_id)
+
+knitr::kable(
+  resumen_bivariado_ct_equipo,
+  caption = "Resumen bivariado de costos de transformación por equipo y tipo de equipo"
+) %>%
+  kableExtra::kable_styling(full_width = FALSE)
+```
+
+```{r bivariado-ci-equipo}
+resumen_bivariado_ci_equipo <- datos %>%
+  group_by(equipo_id, tipo_equipo) %>%
+  summarise(
+    n = length(costo_insumo),
+    media = mean(costo_insumo),
+    ds = sd(costo_insumo),
+    `50%` = median(costo_insumo),
+    minimo = min(costo_insumo),
+    maximo = max(costo_insumo),
+    Q1 = quantile(costo_insumo, 0.25),
+    Q3 = quantile(costo_insumo, 0.75),
+    IQR = IQR(costo_insumo),
+    .groups = "drop"
+  ) %>%
+  arrange(tipo_equipo, equipo_id)
+
+knitr::kable(
+  resumen_bivariado_ci_equipo,
+  caption = "Resumen bivariado de costos de insumo por equipo y tipo de equipo"
+) %>%
+  kableExtra::kable_styling(full_width = FALSE)
+```
+
+
+```{r box_equipo_id, fig.width=9, fig.height=4.5}
+orden_equipos <- datos %>%
+  distinct(tipo_equipo, equipo_id) %>%
+  arrange(tipo_equipo, equipo_id) %>%
+  pull(equipo_id)
+
+  box_ct_equipo <- datos %>%
+  mutate(
+    equipo_id = factor(equipo_id, levels = orden_equipos)
+  ) %>%
+  ggplot(aes(x = equipo_id, y = costo_transformacion, fill = tipo_equipo)) +
+  geom_boxplot(outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "black") +
+  labs(x = "Equipo",
+       y = "Costo de transformación (UM/unidad)",
+       fill = "Tipo de equipo") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  facet_grid(. ~ "Costo de transformación por equipo")
+
+box_ci_equipo <- datos %>%
+  mutate(
+    equipo_id = factor(equipo_id, levels = orden_equipos)
+  ) %>%
+  ggplot(aes(x = equipo_id, y = costo_insumo, fill = tipo_equipo)) +
+  geom_boxplot(outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "black") +
+  labs(x = "Equipo",
+       y = "Costo de insumo (UM/unidad)",
+       fill = "Tipo de equipo") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  facet_grid(. ~ "Costo de insumo por equipo")
+
+box_ct_equipo + box_ci_equipo
+
+```
+
+
+
 
 Un primer análisis bivariado de costos por tipo de equipo (que viene más adelante) muestra diferencias muy grandes:
 
@@ -620,19 +1133,19 @@ El espacio operativo no es completo. No todos los equipos operan en todas las mo
 
 **Lo que parecía un dataset plano con 7 variables categóricas independientes es en realidad un sistema con dependencias operativas:**
 - El tipo de equipo determina qué modalidades de proceso son factibles.
-- La modalidad de proceso restringe qué configuraciones de insumos pueden ejecutarse.
-- El número de insumos condiciona qué combinaciones de producto son posibles.
+- El tipo de equipo determina el número de insumos.
 
+El dataset refleja restricciones técnicas reales de la planta, no una muestra aleatoria de un universo uniforme.
 
-Traducción para la dirección financiera: un operario no elige libremente "equipo D4 con modalidad Y y dos insumos". Esa combinación simplemente no existe en el proceso. El dataset refleja restricciones técnicas reales de la planta, no una muestra aleatoria de un universo uniforme.
-
-6.4.2 Por qué esto cambia todo el análisis
 Si las categorías no son independientes, comparar costos marginalmente es engañoso. Ejemplo concreto:
 
 Si D4 solo opera en modalidad X con 1 insumo, y A1 opera en X, Y y Z con 1 o 2 insumos, entonces decir "D4 es más barato que A1" mezcla dos cosas: el efecto del equipo y el efecto de la modalidad/insumos. No sabemos si D4 es barato porque el equipo es eficiente, o porque solo se usa en las configuraciones más simples.
 
-Este tipo de error se llama confusión (confounding) y es una de las trampas clásicas de los análisis agregados. Desde este punto del capítulo, el análisis abandona la lógica "promedio por categoría" y adopta una lógica condicional: cada efecto se evalúa dentro del contexto operativo donde sí hay comparabilidad.
-6.4.3 Decisiones metodológicas derivadas del descubrimiento
+Este tipo de error se llama confusión (confounding) y es una de las trampas clásicas de los análisis agregados. 
+
+Desde este punto del capítulo, el análisis abandona la lógica "promedio por categoría" y adopta una lógica condicional: cada efecto se evalúa dentro del contexto operativo donde sí hay comparabilidad.
+
+## Decisiones metodológicas derivadas del descubrimiento
 Tras el diagnóstico anterior, se adoptan tres decisiones explícitas que guían el resto del capítulo:
 Decisión 1 — Exclusión de modalidad Z. La modalidad Z corresponde a órdenes excepcionales donde se aplican las modalidades X y Y al mismo producto por solicitud del cliente. Con 14 órdenes distribuidas en 3 celdas (3.5% del dataset), no permite inferencia estadística con potencia suficiente y, al representar una composición de procesos en lugar de una modalidad alternativa, no es conceptualmente comparable con X o Y. Las órdenes con Z se excluyen del análisis principal y se caracterizan brevemente al final del capítulo (sección 6.8).
 Decisión 2 — Exclusión del tipo_equipo C3. C3 tiene solo 8 órdenes (2%), concentradas casi íntegramente en la combinación (X, 1) con un único caso en (X, 2) y cero en modalidad Y. Con este n, los intervalos de confianza son extremadamente amplios y cualquier diferencia observada queda dominada por ruido. C3 se excluye del análisis estratificado y sus estadísticos descriptivos se reportan al final con una advertencia explícita sobre su no comparabilidad.
