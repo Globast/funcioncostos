@@ -1011,8 +1011,6 @@ stats_A1 <- datos_principal %>%
     .groups = "drop"
   )
 stats_A1
-[facet_grid(modalidad_proceso ~ num_insumos): cuatro paneles con el boxplot de costo_transformacion en A1 y B2.]
-
 ```
 Lo que revela el análisis estratificado. Dentro de A1:
 
