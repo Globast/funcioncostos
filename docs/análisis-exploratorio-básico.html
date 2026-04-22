@@ -676,323 +676,6 @@ El sistema produce lotes de escalas muy distintas (entre 100 y 13.300 unidades),
 </div>
 <div id="análisis-univariado-de-predictoras-categóricas" class="section level2 hasAnchor" number="6.4">
 <h2><span class="header-section-number">6.4</span> 6.4 Análisis univariado de predictoras categóricas<a href="análisis-exploratorio-básico.html#an%C3%A1lisis-univariado-de-predictoras-categ%C3%B3ricas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<pre><code>  → Concentración en A1 (73%), cardinalidad variable entre categóricas</code></pre>
-<p>## 6.5 Análisis bivariado marginal
-### 6.5.1 Correlaciones Pearson y Spearman
-### 6.5.2 Diagramas de dispersión
-### 6.5.3 Boxplots de costo por tipo_equipo, modalidad, num_insumos
-→ Diferencias muy grandes entre tipos de equipo y modalidades
-## 6.6 Señales de heterogeneidad estructural
-### 6.6.1 Las distribuciones condicionales no son uniformes
-### 6.6.2 Tabulación cruzada tipo_equipo × modalidad × num_insumos
-### 6.6.3 Descubrimiento: el espacio operativo está truncado
-## 6.7 Implicaciones metodológicas del descubrimiento
-### 6.7.1 Por qué el análisis marginal puede ser engañoso (confounding)
-### 6.7.2 Decisiones de exclusión justificadas
-- Exclusión de modalidad Z (n=14)
-- Exclusión de tipo_equipo C3 (n=8)
-- Identificación de A1 como configuración universal
-## 6.8 Generación del dataset principal
-6.8.1 Filtrado y exportación (data_costos_principal.csv / .rds)
-6.8.2 Verificación del dataset resultante
-## 6.9 Cierre: qué sabemos, qué no sabemos, qué sigue
-→ Hipótesis que justifican el análisis estratificado</p>
-<div id="análisis-bivariado-modalidad-proceso" class="section level3 hasAnchor" number="6.4.1">
-<h3><span class="header-section-number">6.4.1</span> Análisis bivariado: Modalidad proceso<a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado-modalidad-proceso" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>
-(#tab:bivariado_cc_modproceso)(#tab:bivariado_cc_modproceso)Resumen Bivariado costos de transformación por modalidad de proceso
-</caption>
-<thead>
-<tr>
-<th style="text-align:left;">
-modalidad_proceso
-</th>
-<th style="text-align:right;">
-n
-</th>
-<th style="text-align:right;">
-media
-</th>
-<th style="text-align:right;">
-ds
-</th>
-<th style="text-align:right;">
-50%
-</th>
-<th style="text-align:right;">
-minimo
-</th>
-<th style="text-align:right;">
-maximo
-</th>
-<th style="text-align:right;">
-Q1
-</th>
-<th style="text-align:right;">
-Q3
-</th>
-<th style="text-align:right;">
-IQR
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-X
-</td>
-<td style="text-align:right;">
-206
-</td>
-<td style="text-align:right;">
-27.90974
-</td>
-<td style="text-align:right;">
-17.87045
-</td>
-<td style="text-align:right;">
-27.15583
-</td>
-<td style="text-align:right;">
-2.766110
-</td>
-<td style="text-align:right;">
-97.18480
-</td>
-<td style="text-align:right;">
-12.36344
-</td>
-<td style="text-align:right;">
-35.13867
-</td>
-<td style="text-align:right;">
-22.77523
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Y
-</td>
-<td style="text-align:right;">
-175
-</td>
-<td style="text-align:right;">
-31.39504
-</td>
-<td style="text-align:right;">
-10.51311
-</td>
-<td style="text-align:right;">
-29.56235
-</td>
-<td style="text-align:right;">
-5.093602
-</td>
-<td style="text-align:right;">
-76.49633
-</td>
-<td style="text-align:right;">
-24.79461
-</td>
-<td style="text-align:right;">
-36.44523
-</td>
-<td style="text-align:right;">
-11.65063
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Z
-</td>
-<td style="text-align:right;">
-14
-</td>
-<td style="text-align:right;">
-41.62190
-</td>
-<td style="text-align:right;">
-17.33280
-</td>
-<td style="text-align:right;">
-38.88523
-</td>
-<td style="text-align:right;">
-23.124712
-</td>
-<td style="text-align:right;">
-92.17387
-</td>
-<td style="text-align:right;">
-33.02403
-</td>
-<td style="text-align:right;">
-43.81498
-</td>
-<td style="text-align:right;">
-10.79095
-</td>
-</tr>
-</tbody>
-</table>
-<p>La modalidad Z es una combinación operativa de X y Y.</p>
-<p>En costo de transformación, se observa un gradiente en la media que va de X a Y y luego a Z, pero el salto no es lineal.:
-X ≈ 27.9 &lt; Y ≈ 31.4 &lt; Z ≈ 41.6
-La mediana también confirma ese patrón (27.1 → 29.5 → 38.8).</p>
-<ul>
-<li>X tiene alta variabilidad (ds ≈ 17.9, IQR amplio). Es un proceso inestable.</li>
-<li>Y es más controlado (ds ≈ 10.5, IQR más estrecho).</li>
-<li>Z tiene dispersión alta en términos absolutos, pero IQR relativamente contenido. Esto indica que el costo base es alto de forma consistente, no solo por outliers.</li>
-</ul>
-<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>
-(#tab:bivariado_ci_modproceso)(#tab:bivariado_ci_modproceso)Resumen Bivariado costos de insumo por modalidad de proceso
-</caption>
-<thead>
-<tr>
-<th style="text-align:left;">
-modalidad_proceso
-</th>
-<th style="text-align:right;">
-n
-</th>
-<th style="text-align:right;">
-media
-</th>
-<th style="text-align:right;">
-ds
-</th>
-<th style="text-align:right;">
-50%
-</th>
-<th style="text-align:right;">
-minimo
-</th>
-<th style="text-align:right;">
-maximo
-</th>
-<th style="text-align:right;">
-Q1
-</th>
-<th style="text-align:right;">
-Q3
-</th>
-<th style="text-align:right;">
-IQR
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-X
-</td>
-<td style="text-align:right;">
-206
-</td>
-<td style="text-align:right;">
-4.795688
-</td>
-<td style="text-align:right;">
-4.983349
-</td>
-<td style="text-align:right;">
-3.901745
-</td>
-<td style="text-align:right;">
-0.0136519
-</td>
-<td style="text-align:right;">
-46.21884
-</td>
-<td style="text-align:right;">
-2.046081
-</td>
-<td style="text-align:right;">
-5.885855
-</td>
-<td style="text-align:right;">
-3.839774
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Y
-</td>
-<td style="text-align:right;">
-175
-</td>
-<td style="text-align:right;">
-5.200829
-</td>
-<td style="text-align:right;">
-3.602861
-</td>
-<td style="text-align:right;">
-4.324094
-</td>
-<td style="text-align:right;">
-0.1148000
-</td>
-<td style="text-align:right;">
-21.80388
-</td>
-<td style="text-align:right;">
-2.666188
-</td>
-<td style="text-align:right;">
-6.586521
-</td>
-<td style="text-align:right;">
-3.920333
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Z
-</td>
-<td style="text-align:right;">
-14
-</td>
-<td style="text-align:right;">
-6.863816
-</td>
-<td style="text-align:right;">
-4.656808
-</td>
-<td style="text-align:right;">
-4.981695
-</td>
-<td style="text-align:right;">
-2.3523921
-</td>
-<td style="text-align:right;">
-17.18095
-</td>
-<td style="text-align:right;">
-4.093923
-</td>
-<td style="text-align:right;">
-8.363485
-</td>
-<td style="text-align:right;">
-4.269563
-</td>
-</tr>
-</tbody>
-</table>
-<p>En costo de insumo, el patrón es más suave:
-X ≈ 4.80, Y ≈ 5.20, Z ≈ 6.86</p>
-<p>La mediana de Z (≈ 4.98) está cerca de Y, el aumento en la media puede provenir de algunos valores altos .</p>
-<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box_bivariado_mod_proceso-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
-<p>El sobrecosto de Z proviene principalmente de transformación, no de insumo, y además no es lineal. Es un fenómeno de interacción entre procesos, no de suma simple.</p>
-<p>En cambio, el costo de insumo sube poco y de forma relativamente lógica. Eso confirma que el problema no está en materiales, sino en cómo se ejecuta el proceso combinado.</p>
-<p>El tamaño de muestra de Z es bajo (n = 14).</p>
-<p>Y es más estable y ligeramente más costoso que X. Pero X es más volátil.</p>
-</div>
-<div id="análisis-bivariado-tipo-de-equipo" class="section level3 hasAnchor" number="6.4.2">
-<h3><span class="header-section-number">6.4.2</span> Análisis bivariado: tipo de equipo<a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado-tipo-de-equipo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 (#tab:tabla_res_categoricas)(#tab:tabla_res_categoricas)Resumen descriptivo de las variables categóricas seleccionadas
@@ -1599,6 +1282,322 @@ Existe heterogeneidad operativa, → distintos equipos tienen niveles de uso muy
 Cualquier modelo debe considerar tipo_equipo como variable explicativa clave, equipo_id puede capturar efectos más finos (variabilidad intra-tipo) , Comparaciones entre categorías pequeñas pueden ser inestables (bajo n)</p>
 <p>El sistema está estructurado alrededor de un tipo dominante (A1) y un subconjunto reducido de equipos con alta actividad. La variabilidad observada en costos, duración o volumen probablemente está condicionada por esta estructura, no solo por aleatoriedad.</p>
 <p>El tipo de equipo dominante es A1, que concentra el 72.66% de las órdenes. La variable <code>equipo_id</code> tiene 12 niveles distintos y <code>categoria_producto</code> tiene 7 niveles, lo cual exigirá tratamiento cuidadoso en los análisis inferenciales posteriores para evitar celdas con pocas observaciones.</p>
+<p>## 6.5 Análisis bivariado marginal
+### 6.5.1 Correlaciones Pearson y Spearman
+### 6.5.2 Diagramas de dispersión
+### 6.5.3 Boxplots de costo por tipo_equipo, modalidad, num_insumos
+→ Diferencias muy grandes entre tipos de equipo y modalidades
+## 6.6 Señales de heterogeneidad estructural
+### 6.6.1 Las distribuciones condicionales no son uniformes
+### 6.6.2 Tabulación cruzada tipo_equipo × modalidad × num_insumos
+### 6.6.3 Descubrimiento: el espacio operativo está truncado
+## 6.7 Implicaciones metodológicas del descubrimiento
+### 6.7.1 Por qué el análisis marginal puede ser engañoso (confounding)
+### 6.7.2 Decisiones de exclusión justificadas
+- Exclusión de modalidad Z (n=14)
+- Exclusión de tipo_equipo C3 (n=8)
+- Identificación de A1 como configuración universal
+## 6.8 Generación del dataset principal
+6.8.1 Filtrado y exportación (data_costos_principal.csv / .rds)
+6.8.2 Verificación del dataset resultante
+## 6.9 Cierre: qué sabemos, qué no sabemos, qué sigue
+→ Hipótesis que justifican el análisis estratificado</p>
+<div id="análisis-bivariado-modalidad-proceso" class="section level3 hasAnchor" number="6.4.1">
+<h3><span class="header-section-number">6.4.1</span> Análisis bivariado: Modalidad proceso<a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado-modalidad-proceso" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+(#tab:bivariado_cc_modproceso)(#tab:bivariado_cc_modproceso)Resumen Bivariado costos de transformación por modalidad de proceso
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+modalidad_proceso
+</th>
+<th style="text-align:right;">
+n
+</th>
+<th style="text-align:right;">
+media
+</th>
+<th style="text-align:right;">
+ds
+</th>
+<th style="text-align:right;">
+50%
+</th>
+<th style="text-align:right;">
+minimo
+</th>
+<th style="text-align:right;">
+maximo
+</th>
+<th style="text-align:right;">
+Q1
+</th>
+<th style="text-align:right;">
+Q3
+</th>
+<th style="text-align:right;">
+IQR
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:right;">
+206
+</td>
+<td style="text-align:right;">
+27.90974
+</td>
+<td style="text-align:right;">
+17.87045
+</td>
+<td style="text-align:right;">
+27.15583
+</td>
+<td style="text-align:right;">
+2.766110
+</td>
+<td style="text-align:right;">
+97.18480
+</td>
+<td style="text-align:right;">
+12.36344
+</td>
+<td style="text-align:right;">
+35.13867
+</td>
+<td style="text-align:right;">
+22.77523
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:right;">
+175
+</td>
+<td style="text-align:right;">
+31.39504
+</td>
+<td style="text-align:right;">
+10.51311
+</td>
+<td style="text-align:right;">
+29.56235
+</td>
+<td style="text-align:right;">
+5.093602
+</td>
+<td style="text-align:right;">
+76.49633
+</td>
+<td style="text-align:right;">
+24.79461
+</td>
+<td style="text-align:right;">
+36.44523
+</td>
+<td style="text-align:right;">
+11.65063
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Z
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+41.62190
+</td>
+<td style="text-align:right;">
+17.33280
+</td>
+<td style="text-align:right;">
+38.88523
+</td>
+<td style="text-align:right;">
+23.124712
+</td>
+<td style="text-align:right;">
+92.17387
+</td>
+<td style="text-align:right;">
+33.02403
+</td>
+<td style="text-align:right;">
+43.81498
+</td>
+<td style="text-align:right;">
+10.79095
+</td>
+</tr>
+</tbody>
+</table>
+<p>La modalidad Z es una combinación operativa de X y Y.</p>
+<p>En costo de transformación, se observa un gradiente en la media que va de X a Y y luego a Z, pero el salto no es lineal.:
+X ≈ 27.9 &lt; Y ≈ 31.4 &lt; Z ≈ 41.6
+La mediana también confirma ese patrón (27.1 → 29.5 → 38.8).</p>
+<ul>
+<li>X tiene alta variabilidad (ds ≈ 17.9, IQR amplio). Es un proceso inestable.</li>
+<li>Y es más controlado (ds ≈ 10.5, IQR más estrecho).</li>
+<li>Z tiene dispersión alta en términos absolutos, pero IQR relativamente contenido. Esto indica que el costo base es alto de forma consistente, no solo por outliers.</li>
+</ul>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+(#tab:bivariado_ci_modproceso)(#tab:bivariado_ci_modproceso)Resumen Bivariado costos de insumo por modalidad de proceso
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+modalidad_proceso
+</th>
+<th style="text-align:right;">
+n
+</th>
+<th style="text-align:right;">
+media
+</th>
+<th style="text-align:right;">
+ds
+</th>
+<th style="text-align:right;">
+50%
+</th>
+<th style="text-align:right;">
+minimo
+</th>
+<th style="text-align:right;">
+maximo
+</th>
+<th style="text-align:right;">
+Q1
+</th>
+<th style="text-align:right;">
+Q3
+</th>
+<th style="text-align:right;">
+IQR
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:right;">
+206
+</td>
+<td style="text-align:right;">
+4.795688
+</td>
+<td style="text-align:right;">
+4.983349
+</td>
+<td style="text-align:right;">
+3.901745
+</td>
+<td style="text-align:right;">
+0.0136519
+</td>
+<td style="text-align:right;">
+46.21884
+</td>
+<td style="text-align:right;">
+2.046081
+</td>
+<td style="text-align:right;">
+5.885855
+</td>
+<td style="text-align:right;">
+3.839774
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:right;">
+175
+</td>
+<td style="text-align:right;">
+5.200829
+</td>
+<td style="text-align:right;">
+3.602861
+</td>
+<td style="text-align:right;">
+4.324094
+</td>
+<td style="text-align:right;">
+0.1148000
+</td>
+<td style="text-align:right;">
+21.80388
+</td>
+<td style="text-align:right;">
+2.666188
+</td>
+<td style="text-align:right;">
+6.586521
+</td>
+<td style="text-align:right;">
+3.920333
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Z
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+6.863816
+</td>
+<td style="text-align:right;">
+4.656808
+</td>
+<td style="text-align:right;">
+4.981695
+</td>
+<td style="text-align:right;">
+2.3523921
+</td>
+<td style="text-align:right;">
+17.18095
+</td>
+<td style="text-align:right;">
+4.093923
+</td>
+<td style="text-align:right;">
+8.363485
+</td>
+<td style="text-align:right;">
+4.269563
+</td>
+</tr>
+</tbody>
+</table>
+<p>En costo de insumo, el patrón es más suave:
+X ≈ 4.80, Y ≈ 5.20, Z ≈ 6.86</p>
+<p>La mediana de Z (≈ 4.98) está cerca de Y, el aumento en la media puede provenir de algunos valores altos .</p>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box_bivariado_mod_proceso-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<p>El sobrecosto de Z proviene principalmente de transformación, no de insumo, y además no es lineal. Es un fenómeno de interacción entre procesos, no de suma simple.</p>
+<p>En cambio, el costo de insumo sube poco y de forma relativamente lógica. Eso confirma que el problema no está en materiales, sino en cómo se ejecuta el proceso combinado.</p>
+<p>El tamaño de muestra de Z es bajo (n = 14).</p>
+<p>Y es más estable y ligeramente más costoso que X. Pero X es más volátil.</p>
+</div>
+<div id="análisis-bivariado-tipo-de-equipo" class="section level3 hasAnchor" number="6.4.2">
+<h3><span class="header-section-number">6.4.2</span> Análisis bivariado: tipo de equipo<a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado-tipo-de-equipo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/bar_categoricas-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
