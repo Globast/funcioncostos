@@ -3,7 +3,7 @@
 ## Carga del dataset analítico 
 Se parte del dataset depurado en el capítulo de metodología (395 órdenes de producción con tipos ajustados). La limpieza previa ya eliminó errores de digitación y validó la integridad de los registros; este capítulo se concentra en entender qué dicen esos datos.
 
-```{r setup, include=FALSE}
+```{r setup1, include=FALSE}
 knitr::opts_chunk$set(
   echo = FALSE,      # Oculta el código en todo el documento
   message = FALSE,   # Oculta mensajes de carga de librerías
