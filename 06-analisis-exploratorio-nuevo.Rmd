@@ -610,21 +610,18 @@ Una tabulación cruzada contesta la pregunta y cambia el análisis:
 
 tabla_dep <- datos %>%
   count(tipo_equipo, modalidad_proceso, num_insumos) %>%
+  complete(tipo_equipo, modalidad_proceso, num_insumos, fill = list(n = 0)) %>%
   arrange(tipo_equipo, modalidad_proceso, num_insumos)
 
-kable(tabla_dep, caption = "Combinaciones observadas (tipo_equipo × modalidad × num_insumos)") %>%
+kable(tabla_dep, caption = "Combinaciones observadas (Incluyendo celdas vacías)") %>%
   kable_styling(full_width = FALSE)
-
 ```
-La tabla revela un hecho crítico: el espacio operativo no es completo. No todos los equipos operan en todas las modalidades. No todas las modalidades se ejecutan con todos los números de insumos. Las combinaciones son asimétricas y muchas celdas están vacías o con muy pocas observaciones.
+El espacio operativo no es completo. No todos los equipos operan en todas las modalidades. No todas las modalidades se ejecutan con todos los números de insumos. Las combinaciones son asimétricas y muchas celdas están vacías o con muy pocas observaciones.
 
-6.4 El giro del análisis: el dataset tiene estructura jerárquica
-6.4.1 El descubrimiento
-Lo que parecía un dataset plano con 7 variables categóricas independientes es en realidad un sistema con dependencias operativas:
-
-El tipo de equipo determina qué modalidades de proceso son factibles.
-La modalidad de proceso restringe qué configuraciones de insumos pueden ejecutarse.
-El número de insumos condiciona qué combinaciones de producto son posibles.
+**Lo que parecía un dataset plano con 7 variables categóricas independientes es en realidad un sistema con dependencias operativas:**
+- El tipo de equipo determina qué modalidades de proceso son factibles.
+- La modalidad de proceso restringe qué configuraciones de insumos pueden ejecutarse.
+- El número de insumos condiciona qué combinaciones de producto son posibles.
 
 
 Traducción para la dirección financiera: un operario no elige libremente "equipo D4 con modalidad Y y dos insumos". Esa combinación simplemente no existe en el proceso. El dataset refleja restricciones técnicas reales de la planta, no una muestra aleatoria de un universo uniforme.

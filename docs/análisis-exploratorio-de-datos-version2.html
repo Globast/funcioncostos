@@ -1786,13 +1786,14 @@ D4
 Una tabulación cruzada contesta la pregunta y cambia el análisis:</p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="análisis-exploratorio-de-datos-version2.html#cb34-1" tabindex="-1"></a>tabla_dep <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
 <span id="cb34-2"><a href="análisis-exploratorio-de-datos-version2.html#cb34-2" tabindex="-1"></a>  <span class="fu">count</span>(tipo_equipo, modalidad_proceso, num_insumos) <span class="sc">%&gt;%</span></span>
-<span id="cb34-3"><a href="análisis-exploratorio-de-datos-version2.html#cb34-3" tabindex="-1"></a>  <span class="fu">arrange</span>(tipo_equipo, modalidad_proceso, num_insumos)</span>
-<span id="cb34-4"><a href="análisis-exploratorio-de-datos-version2.html#cb34-4" tabindex="-1"></a></span>
-<span id="cb34-5"><a href="análisis-exploratorio-de-datos-version2.html#cb34-5" tabindex="-1"></a><span class="fu">kable</span>(tabla_dep, <span class="at">caption =</span> <span class="st">&quot;Combinaciones observadas (tipo_equipo × modalidad × num_insumos)&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb34-6"><a href="análisis-exploratorio-de-datos-version2.html#cb34-6" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<span id="cb34-3"><a href="análisis-exploratorio-de-datos-version2.html#cb34-3" tabindex="-1"></a>  <span class="fu">complete</span>(tipo_equipo, modalidad_proceso, num_insumos, <span class="at">fill =</span> <span class="fu">list</span>(<span class="at">n =</span> <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb34-4"><a href="análisis-exploratorio-de-datos-version2.html#cb34-4" tabindex="-1"></a>  <span class="fu">arrange</span>(tipo_equipo, modalidad_proceso, num_insumos)</span>
+<span id="cb34-5"><a href="análisis-exploratorio-de-datos-version2.html#cb34-5" tabindex="-1"></a></span>
+<span id="cb34-6"><a href="análisis-exploratorio-de-datos-version2.html#cb34-6" tabindex="-1"></a><span class="fu">kable</span>(tabla_dep, <span class="at">caption =</span> <span class="st">&quot;Combinaciones observadas (Incluyendo celdas vacías)&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb34-7"><a href="análisis-exploratorio-de-datos-version2.html#cb34-7" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-(#tab:bivariado_cost_tipo_equipo)(#tab:bivariado_cost_tipo_equipo)Combinaciones observadas (tipo_equipo × modalidad × num_insumos)
+(#tab:bivariado_cost_tipo_equipo)(#tab:bivariado_cost_tipo_equipo)Combinaciones observadas (Incluyendo celdas vacías)
 </caption>
 <thead>
 <tr>
@@ -1967,6 +1968,20 @@ Z
 </tr>
 <tr>
 <td style="text-align:left;">
+B2
+</td>
+<td style="text-align:left;">
+Z
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 C3
 </td>
 <td style="text-align:left;">
@@ -1995,6 +2010,62 @@ X
 </tr>
 <tr>
 <td style="text-align:left;">
+C3
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C3
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C3
+</td>
+<td style="text-align:left;">
+Z
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C3
+</td>
+<td style="text-align:left;">
+Z
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 D4
 </td>
 <td style="text-align:left;">
@@ -2007,9 +2078,79 @@ X
 55
 </td>
 </tr>
+<tr>
+<td style="text-align:left;">
+D4
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D4
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D4
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D4
+</td>
+<td style="text-align:left;">
+Z
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D4
+</td>
+<td style="text-align:left;">
+Z
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
 </tbody>
 </table>
-<p>La tabla revela un hecho crítico: el espacio operativo no es completo. No todos los equipos operan en todas las modalidades. No todas las modalidades se ejecutan con todos los números de insumos. Las combinaciones son asimétricas y muchas celdas están vacías o con muy pocas observaciones.</p>
+<p>El espacio operativo no es completo. No todos los equipos operan en todas las modalidades. No todas las modalidades se ejecutan con todos los números de insumos. Las combinaciones son asimétricas y muchas celdas están vacías o con muy pocas observaciones.</p>
 <p>6.4 El giro del análisis: el dataset tiene estructura jerárquica
 6.4.1 El descubrimiento
 Lo que parecía un dataset plano con 7 variables categóricas independientes es en realidad un sistema con dependencias operativas:</p>
