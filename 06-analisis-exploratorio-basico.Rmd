@@ -1,8 +1,8 @@
-# Análisis Exploratorio de Datos Version2
-### Carga del dataset analítico
-Se parte del dataset depurado en el capítulo de metodología (395 órdenes de producción con tipos ajustados). La limpieza previa ya eliminó errores de digitación y validó la integridad de los registros; este capítulo se concentra en entender qué dicen esos datos.
+# Capítulo 6 — Análisis Exploratorio Básico
 
-```{r eda_setup, message=FALSE, warning=FALSE}
+  ## 6.1 Carga del dataset analítico 
+  Se parte del dataset depurado en el capítulo de metodología (395 órdenes de producción con tipos ajustados). La limpieza previa ya eliminó errores de digitación y validó la integridad de los registros; este capítulo se concentra en entender qué dicen esos datos.
+```{r eda_setup, message=FALSE, warning=FALSE, echo=FALSE}
 library(tidyverse)
 library(patchwork)
 library(gridExtra)
@@ -13,16 +13,14 @@ datos <- readRDS("data/data_costos_limpio.rds") %>%
   mutate(costo_unitario_total = costo_transformacion + costo_insumo)
 n_total <- nrow(datos)
 ```
-
 El dataset contiene `r n_total` órdenes de producción y `r ncol(datos)` variables.
 
-
-## Análisis univariado de los costos
+  ## 6.2 Análisis univariado de variables respuesta
 Las tres variables respuesta del estudio son `costo_transformacion` (costo de conversión por unidad producida), `costo_insumo` (costo de materias primas por unidad producida) y su agregado `costo_unitario_total`. Se analizan en paralelo porque responden a lógicas operativas distintas: el costo de transformación refleja eficiencia de máquina y proceso, mientras que el costo de insumo refleja decisiones de formulación y consumo de materias primas.
+ 
+ ### 6.2.1 Costo unitario de conversión o de transformacion
 
-### costo_transformacion
-
-```{r resumen_ct, echo=TRUE}
+```{r resumen_ct, echo=FALSE}
 datos %>%
   summarise(
     n       = length(costo_transformacion),
@@ -57,7 +55,7 @@ El rango intercuartílico (`r round(ct_iqr,2)`) indica que la mitad central de l
 Sin embargo, los extremos revela algo distinto. Mientras el valor mínimo (`r round(ct_min,2)`) se mantiene dentro de lo esperado, el máximo (`r round(ct_max,2)`) se encuentra considerablemente alejado del resto. Este comportamiento puede sugerir la presencia de valores atípicos en la parte superior de la distribución, generando una cola hacia la derecha.
 En términos prácticos, esto significa que la mayoría de los procesos operan en niveles de costo relativamente estables, pero existen casos puntuales significativamente más costosos. Estos valores extremos pueden responder a procesos más complejos o a posibles inconsistencias en los datos, por lo que requieren un análisis específico antes de su inclusión en modelos o decisiones operativas.
 
-```{r hist_ct, fig.width=9, fig.height=4.5}
+```{r hist_ct, fig.width=9, fig.height=4.5, echo=FALSE}
 library(dplyr)
 library(ggplot2)
 library(tibble)
@@ -134,9 +132,10 @@ El bigote superior se extiende hasta un cierto punto, pero inmediatamente aparec
 Existe una subpoblación de costos altos. Es decir no son casos extremos que sean puntuales. En la parte inferior no se observan outliers relevantes. El mínimo está dentro del rango esperado
 El boxplot confirma la dispersión y evidencia que el fenómeno clave no es la variabilidad general, sino la existencia de una dinámica diferenciada en costos altos, que requiere segmentación o modelado específico.
 
-### Costo unitario de los insumos
 
-```{r resumen_ci, echo=TRUE}
+### 6.2.2 Costo unitario de los insumos 
+
+```{r resumen_ci, echo=FALSE}
 datos %>%
   summarise(
     n       = length(costo_insumo),
@@ -173,7 +172,7 @@ En resumen:
 - un conjunto reducido de insumos de costo medio
 - pocos insumos de alto impacto económico
 
-```{r hist_box_ci, fig.width=11, fig.height=4.5}
+```{r hist_box_ci, fig.width=11, fig.height=4.5, echo=FALSE}
 
 lineas <- tibble(
   estadistico = c("Media", "Mediana", "Q1", "Q3"),
@@ -228,7 +227,7 @@ p_box_ci <- datos %>%
 p_hist_ci + p_box_ci
 ```
 
-### Costo unitario total
+### 6.2.3 Costo unitario total
 
 La variable `costo_unitario_total` se deriva como la suma de `costo_transformacion` y `costo_insumo`, y representa el costo total por unidad de producto.
 
@@ -331,14 +330,14 @@ p_hist_ct + p_box_ct
 
 El costo unitario total hereda la asimetría de sus dos componentes. Cualquier iniciativa de reducción de costos que se concentre solo en el componente de insumos tendrá un techo muy bajo. La palanca real está en la transformación.
 
-## Los histogramas no son simétricos
-**Los tres costos presentan distribuciones asimétricas con cola derecha pronunciada. En costo_transformacion se observa además un leve segundo abultamiento hacia valores bajos (5–15 UM), que rompe el patrón unimodal esperado.**
-**Una distribución con dos "jorobas" suele indicar que los datos no provienen de un proceso único, sino de dos o más procesos distintos mezclados. El promedio se vuelve engañoso porque representa algo que no existe realmente.**
-**Primera hipótesis que emerge. El sistema productivo puede no ser un único proceso homogéneo, sino una mezcla de regímenes operativos con dinámicas de costo distintas. Si esto es cierto, los estadísticos agregados están ocultando diferencias estructurales importantes.**
+[!NOTE]
+Los tres costos presentan distribuciones asimétricas con cola derecha pronunciada. En costo_transformacion se observa además un leve segundo abultamiento hacia valores bajos (5–15 UM), que rompe el patrón unimodal esperado.
+Una distribución con dos "jorobas" suele indicar que los datos no provienen de un proceso único, sino de dos o más procesos distintos mezclados. El promedio se vuelve engañoso porque representa algo que no existe realmente
+Primera hipótesis que emerge. El sistema productivo puede no ser un único proceso homogéneo, sino una mezcla de regímenes operativos con dinámicas de costo distintas. Si esto es cierto, los estadísticos agregados están ocultando diferencias estructurales importantes
 
-## Análisis univariado de variables numéricas predictoras
 
-Las variables numéricas predictoras son `volumen_lote`, `duracion_proceso`, `cantidad_insumo_1` y `cantidad_insumo_2`. Para las cantidades de insumo, los estadísticos descriptivos se calculan condicionando sobre la presencia efectiva del insumo correspondiente, conforme a la advertencia estructural documentada en el capítulo de metodología.
+## 6.3 Análisis univariado de predictoras numéricas
+Las variables numéricas predictoras son `volumen_lote`, `duracion_proceso`, `cantidad_insumo_1` y `cantidad_insumo_2`.
 
 ```{r resumen_num_predictoras}
 datos %>%
@@ -509,11 +508,40 @@ p_ci2_hist <- datos %>%
 (p_vol_hist + p_dur_hist) / (p_ci1_hist + p_ci2_hist)
 ```
 
-**Visualmente, la fuente real de heterogeneidad no está en los insumos, sino en cómo y cuánto se produce. Esto implica que cualquier análisis o modelo que ignore la escala (volumen) o la complejidad (duración) va a estar mal especificado.**
+[!NOTE]
+Visualmente, la fuente real de heterogeneidad no está en los insumos, sino en cómo y cuánto se produce. Esto implica que cualquier análisis o modelo que ignore la escala (volumen) o la complejidad (duración) va a estar mal especificado.
+El sistema produce lotes de escalas muy distintas (entre 100 y 13.300 unidades), con duraciones que van de 3 a 482 horas. Esta heterogeneidad refleja una lógica de producción "make-to-order" donde cada orden responde a un pedido específico. El tamaño estándar de lote no existe. El proceso no puede optimizarse con reglas uniformes; requerirá segmentación por rangos de producción.
+      → Heterogeneidad en volumen y duración, consumo de insumos estable
 
-**El sistema produce lotes de escalas muy distintas (entre 100 y 13.300 unidades), con duraciones que van de 3 a 482 horas. Esta heterogeneidad refleja una lógica de producción "make-to-order" donde cada orden responde a un pedido específico. El tamaño estándar de lote no existe. El proceso no puede optimizarse con reglas uniformes; requerirá segmentación por rangos de producción.**
+## 6.4 Análisis univariado de predictoras categóricas
+      → Concentración en A1 (73%), cardinalidad variable entre categóricas
+  ## 6.5 Análisis bivariado marginal
+      ### 6.5.1 Correlaciones Pearson y Spearman
+      ### 6.5.2 Diagramas de dispersión
+      ### 6.5.3 Boxplots de costo por tipo_equipo, modalidad, num_insumos
+      → Diferencias muy grandes entre tipos de equipo y modalidades
+  ## 6.6 Señales de heterogeneidad estructural
+      ### 6.6.1 Las distribuciones condicionales no son uniformes
+      ### 6.6.2 Tabulación cruzada tipo_equipo × modalidad × num_insumos
+      ### 6.6.3 Descubrimiento: el espacio operativo está truncado
+  ## 6.7 Implicaciones metodológicas del descubrimiento
+      ### 6.7.1 Por qué el análisis marginal puede ser engañoso (confounding)
+      ### 6.7.2 Decisiones de exclusión justificadas
+          - Exclusión de modalidad Z (n=14)
+          - Exclusión de tipo_equipo C3 (n=8)
+          - Identificación de A1 como configuración universal
+  ## 6.8 Generación del dataset principal
+      6.8.1 Filtrado y exportación (data_costos_principal.csv / .rds)
+      6.8.2 Verificación del dataset resultante
+  ## 6.9 Cierre: qué sabemos, qué no sabemos, qué sigue
+      → Hipótesis que justifican el análisis estratificado
 
-## Análisis univariado de variables categóricas predictoras
+
+
+
+
+
+
 
 ### Análisis bivariado: Modalidad proceso
 
