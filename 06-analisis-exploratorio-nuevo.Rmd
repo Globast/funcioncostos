@@ -748,6 +748,16 @@ resumen_bivariado_cc_modproceso <- datos %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
+La modalidad Z es una combinación operativa de X y Y. 
+
+En costo de transformación, se observa un gradiente en la media que va de X a Y y luego a Z, pero el salto no es lineal.:
+X ≈ 27.9 < Y ≈ 31.4 < Z ≈ 41.6
+La mediana también confirma ese patrón (27.1 → 29.5 → 38.8). 
+
+-  X tiene alta variabilidad (ds ≈ 17.9, IQR amplio). Es un proceso inestable.
+- Y es más controlado (ds ≈ 10.5, IQR más estrecho).
+- Z tiene dispersión alta en términos absolutos, pero IQR relativamente contenido. Esto indica que el costo base es alto de forma consistente, no solo por outliers.
+
 ```{r bivariado_ci_modproceso}
 resumen_bivariado_ci_modproceso <- datos %>%
   group_by(modalidad_proceso) %>%
@@ -768,6 +778,10 @@ resumen_bivariado_ci_modproceso <- datos %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
+En costo de insumo, el patrón es más suave:
+X ≈ 4.80, Y ≈ 5.20, Z ≈ 6.86
+
+La mediana de Z (≈ 4.98) está cerca de Y, el aumento en la media puede provenir de algunos valores altos . 
 
 ```{r box_bivariado_mod_proceso, fig.width=9, fig.height=4.5}
 
@@ -793,50 +807,14 @@ box_ci_mod_proceso <- datos %>%
 box_ct_mod_proceso + box_ci_mod_proceso
 ```
 
-La modalidad Z es una combinación operativa de X y Y. 
 
-En costo de transformación, se observa un gradiente:
-X ≈ 27.9 < Y ≈ 31.4 < Z ≈ 41.6
-La mediana también confirma ese patrón (27.1 → 29.5 → 38.8). 
-
-X tiene alta variabilidad (ds ≈ 17.9, IQR amplio). Es un proceso inestable.
-Y es más controlado (ds ≈ 10.5, IQR más estrecho).
-Z tiene dispersión alta en términos absolutos, pero IQR relativamente contenido. Esto indica que el costo base es alto de forma consistente, no solo por outliers.
-
-En costo de insumo, el patrón es más suave:
-X ≈ 4.80, Y ≈ 5.20, Z ≈ 6.86
-
-Aquí el incremento sí parece más aditivo que estructural. La mediana de Z (≈ 4.98) está cerca de Y, lo que indica que el aumento en la media viene de algunos valores altos (cola derecha). Es decir, el insumo adicional no siempre se usa en la misma intensidad.
-
-Conclusión estadística:
 El sobrecosto de Z proviene principalmente de transformación, no de insumo, y además no es lineal. Es un fenómeno de interacción entre procesos, no de suma simple.
-
-Como gerente de costos
-
-Aquí hay una señal operativa crítica. La modalidad Z (X + Y) no es simplemente “hacer dos cosas”, es hacer dos cosas mal integradas.
-
-El costo de transformación sube de manera desproporcionada. No estás pagando solo más tiempo o más trabajo; estás pagando ineficiencia:
-
-cambios de proceso
-reconfiguración de equipos
-pérdida de continuidad
-posibles reprocesos o esperas
 
 En cambio, el costo de insumo sube poco y de forma relativamente lógica. Eso confirma que el problema no está en materiales, sino en cómo se ejecuta el proceso combinado.
 
-Hay tres implicaciones directas:
+El tamaño de muestra de Z es bajo (n = 14). 
 
-Primero, Z está subvalorado si se cotiza como suma de X + Y. El costo real es mayor. Si el pricing no lo recoge, hay margen erosionándose en cada orden Z.
-
-Segundo, el tamaño de muestra de Z es bajo (n = 14). Esto indica que no es el flujo principal, pero justamente por eso suele estar menos estandarizado y más improvisado. Eso explica la ineficiencia.
-
-Tercero, la diferencia entre X y Y también importa: Y es más estable y ligeramente más costoso. X es más volátil. Cuando ambos se combinan, esa variabilidad se amplifica.
-
-Conclusión operativa:
-Z no es un proceso, es una excepción operativa. Y como toda excepción, cuesta más.
-
-Recomendación implícita:
-O se estandariza Z como proceso propio con tiempos y métodos definidos, o se cobra explícitamente como operación especial. De lo contrario, cada orden Z introduce costo oculto que no se está controlando.
+Y es más estable y ligeramente más costoso que X. Pero  X es más volátil. 
 
 ### Análisis bivariado: tipo de equipo
 

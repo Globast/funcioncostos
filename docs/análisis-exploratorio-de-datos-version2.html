@@ -2523,6 +2523,15 @@ Z
 </tr>
 </tbody>
 </table>
+<p>La modalidad Z es una combinación operativa de X y Y.</p>
+<p>En costo de transformación, se observa un gradiente en la media que va de X a Y y luego a Z, pero el salto no es lineal.:
+X ≈ 27.9 &lt; Y ≈ 31.4 &lt; Z ≈ 41.6
+La mediana también confirma ese patrón (27.1 → 29.5 → 38.8).</p>
+<ul>
+<li>X tiene alta variabilidad (ds ≈ 17.9, IQR amplio). Es un proceso inestable.</li>
+<li>Y es más controlado (ds ≈ 10.5, IQR más estrecho).</li>
+<li>Z tiene dispersión alta en términos absolutos, pero IQR relativamente contenido. Esto indica que el costo base es alto de forma consistente, no solo por outliers.</li>
+</ul>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="análisis-exploratorio-de-datos-version2.html#cb39-1" tabindex="-1"></a>resumen_bivariado_ci_modproceso <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
 <span id="cb39-2"><a href="análisis-exploratorio-de-datos-version2.html#cb39-2" tabindex="-1"></a>  <span class="fu">group_by</span>(modalidad_proceso) <span class="sc">%&gt;%</span></span>
 <span id="cb39-3"><a href="análisis-exploratorio-de-datos-version2.html#cb39-3" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
@@ -2677,6 +2686,9 @@ Z
 </tr>
 </tbody>
 </table>
+<p>En costo de insumo, el patrón es más suave:
+X ≈ 4.80, Y ≈ 5.20, Z ≈ 6.86</p>
+<p>La mediana de Z (≈ 4.98) está cerca de Y, el aumento en la media puede provenir de algunos valores altos .</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="análisis-exploratorio-de-datos-version2.html#cb40-1" tabindex="-1"></a>box_ct_mod_proceso <span class="ot">&lt;-</span>datos <span class="sc">%&gt;%</span></span>
 <span id="cb40-2"><a href="análisis-exploratorio-de-datos-version2.html#cb40-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> modalidad_proceso, <span class="at">y =</span> costo_transformacion)) <span class="sc">+</span></span>
 <span id="cb40-3"><a href="análisis-exploratorio-de-datos-version2.html#cb40-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#87CEFA&quot;</span>, <span class="at">outlier.colour =</span> <span class="st">&quot;red&quot;</span>, <span class="at">outlier.shape =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
@@ -2698,34 +2710,10 @@ Z
 <span id="cb40-19"><a href="análisis-exploratorio-de-datos-version2.html#cb40-19" tabindex="-1"></a></span>
 <span id="cb40-20"><a href="análisis-exploratorio-de-datos-version2.html#cb40-20" tabindex="-1"></a>box_ct_mod_proceso <span class="sc">+</span> box_ci_mod_proceso</span></code></pre></div>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box_bivariado_mod_proceso-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
-<p>La modalidad Z es una combinación operativa de X y Y.</p>
-<p>En costo de transformación, se observa un gradiente:
-X ≈ 27.9 &lt; Y ≈ 31.4 &lt; Z ≈ 41.6
-La mediana también confirma ese patrón (27.1 → 29.5 → 38.8).</p>
-<p>X tiene alta variabilidad (ds ≈ 17.9, IQR amplio). Es un proceso inestable.
-Y es más controlado (ds ≈ 10.5, IQR más estrecho).
-Z tiene dispersión alta en términos absolutos, pero IQR relativamente contenido. Esto indica que el costo base es alto de forma consistente, no solo por outliers.</p>
-<p>En costo de insumo, el patrón es más suave:
-X ≈ 4.80, Y ≈ 5.20, Z ≈ 6.86</p>
-<p>Aquí el incremento sí parece más aditivo que estructural. La mediana de Z (≈ 4.98) está cerca de Y, lo que indica que el aumento en la media viene de algunos valores altos (cola derecha). Es decir, el insumo adicional no siempre se usa en la misma intensidad.</p>
-<p>Conclusión estadística:
-El sobrecosto de Z proviene principalmente de transformación, no de insumo, y además no es lineal. Es un fenómeno de interacción entre procesos, no de suma simple.</p>
-<p>Como gerente de costos</p>
-<p>Aquí hay una señal operativa crítica. La modalidad Z (X + Y) no es simplemente “hacer dos cosas”, es hacer dos cosas mal integradas.</p>
-<p>El costo de transformación sube de manera desproporcionada. No estás pagando solo más tiempo o más trabajo; estás pagando ineficiencia:</p>
-<p>cambios de proceso
-reconfiguración de equipos
-pérdida de continuidad
-posibles reprocesos o esperas</p>
+<p>El sobrecosto de Z proviene principalmente de transformación, no de insumo, y además no es lineal. Es un fenómeno de interacción entre procesos, no de suma simple.</p>
 <p>En cambio, el costo de insumo sube poco y de forma relativamente lógica. Eso confirma que el problema no está en materiales, sino en cómo se ejecuta el proceso combinado.</p>
-<p>Hay tres implicaciones directas:</p>
-<p>Primero, Z está subvalorado si se cotiza como suma de X + Y. El costo real es mayor. Si el pricing no lo recoge, hay margen erosionándose en cada orden Z.</p>
-<p>Segundo, el tamaño de muestra de Z es bajo (n = 14). Esto indica que no es el flujo principal, pero justamente por eso suele estar menos estandarizado y más improvisado. Eso explica la ineficiencia.</p>
-<p>Tercero, la diferencia entre X y Y también importa: Y es más estable y ligeramente más costoso. X es más volátil. Cuando ambos se combinan, esa variabilidad se amplifica.</p>
-<p>Conclusión operativa:
-Z no es un proceso, es una excepción operativa. Y como toda excepción, cuesta más.</p>
-<p>Recomendación implícita:
-O se estandariza Z como proceso propio con tiempos y métodos definidos, o se cobra explícitamente como operación especial. De lo contrario, cada orden Z introduce costo oculto que no se está controlando.</p>
+<p>El tamaño de muestra de Z es bajo (n = 14).</p>
+<p>Y es más estable y ligeramente más costoso que X. Pero X es más volátil.</p>
 </div>
 <div id="análisis-bivariado-tipo-de-equipo" class="section level3 hasAnchor" number="6.5.2">
 <h3><span class="header-section-number">6.5.2</span> Análisis bivariado: tipo de equipo<a href="análisis-exploratorio-de-datos-version2.html#an%C3%A1lisis-bivariado-tipo-de-equipo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
