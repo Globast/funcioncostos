@@ -34,11 +34,14 @@ datos %>%
     IQR     = IQR(costo_transformacion)
   ) -> resumen_ct
 
-knitr::kable(resumen_ct, caption = "Resumen del costo de transformacion") %>%
+knitr::kable(resumen_ct, 
+             caption = "Resumen del costo de transformación",
+             format = "html",
+             table.attr = "class='table'") %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
-```{r ck_resumen_ct_calc, echo=FALSE}
+```{r ck-resumen-ct-calc, echo=FALSE}
 ct_media   <- resumen_ct$media
 ct_ds      <- resumen_ct$ds
 ct_med     <- resumen_ct$`50%`

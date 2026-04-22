@@ -5,15 +5,6 @@ tab:casos-con-ceros
 tab:tabla-causas
 tab:diccionario-datos
 tab:ck-resumen-ct
-resumen
-introducción
-objetivos-en-construcccion
-objetivo-general
-objetivos-específicos
-metodologia
-diseño-del-estudio
-extracción-transformación-y-carga-etl
-carga-del-conjunto-de-datos
 verificación-de-la-lectura
 revisión-de-integridad-de-datos
 cadenas-vacías
