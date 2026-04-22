@@ -1151,7 +1151,7 @@ saveRDS(datos_principal, "data/data_costos_principal.rds")
 
 n_principal <- nrow(datos_principal)
 ```
-Tras estas exclusiones, el dataset principal queda conformado por r n_principal órdenes (`r round(n_principal / n_total * 100, 1`)% del total depurado). Sobre este subconjunto se desarrolla el análisis estratificado que sigue.
+Tras estas exclusiones, el dataset principal queda conformado por r n_principal órdenes . Sobre este subconjunto se desarrolla el análisis estratificado que sigue.
 
 ## Estructura del espacio operativo sobre el dataset principal
 ### Mapa de combinaciones
