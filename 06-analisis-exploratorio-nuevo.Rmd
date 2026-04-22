@@ -515,77 +515,10 @@ p_ci2_hist <- datos %>%
 
 ## Análisis univariado de variables categóricas predictoras
 
-```{r tabla_categoricas}
-vars_cat <- c("tipo_equipo", "equipo_id", "categoria_producto", 
-              "modalidad_proceso", "num_insumos", "insumo_1", "insumo_2")
-
-tabla_cat <- map_dfr(vars_cat, function(v) {
-  datos %>%
-    count(.data[[v]], name = "Frecuencia") %>%
-    mutate(
-      Porcentaje = (Frecuencia / sum(Frecuencia)) * 100,
-      Variable = v,
-      Categoria = as.character(.data[[v]])
-    ) %>%
-    select(Variable, Categoria, Frecuencia, Porcentaje)
-}) %>%
-  mutate(Porcentaje = round(Porcentaje, 2))
-
-knitr::kable(tabla_cat, caption = "Resumen descriptivo de las variables categóricas seleccionadas") %>%
-  kableExtra::kable_styling(full_width = FALSE) 
-```
-
-Tipo de equipo: La categoría A1 concentra el 72.7% de las observaciones.  Significa que cualquier estadístico global del sistema está dominado por el comportamiento de un solo tipo de equipo. Cuando un análisis habla del "costo promedio del sistema", en realidad habla —en un 73%— del costo promedio de A1.
-
-Las demás categorías (B2, D4, C3) tienen participaciones mucho menores, lo que implica posible sesgo en análisis globales si no se segmenta y riesgo de conclusiones dominadas por A1.
-C3 (2.03%) es prácticamente marginal.
-Equipo específico (equipo_id): Distribución es más fragmentada, pero aún desigual. algunos equipos concentran entre 8% y 11% (M02, M09, M08), otros son casi irrelevantes (~1%)
-El sistema no es balanceado, fuerte concentración en tipo A1
-Existe heterogeneidad operativa, → distintos equipos tienen niveles de uso muy distintos
-Cualquier modelo debe considerar tipo_equipo como variable explicativa clave, equipo_id puede capturar efectos más finos (variabilidad intra-tipo) , Comparaciones entre categorías pequeñas pueden ser inestables (bajo n)
-
-El sistema está estructurado alrededor de un tipo dominante (A1) y un subconjunto reducido de equipos con alta actividad. La variabilidad observada en costos, duración o volumen probablemente está condicionada por esta estructura, no solo por aleatoriedad.
-
-```{r freq_tipo_equipo_calc, echo=FALSE}
-freq_te <- tabla_cat %>% filter(Variable == "tipo_equipo") %>% arrange(desc(Frecuencia))
-te_dom_cat <- freq_te$Categoria[1]
-te_dom_pct <- freq_te$Porcentaje[1]
-n_niveles_equipo <- datos %>% distinct(equipo_id) %>% nrow()
-n_niveles_cat   <- datos %>% distinct(categoria_producto) %>% nrow()
-```
-
-El tipo de equipo dominante es `r te_dom_cat`, que concentra el `r te_dom_pct`% de las órdenes. La variable `equipo_id` tiene `r n_niveles_equipo` niveles distintos y `categoria_producto` tiene `r n_niveles_cat` niveles, lo cual exigirá tratamiento cuidadoso en los análisis inferenciales posteriores para evitar celdas con pocas observaciones.
-
-```{r bar_categoricas_grid, fig.width=12, fig.height=16}
-library(dplyr)
-library(ggplot2)
-
-tabla_plot <- tabla_cat %>%
-  mutate(Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)"))
-
-# 2. Generación del gráfico facetado (2 columnas x 4 filas)
-ggplot(tabla_plot, aes(x = Categoria, y = Frecuencia)) +
-  geom_col(fill = "#008B8B", width = 0.6) +
-  geom_text(aes(label = Etiqueta), vjust = -0.5, size = 3.5) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.2))) +
-  labs(
-    x = "Categoría", 
-    y = "Frecuencia",
-    title = "Distribución de Variables Categóricas"
-  ) +
-  theme_bw(base_size = 12) +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    strip.background = element_rect(fill = "#2c3e50"),
-    strip.text = element_text(color = "white", fontface = "bold")
-  ) +
-  facet_wrap(~ Variable, ncol = 2, scales = "free")
-```
-
 
 ### Análisis bivariado: por numero de insumos
 
-```{r bivariado-ct-numinsumos}
+```{r bivariado_cc_numinsumos}
 resumen_bivariado_cc <- datos %>%
   group_by(num_insumos) %>%
   summarise(
@@ -605,7 +538,7 @@ resumen_bivariado_cc <- datos %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
-```{r bivariado-ci-numinsumos}
+```{r bivariado_ci_numinsumos}
 resumen_bivariado_ci <- datos %>%
   group_by(num_insumos) %>%
   summarise(
@@ -626,7 +559,7 @@ resumen_bivariado_ci <- datos %>%
 ```
 
 
-```{r boxinsumo, fig.width=9, fig.height=4.5}
+```{r box_bivariado_insumo, fig.width=9, fig.height=4.5}
 
 box_ct_insumo <-datos %>%
   ggplot(aes(x = num_insumos, y = costo_transformacion)) +
@@ -665,7 +598,7 @@ Es claro que el segundo insumo incrementa el consumo de materiales y el costo de
 
 ### Análisis bivariado: por tipo de insumo
 
-```{r combinacion-insumos}
+```{r combinacion_insumos}
 
 datos <- datos %>%
   mutate(
@@ -688,7 +621,7 @@ datos <- datos %>%
   )
 ```
 
-```{r bivariado_insumos_ct}
+```{r bivariado_insumos_cc}
 resumen_bivariado_ct_comb <- datos %>%
   mutate(
     insumo_combinado = pmap_chr(list(insumo_1, insumo_2), function(x, y) {
@@ -719,7 +652,7 @@ knitr::kable(resumen_bivariado_ct_comb,
 
 ```
 
-```{r bivariado_insumos_ci}
+```{r bivariado_tipoinsumos_ci}
 
 resumen_bivariado_ci_comb <- datos %>%
   mutate(
@@ -781,7 +714,7 @@ El insumo V_T en ciertas combinaciones muestra eficiencia (bajo costo y baja dis
 
 
 
-```{r box-insumo-comb}
+```{r box_insumo_comb}
 box_comb_insumos_ct <- datos %>%
   ggplot(aes(x = insumo_combinado, y = costo_transformacion)) +
   geom_boxplot(fill = "#2c7fb8", alpha = 0.7) +
@@ -810,7 +743,7 @@ box_comb_insumos_ci <- datos %>%
 
 ### Análisis bivariado: Modalidad proceso
 
-```{r bivariado-ct-modproceso}
+```{r bivariado_cc_modproceso}
 resumen_bivariado_cc_modproceso <- datos %>%
   group_by(modalidad_proceso) %>%
   summarise(
@@ -830,7 +763,7 @@ resumen_bivariado_cc_modproceso <- datos %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
-```{r bivariado-ci-modproceso}
+```{r bivariado_ci_modproceso}
 resumen_bivariado_ci_modproceso <- datos %>%
   group_by(modalidad_proceso) %>%
   summarise(
@@ -851,7 +784,7 @@ resumen_bivariado_ci_modproceso <- datos %>%
 ```
 
 
-```{r boxmod_proceso, fig.width=9, fig.height=4.5}
+```{r box_bivariado_mod_proceso, fig.width=9, fig.height=4.5}
 
 box_ct_mod_proceso <-datos %>%
   ggplot(aes(x = modalidad_proceso, y = costo_transformacion)) +
@@ -922,7 +855,74 @@ O se estandariza Z como proceso propio con tiempos y métodos definidos, o se co
 
 ### Análisis bivariado: tipo de equipo
 
-```{r bivariado-ct-tipoequipo}
+```{r tabla_res_categoricas}
+vars_cat <- c("tipo_equipo", "equipo_id", "categoria_producto", 
+              "modalidad_proceso", "num_insumos", "insumo_1", "insumo_2")
+
+tabla_cat <- map_dfr(vars_cat, function(v) {
+  datos %>%
+    count(.data[[v]], name = "Frecuencia") %>%
+    mutate(
+      Porcentaje = (Frecuencia / sum(Frecuencia)) * 100,
+      Variable = v,
+      Categoria = as.character(.data[[v]])
+    ) %>%
+    select(Variable, Categoria, Frecuencia, Porcentaje)
+}) %>%
+  mutate(Porcentaje = round(Porcentaje, 2))
+
+knitr::kable(tabla_cat, caption = "Resumen descriptivo de las variables categóricas seleccionadas") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
+```
+
+Tipo de equipo: La categoría A1 concentra el 72.7% de las observaciones.  Significa que cualquier estadístico global del sistema está dominado por el comportamiento de un solo tipo de equipo. Cuando un análisis habla del "costo promedio del sistema", en realidad habla —en un 73%— del costo promedio de A1.
+
+Las demás categorías (B2, D4, C3) tienen participaciones mucho menores, lo que implica posible sesgo en análisis globales si no se segmenta y riesgo de conclusiones dominadas por A1.
+C3 (2.03%) es prácticamente marginal.
+Equipo específico (equipo_id): Distribución es más fragmentada, pero aún desigual. algunos equipos concentran entre 8% y 11% (M02, M09, M08), otros son casi irrelevantes (~1%)
+El sistema no es balanceado, fuerte concentración en tipo A1
+Existe heterogeneidad operativa, → distintos equipos tienen niveles de uso muy distintos
+Cualquier modelo debe considerar tipo_equipo como variable explicativa clave, equipo_id puede capturar efectos más finos (variabilidad intra-tipo) , Comparaciones entre categorías pequeñas pueden ser inestables (bajo n)
+
+El sistema está estructurado alrededor de un tipo dominante (A1) y un subconjunto reducido de equipos con alta actividad. La variabilidad observada en costos, duración o volumen probablemente está condicionada por esta estructura, no solo por aleatoriedad.
+
+```{r freq_tipoequipo_calc, echo=FALSE}
+freq_te <- tabla_cat %>% filter(Variable == "tipo_equipo") %>% arrange(desc(Frecuencia))
+te_dom_cat <- freq_te$Categoria[1]
+te_dom_pct <- freq_te$Porcentaje[1]
+n_niveles_equipo <- datos %>% distinct(equipo_id) %>% nrow()
+n_niveles_cat   <- datos %>% distinct(categoria_producto) %>% nrow()
+```
+
+El tipo de equipo dominante es `r te_dom_cat`, que concentra el `r te_dom_pct`% de las órdenes. La variable `equipo_id` tiene `r n_niveles_equipo` niveles distintos y `categoria_producto` tiene `r n_niveles_cat` niveles, lo cual exigirá tratamiento cuidadoso en los análisis inferenciales posteriores para evitar celdas con pocas observaciones.
+
+```{r bar_categoricas, fig.width=12, fig.height=16}
+library(dplyr)
+library(ggplot2)
+
+tabla_plot <- tabla_cat %>%
+  mutate(Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)"))
+
+# 2. Generación del gráfico facetado (2 columnas x 4 filas)
+ggplot(tabla_plot, aes(x = Categoria, y = Frecuencia)) +
+  geom_col(fill = "#008B8B", width = 0.6) +
+  geom_text(aes(label = Etiqueta), vjust = -0.5, size = 3.5) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.2))) +
+  labs(
+    x = "Categoría", 
+    y = "Frecuencia",
+    title = "Distribución de Variables Categóricas"
+  ) +
+  theme_bw(base_size = 12) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    strip.background = element_rect(fill = "#2c3e50"),
+    strip.text = element_text(color = "white", fontface = "bold")
+  ) +
+  facet_wrap(~ Variable, ncol = 2, scales = "free")
+```
+
+```{r bivariado_cc_tipoequipo}
 resumen_bivariado_cc <- datos %>%
   group_by(tipo_equipo) %>%
   summarise(
@@ -952,7 +952,7 @@ El tipo de equipo D4 tiene costos notablemente bajos (media cercana a 9). La dis
 
 El costo de transformación está determinado por el tipo de equipo, y la magnitud de las diferencias es significativa.
 
-```{r bivariado-ci-tipoequipo}
+```{r bivariado_ci_tipoequipo}
 resumen_bivariado_ci <- datos %>%
   group_by(tipo_equipo) %>%
   summarise(
@@ -979,7 +979,7 @@ El tipo de equipo C3 nuevamente se diferencia de forma clara. La media (≈11.25
 El tipo de equipo D4 Presenta la media más baja (≈3.58) pero su desviación estándar es alta y supera incluso a la media. Puede influir que D4 solo opera con un insumo. No puede operar con 2. La mediana (≈1.64) está muy por debajo de la media, lo que indica una asimetría extrema. D4 es generalmente eficiente, pero con episodios puntuales de alto consumo.
 
 
-```{r boxequipo, fig.width=9, fig.height=4.5}
+```{r box_equipo, fig.width=9, fig.height=4.5}
 
 box_ct_te <-datos %>%
   ggplot(aes(x = tipo_equipo, y = costo_transformacion)) +
@@ -1007,7 +1007,7 @@ Los boxplots confirman visualmente lo que ya sugerían los resúmenes numéricos
 
 ### Análisis bivariado: Equipo_id
 
-```{r bivariado-ct-equipo}
+```{r bivariado_cc_quipo}
 resumen_bivariado_ct_equipo <- datos %>%
   group_by(equipo_id, tipo_equipo) %>%
   summarise(
@@ -1031,7 +1031,7 @@ knitr::kable(
   kableExtra::kable_styling(full_width = FALSE)
 ```
 
-```{r bivariado-ci-equipo}
+```{r bivariado_ci_equipo}
 resumen_bivariado_ci_equipo <- datos %>%
   group_by(equipo_id, tipo_equipo) %>%
   summarise(
@@ -1056,7 +1056,7 @@ knitr::kable(
 ```
 
 
-```{r box_equipo_id, fig.width=9, fig.height=4.5}
+```{r box_equipoid, fig.width=9, fig.height=4.5}
 orden_equipos <- datos %>%
   distinct(tipo_equipo, equipo_id) %>%
   arrange(tipo_equipo, equipo_id) %>%
@@ -1099,7 +1099,7 @@ box_ct_equipo + box_ci_equipo
 
 Un primer análisis bivariado de costos por tipo de equipo (que viene más adelante) muestra diferencias muy grandes:
 
-```{r res_cost_tipo_equipo}
+```{r res_cost_tipoequipo}
 
 tabla_resumen <- datos %>%
   group_by(tipo_equipo) %>%
@@ -1119,7 +1119,7 @@ kable(tabla_resumen, caption = "Tabla resumen costos por tipo de equipo") %>%
 Las diferencias son tan marcadas que invitan a preguntar: ¿cada tipo de equipo es realmente comparable con los otros?
 Una tabulación cruzada contesta la pregunta y cambia el análisis:
 
-```{r bivariado_cost_tipo_equipo}
+```{r bivariado_cost_tipoequipo}
 
 tabla_dep <- datos %>%
   count(tipo_equipo, modalidad_proceso, num_insumos) %>%
