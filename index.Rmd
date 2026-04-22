@@ -7,7 +7,7 @@ documentclass: book
 bibliography: ["references.bib"]
 link-citations: yes
 lang: es
-description: "Libro académico elaborado en bookdown para Maestría en Estadística Aplicada."
+description: "Maestría en Estadística Aplicada."
 ---
 
 # Portada {-}
@@ -15,8 +15,8 @@ description: "Libro académico elaborado en bookdown para Maestría en Estadíst
 <div class="portada">
   <h1>Analisis del costo unitario de producción en un proceso manufacturero multifactorial</h1>
   <p><strong>Maestría en Estadística Aplicada</strong></p>
-  <p>Autor: Gloria</p>
-  <p>Institución: Nombre de la Universidad</p>
+  <p>Autor: Gloria Bastidas</p>
+  <p>Institución: Universidad del Norte</p>
   <p>Fecha: `r format(Sys.Date(), '%d/%m/%Y')`</p>
 </div>
 
