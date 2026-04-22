@@ -1,7 +1,7 @@
 # Capítulo 6 — Análisis Exploratorio Básico
 
-  ## 6.1 Carga del dataset analítico 
-  Se parte del dataset depurado en el capítulo de metodología (395 órdenes de producción con tipos ajustados). La limpieza previa ya eliminó errores de digitación y validó la integridad de los registros; este capítulo se concentra en entender qué dicen esos datos.
+## 6.1 Carga del dataset analítico 
+Se parte del dataset depurado en el capítulo de metodología (395 órdenes de producción con tipos ajustados). La limpieza previa ya eliminó errores de digitación y validó la integridad de los registros; este capítulo se concentra en entender qué dicen esos datos.
 ```{r eda_setup, message=FALSE, warning=FALSE, echo=FALSE}
 library(tidyverse)
 library(patchwork)
@@ -15,10 +15,10 @@ n_total <- nrow(datos)
 ```
 El dataset contiene `r n_total` órdenes de producción y `r ncol(datos)` variables.
 
-  ## 6.2 Análisis univariado de variables respuesta
+## 6.2 Análisis univariado de variables respuesta
 Las tres variables respuesta del estudio son `costo_transformacion` (costo de conversión por unidad producida), `costo_insumo` (costo de materias primas por unidad producida) y su agregado `costo_unitario_total`. Se analizan en paralelo porque responden a lógicas operativas distintas: el costo de transformación refleja eficiencia de máquina y proceso, mientras que el costo de insumo refleja decisiones de formulación y consumo de materias primas.
  
- ### 6.2.1 Costo unitario de conversión o de transformacion
+### 6.2.1 Costo unitario de conversión o de transformacion
 
 ```{r resumen_ct, echo=FALSE}
 datos %>%

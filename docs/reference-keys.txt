@@ -23,6 +23,9 @@ conversión-de-tipos
 consideraciones-estructurales-para-el-análisis
 diccionario-de-campos
 capítulo-6-análisis-exploratorio-básico
+carga-del-dataset-analítico
+análisis-univariado-de-variables-respuesta
+costo-unitario-de-conversión-o-de-transformacion
 costo-unitario-de-los-insumos
 costo-unitario-total
 análisis-univariado-de-predictoras-numéricas
