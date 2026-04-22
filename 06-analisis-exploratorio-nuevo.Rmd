@@ -599,18 +599,9 @@ tabla_resumen <- datos %>%
     costo_transformacion_medio = round(costo_transformacion_medio, 1),
     costo_insumo_medio = round(costo_insumo_medio, 1)
   )
-tabla_resumen <- datos %>%
-  group_by(tipo_equipo) %>%
-  summarise(
-    costo_transformacion_medio = mean(costo_transformacion),
-    costo_insumo_medio = mean(costo_insumo),
-    .groups = "drop"
-  ) %>%
-  mutate(
-    costo_transformacion_medio = round(costo_transformacion_medio, 1),
-    costo_insumo_medio = round(costo_insumo_medio, 1)
-  )
 
+kable(tabla_resumen, caption = "Tabla resumen costos por tipo de equipo") %>%
+  kable_styling(full_width = FALSE)
 ```
 Las diferencias son tan marcadas que invitan a preguntar: ¿cada tipo de equipo es realmente comparable con los otros?
 Una tabulación cruzada contesta la pregunta y cambia el análisis:

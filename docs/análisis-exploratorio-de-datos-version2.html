@@ -1715,17 +1715,73 @@ Cualquier modelo debe considerar tipo_equipo como variable explicativa clave, eq
 <span id="cb33-9"><a href="análisis-exploratorio-de-datos-version2.html#cb33-9" tabindex="-1"></a>    <span class="at">costo_transformacion_medio =</span> <span class="fu">round</span>(costo_transformacion_medio, <span class="dv">1</span>),</span>
 <span id="cb33-10"><a href="análisis-exploratorio-de-datos-version2.html#cb33-10" tabindex="-1"></a>    <span class="at">costo_insumo_medio =</span> <span class="fu">round</span>(costo_insumo_medio, <span class="dv">1</span>)</span>
 <span id="cb33-11"><a href="análisis-exploratorio-de-datos-version2.html#cb33-11" tabindex="-1"></a>  )</span>
-<span id="cb33-12"><a href="análisis-exploratorio-de-datos-version2.html#cb33-12" tabindex="-1"></a>tabla_resumen <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
-<span id="cb33-13"><a href="análisis-exploratorio-de-datos-version2.html#cb33-13" tabindex="-1"></a>  <span class="fu">group_by</span>(tipo_equipo) <span class="sc">%&gt;%</span></span>
-<span id="cb33-14"><a href="análisis-exploratorio-de-datos-version2.html#cb33-14" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb33-15"><a href="análisis-exploratorio-de-datos-version2.html#cb33-15" tabindex="-1"></a>    <span class="at">costo_transformacion_medio =</span> <span class="fu">mean</span>(costo_transformacion),</span>
-<span id="cb33-16"><a href="análisis-exploratorio-de-datos-version2.html#cb33-16" tabindex="-1"></a>    <span class="at">costo_insumo_medio =</span> <span class="fu">mean</span>(costo_insumo),</span>
-<span id="cb33-17"><a href="análisis-exploratorio-de-datos-version2.html#cb33-17" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span></span>
-<span id="cb33-18"><a href="análisis-exploratorio-de-datos-version2.html#cb33-18" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb33-19"><a href="análisis-exploratorio-de-datos-version2.html#cb33-19" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb33-20"><a href="análisis-exploratorio-de-datos-version2.html#cb33-20" tabindex="-1"></a>    <span class="at">costo_transformacion_medio =</span> <span class="fu">round</span>(costo_transformacion_medio, <span class="dv">1</span>),</span>
-<span id="cb33-21"><a href="análisis-exploratorio-de-datos-version2.html#cb33-21" tabindex="-1"></a>    <span class="at">costo_insumo_medio =</span> <span class="fu">round</span>(costo_insumo_medio, <span class="dv">1</span>)</span>
-<span id="cb33-22"><a href="análisis-exploratorio-de-datos-version2.html#cb33-22" tabindex="-1"></a>  )</span></code></pre></div>
+<span id="cb33-12"><a href="análisis-exploratorio-de-datos-version2.html#cb33-12" tabindex="-1"></a></span>
+<span id="cb33-13"><a href="análisis-exploratorio-de-datos-version2.html#cb33-13" tabindex="-1"></a><span class="fu">kable</span>(tabla_resumen, <span class="at">caption =</span> <span class="st">&quot;Tabla resumen costos por tipo de equipo&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb33-14"><a href="análisis-exploratorio-de-datos-version2.html#cb33-14" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+(#tab:res_cost_tipo_equipo)(#tab:res_cost_tipo_equipo)Tabla resumen costos por tipo de equipo
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+tipo_equipo
+</th>
+<th style="text-align:right;">
+costo_transformacion_medio
+</th>
+<th style="text-align:right;">
+costo_insumo_medio
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+A1
+</td>
+<td style="text-align:right;">
+33.0
+</td>
+<td style="text-align:right;">
+5.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B2
+</td>
+<td style="text-align:right;">
+29.9
+</td>
+<td style="text-align:right;">
+5.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C3
+</td>
+<td style="text-align:right;">
+64.4
+</td>
+<td style="text-align:right;">
+11.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D4
+</td>
+<td style="text-align:right;">
+8.8
+</td>
+<td style="text-align:right;">
+3.6
+</td>
+</tr>
+</tbody>
+</table>
 <p>Las diferencias son tan marcadas que invitan a preguntar: ¿cada tipo de equipo es realmente comparable con los otros?
 Una tabulación cruzada contesta la pregunta y cambia el análisis:</p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="análisis-exploratorio-de-datos-version2.html#cb34-1" tabindex="-1"></a>tabla_dep <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
