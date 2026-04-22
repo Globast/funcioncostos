@@ -5,10 +5,12 @@ Se parte del dataset depurado en el capítulo de metodología (395 órdenes de p
 
 ```{r setup1, include=FALSE}
 knitr::opts_chunk$set(
-  echo = FALSE,      # Oculta el código en todo el documento
-  message = FALSE,   # Oculta mensajes de carga de librerías
-  warning = FALSE,   # Oculta advertencias
-  out.width = "100%",# Gráficas al ancho completo
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  out.width = "100%",  # Ocupa todo el ancho de la página
+  fig.width = 10,      # Ancho base en pulgadas
+  fig.asp = 1,       # Altura es el 50% del ancho (puedes probar 0.4 para más plano)
   fig.align = "center"
 )
 ```
