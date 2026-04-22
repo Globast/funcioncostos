@@ -153,7 +153,7 @@ datos %>%
     IQR     = IQR(costo_insumo)
   ) -> resumen_ci
 
-knitr::kable(resumen_ci, caption = "Resumen del costo de insumo") %>%
+knitr::kable(resumen_ci, caption = "Resumen del costo de insumo"),
                format = "html",
              table.attr = "class='table'") %>%
   kableExtra::kable_styling(full_width = FALSE) 
@@ -251,7 +251,7 @@ datos %>%
     Q3      = quantile(costo_unitario_total, 0.75),
     IQR     = IQR(costo_unitario_total)
   ) -> resumen_ctot
-knitr::kable(resumen_ctot, caption = "Resumen del costo unitario total") %>%
+knitr::kable(resumen_ctot, caption = "Resumen del costo unitario total"),
                  format = "html",
              table.attr = "class='table'") %>%
   kableExtra::kable_styling(full_width = FALSE) 
@@ -410,7 +410,7 @@ datos %>%
 resumen_num_predictoras <- bind_rows(var_num_vol, var_num_dur, var_num_ci1, var_num_ci2) %>%
   select(variable, everything())%>%
   mutate(across(where(is.numeric) & !n, ~ round(.x, 2)))
-knitr::kable(resumen_num_predictoras, caption = "Resumen descriptivo de las variables numéricas seleccionadas") %>%
+knitr::kable(resumen_num_predictoras, caption = "Resumen descriptivo de las variables numéricas seleccionadas"),
                  format = "html",
              table.attr = "class='table'") %>%
   kableExtra::kable_styling(full_width = FALSE) 
