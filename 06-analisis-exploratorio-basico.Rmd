@@ -341,8 +341,8 @@ El costo unitario total hereda la asimetría de sus dos componentes. Cualquier i
 
 ::: {.alert .alert-info}
 Los tres costos presentan distribuciones asimétricas con cola derecha pronunciada. En costo_transformacion se observa además un leve segundo abultamiento hacia valores bajos (5–15 UM), que rompe el patrón unimodal esperado.
-Una distribución con dos "jorobas" suele indicar que los datos no provienen de un proceso único, sino de dos o más procesos distintos mezclados. El promedio se vuelve engañoso porque representa algo que no existe realmente
-Primera hipótesis que emerge. El sistema productivo puede no ser un único proceso homogéneo, sino una mezcla de regímenes operativos con dinámicas de costo distintas. Si esto es cierto, los estadísticos agregados están ocultando diferencias estructurales importantes
+Se observa una bimodalidad leve, es decir un segundo abultamiento en el rango bajo (≈5–15 UM), separado del principal que está alrededor ~25–30 UM. Esto podría  indicar que los datos no provienen de un proceso único, sino de dos o más procesos distintos mezclados. 
+En consecuencia, el sistema productivo puede no ser un único proceso homogéneo, sino una mezcla de regímenes operativos con dinámicas de costo distintas. Si esto es cierto, los estadísticos agregados están ocultando diferencias estructurales importantes
 :::
 
 ## Análisis univariado de predictoras numéricas
