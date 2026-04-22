@@ -1080,28 +1080,42 @@ knitr::kable(
 ```
 
 
-```{r boxmod_proceso, fig.width=9, fig.height=4.5}
+```{r box_equipo_id, fig.width=9, fig.height=4.5}
+orden_equipos <- datos %>%
+  distinct(tipo_equipo, equipo_id) %>%
+  arrange(tipo_equipo, equipo_id) %>%
+  pull(equipo_id)
 
-box_ct_mod_proceso <-datos %>%
-  ggplot(aes(x = modalidad_proceso, y = costo_transformacion)) +
-  geom_boxplot(fill = "#87CEFA", outlier.colour = "red", outlier.shape = 16) +
-  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "darkblue") +
-  labs(x = "Tipo de equipo",
-       y = "Costo de transformación (UM/unidad)") +
+  box_ct_equipo <- datos %>%
+  mutate(
+    equipo_id = factor(equipo_id, levels = orden_equipos)
+  ) %>%
+  ggplot(aes(x = equipo_id, y = costo_transformacion, fill = tipo_equipo)) +
+  geom_boxplot(outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "black") +
+  labs(x = "Equipo",
+       y = "Costo de transformación (UM/unidad)",
+       fill = "Tipo de equipo") +
   theme_bw() +
-  facet_grid(. ~ "Costo de transformación por modalidad de proceso ")
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  facet_grid(. ~ "Costo de transformación por equipo")
 
-
-box_ci_mod_proceso <- datos %>%
-  ggplot(aes(x = modalidad_proceso, y = costo_insumo)) +
-  geom_boxplot(fill = "#b2df8a", outlier.colour = "red", outlier.shape = 16) +
-  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "darkgreen") +
-  labs(x = "Modalidad de proceso",
-       y = "Costo de insumo (UM/unidad)") +
+box_ci_equipo <- datos %>%
+  mutate(
+    equipo_id = factor(equipo_id, levels = orden_equipos)
+  ) %>%
+  ggplot(aes(x = equipo_id, y = costo_insumo, fill = tipo_equipo)) +
+  geom_boxplot(outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "black") +
+  labs(x = "Equipo",
+       y = "Costo de insumo (UM/unidad)",
+       fill = "Tipo de equipo") +
   theme_bw() +
-  facet_grid(. ~ "Costo de insumo por modalidad de proceso")
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  facet_grid(. ~ "Costo de insumo por equipo")
 
-box_ct_mod_proceso + box_ci_mod_proceso
+box_ct_equipo + box_ci_equipo
+
 ```
 
 
