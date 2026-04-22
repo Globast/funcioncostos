@@ -4,7 +4,7 @@ tab:conteo-ceros
 tab:casos-con-ceros
 tab:tabla-causas
 tab:diccionario-datos
-tab:ckresumenct
+tab:ck-resumen-ct
 resumen
 introducción
 objetivos-en-construcccion
