@@ -883,10 +883,11 @@ cantidad_insumo_2
 <span id="cb25-54"><a href="capítulo-6-análisis-exploratorio-básico.html#cb25-54" tabindex="-1"></a></span>
 <span id="cb25-55"><a href="capítulo-6-análisis-exploratorio-básico.html#cb25-55" tabindex="-1"></a>(p_vol_hist <span class="sc">+</span> p_dur_hist) <span class="sc">/</span> (p_ci1_hist <span class="sc">+</span> p_ci2_hist)</span></code></pre></div>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/hist_num_predictoras-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
-<p>[!NOTE]
-Visualmente, la fuente real de heterogeneidad no está en los insumos, sino en cómo y cuánto se produce. Esto implica que cualquier análisis o modelo que ignore la escala (volumen) o la complejidad (duración) va a estar mal especificado.
+<div class="alert alert-info">
+<p>Visualmente, la fuente real de heterogeneidad no está en los insumos, sino en cómo y cuánto se produce. Esto implica que cualquier análisis o modelo que ignore la escala (volumen) o la complejidad (duración) va a estar mal especificado.
 El sistema produce lotes de escalas muy distintas (entre 100 y 13.300 unidades), con duraciones que van de 3 a 482 horas. Esta heterogeneidad refleja una lógica de producción “make-to-order” donde cada orden responde a un pedido específico. El tamaño estándar de lote no existe. El proceso no puede optimizarse con reglas uniformes; requerirá segmentación por rangos de producción.
 → Heterogeneidad en volumen y duración, consumo de insumos estable</p>
+</div>
 </div>
 <div id="análisis-univariado-de-predictoras-categóricas" class="section level2 hasAnchor" number="6.4">
 <h2><span class="header-section-number">6.4</span> 6.4 Análisis univariado de predictoras categóricas<a href="capítulo-6-análisis-exploratorio-básico.html#an%C3%A1lisis-univariado-de-predictoras-categ%C3%B3ricas" class="anchor-section" aria-label="Anchor link to header"></a></h2>

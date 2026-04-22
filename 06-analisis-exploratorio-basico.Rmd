@@ -508,10 +508,11 @@ p_ci2_hist <- datos %>%
 (p_vol_hist + p_dur_hist) / (p_ci1_hist + p_ci2_hist)
 ```
 
-[!NOTE]
+::: {.alert .alert-info}
 Visualmente, la fuente real de heterogeneidad no está en los insumos, sino en cómo y cuánto se produce. Esto implica que cualquier análisis o modelo que ignore la escala (volumen) o la complejidad (duración) va a estar mal especificado.
 El sistema produce lotes de escalas muy distintas (entre 100 y 13.300 unidades), con duraciones que van de 3 a 482 horas. Esta heterogeneidad refleja una lógica de producción "make-to-order" donde cada orden responde a un pedido específico. El tamaño estándar de lote no existe. El proceso no puede optimizarse con reglas uniformes; requerirá segmentación por rangos de producción.
       → Heterogeneidad en volumen y duración, consumo de insumos estable
+:::
 
 ## 6.4 Análisis univariado de predictoras categóricas
       → Concentración en A1 (73%), cardinalidad variable entre categóricas
