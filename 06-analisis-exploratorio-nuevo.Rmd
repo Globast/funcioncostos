@@ -1126,8 +1126,11 @@ tabla_dep <- datos %>%
   complete(tipo_equipo, modalidad_proceso, num_insumos, fill = list(n = 0)) %>%
   arrange(tipo_equipo, modalidad_proceso, num_insumos)
 
-kable(tabla_dep, caption = "Combinaciones observadas (Incluyendo celdas vacías)") %>%
-  kable_styling(full_width = FALSE)
+filas_vacias <- which(tabla_dep$n == 0)
+
+kable(tabla_dep, caption = "Combinaciones observadas con resaltado en ceros") %>%
+  kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover")) %>%
+  row_spec(filas_vacias, bold = TRUE, background = "#FFE6E6", color = "#D32F2F") # Rojo claro para resaltar
 ```
 El espacio operativo no es completo. No todos los equipos operan en todas las modalidades. No todas las modalidades se ejecutan con todos los números de insumos. Las combinaciones son asimétricas y muchas celdas están vacías o con muy pocas observaciones.
 
