@@ -1420,8 +1420,8 @@ comp_X1 <- datos_principal %>%
     .groups = "drop"
   )
 comp_X1
-[Boxplot de costo_transformacion ~ tipo_equipo sobre el filtro (X, 1).]
 ```
+
 
 Interpretación. Dentro de la única celda donde los tres equipos son comparables:
 
