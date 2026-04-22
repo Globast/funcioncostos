@@ -1330,10 +1330,11 @@ IQR
 <span id="cb33-19"><a href="análisis-exploratorio-de-datos-version2.html#cb33-19" tabindex="-1"></a></span>
 <span id="cb33-20"><a href="análisis-exploratorio-de-datos-version2.html#cb33-20" tabindex="-1"></a>box_ct_insumo <span class="sc">+</span> box_ci_insumo </span></code></pre></div>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box_bivariado_insumo-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
-<p>En costos de transformación, el paso de uno a dos insumos implica un incremento claro en la media (de aproximadamente 27.3 a 35.8), acompañado de un desplazamiento de la mediana en la misma dirección. Esto indica que el efecto no está impulsado por valores extremos, sino por un cambio en el comportamiento central de la distribución. La desviación estándar se mantiene prácticamente constante, lo que sugiere que la variabilidad absoluta no aumenta, pero el IQR se reduce en el caso de dos insumos. Esto implica que, aunque el nivel de costo es mayor, la distribución es relativamente más compacta en su rango intercuartílico.</p>
-<p>En costos de insumo, el patrón es análogo pero más moderado. La media aumenta de 4.55 a 6.15, y la mediana también se desplaza hacia arriba. Sin embargo, la dispersión crece ligeramente, reflejada en una mayor desviación estándar. La similitud en los IQR indica que la variabilidad central es comparable, pero los valores extremos tienen mayor peso en el caso de dos insumos.</p>
-<p>El número de insumos actúa como una variable explicativa relevante que introduce un cambio de nivel en los costos, pero no altera sustancialmente la forma de la distribución. Esto es consistente con un efecto aditivo más que multiplicativo.</p>
-<p>Trabajar con dos insumos es sistemáticamente más costoso, tanto en transformación como en materiales. La variabilidad no aumenta de forma proporcional al costo. Esto significa que el sistema es capaz de operar con dos insumos de forma relativamente controlada, pero a un costo superior. No es un problema de desorden operativo, es un problema de diseño del proceso.</p>
+<ul>
+<li><p>Costos de transformación: el paso de uno a dos insumos implica un incremento claro en la media (de aproximadamente 27.3 a 35.8), acompañado de un desplazamiento de la mediana en la misma dirección. La desviación estándar se mantiene prácticamente constante, pero el IQR se reduce en el caso de dos insumos. Es decir, aunque el nivel de costo es mayor, la distribución es relativamente más compacta en su rango intercuartílico.</p></li>
+<li><p>Costos de insumo: La media aumenta de 4.55 a 6.15, y la mediana también se desplaza hacia arriba. Sin embargo, tiene una mayor desviación estándar. La similitud en los IQR indica que la variabilidad central es comparable, pero los valores extremos tienen mayor peso en el caso de dos insumos.</p></li>
+</ul>
+<p>El número de insumos introduce un cambio de nivel en los costos, pero no altera sustancialmente la forma de la distribución. El proceso es capaz de operar con dos insumos de forma relativamente controlada, pero a un costo superior.</p>
 <p>Cada vez que se introduce un segundo insumo, se está aceptando un costo mayor de forma sistemática. Aquí el problema pasa a ser comercial. ¿ese costo adicional se está trasladando al cliente?</p>
 <p>Es claro que el segundo insumo incrementa el consumo de materiales y el costo de transformación , entonces debe reflejarse en un recargo explícito o una estructura de precios diferenciada. de lo contrario se está subsidiando complejidad.</p>
 </div>
@@ -1842,6 +1843,10 @@ B_T + N_O
 </tr>
 </tbody>
 </table>
+<p>En costos de transformación, las combinaciones (B_T, N_T) presentan niveles relativamente similares, con medias cercanas a 25–26. Sin embargo, N_T muestra una dispersión mucho mayor (IQR ≈ 24 frente a ≈ 10 en B_T), lo que indica que su comportamiento es menos estable.</p>
+<p>Cuando se introducen combinaciones con N_O, los costos aumentan de forma sistemática. Tanto N_O + N_T como N_O solo presentan medias superiores a 36–38, lo que implica un cambio estructural en el nivel de costo.</p>
+<p>Las combinaciones con R_T , con valores promedio cercanos a 55 y con alta dispersión, reflejan un costo elevado y también variabilidad significativa. De forma similar, R_T solo o combinado tiende a elevar tanto el nivel como la incertidumbre del costo.</p>
+<p>En contraste, combinaciones como B_T + V_T presentan costos bajos y muy poca dispersión (IQR ≈ 3.9). No todas las combinaciones de dos insumos implican mayor complejidad; algunas mantienen eficiencia operativa.</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="análisis-exploratorio-de-datos-version2.html#cb36-1" tabindex="-1"></a>resumen_bivariado_ci_comb <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
 <span id="cb36-2"><a href="análisis-exploratorio-de-datos-version2.html#cb36-2" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb36-3"><a href="análisis-exploratorio-de-datos-version2.html#cb36-3" tabindex="-1"></a>    <span class="at">insumo_combinado =</span> <span class="fu">pmap_chr</span>(<span class="fu">list</span>(insumo_1, insumo_2), <span class="cf">function</span>(x, y) {</span>
@@ -2329,19 +2334,8 @@ B_T + N_O
 </tr>
 </tbody>
 </table>
-<p>Combinación de insumos introduce estructuras diferenciadas tanto en nivel como en dispersión.</p>
-<p>En costos de transformación, las combinaciones simples (B_T, N_T) presentan niveles relativamente similares, con medias cercanas a 25–26. Sin embargo, N_T muestra una dispersión mucho mayor (IQR ≈ 24 frente a ≈ 10 en B_T), lo que indica que su comportamiento es menos estable. Esto sugiere que, aun siendo comparables en nivel medio, no lo son en términos de consistencia.</p>
-<p>Cuando se introducen combinaciones con N_O, los costos aumentan de forma sistemática. Tanto N_O + N_T como N_O solo presentan medias superiores a 36–38, lo que implica un cambio estructural en el nivel de costo. Este patrón indica que N_O actúa como un factor de incremento base en el proceso de transformación.</p>
-<p>Las combinaciones con R_T son particularmente relevantes. A_T + R_T alcanza valores medios cercanos a 55, con alta dispersión, lo que refleja no solo un costo elevado sino también variabilidad significativa. De forma similar, R_T solo o combinado tiende a elevar tanto el nivel como la incertidumbre del costo.</p>
-<p>En contraste, combinaciones como B_T + V_T presentan costos bajos y muy poca dispersión (IQR ≈ 3.9). No todas las combinaciones de dos insumos implican mayor complejidad; algunas mantienen eficiencia operativa.</p>
 <p>N_T tiene costos bajos, mientras que combinaciones con N_O elevan significativamente el costo de insumo (media ≈ 8.6).</p>
-<p>La dispersión en algunas combinaciones (por ejemplo, sin_segundo_insumo + V_T) es extremadamente alta, lo que indica presencia de outliers y posibles problemas de registro o condiciones operativas atípicas.</p>
-<p>No todos los insumos son equivalentes. Algunos son neutros, otros son caros, y algunos son directamente problemáticos.</p>
-<p>El insumo N_O es el principal driver de costo. Cada vez que aparece, el costo de transformación sube de manera consistente. Es un insumo estructuralmente caro. Su uso debe estar plenamente justificado en precio.</p>
-<p>El insumo R_T es crítico por otra razón, eleva el costo y también introduce variabilidad, es menos predecible. Este tipo de pedido debe tener recargos por incertidumbre.</p>
-<p>El insumo N_T es engañoso. En promedio no es costoso, pero presenta alta dispersión. Esto indica que bajo ciertas condiciones puede volverse problemático. Aquí hay un tema de control operativo.</p>
-<p>El insumo B_T es el más estable. Costos moderados y baja variabilidad. Es una base confiable para operación.</p>
-<p>El insumo V_T en ciertas combinaciones muestra eficiencia (bajo costo y baja dispersión), pero en otros casos presenta outliers extremos. Esto indica inconsistencia en su manejo.</p>
+<p>La dispersión en algunas combinaciones (por ejemplo, sin_segundo_insumo + V_T) es extremadamente alta, hay que revisar outliers y posibles problemas de registro o condiciones operativas atípicas.</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="análisis-exploratorio-de-datos-version2.html#cb37-1" tabindex="-1"></a>box_comb_insumos_ct <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
 <span id="cb37-2"><a href="análisis-exploratorio-de-datos-version2.html#cb37-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> insumo_combinado, <span class="at">y =</span> costo_transformacion)) <span class="sc">+</span></span>
 <span id="cb37-3"><a href="análisis-exploratorio-de-datos-version2.html#cb37-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#2c7fb8&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
@@ -2362,6 +2356,13 @@ B_T + N_O
 <span id="cb37-18"><a href="análisis-exploratorio-de-datos-version2.html#cb37-18" tabindex="-1"></a></span>
 <span id="cb37-19"><a href="análisis-exploratorio-de-datos-version2.html#cb37-19" tabindex="-1"></a>  box_comb_insumos_ct  <span class="sc">/</span> box_comb_insumos_ci</span></code></pre></div>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box_insumo_comb-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<ul>
+<li>N_O es el principal driver de costo. Hace que el costo de transformación suba de manera consistente. Es un insumo estructuralmente caro. Su uso debe estar plenamente justificado en precio.</li>
+<li>R_T es crítico por otra razón, eleva el costo y también introduce variabilidad, es menos predecible. Este tipo de pedido debe tener recargos por incertidumbre.</li>
+<li>N_T es engañoso. En promedio no es costoso, pero presenta alta dispersión. Bajo ciertas condiciones puede volverse problemático. Aquí se debe revisar el control operativo.</li>
+<li>B_T es el más estable. Costos moderados y baja variabilidad.</li>
+<li>V_T en ciertas combinaciones muestra eficiencia (bajo costo y baja dispersión), pero en otros casos presenta outliers extremos. Es decir, inconsistencia en su manejo.</li>
+</ul>
 </div>
 </div>
 <div id="análisis-bivariado-costos-por-tipo-de-equipo" class="section level2 hasAnchor" number="6.5">
