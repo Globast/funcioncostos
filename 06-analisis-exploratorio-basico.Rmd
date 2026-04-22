@@ -10,7 +10,7 @@ knitr::opts_chunk$set(
   warning = FALSE,
   out.width = "90%",  # Ocupa todo el ancho de la página
   fig.width = 10,      # Ancho base en pulgadas
-  fig.asp = 1,       # Altura es el 50% del ancho (puedes probar 0.4 para más plano)
+  fig.asp = 0.4,       # Altura es el 50% del ancho (puedes probar 0.4 para más plano)
   fig.align = "center"
 )
 ```
