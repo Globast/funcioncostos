@@ -345,7 +345,7 @@ datos %>%
   summarise(
     n = length(volumen_lote),
     media = mean(volumen_lote),
-    ds = sd(voulmen_lote),
+    ds = sd(volumen_lote),
     `50%` = median(volumen_lote),
     minimo = min(volumen_lote),
     maximo = max(volumen_lote),

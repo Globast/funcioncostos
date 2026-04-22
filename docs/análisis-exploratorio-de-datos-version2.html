@@ -1,0 +1,2192 @@
+<!DOCTYPE html>
+<html lang="es" xml:lang="es">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capítulo 6 Análisis Exploratorio de Datos Version2 | Análisis exploratorio e inferencial</title>
+  <meta name="description" content="Libro académico elaborado en bookdown para Maestría en Estadística Aplicada." />
+  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capítulo 6 Análisis Exploratorio de Datos Version2 | Análisis exploratorio e inferencial" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Libro académico elaborado en bookdown para Maestría en Estadística Aplicada." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capítulo 6 Análisis Exploratorio de Datos Version2 | Análisis exploratorio e inferencial" />
+  
+  <meta name="twitter:description" content="Libro académico elaborado en bookdown para Maestría en Estadística Aplicada." />
+  
+
+<meta name="author" content="Gloria Bastidas" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="diccionario-de-campos.html"/>
+<link rel="next" href="eda.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Libro Académico</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Portada</a></li>
+<li class="chapter" data-level="" data-path="prefacio.html"><a href="prefacio.html"><i class="fa fa-check"></i>Prefacio</a></li>
+<li class="chapter" data-level="1" data-path="resumen.html"><a href="resumen.html"><i class="fa fa-check"></i><b>1</b> Resumen</a></li>
+<li class="chapter" data-level="2" data-path="introducción.html"><a href="introducción.html"><i class="fa fa-check"></i><b>2</b> Introducción</a></li>
+<li class="chapter" data-level="3" data-path="objetivos-en-construcccion.html"><a href="objetivos-en-construcccion.html"><i class="fa fa-check"></i><b>3</b> Objetivos EN CONSTRUCCCION</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="objetivos-en-construcccion.html"><a href="objetivos-en-construcccion.html#objetivo-general"><i class="fa fa-check"></i><b>3.1</b> Objetivo general</a></li>
+<li class="chapter" data-level="3.2" data-path="objetivos-en-construcccion.html"><a href="objetivos-en-construcccion.html#objetivos-espec%C3%ADficos"><i class="fa fa-check"></i><b>3.2</b> Objetivos específicos</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="metodologia.html"><a href="metodologia.html"><i class="fa fa-check"></i><b>4</b> Metodología</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="metodologia.html"><a href="metodologia.html#dise%C3%B1o-del-estudio"><i class="fa fa-check"></i><b>4.1</b> Diseño del estudio</a></li>
+<li class="chapter" data-level="4.2" data-path="metodologia.html"><a href="metodologia.html#extracci%C3%B3n-transformaci%C3%B3n-y-carga-etl"><i class="fa fa-check"></i><b>4.2</b> Extracción, transformación y carga (ETL)</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="metodologia.html"><a href="metodologia.html#carga-del-conjunto-de-datos"><i class="fa fa-check"></i><b>4.2.1</b> Carga del conjunto de datos</a></li>
+<li class="chapter" data-level="4.2.2" data-path="metodologia.html"><a href="metodologia.html#verificaci%C3%B3n-de-la-lectura"><i class="fa fa-check"></i><b>4.2.2</b> Verificación de la lectura</a></li>
+<li class="chapter" data-level="4.2.3" data-path="metodologia.html"><a href="metodologia.html#revisi%C3%B3n-de-integridad-de-datos"><i class="fa fa-check"></i><b>4.2.3</b> Revisión de integridad de datos</a></li>
+<li class="chapter" data-level="4.2.4" data-path="metodologia.html"><a href="metodologia.html#conversi%C3%B3n-de-tipos"><i class="fa fa-check"></i><b>4.2.4</b> Conversión de tipos</a></li>
+<li class="chapter" data-level="4.2.5" data-path="metodologia.html"><a href="metodologia.html#consideraciones-estructurales-para-el-an%C3%A1lisis"><i class="fa fa-check"></i><b>4.2.5</b> Consideraciones estructurales para el análisis</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="diccionario-de-campos.html"><a href="diccionario-de-campos.html"><i class="fa fa-check"></i><b>5</b> Diccionario de campos</a></li>
+<li class="chapter" data-level="6" data-path="análisis-exploratorio-de-datos-version2.html"><a href="análisis-exploratorio-de-datos-version2.html"><i class="fa fa-check"></i><b>6</b> Análisis Exploratorio de Datos Version2</a>
+<ul>
+<li class="chapter" data-level="6.0.1" data-path="análisis-exploratorio-de-datos-version2.html"><a href="análisis-exploratorio-de-datos-version2.html#carga-del-dataset-anal%C3%ADtico"><i class="fa fa-check"></i><b>6.0.1</b> Carga del dataset analítico</a></li>
+<li class="chapter" data-level="6.1" data-path="análisis-exploratorio-de-datos-version2.html"><a href="análisis-exploratorio-de-datos-version2.html#an%C3%A1lisis-univariado-de-los-costos"><i class="fa fa-check"></i><b>6.1</b> Análisis univariado de los costos</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="análisis-exploratorio-de-datos-version2.html"><a href="análisis-exploratorio-de-datos-version2.html#costo_transformacion"><i class="fa fa-check"></i><b>6.1.1</b> costo_transformacion</a></li>
+<li class="chapter" data-level="6.1.2" data-path="análisis-exploratorio-de-datos-version2.html"><a href="análisis-exploratorio-de-datos-version2.html#costo-unitario-de-los-insumos"><i class="fa fa-check"></i><b>6.1.2</b> Costo unitario de los insumos</a></li>
+<li class="chapter" data-level="6.1.3" data-path="análisis-exploratorio-de-datos-version2.html"><a href="análisis-exploratorio-de-datos-version2.html#costo-unitario-total"><i class="fa fa-check"></i><b>6.1.3</b> Costo unitario total</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="análisis-exploratorio-de-datos-version2.html"><a href="análisis-exploratorio-de-datos-version2.html#los-histogramas-no-son-sim%C3%A9tricos"><i class="fa fa-check"></i><b>6.2</b> Los histogramas no son simétricos</a></li>
+<li class="chapter" data-level="6.3" data-path="análisis-exploratorio-de-datos-version2.html"><a href="análisis-exploratorio-de-datos-version2.html#an%C3%A1lisis-univariado-de-variables-num%C3%A9ricas-predictoras"><i class="fa fa-check"></i><b>6.3</b> Análisis univariado de variables numéricas predictoras</a></li>
+<li class="chapter" data-level="6.4" data-path="análisis-exploratorio-de-datos-version2.html"><a href="análisis-exploratorio-de-datos-version2.html#an%C3%A1lisis-univariado-de-variables-categ%C3%B3ricas-predictoras"><i class="fa fa-check"></i><b>6.4</b> Análisis univariado de variables categóricas predictoras</a></li>
+<li class="chapter" data-level="6.5" data-path="análisis-exploratorio-de-datos-version2.html"><a href="análisis-exploratorio-de-datos-version2.html#an%C3%A1lisis-bivariado-costos-por-tipo-de-equipo"><i class="fa fa-check"></i><b>6.5</b> Análisis bivariado: costos por tipo de equipo</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="eda.html"><a href="eda.html"><i class="fa fa-check"></i><b>7</b> Análisis Exploratorio de Datos</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-univariado-de-los-costos-1"><i class="fa fa-check"></i><b>7.1</b> Análisis univariado de los costos</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="eda.html"><a href="eda.html#costo-unitario-de-conversi%C3%B3n-o-de-transformaci%C3%B3n"><i class="fa fa-check"></i><b>7.1.1</b> Costo unitario de conversión o de transformación</a></li>
+<li class="chapter" data-level="7.1.2" data-path="eda.html"><a href="eda.html#costo-unitario-de-los-insumos-1"><i class="fa fa-check"></i><b>7.1.2</b> Costo unitario de los insumos</a></li>
+<li class="chapter" data-level="7.1.3" data-path="eda.html"><a href="eda.html#costo-unitario-total-1"><i class="fa fa-check"></i><b>7.1.3</b> Costo unitario total</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-univariado-de-variables-num%C3%A9ricas-predictoras-1"><i class="fa fa-check"></i><b>7.2</b> Análisis univariado de variables numéricas predictoras</a></li>
+<li class="chapter" data-level="7.3" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-univariado-de-variables-categ%C3%B3ricas-predictoras-1"><i class="fa fa-check"></i><b>7.3</b> Análisis univariado de variables categóricas predictoras</a></li>
+<li class="chapter" data-level="7.4" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-bivariado-variables-respuesta-vs-predictoras-num%C3%A9ricas"><i class="fa fa-check"></i><b>7.4</b> Análisis bivariado: variables respuesta vs predictoras numéricas</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="eda.html"><a href="eda.html#correlacion-pearson"><i class="fa fa-check"></i><b>7.4.1</b> Correlacion Pearson</a></li>
+<li class="chapter" data-level="7.4.2" data-path="eda.html"><a href="eda.html#diagramas-de-dispersi%C3%B3n"><i class="fa fa-check"></i><b>7.4.2</b> Diagramas de dispersión</a></li>
+<li class="chapter" data-level="7.4.3" data-path="eda.html"><a href="eda.html#matriz-spearman"><i class="fa fa-check"></i><b>7.4.3</b> Matriz Spearman</a></li>
+<li class="chapter" data-level="7.4.4" data-path="eda.html"><a href="eda.html#normalidad-shapiro-wilk"><i class="fa fa-check"></i><b>7.4.4</b> Normalidad (Shapiro-Wilk)</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-bivariado-variables-respuesta-vs-predictoras-categ%C3%B3ricas"><i class="fa fa-check"></i><b>7.5</b> Análisis bivariado: variables respuesta vs predictoras categóricas</a>
+<ul>
+<li class="chapter" data-level="7.5.1" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-bivariado-modalidad-proceso"><i class="fa fa-check"></i><b>7.5.1</b> Análisis bivariado: Modalidad proceso</a></li>
+<li class="chapter" data-level="7.5.2" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-bivariado-tipo-de-equipo"><i class="fa fa-check"></i><b>7.5.2</b> Análisis bivariado: tipo de equipo</a></li>
+<li class="chapter" data-level="7.5.3" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-bivariado-equipo_id"><i class="fa fa-check"></i><b>7.5.3</b> Análisis bivariado: Equipo_id</a></li>
+<li class="chapter" data-level="7.5.4" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-bivariado-por-numero-de-insumos"><i class="fa fa-check"></i><b>7.5.4</b> Análisis bivariado: por numero de insumos</a></li>
+<li class="chapter" data-level="7.5.5" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-bivariado-por-tipo-de-insumo"><i class="fa fa-check"></i><b>7.5.5</b> Análisis bivariado: por tipo de insumo</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="eda.html"><a href="eda.html#variables-derivadas"><i class="fa fa-check"></i><b>7.6</b> Variables derivadas</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="pruebas-de-hipótesis-sin-desarrollar.html"><a href="pruebas-de-hipótesis-sin-desarrollar.html"><i class="fa fa-check"></i><b>8</b> Pruebas de Hipótesis SIN DESARROLLAR</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="pruebas-de-hipótesis-sin-desarrollar.html"><a href="pruebas-de-hipótesis-sin-desarrollar.html#prueba-t-de-dos-muestras"><i class="fa fa-check"></i><b>8.1</b> Prueba t de dos muestras</a></li>
+<li class="chapter" data-level="8.2" data-path="pruebas-de-hipótesis-sin-desarrollar.html"><a href="pruebas-de-hipótesis-sin-desarrollar.html#interpretaci%C3%B3n-base"><i class="fa fa-check"></i><b>8.2</b> Interpretación base</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="modelos-sin-desarrollar.html"><a href="modelos-sin-desarrollar.html"><i class="fa fa-check"></i><b>9</b> Modelos SIN DESARROLLAR</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="modelos-sin-desarrollar.html"><a href="modelos-sin-desarrollar.html#ajuste-del-modelo"><i class="fa fa-check"></i><b>9.1</b> Ajuste del modelo</a></li>
+<li class="chapter" data-level="9.2" data-path="modelos-sin-desarrollar.html"><a href="modelos-sin-desarrollar.html#medidas-de-ajuste"><i class="fa fa-check"></i><b>9.2</b> Medidas de ajuste</a></li>
+<li class="chapter" data-level="9.3" data-path="modelos-sin-desarrollar.html"><a href="modelos-sin-desarrollar.html#gr%C3%A1fico-de-observados-vs-ajustados"><i class="fa fa-check"></i><b>9.3</b> Gráfico de observados vs ajustados</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="conclusión.html"><a href="conclusión.html"><i class="fa fa-check"></i><b>10</b> Conclusión</a></li>
+<li class="chapter" data-level="11" data-path="bibliografía.html"><a href="bibliografía.html"><i class="fa fa-check"></i><b>11</b> Bibliografía</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/">Publicado con GitHub Pages</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Análisis exploratorio e inferencial</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="análisis-exploratorio-de-datos-version2" class="section level1 hasAnchor" number="6">
+<h1><span class="header-section-number">Capítulo 6</span> Análisis Exploratorio de Datos Version2<a href="análisis-exploratorio-de-datos-version2.html#an%C3%A1lisis-exploratorio-de-datos-version2" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="carga-del-dataset-analítico" class="section level3 hasAnchor" number="6.0.1">
+<h3><span class="header-section-number">6.0.1</span> Carga del dataset analítico<a href="análisis-exploratorio-de-datos-version2.html#carga-del-dataset-anal%C3%ADtico" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Se parte del dataset depurado en el capítulo de metodología (395 órdenes de producción con tipos ajustados). La limpieza previa ya eliminó errores de digitación y validó la integridad de los registros; este capítulo se concentra en entender qué dicen esos datos.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="análisis-exploratorio-de-datos-version2.html#cb21-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb21-2"><a href="análisis-exploratorio-de-datos-version2.html#cb21-2" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb21-3"><a href="análisis-exploratorio-de-datos-version2.html#cb21-3" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
+<span id="cb21-4"><a href="análisis-exploratorio-de-datos-version2.html#cb21-4" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb21-5"><a href="análisis-exploratorio-de-datos-version2.html#cb21-5" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb21-6"><a href="análisis-exploratorio-de-datos-version2.html#cb21-6" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="análisis-exploratorio-de-datos-version2.html#cb21-7" tabindex="-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/data_costos_limpio.rds&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb21-8"><a href="análisis-exploratorio-de-datos-version2.html#cb21-8" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">costo_unitario_total =</span> costo_transformacion <span class="sc">+</span> costo_insumo)</span>
+<span id="cb21-9"><a href="análisis-exploratorio-de-datos-version2.html#cb21-9" tabindex="-1"></a>n_total <span class="ot">&lt;-</span> <span class="fu">nrow</span>(datos)</span></code></pre></div>
+<p>El dataset contiene 395 órdenes de producción y 17 variables.</p>
+</div>
+<div id="análisis-univariado-de-los-costos" class="section level2 hasAnchor" number="6.1">
+<h2><span class="header-section-number">6.1</span> Análisis univariado de los costos<a href="análisis-exploratorio-de-datos-version2.html#an%C3%A1lisis-univariado-de-los-costos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Las tres variables respuesta del estudio son <code>costo_transformacion</code> (costo de conversión por unidad producida), <code>costo_insumo</code> (costo de materias primas por unidad producida) y su agregado <code>costo_unitario_total</code>. Se analizan en paralelo porque responden a lógicas operativas distintas: el costo de transformación refleja eficiencia de máquina y proceso, mientras que el costo de insumo refleja decisiones de formulación y consumo de materias primas.</p>
+<div id="costo_transformacion" class="section level3 hasAnchor" number="6.1.1">
+<h3><span class="header-section-number">6.1.1</span> costo_transformacion<a href="análisis-exploratorio-de-datos-version2.html#costo_transformacion" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="análisis-exploratorio-de-datos-version2.html#cb22-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="análisis-exploratorio-de-datos-version2.html#cb22-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb22-3"><a href="análisis-exploratorio-de-datos-version2.html#cb22-3" tabindex="-1"></a>    <span class="at">n       =</span> <span class="fu">length</span>(costo_transformacion),</span>
+<span id="cb22-4"><a href="análisis-exploratorio-de-datos-version2.html#cb22-4" tabindex="-1"></a>    <span class="at">media   =</span> <span class="fu">mean</span>(costo_transformacion),</span>
+<span id="cb22-5"><a href="análisis-exploratorio-de-datos-version2.html#cb22-5" tabindex="-1"></a>    <span class="at">ds      =</span> <span class="fu">sd</span>(costo_transformacion),</span>
+<span id="cb22-6"><a href="análisis-exploratorio-de-datos-version2.html#cb22-6" tabindex="-1"></a>    <span class="st">`</span><span class="at">50%</span><span class="st">`</span>   <span class="ot">=</span> <span class="fu">median</span>(costo_transformacion),</span>
+<span id="cb22-7"><a href="análisis-exploratorio-de-datos-version2.html#cb22-7" tabindex="-1"></a>    <span class="at">minimo  =</span> <span class="fu">min</span>(costo_transformacion),</span>
+<span id="cb22-8"><a href="análisis-exploratorio-de-datos-version2.html#cb22-8" tabindex="-1"></a>    <span class="at">maximo  =</span> <span class="fu">max</span>(costo_transformacion),</span>
+<span id="cb22-9"><a href="análisis-exploratorio-de-datos-version2.html#cb22-9" tabindex="-1"></a>    <span class="at">Q1      =</span> <span class="fu">quantile</span>(costo_transformacion, <span class="fl">0.25</span>),</span>
+<span id="cb22-10"><a href="análisis-exploratorio-de-datos-version2.html#cb22-10" tabindex="-1"></a>    <span class="at">Q3      =</span> <span class="fu">quantile</span>(costo_transformacion, <span class="fl">0.75</span>),</span>
+<span id="cb22-11"><a href="análisis-exploratorio-de-datos-version2.html#cb22-11" tabindex="-1"></a>    <span class="at">IQR     =</span> <span class="fu">IQR</span>(costo_transformacion)</span>
+<span id="cb22-12"><a href="análisis-exploratorio-de-datos-version2.html#cb22-12" tabindex="-1"></a>  ) <span class="ot">-&gt;</span> resumen_ct</span>
+<span id="cb22-13"><a href="análisis-exploratorio-de-datos-version2.html#cb22-13" tabindex="-1"></a></span>
+<span id="cb22-14"><a href="análisis-exploratorio-de-datos-version2.html#cb22-14" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(resumen_ct, <span class="at">caption =</span> <span class="st">&quot;Resumen del costo de transformacion&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb22-15"><a href="análisis-exploratorio-de-datos-version2.html#cb22-15" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>) </span></code></pre></div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+(#tab:resumen_ct)(#tab:resumen_ct)Resumen del costo de transformacion
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+n
+</th>
+<th style="text-align:right;">
+media
+</th>
+<th style="text-align:right;">
+ds
+</th>
+<th style="text-align:right;">
+50%
+</th>
+<th style="text-align:right;">
+minimo
+</th>
+<th style="text-align:right;">
+maximo
+</th>
+<th style="text-align:right;">
+Q1
+</th>
+<th style="text-align:right;">
+Q3
+</th>
+<th style="text-align:right;">
+IQR
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+395
+</td>
+<td style="text-align:right;">
+29.93986
+</td>
+<td style="text-align:right;">
+15.25873
+</td>
+<td style="text-align:right;">
+29.0901
+</td>
+<td style="text-align:right;">
+2.76611
+</td>
+<td style="text-align:right;">
+97.1848
+</td>
+<td style="text-align:right;">
+21.90816
+</td>
+<td style="text-align:right;">
+36.44523
+</td>
+<td style="text-align:right;">
+14.53708
+</td>
+</tr>
+</tbody>
+</table>
+<p>La variable <code>costo_transformacion</code> se analizó a partir de 395 órdenes de producción.
+Se obtuvo un costo medio de conversión por unidad de 29.94 UM/unidad (DS = 15.26 UM/unidad), con un coeficiente de variación de 51%. El 50% de las órdenes presenta un costo de conversión por debajo de 29.09 UM/unidad.
+La desviación estándar alcanza 15.26, lo que equivale a un coeficiente de variación de 51%. Quiere decir que los costos fluctúan de manera importante respecto al promedio.
+El rango intercuartílico (14.54) indica que la mitad central de los datos se sitúa en un intervalo relativamente acotado, lo que describe el comportamiento típico del proceso.
+Sin embargo, los extremos revela algo distinto. Mientras el valor mínimo (2.77) se mantiene dentro de lo esperado, el máximo (97.18) se encuentra considerablemente alejado del resto. Este comportamiento puede sugerir la presencia de valores atípicos en la parte superior de la distribución, generando una cola hacia la derecha.
+En términos prácticos, esto significa que la mayoría de los procesos operan en niveles de costo relativamente estables, pero existen casos puntuales significativamente más costosos. Estos valores extremos pueden responder a procesos más complejos o a posibles inconsistencias en los datos, por lo que requieren un análisis específico antes de su inclusión en modelos o decisiones operativas.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="análisis-exploratorio-de-datos-version2.html#cb23-1" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb23-2"><a href="análisis-exploratorio-de-datos-version2.html#cb23-2" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb23-3"><a href="análisis-exploratorio-de-datos-version2.html#cb23-3" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
+<span id="cb23-4"><a href="análisis-exploratorio-de-datos-version2.html#cb23-4" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="análisis-exploratorio-de-datos-version2.html#cb23-5" tabindex="-1"></a>lineas <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb23-6"><a href="análisis-exploratorio-de-datos-version2.html#cb23-6" tabindex="-1"></a>  <span class="at">estadistico =</span> <span class="fu">c</span>(<span class="st">&quot;Media&quot;</span>, <span class="st">&quot;Mediana&quot;</span>, <span class="st">&quot;Q1&quot;</span>, <span class="st">&quot;Q3&quot;</span>),</span>
+<span id="cb23-7"><a href="análisis-exploratorio-de-datos-version2.html#cb23-7" tabindex="-1"></a>  <span class="at">valor =</span> <span class="fu">c</span>(</span>
+<span id="cb23-8"><a href="análisis-exploratorio-de-datos-version2.html#cb23-8" tabindex="-1"></a>    resumen_ct<span class="sc">$</span>media,</span>
+<span id="cb23-9"><a href="análisis-exploratorio-de-datos-version2.html#cb23-9" tabindex="-1"></a>    resumen_ct<span class="sc">$</span><span class="st">`</span><span class="at">50%</span><span class="st">`</span>,</span>
+<span id="cb23-10"><a href="análisis-exploratorio-de-datos-version2.html#cb23-10" tabindex="-1"></a>    <span class="fu">as.numeric</span>(resumen_ct<span class="sc">$</span>Q1),</span>
+<span id="cb23-11"><a href="análisis-exploratorio-de-datos-version2.html#cb23-11" tabindex="-1"></a>    <span class="fu">as.numeric</span>(resumen_ct<span class="sc">$</span>Q3)</span>
+<span id="cb23-12"><a href="análisis-exploratorio-de-datos-version2.html#cb23-12" tabindex="-1"></a>  )</span>
+<span id="cb23-13"><a href="análisis-exploratorio-de-datos-version2.html#cb23-13" tabindex="-1"></a>)</span>
+<span id="cb23-14"><a href="análisis-exploratorio-de-datos-version2.html#cb23-14" tabindex="-1"></a></span>
+<span id="cb23-15"><a href="análisis-exploratorio-de-datos-version2.html#cb23-15" tabindex="-1"></a>p_hist_cc<span class="ot">&lt;-</span>datos <span class="sc">%&gt;%</span></span>
+<span id="cb23-16"><a href="análisis-exploratorio-de-datos-version2.html#cb23-16" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> costo_transformacion)) <span class="sc">+</span></span>
+<span id="cb23-17"><a href="análisis-exploratorio-de-datos-version2.html#cb23-17" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
+<span id="cb23-18"><a href="análisis-exploratorio-de-datos-version2.html#cb23-18" tabindex="-1"></a>                 <span class="at">bins =</span> <span class="dv">30</span>,</span>
+<span id="cb23-19"><a href="análisis-exploratorio-de-datos-version2.html#cb23-19" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">&quot;#ACAEAF&quot;</span>,</span>
+<span id="cb23-20"><a href="análisis-exploratorio-de-datos-version2.html#cb23-20" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;#616161&quot;</span>,</span>
+<span id="cb23-21"><a href="análisis-exploratorio-de-datos-version2.html#cb23-21" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb23-22"><a href="análisis-exploratorio-de-datos-version2.html#cb23-22" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb23-23"><a href="análisis-exploratorio-de-datos-version2.html#cb23-23" tabindex="-1"></a>  </span>
+<span id="cb23-24"><a href="análisis-exploratorio-de-datos-version2.html#cb23-24" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">data =</span> lineas,</span>
+<span id="cb23-25"><a href="análisis-exploratorio-de-datos-version2.html#cb23-25" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">xintercept =</span> valor, <span class="at">color =</span> estadistico, <span class="at">linetype =</span> estadistico),</span>
+<span id="cb23-26"><a href="análisis-exploratorio-de-datos-version2.html#cb23-26" tabindex="-1"></a>             <span class="at">linewidth =</span> <span class="fl">0.9</span>) <span class="sc">+</span></span>
+<span id="cb23-27"><a href="análisis-exploratorio-de-datos-version2.html#cb23-27" tabindex="-1"></a></span>
+<span id="cb23-28"><a href="análisis-exploratorio-de-datos-version2.html#cb23-28" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(</span>
+<span id="cb23-29"><a href="análisis-exploratorio-de-datos-version2.html#cb23-29" tabindex="-1"></a>    <span class="st">&quot;Media&quot;</span>   <span class="ot">=</span> <span class="st">&quot;#551196&quot;</span>,</span>
+<span id="cb23-30"><a href="análisis-exploratorio-de-datos-version2.html#cb23-30" tabindex="-1"></a>    <span class="st">&quot;Mediana&quot;</span> <span class="ot">=</span> <span class="st">&quot;#1a9850&quot;</span>,</span>
+<span id="cb23-31"><a href="análisis-exploratorio-de-datos-version2.html#cb23-31" tabindex="-1"></a>    <span class="st">&quot;Q1&quot;</span>      <span class="ot">=</span> <span class="st">&quot;#f46d43&quot;</span>,</span>
+<span id="cb23-32"><a href="análisis-exploratorio-de-datos-version2.html#cb23-32" tabindex="-1"></a>    <span class="st">&quot;Q3&quot;</span>      <span class="ot">=</span> <span class="st">&quot;#a71c1c&quot;</span></span>
+<span id="cb23-33"><a href="análisis-exploratorio-de-datos-version2.html#cb23-33" tabindex="-1"></a>  )) <span class="sc">+</span></span>
+<span id="cb23-34"><a href="análisis-exploratorio-de-datos-version2.html#cb23-34" tabindex="-1"></a>  <span class="fu">scale_linetype_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(</span>
+<span id="cb23-35"><a href="análisis-exploratorio-de-datos-version2.html#cb23-35" tabindex="-1"></a>    <span class="st">&quot;Media&quot;</span>   <span class="ot">=</span> <span class="st">&quot;longdash&quot;</span>,</span>
+<span id="cb23-36"><a href="análisis-exploratorio-de-datos-version2.html#cb23-36" tabindex="-1"></a>    <span class="st">&quot;Mediana&quot;</span> <span class="ot">=</span> <span class="st">&quot;longdash&quot;</span>,</span>
+<span id="cb23-37"><a href="análisis-exploratorio-de-datos-version2.html#cb23-37" tabindex="-1"></a>    <span class="st">&quot;Q1&quot;</span>      <span class="ot">=</span> <span class="st">&quot;dotted&quot;</span>,</span>
+<span id="cb23-38"><a href="análisis-exploratorio-de-datos-version2.html#cb23-38" tabindex="-1"></a>    <span class="st">&quot;Q3&quot;</span>      <span class="ot">=</span> <span class="st">&quot;dotted&quot;</span></span>
+<span id="cb23-39"><a href="análisis-exploratorio-de-datos-version2.html#cb23-39" tabindex="-1"></a>  )) <span class="sc">+</span></span>
+<span id="cb23-40"><a href="análisis-exploratorio-de-datos-version2.html#cb23-40" tabindex="-1"></a></span>
+<span id="cb23-41"><a href="análisis-exploratorio-de-datos-version2.html#cb23-41" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Costo de transformación (UM/unidad)&quot;</span>,</span>
+<span id="cb23-42"><a href="análisis-exploratorio-de-datos-version2.html#cb23-42" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Densidad&quot;</span>,</span>
+<span id="cb23-43"><a href="análisis-exploratorio-de-datos-version2.html#cb23-43" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Estadístico&quot;</span>,</span>
+<span id="cb23-44"><a href="análisis-exploratorio-de-datos-version2.html#cb23-44" tabindex="-1"></a>       <span class="at">linetype =</span> <span class="st">&quot;Estadístico&quot;</span>) <span class="sc">+</span></span>
+<span id="cb23-45"><a href="análisis-exploratorio-de-datos-version2.html#cb23-45" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb23-46"><a href="análisis-exploratorio-de-datos-version2.html#cb23-46" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;right&quot;</span>) <span class="sc">+</span></span>
+<span id="cb23-47"><a href="análisis-exploratorio-de-datos-version2.html#cb23-47" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Distribución del costo de transformación&quot;</span>)</span>
+<span id="cb23-48"><a href="análisis-exploratorio-de-datos-version2.html#cb23-48" tabindex="-1"></a></span>
+<span id="cb23-49"><a href="análisis-exploratorio-de-datos-version2.html#cb23-49" tabindex="-1"></a>p_box_cc<span class="ot">&lt;-</span>datos <span class="sc">%&gt;%</span></span>
+<span id="cb23-50"><a href="análisis-exploratorio-de-datos-version2.html#cb23-50" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> costo_transformacion)) <span class="sc">+</span></span>
+<span id="cb23-51"><a href="análisis-exploratorio-de-datos-version2.html#cb23-51" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#ACAEAF&quot;</span>, <span class="at">color =</span> <span class="st">&quot;#616161&quot;</span>, <span class="at">outlier.color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb23-52"><a href="análisis-exploratorio-de-datos-version2.html#cb23-52" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">shape =</span> <span class="dv">20</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb23-53"><a href="análisis-exploratorio-de-datos-version2.html#cb23-53" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb23-54"><a href="análisis-exploratorio-de-datos-version2.html#cb23-54" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Costo de transformación (UM/unidad)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb23-55"><a href="análisis-exploratorio-de-datos-version2.html#cb23-55" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb23-56"><a href="análisis-exploratorio-de-datos-version2.html#cb23-56" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Boxplot del costo de transformación&quot;</span>)</span>
+<span id="cb23-57"><a href="análisis-exploratorio-de-datos-version2.html#cb23-57" tabindex="-1"></a></span>
+<span id="cb23-58"><a href="análisis-exploratorio-de-datos-version2.html#cb23-58" tabindex="-1"></a>p_hist_cc <span class="sc">+</span> p_box_cc</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/hist_ct-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<p>El núcleo de la distribución se concentra claramente alrededor de r round(ct_media,2), con una densidad máxima cercana a los 25–30 UM. Esta región coincide con la mediana (r round(ct_med,2)) y el rango intercuartílico.
+La forma de la distribución no es simétrica. Se observa una cola derecha prolongada, que se extiende hasta valores cercanos a r round(ct_max,0). Esta asimetría implica que, aunque la mayoría de los costos son moderados, existe una proporción pequeña de observaciones con costos significativamente más altos.
+Adicionalmente, aparece un leve segundo abultamiento en valores bajos (≈ 5–15 UM). Esto sugiere la posible existencia de subgrupos dentro del proceso, es decir, no todos los registros provienen del mismo mecanismo generador de costos.</p>
+<p>Podrían coexistir:
+- procesos simples o de baja complejidad (costos bajos)
+- procesos estándar (zona central)
+- procesos excepcionales o más complejos (cola derecha)</p>
+<p>En términos operativos, el sistema no solo presenta variabilidad, sino también estructura interna: no es un proceso homogéneo, sino una mezcla de dinámicas distintas que conviene separar antes de cualquier inferencia o optimización.</p>
+<p>El bigote superior se extiende hasta un cierto punto, pero inmediatamente aparecen múltiples observaciones por encima, marcadas en rojo. Estos son outliers superiores, y no son pocos ni aislados: forman un grupo visible.
+Existe una subpoblación de costos altos. Es decir no son casos extremos que sean puntuales. En la parte inferior no se observan outliers relevantes. El mínimo está dentro del rango esperado
+El boxplot confirma la dispersión y evidencia que el fenómeno clave no es la variabilidad general, sino la existencia de una dinámica diferenciada en costos altos, que requiere segmentación o modelado específico.</p>
+</div>
+<div id="costo-unitario-de-los-insumos" class="section level3 hasAnchor" number="6.1.2">
+<h3><span class="header-section-number">6.1.2</span> Costo unitario de los insumos<a href="análisis-exploratorio-de-datos-version2.html#costo-unitario-de-los-insumos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="análisis-exploratorio-de-datos-version2.html#cb24-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb24-2"><a href="análisis-exploratorio-de-datos-version2.html#cb24-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb24-3"><a href="análisis-exploratorio-de-datos-version2.html#cb24-3" tabindex="-1"></a>    <span class="at">n       =</span> <span class="fu">length</span>(costo_insumo),</span>
+<span id="cb24-4"><a href="análisis-exploratorio-de-datos-version2.html#cb24-4" tabindex="-1"></a>    <span class="at">media   =</span> <span class="fu">mean</span>(costo_insumo),</span>
+<span id="cb24-5"><a href="análisis-exploratorio-de-datos-version2.html#cb24-5" tabindex="-1"></a>    <span class="at">ds      =</span> <span class="fu">sd</span>(costo_insumo),</span>
+<span id="cb24-6"><a href="análisis-exploratorio-de-datos-version2.html#cb24-6" tabindex="-1"></a>    <span class="st">`</span><span class="at">50%</span><span class="st">`</span>   <span class="ot">=</span> <span class="fu">median</span>(costo_insumo),</span>
+<span id="cb24-7"><a href="análisis-exploratorio-de-datos-version2.html#cb24-7" tabindex="-1"></a>    <span class="at">minimo  =</span> <span class="fu">min</span>(costo_insumo),</span>
+<span id="cb24-8"><a href="análisis-exploratorio-de-datos-version2.html#cb24-8" tabindex="-1"></a>    <span class="at">maximo  =</span> <span class="fu">max</span>(costo_insumo),</span>
+<span id="cb24-9"><a href="análisis-exploratorio-de-datos-version2.html#cb24-9" tabindex="-1"></a>    <span class="at">Q1      =</span> <span class="fu">quantile</span>(costo_insumo, <span class="fl">0.25</span>),</span>
+<span id="cb24-10"><a href="análisis-exploratorio-de-datos-version2.html#cb24-10" tabindex="-1"></a>    <span class="at">Q3      =</span> <span class="fu">quantile</span>(costo_insumo, <span class="fl">0.75</span>),</span>
+<span id="cb24-11"><a href="análisis-exploratorio-de-datos-version2.html#cb24-11" tabindex="-1"></a>    <span class="at">IQR     =</span> <span class="fu">IQR</span>(costo_insumo)</span>
+<span id="cb24-12"><a href="análisis-exploratorio-de-datos-version2.html#cb24-12" tabindex="-1"></a>  ) <span class="ot">-&gt;</span> resumen_ci</span>
+<span id="cb24-13"><a href="análisis-exploratorio-de-datos-version2.html#cb24-13" tabindex="-1"></a></span>
+<span id="cb24-14"><a href="análisis-exploratorio-de-datos-version2.html#cb24-14" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(resumen_ci, <span class="at">caption =</span> <span class="st">&quot;Resumen del costo de insumo&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb24-15"><a href="análisis-exploratorio-de-datos-version2.html#cb24-15" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>) </span></code></pre></div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+(#tab:resumen_ci)(#tab:resumen_ci)Resumen del costo de insumo
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+n
+</th>
+<th style="text-align:right;">
+media
+</th>
+<th style="text-align:right;">
+ds
+</th>
+<th style="text-align:right;">
+50%
+</th>
+<th style="text-align:right;">
+minimo
+</th>
+<th style="text-align:right;">
+maximo
+</th>
+<th style="text-align:right;">
+Q1
+</th>
+<th style="text-align:right;">
+Q3
+</th>
+<th style="text-align:right;">
+IQR
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+395
+</td>
+<td style="text-align:right;">
+5.048482
+</td>
+<td style="text-align:right;">
+4.419278
+</td>
+<td style="text-align:right;">
+4.184607
+</td>
+<td style="text-align:right;">
+0.0136519
+</td>
+<td style="text-align:right;">
+46.21884
+</td>
+<td style="text-align:right;">
+2.427897
+</td>
+<td style="text-align:right;">
+6.211323
+</td>
+<td style="text-align:right;">
+3.783426
+</td>
+</tr>
+</tbody>
+</table>
+<p>El costo de insumo promedio es de 5.05 UM/unidad (DS = 4.42 UM/unidad), con un coeficiente de variación de 87.5%. El 50% de las órdenes tiene un costo de insumo por debajo de 4.18 UM/unidad, con un mínimo de 0.01 y un máximo de 46.22 UM/unidad. El rango intercuartílico es de 3.78 UM/unidad.
+El comportamiento típico se concentra en valores bajos. La mayoría de los insumos se ubican en niveles reducidos de costo, mientras que la media (r round(ci_media,2)) es superior, lo que evidencia la influencia de valores más altos sobre el promedio. Esta diferencia confirma una asimetría positiva: pocos insumos concentran costos considerablemente mayores.
+El rango intercuartílico (r round(ci_iqr,2)) delimita el comportamiento típico: el 50% central de los costos se sitúa en un intervalo relativamente acotado, lo que sugiere que existe un conjunto dominante de insumos de bajo costo. Sin embargo, este núcleo convive con una cola derecha extensa.
+En resumen:
+- comportamiento homogéneo
+- un grupo mayoritario de insumos de bajo costo
+- un conjunto reducido de insumos de costo medio
+- pocos insumos de alto impacto económico</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="análisis-exploratorio-de-datos-version2.html#cb25-1" tabindex="-1"></a>lineas <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb25-2"><a href="análisis-exploratorio-de-datos-version2.html#cb25-2" tabindex="-1"></a>  <span class="at">estadistico =</span> <span class="fu">c</span>(<span class="st">&quot;Media&quot;</span>, <span class="st">&quot;Mediana&quot;</span>, <span class="st">&quot;Q1&quot;</span>, <span class="st">&quot;Q3&quot;</span>),</span>
+<span id="cb25-3"><a href="análisis-exploratorio-de-datos-version2.html#cb25-3" tabindex="-1"></a>  <span class="at">valor =</span> <span class="fu">c</span>(</span>
+<span id="cb25-4"><a href="análisis-exploratorio-de-datos-version2.html#cb25-4" tabindex="-1"></a>    resumen_ci<span class="sc">$</span>media,</span>
+<span id="cb25-5"><a href="análisis-exploratorio-de-datos-version2.html#cb25-5" tabindex="-1"></a>    resumen_ci<span class="sc">$</span><span class="st">`</span><span class="at">50%</span><span class="st">`</span>,</span>
+<span id="cb25-6"><a href="análisis-exploratorio-de-datos-version2.html#cb25-6" tabindex="-1"></a>    <span class="fu">as.numeric</span>(resumen_ci<span class="sc">$</span>Q1),</span>
+<span id="cb25-7"><a href="análisis-exploratorio-de-datos-version2.html#cb25-7" tabindex="-1"></a>    <span class="fu">as.numeric</span>(resumen_ci<span class="sc">$</span>Q3)</span>
+<span id="cb25-8"><a href="análisis-exploratorio-de-datos-version2.html#cb25-8" tabindex="-1"></a>  )</span>
+<span id="cb25-9"><a href="análisis-exploratorio-de-datos-version2.html#cb25-9" tabindex="-1"></a>)</span>
+<span id="cb25-10"><a href="análisis-exploratorio-de-datos-version2.html#cb25-10" tabindex="-1"></a>p_hist_ci <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb25-11"><a href="análisis-exploratorio-de-datos-version2.html#cb25-11" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> costo_insumo)) <span class="sc">+</span></span>
+<span id="cb25-12"><a href="análisis-exploratorio-de-datos-version2.html#cb25-12" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
+<span id="cb25-13"><a href="análisis-exploratorio-de-datos-version2.html#cb25-13" tabindex="-1"></a>                 <span class="at">bins =</span> <span class="dv">30</span>,</span>
+<span id="cb25-14"><a href="análisis-exploratorio-de-datos-version2.html#cb25-14" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">&quot;#ACAEAF&quot;</span>,</span>
+<span id="cb25-15"><a href="análisis-exploratorio-de-datos-version2.html#cb25-15" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;#616161&quot;</span>,</span>
+<span id="cb25-16"><a href="análisis-exploratorio-de-datos-version2.html#cb25-16" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb25-17"><a href="análisis-exploratorio-de-datos-version2.html#cb25-17" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb25-18"><a href="análisis-exploratorio-de-datos-version2.html#cb25-18" tabindex="-1"></a>   </span>
+<span id="cb25-19"><a href="análisis-exploratorio-de-datos-version2.html#cb25-19" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">data =</span> lineas,</span>
+<span id="cb25-20"><a href="análisis-exploratorio-de-datos-version2.html#cb25-20" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">xintercept =</span> valor, <span class="at">color =</span> estadistico, <span class="at">linetype =</span> estadistico),</span>
+<span id="cb25-21"><a href="análisis-exploratorio-de-datos-version2.html#cb25-21" tabindex="-1"></a>             <span class="at">linewidth =</span> <span class="fl">0.9</span>) <span class="sc">+</span></span>
+<span id="cb25-22"><a href="análisis-exploratorio-de-datos-version2.html#cb25-22" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(</span>
+<span id="cb25-23"><a href="análisis-exploratorio-de-datos-version2.html#cb25-23" tabindex="-1"></a>    <span class="st">&quot;Media&quot;</span>   <span class="ot">=</span> <span class="st">&quot;#551196&quot;</span>,</span>
+<span id="cb25-24"><a href="análisis-exploratorio-de-datos-version2.html#cb25-24" tabindex="-1"></a>    <span class="st">&quot;Mediana&quot;</span> <span class="ot">=</span> <span class="st">&quot;#1a9850&quot;</span>,</span>
+<span id="cb25-25"><a href="análisis-exploratorio-de-datos-version2.html#cb25-25" tabindex="-1"></a>    <span class="st">&quot;Q1&quot;</span>      <span class="ot">=</span> <span class="st">&quot;#f46d43&quot;</span>,</span>
+<span id="cb25-26"><a href="análisis-exploratorio-de-datos-version2.html#cb25-26" tabindex="-1"></a>    <span class="st">&quot;Q3&quot;</span>      <span class="ot">=</span> <span class="st">&quot;#a71c1c&quot;</span></span>
+<span id="cb25-27"><a href="análisis-exploratorio-de-datos-version2.html#cb25-27" tabindex="-1"></a>  )) <span class="sc">+</span></span>
+<span id="cb25-28"><a href="análisis-exploratorio-de-datos-version2.html#cb25-28" tabindex="-1"></a>  <span class="fu">scale_linetype_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(</span>
+<span id="cb25-29"><a href="análisis-exploratorio-de-datos-version2.html#cb25-29" tabindex="-1"></a>    <span class="st">&quot;Media&quot;</span>   <span class="ot">=</span> <span class="st">&quot;longdash&quot;</span>,</span>
+<span id="cb25-30"><a href="análisis-exploratorio-de-datos-version2.html#cb25-30" tabindex="-1"></a>    <span class="st">&quot;Mediana&quot;</span> <span class="ot">=</span> <span class="st">&quot;longdash&quot;</span>,</span>
+<span id="cb25-31"><a href="análisis-exploratorio-de-datos-version2.html#cb25-31" tabindex="-1"></a>    <span class="st">&quot;Q1&quot;</span>      <span class="ot">=</span> <span class="st">&quot;dotted&quot;</span>,</span>
+<span id="cb25-32"><a href="análisis-exploratorio-de-datos-version2.html#cb25-32" tabindex="-1"></a>    <span class="st">&quot;Q3&quot;</span>      <span class="ot">=</span> <span class="st">&quot;dotted&quot;</span></span>
+<span id="cb25-33"><a href="análisis-exploratorio-de-datos-version2.html#cb25-33" tabindex="-1"></a>  )) <span class="sc">+</span></span>
+<span id="cb25-34"><a href="análisis-exploratorio-de-datos-version2.html#cb25-34" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Costo de insumo (UM/unidad)&quot;</span>,</span>
+<span id="cb25-35"><a href="análisis-exploratorio-de-datos-version2.html#cb25-35" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Densidad&quot;</span>,</span>
+<span id="cb25-36"><a href="análisis-exploratorio-de-datos-version2.html#cb25-36" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Estadístico&quot;</span>,</span>
+<span id="cb25-37"><a href="análisis-exploratorio-de-datos-version2.html#cb25-37" tabindex="-1"></a>       <span class="at">linetype =</span> <span class="st">&quot;Estadístico&quot;</span>) <span class="sc">+</span></span>
+<span id="cb25-38"><a href="análisis-exploratorio-de-datos-version2.html#cb25-38" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb25-39"><a href="análisis-exploratorio-de-datos-version2.html#cb25-39" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;right&quot;</span>) <span class="sc">+</span></span>
+<span id="cb25-40"><a href="análisis-exploratorio-de-datos-version2.html#cb25-40" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Distribución del costo de insumo&quot;</span>)</span>
+<span id="cb25-41"><a href="análisis-exploratorio-de-datos-version2.html#cb25-41" tabindex="-1"></a></span>
+<span id="cb25-42"><a href="análisis-exploratorio-de-datos-version2.html#cb25-42" tabindex="-1"></a></span>
+<span id="cb25-43"><a href="análisis-exploratorio-de-datos-version2.html#cb25-43" tabindex="-1"></a>p_box_ci <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb25-44"><a href="análisis-exploratorio-de-datos-version2.html#cb25-44" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> costo_insumo)) <span class="sc">+</span></span>
+<span id="cb25-45"><a href="análisis-exploratorio-de-datos-version2.html#cb25-45" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#ACAEAF&quot;</span>, <span class="at">color =</span> <span class="st">&quot;#616161&quot;</span>, <span class="at">outlier.color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb25-46"><a href="análisis-exploratorio-de-datos-version2.html#cb25-46" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">shape =</span> <span class="dv">20</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb25-47"><a href="análisis-exploratorio-de-datos-version2.html#cb25-47" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Costo de insumo (UM/unidad)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb25-48"><a href="análisis-exploratorio-de-datos-version2.html#cb25-48" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb25-49"><a href="análisis-exploratorio-de-datos-version2.html#cb25-49" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Boxplot del costo de insumo&quot;</span>)</span>
+<span id="cb25-50"><a href="análisis-exploratorio-de-datos-version2.html#cb25-50" tabindex="-1"></a></span>
+<span id="cb25-51"><a href="análisis-exploratorio-de-datos-version2.html#cb25-51" tabindex="-1"></a>p_hist_ci <span class="sc">+</span> p_box_ci</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/hist_box_ci-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="costo-unitario-total" class="section level3 hasAnchor" number="6.1.3">
+<h3><span class="header-section-number">6.1.3</span> Costo unitario total<a href="análisis-exploratorio-de-datos-version2.html#costo-unitario-total" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>La variable <code>costo_unitario_total</code> se deriva como la suma de <code>costo_transformacion</code> y <code>costo_insumo</code>, y representa el costo total por unidad de producto.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="análisis-exploratorio-de-datos-version2.html#cb26-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="análisis-exploratorio-de-datos-version2.html#cb26-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb26-3"><a href="análisis-exploratorio-de-datos-version2.html#cb26-3" tabindex="-1"></a>    <span class="at">n       =</span> <span class="fu">length</span>(costo_unitario_total),</span>
+<span id="cb26-4"><a href="análisis-exploratorio-de-datos-version2.html#cb26-4" tabindex="-1"></a>    <span class="at">media   =</span> <span class="fu">mean</span>(costo_unitario_total),</span>
+<span id="cb26-5"><a href="análisis-exploratorio-de-datos-version2.html#cb26-5" tabindex="-1"></a>    <span class="at">ds      =</span> <span class="fu">sd</span>(costo_unitario_total),</span>
+<span id="cb26-6"><a href="análisis-exploratorio-de-datos-version2.html#cb26-6" tabindex="-1"></a>    <span class="st">`</span><span class="at">50%</span><span class="st">`</span>   <span class="ot">=</span> <span class="fu">median</span>(costo_unitario_total),</span>
+<span id="cb26-7"><a href="análisis-exploratorio-de-datos-version2.html#cb26-7" tabindex="-1"></a>    <span class="at">minimo  =</span> <span class="fu">min</span>(costo_unitario_total),</span>
+<span id="cb26-8"><a href="análisis-exploratorio-de-datos-version2.html#cb26-8" tabindex="-1"></a>    <span class="at">maximo  =</span> <span class="fu">max</span>(costo_unitario_total),</span>
+<span id="cb26-9"><a href="análisis-exploratorio-de-datos-version2.html#cb26-9" tabindex="-1"></a>    <span class="at">Q1      =</span> <span class="fu">quantile</span>(costo_unitario_total, <span class="fl">0.25</span>),</span>
+<span id="cb26-10"><a href="análisis-exploratorio-de-datos-version2.html#cb26-10" tabindex="-1"></a>    <span class="at">Q3      =</span> <span class="fu">quantile</span>(costo_unitario_total, <span class="fl">0.75</span>),</span>
+<span id="cb26-11"><a href="análisis-exploratorio-de-datos-version2.html#cb26-11" tabindex="-1"></a>    <span class="at">IQR     =</span> <span class="fu">IQR</span>(costo_unitario_total)</span>
+<span id="cb26-12"><a href="análisis-exploratorio-de-datos-version2.html#cb26-12" tabindex="-1"></a>  ) <span class="ot">-&gt;</span> resumen_ctot</span>
+<span id="cb26-13"><a href="análisis-exploratorio-de-datos-version2.html#cb26-13" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(resumen_ctot, <span class="at">caption =</span> <span class="st">&quot;Resumen del costo unitario total&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb26-14"><a href="análisis-exploratorio-de-datos-version2.html#cb26-14" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>) </span></code></pre></div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+(#tab:resumen_ctot)(#tab:resumen_ctot)Resumen del costo unitario total
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+n
+</th>
+<th style="text-align:right;">
+media
+</th>
+<th style="text-align:right;">
+ds
+</th>
+<th style="text-align:right;">
+50%
+</th>
+<th style="text-align:right;">
+minimo
+</th>
+<th style="text-align:right;">
+maximo
+</th>
+<th style="text-align:right;">
+Q1
+</th>
+<th style="text-align:right;">
+Q3
+</th>
+<th style="text-align:right;">
+IQR
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+395
+</td>
+<td style="text-align:right;">
+34.98835
+</td>
+<td style="text-align:right;">
+17.28567
+</td>
+<td style="text-align:right;">
+33.63643
+</td>
+<td style="text-align:right;">
+4.301429
+</td>
+<td style="text-align:right;">
+111.7165
+</td>
+<td style="text-align:right;">
+25.60903
+</td>
+<td style="text-align:right;">
+41.68937
+</td>
+<td style="text-align:right;">
+16.08034
+</td>
+</tr>
+</tbody>
+</table>
+<p>El costo unitario total promedio es de 34.99 UM/unidad , la cercanía relativa entre ambas indica que, aunque existe asimetría, el núcleo del sistema está bien definido. Sin embargo, la media se mantiene por encima de la mediana, lo que confirma la presencia de una cola derecha..
+Un coeficiente de variación de 49.4% (DS = 17.29), la variabilidad del costo total no es despreciable . De este promedio, el 85.6% corresponde al costo de transformación y el 14.4% al costo de insumo.
+El 50% de las órdenes presenta un costo unitario total por debajo de 33.64 UM/unidad, con un rango entre 4.3 y 111.72.
+El boxplot confirma la presencia de outliers superiores múltiples, no aislados. Estos valores altos no corresponden a ruido aleatorio, sino a una fracción del sistema que sistemáticamente incurre en costos elevados.</p>
+<p>Descomposición del costo total:
+- Costo de transformación representa aproximadamente r prop_ct% del total
+- Costo de insumos representa aproximadamente r prop_ci%
+Claramente el componente dominante del costo total es el proceso de transformación, mientras que los insumos, aunque más variables, tienen menor peso relativo en el agregado.</p>
+<p>El sistema productivo opera mayoritariamente en un rango de costos relativamente estable, pero está condicionado por una fracción de casos con costos significativamente más altos. Estos casos no son marginales y deben interpretarse como parte de la estructura del proceso, no como anomalías aisladas. La clave analítica no está en el promedio, sino en entender qué condiciones generan esos costos elevados y cómo se relacionan con los componentes del costo total.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="análisis-exploratorio-de-datos-version2.html#cb27-1" tabindex="-1"></a>lineas <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb27-2"><a href="análisis-exploratorio-de-datos-version2.html#cb27-2" tabindex="-1"></a>  <span class="at">estadistico =</span> <span class="fu">c</span>(<span class="st">&quot;Media&quot;</span>, <span class="st">&quot;Mediana&quot;</span>, <span class="st">&quot;Q1&quot;</span>, <span class="st">&quot;Q3&quot;</span>),</span>
+<span id="cb27-3"><a href="análisis-exploratorio-de-datos-version2.html#cb27-3" tabindex="-1"></a>  <span class="at">valor =</span> <span class="fu">c</span>(</span>
+<span id="cb27-4"><a href="análisis-exploratorio-de-datos-version2.html#cb27-4" tabindex="-1"></a>    resumen_ctot<span class="sc">$</span>media,</span>
+<span id="cb27-5"><a href="análisis-exploratorio-de-datos-version2.html#cb27-5" tabindex="-1"></a>    resumen_ctot<span class="sc">$</span><span class="st">`</span><span class="at">50%</span><span class="st">`</span>,</span>
+<span id="cb27-6"><a href="análisis-exploratorio-de-datos-version2.html#cb27-6" tabindex="-1"></a>    <span class="fu">as.numeric</span>(resumen_ctot<span class="sc">$</span>Q1),</span>
+<span id="cb27-7"><a href="análisis-exploratorio-de-datos-version2.html#cb27-7" tabindex="-1"></a>    <span class="fu">as.numeric</span>(resumen_ctot<span class="sc">$</span>Q3)</span>
+<span id="cb27-8"><a href="análisis-exploratorio-de-datos-version2.html#cb27-8" tabindex="-1"></a>  )</span>
+<span id="cb27-9"><a href="análisis-exploratorio-de-datos-version2.html#cb27-9" tabindex="-1"></a>)</span>
+<span id="cb27-10"><a href="análisis-exploratorio-de-datos-version2.html#cb27-10" tabindex="-1"></a>p_hist_ct <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb27-11"><a href="análisis-exploratorio-de-datos-version2.html#cb27-11" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> costo_unitario_total)) <span class="sc">+</span></span>
+<span id="cb27-12"><a href="análisis-exploratorio-de-datos-version2.html#cb27-12" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
+<span id="cb27-13"><a href="análisis-exploratorio-de-datos-version2.html#cb27-13" tabindex="-1"></a>                 <span class="at">bins =</span> <span class="dv">30</span>,</span>
+<span id="cb27-14"><a href="análisis-exploratorio-de-datos-version2.html#cb27-14" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">&quot;#ACAEAF&quot;</span>,</span>
+<span id="cb27-15"><a href="análisis-exploratorio-de-datos-version2.html#cb27-15" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb27-16"><a href="análisis-exploratorio-de-datos-version2.html#cb27-16" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb27-17"><a href="análisis-exploratorio-de-datos-version2.html#cb27-17" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">&quot;#4d004b&quot;</span>, <span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb27-18"><a href="análisis-exploratorio-de-datos-version2.html#cb27-18" tabindex="-1"></a></span>
+<span id="cb27-19"><a href="análisis-exploratorio-de-datos-version2.html#cb27-19" tabindex="-1"></a>  </span>
+<span id="cb27-20"><a href="análisis-exploratorio-de-datos-version2.html#cb27-20" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">data =</span> lineas,</span>
+<span id="cb27-21"><a href="análisis-exploratorio-de-datos-version2.html#cb27-21" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">xintercept =</span> valor, <span class="at">color =</span> estadistico, <span class="at">linetype =</span> estadistico),</span>
+<span id="cb27-22"><a href="análisis-exploratorio-de-datos-version2.html#cb27-22" tabindex="-1"></a>             <span class="at">linewidth =</span> <span class="fl">0.9</span>) <span class="sc">+</span></span>
+<span id="cb27-23"><a href="análisis-exploratorio-de-datos-version2.html#cb27-23" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(</span>
+<span id="cb27-24"><a href="análisis-exploratorio-de-datos-version2.html#cb27-24" tabindex="-1"></a>    <span class="st">&quot;Media&quot;</span>   <span class="ot">=</span> <span class="st">&quot;#551196&quot;</span>,</span>
+<span id="cb27-25"><a href="análisis-exploratorio-de-datos-version2.html#cb27-25" tabindex="-1"></a>    <span class="st">&quot;Mediana&quot;</span> <span class="ot">=</span> <span class="st">&quot;#1a9850&quot;</span>,</span>
+<span id="cb27-26"><a href="análisis-exploratorio-de-datos-version2.html#cb27-26" tabindex="-1"></a>    <span class="st">&quot;Q1&quot;</span>      <span class="ot">=</span> <span class="st">&quot;#f46d43&quot;</span>,</span>
+<span id="cb27-27"><a href="análisis-exploratorio-de-datos-version2.html#cb27-27" tabindex="-1"></a>    <span class="st">&quot;Q3&quot;</span>      <span class="ot">=</span> <span class="st">&quot;#a71c1c&quot;</span></span>
+<span id="cb27-28"><a href="análisis-exploratorio-de-datos-version2.html#cb27-28" tabindex="-1"></a>  )) <span class="sc">+</span></span>
+<span id="cb27-29"><a href="análisis-exploratorio-de-datos-version2.html#cb27-29" tabindex="-1"></a>  <span class="fu">scale_linetype_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(</span>
+<span id="cb27-30"><a href="análisis-exploratorio-de-datos-version2.html#cb27-30" tabindex="-1"></a>    <span class="st">&quot;Media&quot;</span>   <span class="ot">=</span> <span class="st">&quot;longdash&quot;</span>,</span>
+<span id="cb27-31"><a href="análisis-exploratorio-de-datos-version2.html#cb27-31" tabindex="-1"></a>    <span class="st">&quot;Mediana&quot;</span> <span class="ot">=</span> <span class="st">&quot;longdash&quot;</span>,</span>
+<span id="cb27-32"><a href="análisis-exploratorio-de-datos-version2.html#cb27-32" tabindex="-1"></a>    <span class="st">&quot;Q1&quot;</span>      <span class="ot">=</span> <span class="st">&quot;dotted&quot;</span>,</span>
+<span id="cb27-33"><a href="análisis-exploratorio-de-datos-version2.html#cb27-33" tabindex="-1"></a>    <span class="st">&quot;Q3&quot;</span>      <span class="ot">=</span> <span class="st">&quot;dotted&quot;</span></span>
+<span id="cb27-34"><a href="análisis-exploratorio-de-datos-version2.html#cb27-34" tabindex="-1"></a>  )) <span class="sc">+</span></span>
+<span id="cb27-35"><a href="análisis-exploratorio-de-datos-version2.html#cb27-35" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Costo unitario total (UM/unidad)&quot;</span>,</span>
+<span id="cb27-36"><a href="análisis-exploratorio-de-datos-version2.html#cb27-36" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Densidad&quot;</span>,</span>
+<span id="cb27-37"><a href="análisis-exploratorio-de-datos-version2.html#cb27-37" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Estadístico&quot;</span>,</span>
+<span id="cb27-38"><a href="análisis-exploratorio-de-datos-version2.html#cb27-38" tabindex="-1"></a>       <span class="at">linetype =</span> <span class="st">&quot;Estadístico&quot;</span>) <span class="sc">+</span></span>
+<span id="cb27-39"><a href="análisis-exploratorio-de-datos-version2.html#cb27-39" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb27-40"><a href="análisis-exploratorio-de-datos-version2.html#cb27-40" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;right&quot;</span>) <span class="sc">+</span></span>
+<span id="cb27-41"><a href="análisis-exploratorio-de-datos-version2.html#cb27-41" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Distribución del costo unitario total&quot;</span>)</span>
+<span id="cb27-42"><a href="análisis-exploratorio-de-datos-version2.html#cb27-42" tabindex="-1"></a>  </span>
+<span id="cb27-43"><a href="análisis-exploratorio-de-datos-version2.html#cb27-43" tabindex="-1"></a>p_box_ct <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb27-44"><a href="análisis-exploratorio-de-datos-version2.html#cb27-44" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> costo_unitario_total)) <span class="sc">+</span></span>
+<span id="cb27-45"><a href="análisis-exploratorio-de-datos-version2.html#cb27-45" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#ACAEAF&quot;</span>, <span class="at">color =</span> <span class="st">&quot;#616161&quot;</span>, <span class="at">outlier.color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb27-46"><a href="análisis-exploratorio-de-datos-version2.html#cb27-46" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">shape =</span> <span class="dv">20</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb27-47"><a href="análisis-exploratorio-de-datos-version2.html#cb27-47" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Costo unitario total (UM/unidad)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb27-48"><a href="análisis-exploratorio-de-datos-version2.html#cb27-48" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb27-49"><a href="análisis-exploratorio-de-datos-version2.html#cb27-49" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Boxplot del costo unitario total&quot;</span>)</span>
+<span id="cb27-50"><a href="análisis-exploratorio-de-datos-version2.html#cb27-50" tabindex="-1"></a></span>
+<span id="cb27-51"><a href="análisis-exploratorio-de-datos-version2.html#cb27-51" tabindex="-1"></a>p_hist_ct <span class="sc">+</span> p_box_ct</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/hist_box_ctot-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<p>El costo unitario total hereda la asimetría de sus dos componentes. Cualquier iniciativa de reducción de costos que se concentre solo en el componente de insumos tendrá un techo muy bajo. La palanca real está en la transformación.</p>
+</div>
+</div>
+<div id="los-histogramas-no-son-simétricos" class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> Los histogramas no son simétricos<a href="análisis-exploratorio-de-datos-version2.html#los-histogramas-no-son-sim%C3%A9tricos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Los tres costos presentan distribuciones asimétricas con cola derecha pronunciada. En costo_transformacion se observa además un leve segundo abultamiento hacia valores bajos (5–15 UM), que rompe el patrón unimodal esperado.</strong>
+<strong>Una distribución con dos “jorobas” suele indicar que los datos no provienen de un proceso único, sino de dos o más procesos distintos mezclados. El promedio se vuelve engañoso porque representa algo que no existe realmente.</strong>
+<strong>Primera hipótesis que emerge. El sistema productivo puede no ser un único proceso homogéneo, sino una mezcla de regímenes operativos con dinámicas de costo distintas. Si esto es cierto, los estadísticos agregados están ocultando diferencias estructurales importantes.</strong></p>
+</div>
+<div id="análisis-univariado-de-variables-numéricas-predictoras" class="section level2 hasAnchor" number="6.3">
+<h2><span class="header-section-number">6.3</span> Análisis univariado de variables numéricas predictoras<a href="análisis-exploratorio-de-datos-version2.html#an%C3%A1lisis-univariado-de-variables-num%C3%A9ricas-predictoras" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Las variables numéricas predictoras son <code>volumen_lote</code>, <code>duracion_proceso</code>, <code>cantidad_insumo_1</code> y <code>cantidad_insumo_2</code>. Para las cantidades de insumo, los estadísticos descriptivos se calculan condicionando sobre la presencia efectiva del insumo correspondiente, conforme a la advertencia estructural documentada en el capítulo de metodología.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="análisis-exploratorio-de-datos-version2.html#cb28-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="análisis-exploratorio-de-datos-version2.html#cb28-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb28-3"><a href="análisis-exploratorio-de-datos-version2.html#cb28-3" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(volumen_lote),</span>
+<span id="cb28-4"><a href="análisis-exploratorio-de-datos-version2.html#cb28-4" tabindex="-1"></a>    <span class="at">media =</span> <span class="fu">mean</span>(volumen_lote),</span>
+<span id="cb28-5"><a href="análisis-exploratorio-de-datos-version2.html#cb28-5" tabindex="-1"></a>    <span class="at">ds =</span> <span class="fu">sd</span>(volumen_lote),</span>
+<span id="cb28-6"><a href="análisis-exploratorio-de-datos-version2.html#cb28-6" tabindex="-1"></a>    <span class="st">`</span><span class="at">50%</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">median</span>(volumen_lote),</span>
+<span id="cb28-7"><a href="análisis-exploratorio-de-datos-version2.html#cb28-7" tabindex="-1"></a>    <span class="at">minimo =</span> <span class="fu">min</span>(volumen_lote),</span>
+<span id="cb28-8"><a href="análisis-exploratorio-de-datos-version2.html#cb28-8" tabindex="-1"></a>    <span class="at">maximo =</span> <span class="fu">max</span>(volumen_lote),</span>
+<span id="cb28-9"><a href="análisis-exploratorio-de-datos-version2.html#cb28-9" tabindex="-1"></a>    <span class="at">Q1 =</span> <span class="fu">quantile</span>(volumen_lote, <span class="fl">0.25</span>),</span>
+<span id="cb28-10"><a href="análisis-exploratorio-de-datos-version2.html#cb28-10" tabindex="-1"></a>    <span class="at">Q3 =</span> <span class="fu">quantile</span>(volumen_lote, <span class="fl">0.75</span>),</span>
+<span id="cb28-11"><a href="análisis-exploratorio-de-datos-version2.html#cb28-11" tabindex="-1"></a>    <span class="at">IQR =</span> <span class="fu">IQR</span>(volumen_lote)</span>
+<span id="cb28-12"><a href="análisis-exploratorio-de-datos-version2.html#cb28-12" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb28-13"><a href="análisis-exploratorio-de-datos-version2.html#cb28-13" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">variable =</span> <span class="st">&quot;volumen_lote&quot;</span>) <span class="ot">-&gt;</span> var_num_vol</span>
+<span id="cb28-14"><a href="análisis-exploratorio-de-datos-version2.html#cb28-14" tabindex="-1"></a></span>
+<span id="cb28-15"><a href="análisis-exploratorio-de-datos-version2.html#cb28-15" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb28-16"><a href="análisis-exploratorio-de-datos-version2.html#cb28-16" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb28-17"><a href="análisis-exploratorio-de-datos-version2.html#cb28-17" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(duracion_proceso),</span>
+<span id="cb28-18"><a href="análisis-exploratorio-de-datos-version2.html#cb28-18" tabindex="-1"></a>    <span class="at">media =</span> <span class="fu">mean</span>(duracion_proceso),</span>
+<span id="cb28-19"><a href="análisis-exploratorio-de-datos-version2.html#cb28-19" tabindex="-1"></a>    <span class="at">ds =</span> <span class="fu">sd</span>(duracion_proceso),</span>
+<span id="cb28-20"><a href="análisis-exploratorio-de-datos-version2.html#cb28-20" tabindex="-1"></a>    <span class="st">`</span><span class="at">50%</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">median</span>(duracion_proceso),</span>
+<span id="cb28-21"><a href="análisis-exploratorio-de-datos-version2.html#cb28-21" tabindex="-1"></a>    <span class="at">minimo =</span> <span class="fu">min</span>(duracion_proceso),</span>
+<span id="cb28-22"><a href="análisis-exploratorio-de-datos-version2.html#cb28-22" tabindex="-1"></a>    <span class="at">maximo =</span> <span class="fu">max</span>(duracion_proceso),</span>
+<span id="cb28-23"><a href="análisis-exploratorio-de-datos-version2.html#cb28-23" tabindex="-1"></a>    <span class="at">Q1 =</span> <span class="fu">quantile</span>(duracion_proceso, <span class="fl">0.25</span>),</span>
+<span id="cb28-24"><a href="análisis-exploratorio-de-datos-version2.html#cb28-24" tabindex="-1"></a>    <span class="at">Q3 =</span> <span class="fu">quantile</span>(duracion_proceso, <span class="fl">0.75</span>),</span>
+<span id="cb28-25"><a href="análisis-exploratorio-de-datos-version2.html#cb28-25" tabindex="-1"></a>    <span class="at">IQR =</span> <span class="fu">IQR</span>(duracion_proceso)</span>
+<span id="cb28-26"><a href="análisis-exploratorio-de-datos-version2.html#cb28-26" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb28-27"><a href="análisis-exploratorio-de-datos-version2.html#cb28-27" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">variable =</span> <span class="st">&quot;duracion_proceso&quot;</span>) <span class="ot">-&gt;</span> var_num_dur</span>
+<span id="cb28-28"><a href="análisis-exploratorio-de-datos-version2.html#cb28-28" tabindex="-1"></a></span>
+<span id="cb28-29"><a href="análisis-exploratorio-de-datos-version2.html#cb28-29" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb28-30"><a href="análisis-exploratorio-de-datos-version2.html#cb28-30" tabindex="-1"></a>  <span class="fu">filter</span>(num_insumos <span class="sc">&gt;=</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb28-31"><a href="análisis-exploratorio-de-datos-version2.html#cb28-31" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb28-32"><a href="análisis-exploratorio-de-datos-version2.html#cb28-32" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(cantidad_insumo_1),</span>
+<span id="cb28-33"><a href="análisis-exploratorio-de-datos-version2.html#cb28-33" tabindex="-1"></a>    <span class="at">media =</span> <span class="fu">mean</span>(cantidad_insumo_1),</span>
+<span id="cb28-34"><a href="análisis-exploratorio-de-datos-version2.html#cb28-34" tabindex="-1"></a>    <span class="at">ds =</span> <span class="fu">sd</span>(cantidad_insumo_1),</span>
+<span id="cb28-35"><a href="análisis-exploratorio-de-datos-version2.html#cb28-35" tabindex="-1"></a>    <span class="st">`</span><span class="at">50%</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">median</span>(cantidad_insumo_1),</span>
+<span id="cb28-36"><a href="análisis-exploratorio-de-datos-version2.html#cb28-36" tabindex="-1"></a>    <span class="at">minimo =</span> <span class="fu">min</span>(cantidad_insumo_1),</span>
+<span id="cb28-37"><a href="análisis-exploratorio-de-datos-version2.html#cb28-37" tabindex="-1"></a>    <span class="at">maximo =</span> <span class="fu">max</span>(cantidad_insumo_1),</span>
+<span id="cb28-38"><a href="análisis-exploratorio-de-datos-version2.html#cb28-38" tabindex="-1"></a>    <span class="at">Q1 =</span> <span class="fu">quantile</span>(cantidad_insumo_1, <span class="fl">0.25</span>),</span>
+<span id="cb28-39"><a href="análisis-exploratorio-de-datos-version2.html#cb28-39" tabindex="-1"></a>    <span class="at">Q3 =</span> <span class="fu">quantile</span>(cantidad_insumo_1, <span class="fl">0.75</span>),</span>
+<span id="cb28-40"><a href="análisis-exploratorio-de-datos-version2.html#cb28-40" tabindex="-1"></a>    <span class="at">IQR =</span> <span class="fu">IQR</span>(cantidad_insumo_1)</span>
+<span id="cb28-41"><a href="análisis-exploratorio-de-datos-version2.html#cb28-41" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb28-42"><a href="análisis-exploratorio-de-datos-version2.html#cb28-42" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">variable =</span> <span class="st">&quot;cantidad_insumo_1&quot;</span>) <span class="ot">-&gt;</span> var_num_ci1</span>
+<span id="cb28-43"><a href="análisis-exploratorio-de-datos-version2.html#cb28-43" tabindex="-1"></a></span>
+<span id="cb28-44"><a href="análisis-exploratorio-de-datos-version2.html#cb28-44" tabindex="-1"></a>datos <span class="sc">%&gt;%</span></span>
+<span id="cb28-45"><a href="análisis-exploratorio-de-datos-version2.html#cb28-45" tabindex="-1"></a>  <span class="fu">filter</span>(num_insumos <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb28-46"><a href="análisis-exploratorio-de-datos-version2.html#cb28-46" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb28-47"><a href="análisis-exploratorio-de-datos-version2.html#cb28-47" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(cantidad_insumo_2),</span>
+<span id="cb28-48"><a href="análisis-exploratorio-de-datos-version2.html#cb28-48" tabindex="-1"></a>    <span class="at">media =</span> <span class="fu">mean</span>(cantidad_insumo_2),</span>
+<span id="cb28-49"><a href="análisis-exploratorio-de-datos-version2.html#cb28-49" tabindex="-1"></a>    <span class="at">ds =</span> <span class="fu">sd</span>(cantidad_insumo_2),</span>
+<span id="cb28-50"><a href="análisis-exploratorio-de-datos-version2.html#cb28-50" tabindex="-1"></a>    <span class="st">`</span><span class="at">50%</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">median</span>(cantidad_insumo_2),</span>
+<span id="cb28-51"><a href="análisis-exploratorio-de-datos-version2.html#cb28-51" tabindex="-1"></a>    <span class="at">minimo =</span> <span class="fu">min</span>(cantidad_insumo_2),</span>
+<span id="cb28-52"><a href="análisis-exploratorio-de-datos-version2.html#cb28-52" tabindex="-1"></a>    <span class="at">maximo =</span> <span class="fu">max</span>(cantidad_insumo_2),</span>
+<span id="cb28-53"><a href="análisis-exploratorio-de-datos-version2.html#cb28-53" tabindex="-1"></a>    <span class="at">Q1 =</span> <span class="fu">quantile</span>(cantidad_insumo_2, <span class="fl">0.25</span>),</span>
+<span id="cb28-54"><a href="análisis-exploratorio-de-datos-version2.html#cb28-54" tabindex="-1"></a>    <span class="at">Q3 =</span> <span class="fu">quantile</span>(cantidad_insumo_2, <span class="fl">0.75</span>),</span>
+<span id="cb28-55"><a href="análisis-exploratorio-de-datos-version2.html#cb28-55" tabindex="-1"></a>    <span class="at">IQR =</span> <span class="fu">IQR</span>(cantidad_insumo_2)</span>
+<span id="cb28-56"><a href="análisis-exploratorio-de-datos-version2.html#cb28-56" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb28-57"><a href="análisis-exploratorio-de-datos-version2.html#cb28-57" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">variable =</span> <span class="st">&quot;cantidad_insumo_2&quot;</span>) <span class="ot">-&gt;</span> var_num_ci2</span>
+<span id="cb28-58"><a href="análisis-exploratorio-de-datos-version2.html#cb28-58" tabindex="-1"></a></span>
+<span id="cb28-59"><a href="análisis-exploratorio-de-datos-version2.html#cb28-59" tabindex="-1"></a>resumen_num_predictoras <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(var_num_vol, var_num_dur, var_num_ci1, var_num_ci2) <span class="sc">%&gt;%</span></span>
+<span id="cb28-60"><a href="análisis-exploratorio-de-datos-version2.html#cb28-60" tabindex="-1"></a>  <span class="fu">select</span>(variable, <span class="fu">everything</span>())<span class="sc">%&gt;%</span></span>
+<span id="cb28-61"><a href="análisis-exploratorio-de-datos-version2.html#cb28-61" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric) <span class="sc">&amp;</span> <span class="sc">!</span>n, <span class="sc">~</span> <span class="fu">round</span>(.x, <span class="dv">2</span>)))</span>
+<span id="cb28-62"><a href="análisis-exploratorio-de-datos-version2.html#cb28-62" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(resumen_num_predictoras, <span class="at">caption =</span> <span class="st">&quot;Resumen descriptivo de las variables numéricas seleccionadas&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb28-63"><a href="análisis-exploratorio-de-datos-version2.html#cb28-63" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>) </span></code></pre></div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+(#tab:resumen_num_predictoras)(#tab:resumen_num_predictoras)Resumen descriptivo de las variables numéricas seleccionadas
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+variable
+</th>
+<th style="text-align:right;">
+n
+</th>
+<th style="text-align:right;">
+media
+</th>
+<th style="text-align:right;">
+ds
+</th>
+<th style="text-align:right;">
+50%
+</th>
+<th style="text-align:right;">
+minimo
+</th>
+<th style="text-align:right;">
+maximo
+</th>
+<th style="text-align:right;">
+Q1
+</th>
+<th style="text-align:right;">
+Q3
+</th>
+<th style="text-align:right;">
+IQR
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+volumen_lote
+</td>
+<td style="text-align:right;">
+395
+</td>
+<td style="text-align:right;">
+2739.03
+</td>
+<td style="text-align:right;">
+2346.76
+</td>
+<td style="text-align:right;">
+1989
+</td>
+<td style="text-align:right;">
+100.00
+</td>
+<td style="text-align:right;">
+13300
+</td>
+<td style="text-align:right;">
+1226.00
+</td>
+<td style="text-align:right;">
+3289
+</td>
+<td style="text-align:right;">
+2063.00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+duracion_proceso
+</td>
+<td style="text-align:right;">
+395
+</td>
+<td style="text-align:right;">
+115.79
+</td>
+<td style="text-align:right;">
+82.59
+</td>
+<td style="text-align:right;">
+100
+</td>
+<td style="text-align:right;">
+3.00
+</td>
+<td style="text-align:right;">
+482
+</td>
+<td style="text-align:right;">
+60.00
+</td>
+<td style="text-align:right;">
+150
+</td>
+<td style="text-align:right;">
+90.00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cantidad_insumo_1
+</td>
+<td style="text-align:right;">
+395
+</td>
+<td style="text-align:right;">
+2.29
+</td>
+<td style="text-align:right;">
+1.90
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+2.00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cantidad_insumo_2
+</td>
+<td style="text-align:right;">
+124
+</td>
+<td style="text-align:right;">
+1.43
+</td>
+<td style="text-align:right;">
+1.08
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+0.75
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1.25
+</td>
+</tr>
+</tbody>
+</table>
+<p>No son variables independientes: describen distintas dimensiones del mismo proceso productivo.
+- Volumen de lote, es la variable más heterogénea. La media supera claramente a la mediana, lo que indica asimetría positiva. El rango es muy amplio (100 a 13300) y el IQR (2063) es elevado, señal de que incluso el comportamiento “típico” presenta alta dispersión. el proceso opera con lotes muy dispares, dependiendo de los pedidos de los clientes , el proceso es make to order. No hay un tamaño estándar dominante.
+- Duración del proceso, es heterogéneo también pero más controlado. La media es superior a la mediana, nuevamente cola derecha. El IQR muestra que la mitad de los procesos se concentra entre 60 y 150 horas, lo que define un rango operativo razonablemente estable. Sin embargo, el máximo de 482 horas apunta a procesos excepcionalmente largos.
+- Cantidad de insumo 1, comportamiento más discreto y concentrado. La mediana es 2 y el IQR es 2, lo que indica que la mayoría de los casos utiliza entre 1 y 3 unidades. La media (2.29) ligeramente superior a la mediana sugiere algunos valores altos, pero sin una dispersión extrema. Esta variable refleja un consumo relativamente estable y predecible, con variaciones moderadas.
+- Cantidad de insumo 2: Tiene menor número de observaciones, no todos las ordenes llevan insumo 2. Su mediana es 1 y el IQR es 1.25, lo que muestra una concentración aún mayor que en el insumo 1. La dispersión es baja y los valores extremos (máximo 7) son menos pronunciados. Esto sugiere que el segundo insumo actúa como un componente opcional o complementario, con consumo bajo y controlado.</p>
+<p>La principal fuente de heterogeneidad no está en los insumos, sino en el tamaño de los lotes y la duración de los procesos. Esto sugiere que cualquier modelamiento o mejora operativa debe centrarse en segmentar por escala de producción y complejidad del proceso, más que en el consumo de insumos.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="análisis-exploratorio-de-datos-version2.html#cb29-1" tabindex="-1"></a>p_vol <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="análisis-exploratorio-de-datos-version2.html#cb29-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> volumen_lote)) <span class="sc">+</span></span>
+<span id="cb29-3"><a href="análisis-exploratorio-de-datos-version2.html#cb29-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#1f77b4&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb29-4"><a href="análisis-exploratorio-de-datos-version2.html#cb29-4" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">shape =</span> <span class="dv">18</span>, <span class="at">size =</span> <span class="dv">4</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb29-5"><a href="análisis-exploratorio-de-datos-version2.html#cb29-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Distribución del volumen de lote&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Unidades&quot;</span>, <span class="at">x =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb29-6"><a href="análisis-exploratorio-de-datos-version2.html#cb29-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb29-7"><a href="análisis-exploratorio-de-datos-version2.html#cb29-7" tabindex="-1"></a></span>
+<span id="cb29-8"><a href="análisis-exploratorio-de-datos-version2.html#cb29-8" tabindex="-1"></a>p_dur <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb29-9"><a href="análisis-exploratorio-de-datos-version2.html#cb29-9" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> duracion_proceso)) <span class="sc">+</span></span>
+<span id="cb29-10"><a href="análisis-exploratorio-de-datos-version2.html#cb29-10" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#2ca02c&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb29-11"><a href="análisis-exploratorio-de-datos-version2.html#cb29-11" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">shape =</span> <span class="dv">18</span>, <span class="at">size =</span> <span class="dv">4</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb29-12"><a href="análisis-exploratorio-de-datos-version2.html#cb29-12" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Distribución de la duración de proceso&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Horas&quot;</span>, <span class="at">x =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb29-13"><a href="análisis-exploratorio-de-datos-version2.html#cb29-13" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb29-14"><a href="análisis-exploratorio-de-datos-version2.html#cb29-14" tabindex="-1"></a></span>
+<span id="cb29-15"><a href="análisis-exploratorio-de-datos-version2.html#cb29-15" tabindex="-1"></a>p_ci1 <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb29-16"><a href="análisis-exploratorio-de-datos-version2.html#cb29-16" tabindex="-1"></a>  <span class="fu">filter</span>(num_insumos <span class="sc">&gt;=</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-17"><a href="análisis-exploratorio-de-datos-version2.html#cb29-17" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> cantidad_insumo_1)) <span class="sc">+</span></span>
+<span id="cb29-18"><a href="análisis-exploratorio-de-datos-version2.html#cb29-18" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#ff7f0e&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb29-19"><a href="análisis-exploratorio-de-datos-version2.html#cb29-19" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">shape =</span> <span class="dv">18</span>, <span class="at">size =</span> <span class="dv">4</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb29-20"><a href="análisis-exploratorio-de-datos-version2.html#cb29-20" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Cantidad de insumo 1 (órdenes con insumo)&quot;</span>,</span>
+<span id="cb29-21"><a href="análisis-exploratorio-de-datos-version2.html#cb29-21" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Litros equivalentes&quot;</span>, <span class="at">x =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb29-22"><a href="análisis-exploratorio-de-datos-version2.html#cb29-22" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb29-23"><a href="análisis-exploratorio-de-datos-version2.html#cb29-23" tabindex="-1"></a></span>
+<span id="cb29-24"><a href="análisis-exploratorio-de-datos-version2.html#cb29-24" tabindex="-1"></a>p_ci2 <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb29-25"><a href="análisis-exploratorio-de-datos-version2.html#cb29-25" tabindex="-1"></a>  <span class="fu">filter</span>(num_insumos <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-26"><a href="análisis-exploratorio-de-datos-version2.html#cb29-26" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> cantidad_insumo_2)) <span class="sc">+</span></span>
+<span id="cb29-27"><a href="análisis-exploratorio-de-datos-version2.html#cb29-27" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#9467bd&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb29-28"><a href="análisis-exploratorio-de-datos-version2.html#cb29-28" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="at">shape =</span> <span class="dv">18</span>, <span class="at">size =</span> <span class="dv">4</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb29-29"><a href="análisis-exploratorio-de-datos-version2.html#cb29-29" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Cantidad de insumo 2 (órdenes con segundo insumo)&quot;</span>,</span>
+<span id="cb29-30"><a href="análisis-exploratorio-de-datos-version2.html#cb29-30" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Litros equivalentes&quot;</span>, <span class="at">x =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb29-31"><a href="análisis-exploratorio-de-datos-version2.html#cb29-31" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb29-32"><a href="análisis-exploratorio-de-datos-version2.html#cb29-32" tabindex="-1"></a></span>
+<span id="cb29-33"><a href="análisis-exploratorio-de-datos-version2.html#cb29-33" tabindex="-1"></a>(p_vol <span class="sc">+</span> p_dur) <span class="sc">/</span> (p_ci1 <span class="sc">+</span> p_ci2)</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box_num_predictoras-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="análisis-exploratorio-de-datos-version2.html#cb30-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb30-2"><a href="análisis-exploratorio-de-datos-version2.html#cb30-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb30-3"><a href="análisis-exploratorio-de-datos-version2.html#cb30-3" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb30-4"><a href="análisis-exploratorio-de-datos-version2.html#cb30-4" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="análisis-exploratorio-de-datos-version2.html#cb30-5" tabindex="-1"></a>p_vol_hist <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb30-6"><a href="análisis-exploratorio-de-datos-version2.html#cb30-6" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> volumen_lote)) <span class="sc">+</span></span>
+<span id="cb30-7"><a href="análisis-exploratorio-de-datos-version2.html#cb30-7" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
+<span id="cb30-8"><a href="análisis-exploratorio-de-datos-version2.html#cb30-8" tabindex="-1"></a>                 <span class="at">bins =</span> <span class="dv">30</span>,</span>
+<span id="cb30-9"><a href="análisis-exploratorio-de-datos-version2.html#cb30-9" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">&quot;#1f77b4&quot;</span>,</span>
+<span id="cb30-10"><a href="análisis-exploratorio-de-datos-version2.html#cb30-10" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb30-11"><a href="análisis-exploratorio-de-datos-version2.html#cb30-11" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb30-12"><a href="análisis-exploratorio-de-datos-version2.html#cb30-12" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb30-13"><a href="análisis-exploratorio-de-datos-version2.html#cb30-13" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Distribución del volumen de lote&quot;</span>,</span>
+<span id="cb30-14"><a href="análisis-exploratorio-de-datos-version2.html#cb30-14" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Unidades&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Densidad&quot;</span>) <span class="sc">+</span></span>
+<span id="cb30-15"><a href="análisis-exploratorio-de-datos-version2.html#cb30-15" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb30-16"><a href="análisis-exploratorio-de-datos-version2.html#cb30-16" tabindex="-1"></a></span>
+<span id="cb30-17"><a href="análisis-exploratorio-de-datos-version2.html#cb30-17" tabindex="-1"></a>p_dur_hist <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb30-18"><a href="análisis-exploratorio-de-datos-version2.html#cb30-18" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> duracion_proceso)) <span class="sc">+</span></span>
+<span id="cb30-19"><a href="análisis-exploratorio-de-datos-version2.html#cb30-19" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
+<span id="cb30-20"><a href="análisis-exploratorio-de-datos-version2.html#cb30-20" tabindex="-1"></a>                 <span class="at">bins =</span> <span class="dv">30</span>,</span>
+<span id="cb30-21"><a href="análisis-exploratorio-de-datos-version2.html#cb30-21" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">&quot;#2ca02c&quot;</span>,</span>
+<span id="cb30-22"><a href="análisis-exploratorio-de-datos-version2.html#cb30-22" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb30-23"><a href="análisis-exploratorio-de-datos-version2.html#cb30-23" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb30-24"><a href="análisis-exploratorio-de-datos-version2.html#cb30-24" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb30-25"><a href="análisis-exploratorio-de-datos-version2.html#cb30-25" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Distribución de la duración de proceso&quot;</span>,</span>
+<span id="cb30-26"><a href="análisis-exploratorio-de-datos-version2.html#cb30-26" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Horas&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Densidad&quot;</span>) <span class="sc">+</span></span>
+<span id="cb30-27"><a href="análisis-exploratorio-de-datos-version2.html#cb30-27" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb30-28"><a href="análisis-exploratorio-de-datos-version2.html#cb30-28" tabindex="-1"></a></span>
+<span id="cb30-29"><a href="análisis-exploratorio-de-datos-version2.html#cb30-29" tabindex="-1"></a>p_ci1_hist <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb30-30"><a href="análisis-exploratorio-de-datos-version2.html#cb30-30" tabindex="-1"></a>  <span class="fu">filter</span>(num_insumos <span class="sc">&gt;=</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb30-31"><a href="análisis-exploratorio-de-datos-version2.html#cb30-31" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> cantidad_insumo_1)) <span class="sc">+</span></span>
+<span id="cb30-32"><a href="análisis-exploratorio-de-datos-version2.html#cb30-32" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
+<span id="cb30-33"><a href="análisis-exploratorio-de-datos-version2.html#cb30-33" tabindex="-1"></a>                 <span class="at">bins =</span> <span class="dv">25</span>,</span>
+<span id="cb30-34"><a href="análisis-exploratorio-de-datos-version2.html#cb30-34" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">&quot;#ff7f0e&quot;</span>,</span>
+<span id="cb30-35"><a href="análisis-exploratorio-de-datos-version2.html#cb30-35" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb30-36"><a href="análisis-exploratorio-de-datos-version2.html#cb30-36" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb30-37"><a href="análisis-exploratorio-de-datos-version2.html#cb30-37" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb30-38"><a href="análisis-exploratorio-de-datos-version2.html#cb30-38" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Cantidad de insumo 1 (órdenes con insumo)&quot;</span>,</span>
+<span id="cb30-39"><a href="análisis-exploratorio-de-datos-version2.html#cb30-39" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Litros equivalentes&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Densidad&quot;</span>) <span class="sc">+</span></span>
+<span id="cb30-40"><a href="análisis-exploratorio-de-datos-version2.html#cb30-40" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb30-41"><a href="análisis-exploratorio-de-datos-version2.html#cb30-41" tabindex="-1"></a></span>
+<span id="cb30-42"><a href="análisis-exploratorio-de-datos-version2.html#cb30-42" tabindex="-1"></a>p_ci2_hist <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb30-43"><a href="análisis-exploratorio-de-datos-version2.html#cb30-43" tabindex="-1"></a>  <span class="fu">filter</span>(num_insumos <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb30-44"><a href="análisis-exploratorio-de-datos-version2.html#cb30-44" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> cantidad_insumo_2)) <span class="sc">+</span></span>
+<span id="cb30-45"><a href="análisis-exploratorio-de-datos-version2.html#cb30-45" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
+<span id="cb30-46"><a href="análisis-exploratorio-de-datos-version2.html#cb30-46" tabindex="-1"></a>                 <span class="at">bins =</span> <span class="dv">20</span>,</span>
+<span id="cb30-47"><a href="análisis-exploratorio-de-datos-version2.html#cb30-47" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">&quot;#9467bd&quot;</span>,</span>
+<span id="cb30-48"><a href="análisis-exploratorio-de-datos-version2.html#cb30-48" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb30-49"><a href="análisis-exploratorio-de-datos-version2.html#cb30-49" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb30-50"><a href="análisis-exploratorio-de-datos-version2.html#cb30-50" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb30-51"><a href="análisis-exploratorio-de-datos-version2.html#cb30-51" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Cantidad de insumo 2 (órdenes con segundo insumo)&quot;</span>,</span>
+<span id="cb30-52"><a href="análisis-exploratorio-de-datos-version2.html#cb30-52" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Litros equivalentes&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Densidad&quot;</span>) <span class="sc">+</span></span>
+<span id="cb30-53"><a href="análisis-exploratorio-de-datos-version2.html#cb30-53" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb30-54"><a href="análisis-exploratorio-de-datos-version2.html#cb30-54" tabindex="-1"></a></span>
+<span id="cb30-55"><a href="análisis-exploratorio-de-datos-version2.html#cb30-55" tabindex="-1"></a>(p_vol_hist <span class="sc">+</span> p_dur_hist) <span class="sc">/</span> (p_ci1_hist <span class="sc">+</span> p_ci2_hist)</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/hist_num_predictoras-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<p><strong>Visualmente, la fuente real de heterogeneidad no está en los insumos, sino en cómo y cuánto se produce. Esto implica que cualquier análisis o modelo que ignore la escala (volumen) o la complejidad (duración) va a estar mal especificado.</strong></p>
+<p><strong>El sistema produce lotes de escalas muy distintas (entre 100 y 13.300 unidades), con duraciones que van de 3 a 482 horas. Esta heterogeneidad refleja una lógica de producción “make-to-order” donde cada orden responde a un pedido específico. El tamaño estándar de lote no existe. El proceso no puede optimizarse con reglas uniformes; requerirá segmentación por rangos de producción.</strong></p>
+</div>
+<div id="análisis-univariado-de-variables-categóricas-predictoras" class="section level2 hasAnchor" number="6.4">
+<h2><span class="header-section-number">6.4</span> Análisis univariado de variables categóricas predictoras<a href="análisis-exploratorio-de-datos-version2.html#an%C3%A1lisis-univariado-de-variables-categ%C3%B3ricas-predictoras" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="análisis-exploratorio-de-datos-version2.html#cb31-1" tabindex="-1"></a>vars_cat <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;tipo_equipo&quot;</span>, <span class="st">&quot;equipo_id&quot;</span>, <span class="st">&quot;categoria_producto&quot;</span>, </span>
+<span id="cb31-2"><a href="análisis-exploratorio-de-datos-version2.html#cb31-2" tabindex="-1"></a>              <span class="st">&quot;modalidad_proceso&quot;</span>, <span class="st">&quot;num_insumos&quot;</span>, <span class="st">&quot;insumo_1&quot;</span>, <span class="st">&quot;insumo_2&quot;</span>)</span>
+<span id="cb31-3"><a href="análisis-exploratorio-de-datos-version2.html#cb31-3" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="análisis-exploratorio-de-datos-version2.html#cb31-4" tabindex="-1"></a>tabla_cat <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(vars_cat, <span class="cf">function</span>(v) {</span>
+<span id="cb31-5"><a href="análisis-exploratorio-de-datos-version2.html#cb31-5" tabindex="-1"></a>  datos <span class="sc">%&gt;%</span></span>
+<span id="cb31-6"><a href="análisis-exploratorio-de-datos-version2.html#cb31-6" tabindex="-1"></a>    <span class="fu">count</span>(.data[[v]], <span class="at">name =</span> <span class="st">&quot;Frecuencia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-7"><a href="análisis-exploratorio-de-datos-version2.html#cb31-7" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb31-8"><a href="análisis-exploratorio-de-datos-version2.html#cb31-8" tabindex="-1"></a>      <span class="at">Porcentaje =</span> (Frecuencia <span class="sc">/</span> <span class="fu">sum</span>(Frecuencia)) <span class="sc">*</span> <span class="dv">100</span>,</span>
+<span id="cb31-9"><a href="análisis-exploratorio-de-datos-version2.html#cb31-9" tabindex="-1"></a>      <span class="at">Variable =</span> v,</span>
+<span id="cb31-10"><a href="análisis-exploratorio-de-datos-version2.html#cb31-10" tabindex="-1"></a>      <span class="at">Categoria =</span> <span class="fu">as.character</span>(.data[[v]])</span>
+<span id="cb31-11"><a href="análisis-exploratorio-de-datos-version2.html#cb31-11" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
+<span id="cb31-12"><a href="análisis-exploratorio-de-datos-version2.html#cb31-12" tabindex="-1"></a>    <span class="fu">select</span>(Variable, Categoria, Frecuencia, Porcentaje)</span>
+<span id="cb31-13"><a href="análisis-exploratorio-de-datos-version2.html#cb31-13" tabindex="-1"></a>}) <span class="sc">%&gt;%</span></span>
+<span id="cb31-14"><a href="análisis-exploratorio-de-datos-version2.html#cb31-14" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Porcentaje =</span> <span class="fu">round</span>(Porcentaje, <span class="dv">2</span>))</span>
+<span id="cb31-15"><a href="análisis-exploratorio-de-datos-version2.html#cb31-15" tabindex="-1"></a></span>
+<span id="cb31-16"><a href="análisis-exploratorio-de-datos-version2.html#cb31-16" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tabla_cat, <span class="at">caption =</span> <span class="st">&quot;Resumen descriptivo de las variables categóricas seleccionadas&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-17"><a href="análisis-exploratorio-de-datos-version2.html#cb31-17" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>) </span></code></pre></div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+(#tab:tabla_categoricas)(#tab:tabla_categoricas)Resumen descriptivo de las variables categóricas seleccionadas
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Variable
+</th>
+<th style="text-align:left;">
+Categoria
+</th>
+<th style="text-align:right;">
+Frecuencia
+</th>
+<th style="text-align:right;">
+Porcentaje
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+tipo_equipo
+</td>
+<td style="text-align:left;">
+A1
+</td>
+<td style="text-align:right;">
+287
+</td>
+<td style="text-align:right;">
+72.66
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+tipo_equipo
+</td>
+<td style="text-align:left;">
+B2
+</td>
+<td style="text-align:right;">
+45
+</td>
+<td style="text-align:right;">
+11.39
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+tipo_equipo
+</td>
+<td style="text-align:left;">
+C3
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+2.03
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+tipo_equipo
+</td>
+<td style="text-align:left;">
+D4
+</td>
+<td style="text-align:right;">
+55
+</td>
+<td style="text-align:right;">
+13.92
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+equipo_id
+</td>
+<td style="text-align:left;">
+M02
+</td>
+<td style="text-align:right;">
+45
+</td>
+<td style="text-align:right;">
+11.39
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+equipo_id
+</td>
+<td style="text-align:left;">
+M04
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+1.01
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+equipo_id
+</td>
+<td style="text-align:left;">
+M05
+</td>
+<td style="text-align:right;">
+31
+</td>
+<td style="text-align:right;">
+7.85
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+equipo_id
+</td>
+<td style="text-align:left;">
+M08
+</td>
+<td style="text-align:right;">
+34
+</td>
+<td style="text-align:right;">
+8.61
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+equipo_id
+</td>
+<td style="text-align:left;">
+M09
+</td>
+<td style="text-align:right;">
+40
+</td>
+<td style="text-align:right;">
+10.13
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+equipo_id
+</td>
+<td style="text-align:left;">
+M11
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+1.01
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+equipo_id
+</td>
+<td style="text-align:left;">
+M12
+</td>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:right;">
+6.08
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+equipo_id
+</td>
+<td style="text-align:left;">
+M13
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:right;">
+9.11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+equipo_id
+</td>
+<td style="text-align:left;">
+M14
+</td>
+<td style="text-align:right;">
+43
+</td>
+<td style="text-align:right;">
+10.89
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+equipo_id
+</td>
+<td style="text-align:left;">
+M15
+</td>
+<td style="text-align:right;">
+43
+</td>
+<td style="text-align:right;">
+10.89
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+equipo_id
+</td>
+<td style="text-align:left;">
+M16
+</td>
+<td style="text-align:right;">
+46
+</td>
+<td style="text-align:right;">
+11.65
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+equipo_id
+</td>
+<td style="text-align:left;">
+M17
+</td>
+<td style="text-align:right;">
+45
+</td>
+<td style="text-align:right;">
+11.39
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+categoria_producto
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+2.28
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+categoria_producto
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+2.28
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+categoria_producto
+</td>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:right;">
+74
+</td>
+<td style="text-align:right;">
+18.73
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+categoria_producto
+</td>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+7.59
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+categoria_producto
+</td>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:right;">
+246
+</td>
+<td style="text-align:right;">
+62.28
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+categoria_producto
+</td>
+<td style="text-align:left;">
+6
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.25
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+categoria_producto
+</td>
+<td style="text-align:left;">
+7
+</td>
+<td style="text-align:right;">
+26
+</td>
+<td style="text-align:right;">
+6.58
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+modalidad_proceso
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:right;">
+206
+</td>
+<td style="text-align:right;">
+52.15
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+modalidad_proceso
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:right;">
+175
+</td>
+<td style="text-align:right;">
+44.30
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+modalidad_proceso
+</td>
+<td style="text-align:left;">
+Z
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+3.54
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+num_insumos
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+271
+</td>
+<td style="text-align:right;">
+68.61
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+num_insumos
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+124
+</td>
+<td style="text-align:right;">
+31.39
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+insumo_1
+</td>
+<td style="text-align:left;">
+A_T
+</td>
+<td style="text-align:right;">
+38
+</td>
+<td style="text-align:right;">
+9.62
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+insumo_1
+</td>
+<td style="text-align:left;">
+B_T
+</td>
+<td style="text-align:right;">
+173
+</td>
+<td style="text-align:right;">
+43.80
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+insumo_1
+</td>
+<td style="text-align:left;">
+N_O
+</td>
+<td style="text-align:right;">
+43
+</td>
+<td style="text-align:right;">
+10.89
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+insumo_1
+</td>
+<td style="text-align:left;">
+N_T
+</td>
+<td style="text-align:right;">
+114
+</td>
+<td style="text-align:right;">
+28.86
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+insumo_1
+</td>
+<td style="text-align:left;">
+R_T
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+3.04
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+insumo_1
+</td>
+<td style="text-align:left;">
+V_T
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+3.80
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+insumo_2
+</td>
+<td style="text-align:left;">
+A_T
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+5.06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+insumo_2
+</td>
+<td style="text-align:left;">
+B_T
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+3.80
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+insumo_2
+</td>
+<td style="text-align:left;">
+N_O
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+5.82
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+insumo_2
+</td>
+<td style="text-align:left;">
+N_T
+</td>
+<td style="text-align:right;">
+27
+</td>
+<td style="text-align:right;">
+6.84
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+insumo_2
+</td>
+<td style="text-align:left;">
+R_T
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+6.33
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+insumo_2
+</td>
+<td style="text-align:left;">
+sin_segundo_insumo
+</td>
+<td style="text-align:right;">
+271
+</td>
+<td style="text-align:right;">
+68.61
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+insumo_2
+</td>
+<td style="text-align:left;">
+V_T
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+3.54
+</td>
+</tr>
+</tbody>
+</table>
+<p>Tipo de equipo: La categoría A1 concentra el 72.7% de las observaciones. Significa que cualquier estadístico global del sistema está dominado por el comportamiento de un solo tipo de equipo. Cuando un análisis habla del “costo promedio del sistema”, en realidad habla —en un 73%— del costo promedio de A1.</p>
+<p>Las demás categorías (B2, D4, C3) tienen participaciones mucho menores, lo que implica posible sesgo en análisis globales si no se segmenta y riesgo de conclusiones dominadas por A1.
+C3 (2.03%) es prácticamente marginal.
+Equipo específico (equipo_id): Distribución es más fragmentada, pero aún desigual. algunos equipos concentran entre 8% y 11% (M02, M09, M08), otros son casi irrelevantes (~1%)
+El sistema no es balanceado, fuerte concentración en tipo A1
+Existe heterogeneidad operativa, → distintos equipos tienen niveles de uso muy distintos
+Cualquier modelo debe considerar tipo_equipo como variable explicativa clave, equipo_id puede capturar efectos más finos (variabilidad intra-tipo) , Comparaciones entre categorías pequeñas pueden ser inestables (bajo n)</p>
+<p>El sistema está estructurado alrededor de un tipo dominante (A1) y un subconjunto reducido de equipos con alta actividad. La variabilidad observada en costos, duración o volumen probablemente está condicionada por esta estructura, no solo por aleatoriedad.</p>
+<p>El tipo de equipo dominante es A1, que concentra el 72.66% de las órdenes. La variable <code>equipo_id</code> tiene 12 niveles distintos y <code>categoria_producto</code> tiene 7 niveles, lo cual exigirá tratamiento cuidadoso en los análisis inferenciales posteriores para evitar celdas con pocas observaciones.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="análisis-exploratorio-de-datos-version2.html#cb32-1" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb32-2"><a href="análisis-exploratorio-de-datos-version2.html#cb32-2" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb32-3"><a href="análisis-exploratorio-de-datos-version2.html#cb32-3" tabindex="-1"></a></span>
+<span id="cb32-4"><a href="análisis-exploratorio-de-datos-version2.html#cb32-4" tabindex="-1"></a>tabla_plot <span class="ot">&lt;-</span> tabla_cat <span class="sc">%&gt;%</span></span>
+<span id="cb32-5"><a href="análisis-exploratorio-de-datos-version2.html#cb32-5" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Etiqueta =</span> <span class="fu">paste0</span>(Frecuencia, <span class="st">&quot; (&quot;</span>, Porcentaje, <span class="st">&quot;%)&quot;</span>))</span>
+<span id="cb32-6"><a href="análisis-exploratorio-de-datos-version2.html#cb32-6" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="análisis-exploratorio-de-datos-version2.html#cb32-7" tabindex="-1"></a><span class="co"># 2. Generación del gráfico facetado (2 columnas x 4 filas)</span></span>
+<span id="cb32-8"><a href="análisis-exploratorio-de-datos-version2.html#cb32-8" tabindex="-1"></a><span class="fu">ggplot</span>(tabla_plot, <span class="fu">aes</span>(<span class="at">x =</span> Categoria, <span class="at">y =</span> Frecuencia)) <span class="sc">+</span></span>
+<span id="cb32-9"><a href="análisis-exploratorio-de-datos-version2.html#cb32-9" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">&quot;#008B8B&quot;</span>, <span class="at">width =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb32-10"><a href="análisis-exploratorio-de-datos-version2.html#cb32-10" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> Etiqueta), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb32-11"><a href="análisis-exploratorio-de-datos-version2.html#cb32-11" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.2</span>))) <span class="sc">+</span></span>
+<span id="cb32-12"><a href="análisis-exploratorio-de-datos-version2.html#cb32-12" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb32-13"><a href="análisis-exploratorio-de-datos-version2.html#cb32-13" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Categoría&quot;</span>, </span>
+<span id="cb32-14"><a href="análisis-exploratorio-de-datos-version2.html#cb32-14" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Frecuencia&quot;</span>,</span>
+<span id="cb32-15"><a href="análisis-exploratorio-de-datos-version2.html#cb32-15" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Distribución de Variables Categóricas&quot;</span></span>
+<span id="cb32-16"><a href="análisis-exploratorio-de-datos-version2.html#cb32-16" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb32-17"><a href="análisis-exploratorio-de-datos-version2.html#cb32-17" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb32-18"><a href="análisis-exploratorio-de-datos-version2.html#cb32-18" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb32-19"><a href="análisis-exploratorio-de-datos-version2.html#cb32-19" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>),</span>
+<span id="cb32-20"><a href="análisis-exploratorio-de-datos-version2.html#cb32-20" tabindex="-1"></a>    <span class="at">strip.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">&quot;#2c3e50&quot;</span>),</span>
+<span id="cb32-21"><a href="análisis-exploratorio-de-datos-version2.html#cb32-21" tabindex="-1"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">&quot;white&quot;</span>, <span class="at">fontface =</span> <span class="st">&quot;bold&quot;</span>)</span>
+<span id="cb32-22"><a href="análisis-exploratorio-de-datos-version2.html#cb32-22" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb32-23"><a href="análisis-exploratorio-de-datos-version2.html#cb32-23" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> Variable, <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/bar_categoricas_grid-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="análisis-bivariado-costos-por-tipo-de-equipo" class="section level2 hasAnchor" number="6.5">
+<h2><span class="header-section-number">6.5</span> Análisis bivariado: costos por tipo de equipo<a href="análisis-exploratorio-de-datos-version2.html#an%C3%A1lisis-bivariado-costos-por-tipo-de-equipo" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Un primer análisis bivariado de costos por tipo de equipo (que viene más adelante) muestra diferencias muy grandes:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="análisis-exploratorio-de-datos-version2.html#cb33-1" tabindex="-1"></a>tabla_resumen <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb33-2"><a href="análisis-exploratorio-de-datos-version2.html#cb33-2" tabindex="-1"></a>  <span class="fu">group_by</span>(tipo_equipo) <span class="sc">%&gt;%</span></span>
+<span id="cb33-3"><a href="análisis-exploratorio-de-datos-version2.html#cb33-3" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb33-4"><a href="análisis-exploratorio-de-datos-version2.html#cb33-4" tabindex="-1"></a>    <span class="at">costo_transformacion_medio =</span> <span class="fu">mean</span>(costo_transformacion),</span>
+<span id="cb33-5"><a href="análisis-exploratorio-de-datos-version2.html#cb33-5" tabindex="-1"></a>    <span class="at">costo_insumo_medio =</span> <span class="fu">mean</span>(costo_insumo),</span>
+<span id="cb33-6"><a href="análisis-exploratorio-de-datos-version2.html#cb33-6" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span></span>
+<span id="cb33-7"><a href="análisis-exploratorio-de-datos-version2.html#cb33-7" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb33-8"><a href="análisis-exploratorio-de-datos-version2.html#cb33-8" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb33-9"><a href="análisis-exploratorio-de-datos-version2.html#cb33-9" tabindex="-1"></a>    <span class="at">costo_transformacion_medio =</span> <span class="fu">round</span>(costo_transformacion_medio, <span class="dv">1</span>),</span>
+<span id="cb33-10"><a href="análisis-exploratorio-de-datos-version2.html#cb33-10" tabindex="-1"></a>    <span class="at">costo_insumo_medio =</span> <span class="fu">round</span>(costo_insumo_medio, <span class="dv">1</span>)</span>
+<span id="cb33-11"><a href="análisis-exploratorio-de-datos-version2.html#cb33-11" tabindex="-1"></a>  )</span>
+<span id="cb33-12"><a href="análisis-exploratorio-de-datos-version2.html#cb33-12" tabindex="-1"></a>tabla_resumen <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb33-13"><a href="análisis-exploratorio-de-datos-version2.html#cb33-13" tabindex="-1"></a>  <span class="fu">group_by</span>(tipo_equipo) <span class="sc">%&gt;%</span></span>
+<span id="cb33-14"><a href="análisis-exploratorio-de-datos-version2.html#cb33-14" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb33-15"><a href="análisis-exploratorio-de-datos-version2.html#cb33-15" tabindex="-1"></a>    <span class="at">costo_transformacion_medio =</span> <span class="fu">mean</span>(costo_transformacion),</span>
+<span id="cb33-16"><a href="análisis-exploratorio-de-datos-version2.html#cb33-16" tabindex="-1"></a>    <span class="at">costo_insumo_medio =</span> <span class="fu">mean</span>(costo_insumo),</span>
+<span id="cb33-17"><a href="análisis-exploratorio-de-datos-version2.html#cb33-17" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span></span>
+<span id="cb33-18"><a href="análisis-exploratorio-de-datos-version2.html#cb33-18" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb33-19"><a href="análisis-exploratorio-de-datos-version2.html#cb33-19" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb33-20"><a href="análisis-exploratorio-de-datos-version2.html#cb33-20" tabindex="-1"></a>    <span class="at">costo_transformacion_medio =</span> <span class="fu">round</span>(costo_transformacion_medio, <span class="dv">1</span>),</span>
+<span id="cb33-21"><a href="análisis-exploratorio-de-datos-version2.html#cb33-21" tabindex="-1"></a>    <span class="at">costo_insumo_medio =</span> <span class="fu">round</span>(costo_insumo_medio, <span class="dv">1</span>)</span>
+<span id="cb33-22"><a href="análisis-exploratorio-de-datos-version2.html#cb33-22" tabindex="-1"></a>  )</span></code></pre></div>
+<p>Las diferencias son tan marcadas que invitan a preguntar: ¿cada tipo de equipo es realmente comparable con los otros?
+Una tabulación cruzada contesta la pregunta y cambia el análisis:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="análisis-exploratorio-de-datos-version2.html#cb34-1" tabindex="-1"></a>tabla_dep <span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span></span>
+<span id="cb34-2"><a href="análisis-exploratorio-de-datos-version2.html#cb34-2" tabindex="-1"></a>  <span class="fu">count</span>(tipo_equipo, modalidad_proceso, num_insumos) <span class="sc">%&gt;%</span></span>
+<span id="cb34-3"><a href="análisis-exploratorio-de-datos-version2.html#cb34-3" tabindex="-1"></a>  <span class="fu">arrange</span>(tipo_equipo, modalidad_proceso, num_insumos)</span>
+<span id="cb34-4"><a href="análisis-exploratorio-de-datos-version2.html#cb34-4" tabindex="-1"></a></span>
+<span id="cb34-5"><a href="análisis-exploratorio-de-datos-version2.html#cb34-5" tabindex="-1"></a><span class="fu">kable</span>(tabla_dep, <span class="at">caption =</span> <span class="st">&quot;Combinaciones observadas (tipo_equipo × modalidad × num_insumos)&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb34-6"><a href="análisis-exploratorio-de-datos-version2.html#cb34-6" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+(#tab:bivariado_cost_tipo_equipo)(#tab:bivariado_cost_tipo_equipo)Combinaciones observadas (tipo_equipo × modalidad × num_insumos)
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+tipo_equipo
+</th>
+<th style="text-align:left;">
+modalidad_proceso
+</th>
+<th style="text-align:left;">
+num_insumos
+</th>
+<th style="text-align:right;">
+n
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+A1
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+60
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A1
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+63
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A1
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+118
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A1
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+33
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A1
+</td>
+<td style="text-align:left;">
+Z
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A1
+</td>
+<td style="text-align:left;">
+Z
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B2
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B2
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+13
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B2
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+18
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B2
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B2
+</td>
+<td style="text-align:left;">
+Z
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C3
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C3
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D4
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+55
+</td>
+</tr>
+</tbody>
+</table>
+<p>La tabla revela un hecho crítico: el espacio operativo no es completo. No todos los equipos operan en todas las modalidades. No todas las modalidades se ejecutan con todos los números de insumos. Las combinaciones son asimétricas y muchas celdas están vacías o con muy pocas observaciones.</p>
+<p>6.4 El giro del análisis: el dataset tiene estructura jerárquica
+6.4.1 El descubrimiento
+Lo que parecía un dataset plano con 7 variables categóricas independientes es en realidad un sistema con dependencias operativas:</p>
+<p>El tipo de equipo determina qué modalidades de proceso son factibles.
+La modalidad de proceso restringe qué configuraciones de insumos pueden ejecutarse.
+El número de insumos condiciona qué combinaciones de producto son posibles.</p>
+<p>Traducción para la dirección financiera: un operario no elige libremente “equipo D4 con modalidad Y y dos insumos”. Esa combinación simplemente no existe en el proceso. El dataset refleja restricciones técnicas reales de la planta, no una muestra aleatoria de un universo uniforme.</p>
+<p>6.4.2 Por qué esto cambia todo el análisis
+Si las categorías no son independientes, comparar costos marginalmente es engañoso. Ejemplo concreto:</p>
+<p>Si D4 solo opera en modalidad X con 1 insumo, y A1 opera en X, Y y Z con 1 o 2 insumos, entonces decir “D4 es más barato que A1” mezcla dos cosas: el efecto del equipo y el efecto de la modalidad/insumos. No sabemos si D4 es barato porque el equipo es eficiente, o porque solo se usa en las configuraciones más simples.</p>
+<p>Este tipo de error se llama confusión (confounding) y es una de las trampas clásicas de los análisis agregados. Desde este punto del capítulo, el análisis abandona la lógica “promedio por categoría” y adopta una lógica condicional: cada efecto se evalúa dentro del contexto operativo donde sí hay comparabilidad.
+6.4.3 Decisiones metodológicas derivadas del descubrimiento
+Tras el diagnóstico anterior, se adoptan tres decisiones explícitas que guían el resto del capítulo:
+Decisión 1 — Exclusión de modalidad Z. La modalidad Z corresponde a órdenes excepcionales donde se aplican las modalidades X y Y al mismo producto por solicitud del cliente. Con 14 órdenes distribuidas en 3 celdas (3.5% del dataset), no permite inferencia estadística con potencia suficiente y, al representar una composición de procesos en lugar de una modalidad alternativa, no es conceptualmente comparable con X o Y. Las órdenes con Z se excluyen del análisis principal y se caracterizan brevemente al final del capítulo (sección 6.8).
+Decisión 2 — Exclusión del tipo_equipo C3. C3 tiene solo 8 órdenes (2%), concentradas casi íntegramente en la combinación (X, 1) con un único caso en (X, 2) y cero en modalidad Y. Con este n, los intervalos de confianza son extremadamente amplios y cualquier diferencia observada queda dominada por ruido. C3 se excluye del análisis estratificado y sus estadísticos descriptivos se reportan al final con una advertencia explícita sobre su no comparabilidad.
+Decisión 3 — Configuración universal. Tras excluir Z y C3, el equipo A1 es el único que cubre las 4 combinaciones (X × Y × 1 × 2), con 274 órdenes. Es la única base analítica donde es posible evaluar de forma limpia los efectos de modalidad y número de insumos. Los análisis multivariados profundos se desarrollarán sobre este subconjunto.
+datos_principal &lt;- datos %&gt;%
+filter(modalidad_proceso != “Z”,
+tipo_equipo != “C3”) %&gt;%
+mutate(modalidad_proceso = droplevels(modalidad_proceso),
+tipo_equipo = droplevels(tipo_equipo))</p>
+<p>write_csv2(datos_principal, “data/data_costos_principal.csv”)
+saveRDS(datos_principal, “data/data_costos_principal.rds”)</p>
+<p>n_principal &lt;- nrow(datos_principal)
+Tras estas exclusiones, el dataset principal queda conformado por r n_principal órdenes (r round(n_principal / n_total * 100, 1)% del total depurado). Sobre este subconjunto se desarrolla el análisis estratificado que sigue.</p>
+<p>6.5 Estructura del espacio operativo sobre el dataset principal
+6.5.1 Mapa de combinaciones
+mapa_n &lt;- datos_principal %&gt;%
+count(tipo_equipo, modalidad_proceso, num_insumos) %&gt;%
+pivot_wider(names_from = c(modalidad_proceso, num_insumos),
+values_from = n,
+values_fill = 0,
+names_sep = “_“)</p>
+<p>kable(mapa_n, caption = “Tamaño muestral por combinación (dataset principal)”) %&gt;%
+kable_styling(full_width = FALSE)
+Lectura del mapa.</p>
+<p>A1 tiene cobertura completa: 60 órdenes en (X, 1), 63 en (X, 2), 118 en (Y, 1), 33 en (Y, 2). Total: 274. Es el único equipo que permite comparar simultáneamente los efectos de modalidad y de número de insumos.
+B2 tiene cobertura en las 4 combinaciones pero con n reducido (7, 13, 18, 6). Permite análisis condicional con cautela.
+D4 opera exclusivamente en (X, 1) con 55 órdenes. No se puede estudiar si D4 cambia de comportamiento en otras modalidades o con otros insumos: esa información no existe.</p>
+<p>6.5.2 Comparaciones válidas identificadas
+Este mapa define el universo de comparaciones legítimas:</p>
+<p>Comparación inter-equipos en (X, 1): es el único estrato donde A1 (n=60), B2 (n=7) y D4 (n=55) coexisten. Total: 122 órdenes. Es la única celda limpia para responder la pregunta “¿los equipos difieren en costo?”.
+Comparación intra-equipo A1 (efectos de modalidad e insumos): con 274 órdenes y cobertura completa, A1 es la configuración universal para estudiar cómo varían los costos según modalidad y número de insumos.
+Comparación intra-equipo B2: análoga a A1 pero con n=44. Las conclusiones son sugestivas, no definitivas.</p>
+<p>Todo el resto del análisis (sección 6.6) se organiza alrededor de estas tres comparaciones.</p>
+<p>6.6 Análisis condicional: lo que revelan los estratos
+6.6.1 Efecto puro de tipo_equipo dentro de (X, 1)
+Esta es la pregunta que parecía obvia al inicio: ¿los equipos tienen costos distintos?
+comp_X1 &lt;- datos_principal %&gt;%
+filter(modalidad_proceso == “X”, num_insumos == 1) %&gt;%
+group_by(tipo_equipo) %&gt;%
+summarise(
+n = n(),
+media = mean(costo_transformacion),
+<code>50%</code> = median(costo_transformacion),
+ds = sd(costo_transformacion),
+IQR = IQR(costo_transformacion),
+.groups = “drop”
+)
+comp_X1
+[Boxplot de costo_transformacion ~ tipo_equipo sobre el filtro (X, 1).]
+Interpretación. Dentro de la única celda donde los tres equipos son comparables:</p>
+<p>D4 mantiene un costo de transformación sustancialmente menor.
+A1 y B2 son relativamente similares entre sí.
+La diferencia entre D4 y los otros equipos es real, no un artefacto de la mezcla de modalidades.</p>
+<p>Implicación para la dirección financiera. D4 es efectivamente más eficiente en transformación, al menos en la configuración (X, 1). Sin embargo, el dataset no permite concluir que D4 sería igualmente eficiente en otras modalidades — simplemente porque D4 nunca se ha operado en Y o con 2 insumos. La recomendación “migrar producción hacia D4” requiere información adicional: ¿existen restricciones técnicas que impiden usar D4 en Y? ¿O simplemente nunca se ha intentado?
+6.6.2 Efecto de modalidad e insumos dentro de A1 (configuración universal)
+Este es el análisis más potente del capítulo, porque A1 es el único equipo donde todas las combinaciones tienen n suficiente.
+stats_A1 &lt;- datos_principal %&gt;%
+filter(tipo_equipo == “A1”) %&gt;%
+group_by(modalidad_proceso, num_insumos) %&gt;%
+summarise(
+n = n(),
+media = mean(costo_transformacion),
+<code>50%</code> = median(costo_transformacion),
+ds = sd(costo_transformacion),
+.groups = “drop”
+)
+stats_A1
+[facet_grid(modalidad_proceso ~ num_insumos): cuatro paneles con el boxplot de costo_transformacion en A1.]
+Lo que revela el análisis estratificado. Dentro de A1:</p>
+<p>El paso de 1 a 2 insumos incrementa el costo de transformación medio de manera consistente en ambas modalidades.
+La modalidad Y tiende a tener costos más estables (menor IQR) que la modalidad X.
+La combinación (Y, 1) es la más eficiente y la más frecuente (n=118).</p>
+<p>Pregunta clave para la dirección: la combinación más frecuente del sistema (Y, 1 en A1) es también la más eficiente. ¿Es esto resultado de una estrategia consciente de planeación, o es una coincidencia del perfil de pedidos? La respuesta define si la eficiencia es replicable o circunstancial.</p>
+<p>6.6.3 Efecto de número de insumos: comparación condicional
+Un análisis marginal diría que pasar de 1 a 2 insumos aumenta el costo en promedio de 27.3 a 35.8 UM/unidad (+31%). Pero esa comparación mezcla equipos, modalidades y productos.
+La comparación condicional dentro de A1 da una respuesta más fina:
+efecto_insumos &lt;- datos_principal %&gt;%
+filter(tipo_equipo == “A1”) %&gt;%
+group_by(modalidad_proceso, num_insumos) %&gt;%
+summarise(
+media_ct = mean(costo_transformacion),
+media_ci = mean(costo_insumo),
+.groups = “drop”
+) %&gt;%
+pivot_wider(names_from = num_insumos,
+values_from = c(media_ct, media_ci),
+names_sep = “_ins”)
+efecto_insumos
+Interpretación condicional. Dentro de A1, el efecto de agregar un segundo insumo es:</p>
+<p>En modalidad X: incremento claro en ambos costos.
+En modalidad Y: incremento menor en transformación, más marcado en insumo.</p>
+<p>Esta es una interacción: el efecto de num_insumos no es el mismo en todas las modalidades. El análisis marginal (el que no estratifica) promedia esas dos realidades y produce un número engañoso.
+Implicación financiera. Si la empresa cobra un recargo por órdenes con dos insumos, ese recargo debería depender de la modalidad. Un recargo uniforme subsidia las órdenes complejas en X con los márgenes de las órdenes simples en Y.</p>
+<p>6.7 Asociaciones numéricas: cuando la correlación cambia al estratificar
+Las correlaciones marginales sobre el dataset principal muestran:</p>
+<p>volumen_lote ↔︎ costo_transformacion: −0.35 (Pearson) / −0.27 (Spearman).
+duracion_proceso ↔︎ costo_transformacion: +0.22 / +0.28.</p>
+<p>Lectura marginal: lotes más grandes son más baratos por unidad (economías de escala), procesos más largos son ligeramente más costosos.
+Pero al calcular las mismas correlaciones dentro de A1 únicamente:
+cor_A1 &lt;- datos_principal %&gt;%
+filter(tipo_equipo == “A1”) %&gt;%
+select(costo_transformacion, volumen_lote, duracion_proceso,
+cantidad_insumo_1, cantidad_insumo_2) %&gt;%
+cor(use = “pairwise.complete.obs”, method = “spearman”) %&gt;%
+round(3)
+cor_A1
+Por qué importa este contraste. Si la correlación marginal y la correlación dentro de A1 difieren sustancialmente, significa que parte de la relación observada globalmente no es un efecto directo de la variable, sino un efecto de composición: los equipos con ciertos perfiles de volumen también tienen ciertos perfiles de costo, y eso infla o deforma la correlación marginal.
+Traducción financiera. Las economías de escala son reales dentro de A1, pero el tamaño del efecto marginal que ven los reportes tradicionales puede estar sobrestimado porque mezcla el efecto de “producir más” con el efecto de “producir en un equipo distinto”.</p>
+<p>6.8 Caracterización descriptiva de los subconjuntos excluidos
+Esta sección es puramente descriptiva. No se hacen inferencias, solo se documentan los subconjuntos excluidos del análisis principal para transparencia.
+6.8.1 Modalidad Z (n=14)
+datos %&gt;%
+filter(modalidad_proceso == “Z”) %&gt;%
+group_by(tipo_equipo) %&gt;%
+summarise(
+n = n(),
+ct_media = mean(costo_transformacion),
+ci_media = mean(costo_insumo),
+ctot_media = mean(costo_unitario_total),
+.groups = “drop”
+)
+Observación descriptiva. Las órdenes en modalidad Z presentan un costo total promedio superior al de X y Y en A1. Esto es consistente con la definición operativa de Z (aplicación conjunta de X e Y al mismo producto), que implica mayor consumo de tiempo y recursos. La magnitud exacta del sobrecosto no es generalizable con n=14 y no se usará para ninguna conclusión. Solo sirve como referencia cualitativa para que la empresa calibre el recargo comercial aplicado a pedidos que solicitan Z.
+6.8.2 Tipo de equipo C3 (n=8)
+datos %&gt;%
+filter(tipo_equipo == “C3”) %&gt;%
+summarise(
+n = n(),
+ct_media = mean(costo_transformacion),
+ct_mediana = median(costo_transformacion),
+ci_media = mean(costo_insumo),
+ci_mediana = median(costo_insumo)
+)
+Observación descriptiva. C3 presenta los costos más altos del dataset tanto en transformación como en insumos. Con n=8 el intervalo de confianza es demasiado amplio para afirmar cuánto más costoso es en comparación con otros equipos, pero el patrón es consistente y amerita una revisión operativa específica —fuera del alcance de este trabajo estadístico— sobre qué justifica su uso y en qué condiciones.</p>
+<p>6.9 Síntesis: lo que cambia para el capítulo de inferencia
+6.9.1 Qué se puede afirmar después del EDA</p>
+<p>El sistema productivo no es homogéneo: tiene al menos tres regímenes operativos diferenciados por tipo de equipo (A1/B2 como regímenes estándar, D4 como régimen eficiente restringido a (X, 1), C3 como régimen excepcional).
+Dentro de A1 (configuración universal), el número de insumos y la modalidad afectan el costo de manera interactiva. El efecto de agregar un segundo insumo depende de la modalidad.
+Las economías de escala son reales pero no uniformes: pierden intensidad en volúmenes altos y presentan mayor dispersión en lotes pequeños.
+El costo de transformación domina el costo total (85%). Cualquier iniciativa de reducción debe enfocarse en procesos, no en insumos.</p>
+<p>6.9.2 Hipótesis que alimentan el capítulo 7 (inferencia)
+Con base en el EDA, las pruebas inferenciales formales que tienen sustento son:
+HipótesisPrueba aplicableEstratonH1: El costo de transformación difiere entre A1, B2 y D4ANOVA 1 vía (Welch) o Kruskal-Wallis(X, 1) únicamente122H2: Dentro de A1, la modalidad afecta el costot-test o Mann-WhitneyA1 completo274H3: Dentro de A1, el número de insumos afecta el costot-test o Mann-WhitneyA1 completo274H4: Existe interacción modalidad × num_insumos dentro de A1ANOVA 2 víasA1 completo274H5: Existe correlación entre volumen_lote y costo dentro de A1Correlación de Spearman con ICA1 completo274
+6.9.3 Comparaciones que el diseño del dataset no permite hacer
+Para transparencia metodológica, se documenta lo que el dataset no puede responder:</p>
+<p>Si D4 sería más eficiente que A1 en modalidad Y: D4 nunca operó en Y.
+Si C3 sería competitivo con volúmenes altos: los 8 casos de C3 no cubren rangos altos de volumen.
+Si la modalidad Z es más costosa que la suma de X e Y: n=14 no da potencia suficiente.</p>
+<p>Estas preguntas requerirían un diseño de recolección de datos distinto, con asignación deliberada de órdenes a configuraciones específicas para romper la dependencia entre factores.</p>
+<p>6.10 Implicaciones para la dirección financiera
+Cuatro mensajes para la toma de decisiones:</p>
+<p>La reducción de costos tiene un techo estructural del 15% si se enfoca solo en insumos. La palanca mayor está en los procesos de transformación, específicamente en los regímenes menos eficientes.
+D4 es el equipo más eficiente observado, pero su alcance es limitado. Antes de recomendar migración de producción, se requiere un estudio operativo que determine si las restricciones de D4 son técnicas o históricas.
+La política de precios probablemente está subsidiando la complejidad. Las órdenes con dos insumos son sistemáticamente más costosas, pero el recargo aplicado (si existe) no varía por modalidad. Órdenes complejas en modalidad X son las menos rentables.
+El tamaño de lote mínimo rentable debe definirse explícitamente. Los lotes pequeños concentran los mayores costos unitarios y la mayor variabilidad. Una política de lote mínimo, o una estructura de precios que incentive la consolidación de pedidos, tendría impacto medible e inmediato.</p>
+<p>Nota final sobre el método. Este capítulo deliberadamente empezó con una visión agregada y la desmontó progresivamente. El objetivo no fue mostrar los hallazgos de la forma más eficiente, sino hacer visible el razonamiento: cómo una primera lectura simple escondía una estructura jerárquica, por qué el análisis marginal era engañoso, y qué comparaciones sí son válidas en un dataset con espacio operativo truncado. Esta disciplina es la que separa un EDA mecánico de un EDA con criterio.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="diccionario-de-campos.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="eda.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "serif",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": {},
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  },
+  "toolbar": {
+    "position": "static"
+  }
+});
+});
+</script>
+
+</body>
+
+</html>
