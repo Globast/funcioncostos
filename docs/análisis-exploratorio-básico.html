@@ -398,7 +398,7 @@ En resumen:
 - un grupo mayoritario de insumos de bajo costo
 - un conjunto reducido de insumos de costo medio
 - pocos insumos de alto impacto económico</p>
-<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/ck_hist_box_ci-1.png" alt="" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/ck_hist_box_ci-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="costo-unitario-total" class="section level3 hasAnchor" number="6.2.3">
 <h3><span class="header-section-number">6.2.3</span> Costo unitario total<a href="análisis-exploratorio-básico.html#costo-unitario-total" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -479,7 +479,7 @@ El boxplot confirma la presencia de outliers superiores múltiples, no aislados.
 - Costo de insumos representa aproximadamente r prop_ci%
 Claramente el componente dominante del costo total es el proceso de transformación, mientras que los insumos, aunque más variables, tienen menor peso relativo en el agregado.</p>
 <p>El sistema productivo opera mayoritariamente en un rango de costos relativamente estable, pero está condicionado por una fracción de casos con costos significativamente más altos. Estos casos no son marginales y deben interpretarse como parte de la estructura del proceso, no como anomalías aisladas. La clave analítica no está en el promedio, sino en entender qué condiciones generan esos costos elevados y cómo se relacionan con los componentes del costo total.</p>
-<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/ck_hist_box_ctot-1.png" alt="" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/ck_hist_box_ctot-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
 <p>El costo unitario total hereda la asimetría de sus dos componentes. Cualquier iniciativa de reducción de costos que se concentre solo en el componente de insumos tendrá un techo muy bajo. La palanca real está en la transformación.</p>
 <div class="alert alert-info">
 <p>Los tres costos presentan distribuciones asimétricas con cola derecha pronunciada.
@@ -666,8 +666,8 @@ cantidad_insumo_2
 - Cantidad de insumo 1, comportamiento más discreto y concentrado. La mediana es 2 y el IQR es 2, lo que indica que la mayoría de los casos utiliza entre 1 y 3 unidades. La media (2.29) ligeramente superior a la mediana sugiere algunos valores altos, pero sin una dispersión extrema. Esta variable refleja un consumo relativamente estable y predecible, con variaciones moderadas.
 - Cantidad de insumo 2: Tiene menor número de observaciones, no todos las ordenes llevan insumo 2. Su mediana es 1 y el IQR es 1.25, lo que muestra una concentración aún mayor que en el insumo 1. La dispersión es baja y los valores extremos (máximo 7) son menos pronunciados. Esto sugiere que el segundo insumo actúa como un componente opcional o complementario, con consumo bajo y controlado.</p>
 <p>La principal fuente de heterogeneidad no está en los insumos, sino en el tamaño de los lotes y la duración de los procesos. Esto sugiere que cualquier modelamiento o mejora operativa debe centrarse en segmentar por escala de producción y complejidad del proceso, más que en el consumo de insumos.</p>
-<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box_num_predictoras-1.png" alt="" width="100%" style="display: block; margin: auto;" /></p>
-<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/hist_num_predictoras-1.png" alt="" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box_num_predictoras-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/hist_num_predictoras-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
 <div class="alert alert-info">
 <p>Visualmente, la fuente real de heterogeneidad no está en los insumos, sino en cómo y cuánto se produce. Esto implica que cualquier análisis o modelo que ignore la escala (volumen) o la complejidad (duración) va a estar mal especificado.
 El sistema produce lotes de escalas muy distintas (entre 100 y 13.300 unidades), con duraciones que van de 3 a 482 horas. Esta heterogeneidad refleja una lógica de producción “make-to-order” donde cada orden responde a un pedido específico. El tamaño estándar de lote no existe. El proceso no puede optimizarse con reglas uniformes; requerirá segmentación por rangos de producción.
@@ -985,7 +985,7 @@ Z
 <p>En costo de insumo, el patrón es más suave:
 X ≈ 4.80, Y ≈ 5.20, Z ≈ 6.86</p>
 <p>La mediana de Z (≈ 4.98) está cerca de Y, el aumento en la media puede provenir de algunos valores altos .</p>
-<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box_bivariado_mod_proceso-1.png" alt="" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box_bivariado_mod_proceso-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
 <p>El sobrecosto de Z proviene principalmente de transformación, no de insumo, y además no es lineal. Es un fenómeno de interacción entre procesos, no de suma simple.</p>
 <p>En cambio, el costo de insumo sube poco y de forma relativamente lógica. Eso confirma que el problema no está en materiales, sino en cómo se ejecuta el proceso combinado.</p>
 <p>El tamaño de muestra de Z es bajo (n = 14).</p>
@@ -1599,7 +1599,7 @@ Existe heterogeneidad operativa, → distintos equipos tienen niveles de uso muy
 Cualquier modelo debe considerar tipo_equipo como variable explicativa clave, equipo_id puede capturar efectos más finos (variabilidad intra-tipo) , Comparaciones entre categorías pequeñas pueden ser inestables (bajo n)</p>
 <p>El sistema está estructurado alrededor de un tipo dominante (A1) y un subconjunto reducido de equipos con alta actividad. La variabilidad observada en costos, duración o volumen probablemente está condicionada por esta estructura, no solo por aleatoriedad.</p>
 <p>El tipo de equipo dominante es A1, que concentra el 72.66% de las órdenes. La variable <code>equipo_id</code> tiene 12 niveles distintos y <code>categoria_producto</code> tiene 7 niveles, lo cual exigirá tratamiento cuidadoso en los análisis inferenciales posteriores para evitar celdas con pocas observaciones.</p>
-<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/bar_categoricas-1.png" alt="" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/bar_categoricas-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 (#tab:bivariado_cc_tipoequipo)(#tab:bivariado_cc_tipoequipo)Resumen Bivariado costos de transformación
@@ -1946,7 +1946,7 @@ D4
 <p>Los tipos de equipos A1 y B2 presentan patrones similares: medias cercanas a 5 UM/unidad y medianas ligeramente inferiores. El rango intercuartílico es moderado, sugiriendo que el consumo de insumos en estos equipos es predecible y controlado.</p>
 <p>El tipo de equipo C3 nuevamente se diferencia de forma clara. La media (≈11.25) es más del doble que en A1 y B2, y la dispersión es considerable. Además, la mediana se mantiene alta. Costoso tanto en transformación como en insumos, es menos eficiente.</p>
 <p>El tipo de equipo D4 Presenta la media más baja (≈3.58) pero su desviación estándar es alta y supera incluso a la media. Puede influir que D4 solo opera con un insumo. No puede operar con 2. La mediana (≈1.64) está muy por debajo de la media, lo que indica una asimetría extrema. D4 es generalmente eficiente, pero con episodios puntuales de alto consumo.</p>
-<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box_equipo-1.png" alt="" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box_equipo-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
 <p>Los boxplots confirman visualmente lo que ya sugerían los resúmenes numéricos: el tipo de equipo introduce regímenes claramente diferenciados de costos, tanto en transformación como en insumos.</p>
 </div>
 <div id="análisis-bivariado-equipo_id" class="section level3 hasAnchor" number="6.4.3">
@@ -2879,7 +2879,7 @@ D4
 </tr>
 </tbody>
 </table>
-<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box_equipoid-1.png" alt="" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box_equipoid-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
 <p>A1 (M08, M09, M13, M14, M15, M16, M17): siete equipos con costo de transformación medio entre 30 y 38 UM/unidad. La variabilidad intra-equipo es alta, pero la variabilidad entre equipos del mismo tipo es modesta. Los siete equipos se comportan como una familia coherente.
 B2 (M02): un único equipo. Su perfil es indistinguible visualmente de los equipos A1. Esto plantea una pregunta operativa relevante: si M02 (B2) opera con costos similares a los siete equipos A1, ¿qué justifica mantener una clasificación tecnológica separada?
 C3 (M04, M11): dos equipos con costos significativamente más altos que el resto, pero muy diferentes entre sí. M04 opera en torno a 79 UM/unidad, M11 en torno a 49 UM/unidad. Tratarlos como un solo grupo “C3” oscurece esta diferencia.
