@@ -986,7 +986,7 @@ kable(matriz_df,
 
 ### Diagramas de dispersión
 
-```{r scatter-prioritarios, fig.asp = 1, warning=FALSE, message=FALSE}
+```{r scatter-prioritarios, fig.asp = 1.2, warning=FALSE, message=FALSE}
 
 # Función auxiliar para construir gráficos de dispersión
 graf_disp <- function(data, x, y, xlab, ylab, titulo, color = "#1E90FF") {
@@ -1095,13 +1095,26 @@ knitr::kable(matriz_spearman , caption = "Matriz de correlación de Spearman") %
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
+
 Spearman mide asociaciones monótonas (no necesariamente lineales) y resulta más robusto frente a asimetrías y outliers.
 Comparando ambas matrices:
-Las relaciones operativas se fortalecen. Volumen-duración pasa de `r round(matriz_correlacion[5, 4], 3)` a `r round(matriz_spearman[5, 4], 3)`. Volumen-insumo 1 pasa de `r round(matriz_correlacion[6, 4], 3)` a `r round(matriz_spearman[6, 4], 3)`. Esto confirma que la relación es monótona fuerte pero no lineal: cuando una variable sube, la otra sube de manera consistente, pero no en proporción constante.
-Las economías de escala se debilitan ligeramente. Volumen-costo total pasa de `r round(matriz_correlacion[5, 3], 3)` a `r round(matriz_spearman[5, 3], 3)`. La relación inversa sigue presente, pero con dispersión real: a mayor volumen, costo unitario menor, pero no de forma uniforme.
+
+Las relaciones operativas se fortalecen. Volumen-duración pasa de `r round(matriz_correlacion[5,4], 3)` a `r matriz_spearman[5, 4]`. Volumen-insumo 1 pasa de `r round(matriz_correlacion[7,4], 3)` a `r matriz_spearman[7, 4]`. Esto confirma que la relación es monótona fuerte pero no lineal: cuando una variable sube, la otra sube de manera consistente, pero no en proporción constante.
+
+Las economías de escala se debilitan ligeramente. Volumen-costo total pasa de `r round(matriz_correlacion[3,4], 3)` a `r matriz_spearman[3, 4]`. La relación inversa sigue presente, pero con dispersión real: a mayor volumen, costo unitario menor, pero no de forma uniforme.
+
 El segundo insumo gana presencia. Sus correlaciones con costos suben en Spearman. Esto indica que su efecto no es lineal sino más bien "por presencia": el simple hecho de operar con dos insumos cambia el régimen de costos más que la cantidad específica del segundo insumo.
+
 Lectura conjunta de ambas matrices. El sistema productivo es consistente en dirección pero irregular en intensidad. Las relaciones existen y van en el sentido económico esperado (escala reduce costo, complejidad aumenta costo), pero no son uniformes a lo largo de los rangos de las variables. Esto significa que modelos simples basados en linealidad pueden producir conclusiones engañosas: las decisiones basadas en promedios y elasticidades constantes pueden subestimar o sobreestimar efectos reales. Se requiere segmentación.
 
+
+
+::: {.alert .alert-primary}
+- Las relaciones operativas son monótonas fuertes pero no lineales; los modelos lineales subestiman su intensidad.
+•	Las economías de escala son reales pero irregulares; existen rangos donde el beneficio marginal cambia.
+•	Las decisiones basadas en promedios pueden ser engañosas; se requiere análisis por rangos y segmentos.
+
+::: 
 
 
 ### Análisis bivariado: Modalidad proceso
