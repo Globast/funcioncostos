@@ -593,7 +593,7 @@ p_ci2_hist <- datos %>%
 
 La distribución de frecuencias de las siete variables categóricas deja ver, desde el inicio, que el sistema no está repartido de manera uniforme. Por el contrario, se concentra en pocas categorías dominantes, mientras que el resto aparece con baja frecuencia.
 
-```{r tipo-equipo, fig.width=8, fig.height=4, echo=FALSE}
+```{r tipo-equipo,  out.width = "75%", echo=FALSE}
 tabla_tipo_equipo <- datos %>%
   count(tipo_equipo, name = "Frecuencia") %>%
   mutate(
