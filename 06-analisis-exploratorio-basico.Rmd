@@ -605,6 +605,15 @@ knitr::kable(tabla_cat, caption = "Resumen descriptivo de las variables categór
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
+
+```{r freq-tipoequipo-calc, echo=FALSE}
+freq_te <- tabla_cat %>% filter(Variable == "tipo_equipo") %>% arrange(desc(Frecuencia))
+te_dom_cat <- freq_te$Categoria[1]
+te_dom_pct <- freq_te$Porcentaje[1]
+n_niveles_equipo <- datos %>% distinct(equipo_id) %>% nrow()
+n_niveles_cat   <- datos %>% distinct(categoria_producto) %>% nrow()
+```
+
 Tipo de equipo: La categoría A1 concentra el `r round(freq_te$Porcentaje[1], 2)`% de las observaciones.  Significa que cualquier estadístico global del sistema está dominado por el comportamiento de un solo tipo de equipo. Cuando un análisis habla del "costo promedio del sistema", en realidad habla —en un `r round(freq_te$Porcentaje[1], 2)`%— del costo promedio de A1.
 
 Las demás categorías (B2, D4, C3) tienen participaciones mucho menores, lo que implica posible sesgo en análisis globales si no se segmenta y riesgo de conclusiones dominadas por A1.
@@ -615,14 +624,6 @@ Existe heterogeneidad operativa, es deicr distintos equipos tienen niveles de us
 Cualquier modelo debe considerar tipo_equipo como variable explicativa clave, equipo_id puede capturar efectos más finos (variabilidad intra-tipo) , Comparaciones entre categorías pequeñas pueden ser inestables .
 
 El sistema está estructurado alrededor de un tipo dominante (A1) y un subconjunto reducido de equipos con alta actividad. La variabilidad observada en costos, duración o volumen probablemente está condicionada por esta estructura, no solo por aleatoriedad.
-
-```{r freq-tipoequipo-calc, echo=FALSE}
-freq_te <- tabla_cat %>% filter(Variable == "tipo_equipo") %>% arrange(desc(Frecuencia))
-te_dom_cat <- freq_te$Categoria[1]
-te_dom_pct <- freq_te$Porcentaje[1]
-n_niveles_equipo <- datos %>% distinct(equipo_id) %>% nrow()
-n_niveles_cat   <- datos %>% distinct(categoria_producto) %>% nrow()
-```
 
 El tipo de equipo dominante es `r te_dom_cat`, que concentra el `r te_dom_pct`% de las órdenes. La variable `equipo_id` tiene `r n_niveles_equipo` niveles distintos y `categoria_producto` tiene `r n_niveles_cat` niveles, lo cual exigirá tratamiento cuidadoso en los análisis inferenciales posteriores para evitar celdas con pocas observaciones.
 
