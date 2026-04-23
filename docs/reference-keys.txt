@@ -52,7 +52,6 @@ análisis-bivariado-tipo-de-equipo
 análisis-bivariado-equipo_id
 señales-de-heterogeneidad-estructural
 tabulación-cruzada-tipo_equipo-modalidad-num_insumos
-descubrimiento-el-espacio-operativo-está-truncado
 implicaciones-metodológicas-del-descubrimiento
 por-qué-el-análisis-marginal-puede-ser-engañoso-confounding
 decisiones-de-exclusión-justificadas

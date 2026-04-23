@@ -187,7 +187,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.6" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#se%C3%B1ales-de-heterogeneidad-estructural"><i class="fa fa-check"></i><b>6.6</b> Señales de heterogeneidad estructural</a>
 <ul>
 <li class="chapter" data-level="6.6.1" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#tabulaci%C3%B3n-cruzada-tipo_equipo-modalidad-num_insumos"><i class="fa fa-check"></i><b>6.6.1</b> Tabulación cruzada tipo_equipo × modalidad × num_insumos</a></li>
-<li class="chapter" data-level="6.6.2" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#descubrimiento-el-espacio-operativo-est%C3%A1-truncado"><i class="fa fa-check"></i><b>6.6.2</b> Descubrimiento: el espacio operativo está truncado</a></li>
 </ul></li>
 <li class="chapter" data-level="6.7" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#implicaciones-metodol%C3%B3gicas-del-descubrimiento"><i class="fa fa-check"></i><b>6.7</b> Implicaciones metodológicas del descubrimiento</a>
 <ul>
@@ -2721,29 +2720,23 @@ D4
 </tbody>
 </table>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box-equipoid-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
-<p>A1 (M08, M09, M13, M14, M15, M16, M17): siete equipos con costo de transformación medio entre 30 y 38 UM/unidad. La variabilidad intra-equipo es alta, pero la variabilidad entre equipos del mismo tipo es modesta. Los siete equipos se comportan como una familia coherente.
-B2 (M02): un único equipo. Su perfil es indistinguible visualmente de los equipos A1. Esto plantea una pregunta operativa relevante: si M02 (B2) opera con costos similares a los siete equipos A1, ¿qué justifica mantener una clasificación tecnológica separada?
-C3 (M04, M11): dos equipos con costos significativamente más altos que el resto, pero muy diferentes entre sí. M04 opera en torno a 79 UM/unidad, M11 en torno a 49 UM/unidad. Tratarlos como un solo grupo “C3” oscurece esta diferencia.
-D4 (M05, M12): dos equipos con costos significativamente más bajos que el resto, también diferentes entre sí. M05 promedia 10 UM/unidad, M12 promedia 7 UM/unidad. La diferencia es proporcionalmente importante.</p>
-<p>Interpretación por tipo
-- A1: Los siete equipos muestran un comportamiento notablemente similar, tanto en costo de transformación como en costo de insumo. Las medias se mueven entre 30 y 38 UM/unidad, los IQR son comparables (10–16 UM), y los outliers superiores aparecen distribuidos de forma similar. M15 destaca ligeramente como el más costoso del grupo (media 38, mediana 35.6), mientras que M13 y M17 son los más bajos. Pero ninguna de estas diferencias es lo suficientemente grande para considerar que los equipos operan en regímenes distintos.
-aunque la media de M15 es la más alta del grupo, su IQR (14.1) no es el más amplio y su distribución no muestra patología visible. El hecho de que M15 promedie ~5 UM/unidad más que M13 podría ser estructural (productos asignados sistemáticamente más complejos) o aleatorio (mezcla particular de órdenes en el período). El EDA no permite distinguir entre las dos hipótesis; un análisis estratificado por categoría_producto sería el siguiente paso.
-- B2: toda conclusión sobre el “tipo B2” es en realidad una conclusión sobre el equipo M02 específico. Visualmente, M02 es indistinguible del cluster A1: media 29.9, mediana 28.9, IQR 10.9, todos en el rango de los equipos A1.</p>
-<p>B2 y A1 son tecnologías similares en costo, y mantenerlas como categorías separadas refleja diferencias técnicas (tamaño, año, fabricante) que no se traducen en costo unitario observable.
-<strong>qué diferencia formalmente a B2 de A1 y si esa diferencia debe seguir siendo una dimensión de análisis.</strong></p>
+<p>A1: una familia coherente. Los siete equipos A1 muestran medias de transformación entre 30 y 38 UM/unidad. La variabilidad dentro de cada equipo (IQR entre 10 y 16) es comparable. La variabilidad entre equipos es modesta. Los siete se comportan como una familia homogénea. M15 destaca ligeramente como el más caro del grupo, pero la diferencia respecto al más barato (M13) es de apenas 7-8 UM/unidad —irrelevante frente a los 50+ UM que separan a C3 de D4—. Operativamente, esto significa que la planificación puede asignar órdenes a cualquier equipo A1 con expectativas razonablemente predecibles.</p>
+<p>B2: un solo equipo. M02 es el único equipo B2. Su perfil (29.9, 4.99) es indistinguible visualmente del cluster A1. Esto plantea una pregunta operativa relevante: si B2 opera con costos similares a los A1, ¿qué justifica mantenerlas como categorías separadas? La respuesta puede ser técnica (diferencias de fabricante, año o capacidad que no se traducen en costo unitario) u organizacional (clasificación heredada que ya no refleja diferencias económicas).</p>
+<p>C3: dos equipos heterogéneos entre sí. Aquí es donde la subdivisión por equipo individual cambia más radicalmente la lectura. M04 promedia 79 UM/unidad; M11 promedia 49 UM/unidad. La diferencia entre estos dos equipos del mismo tipo (30 UM/unidad) es mayor que la diferencia entre los tipos A1 y D4 (que es de unas 25 UM). Tratarlos como un grupo “C3” da un promedio (64.4) que no representa a ninguno de los dos. Adicionalmente, M11 tiene IQR estrecho (3.8) mientras M04 tiene IQR amplio (17.0): M04 no solo es más caro, también es menos predecible. La decisión metodológica que sigue (excluir C3 del análisis estratificado) queda doblemente justificada: por bajo n y por heterogeneidad interna.</p>
+<p>D4: dos equipos eficientes pero distintos. M05 promedia 10.1, M12 promedia 7.2. La diferencia absoluta (3 UM/unidad) parece pequeña pero representa un 40% de variación relativa. En insumos la diferencia es aún más marcada (5.3 vs 1.4). Sin embargo, M05 muestra un máximo de 46.2 con desviación estándar de 8.1, lo que indica al menos un outlier extremo que distorsiona su media. La pregunta operativa relevante: ¿qué hace que M12 sea más eficiente que M05? Si es estructural (productos asignados más simples), es composición. Si es técnico (mejor mantenimiento, mejor operario), es una oportunidad de mejora replicable.</p>
+<div class="alert alert-primary">
 <ul>
-<li>C3 es donde la subdivisión por equipo individual cambia más radicalmente . M04 (n=4) opera con un costo de transformación medio de 79.4 UM/unidad; M11 (n=4) opera con 49.4. La diferencia entre estos dos equipos (30 UM/unidad) es mayor que la diferencia entre A1 y D4 (que es de unas 25 UM). Tratarlos como un grupo “C3” da un promedio de 64.4, que no representa adecuadamente ni a M04 ni a M11.
-las distribuciones intra-equipo son distintas: M11 tiene un IQR de 3.8 (muy estable dentro de su nivel), mientras que M04 tiene un IQR de 17.0 (alta variabilidad). M04 no solo es más caro: también es menos predecible.</li>
-<li>D4: M05 y M12 son ambos significativamente más eficientes que el resto del sistema, pero también son distintos entre sí: M05 promedia 10.1 UM/unidad, M12 promedia 7.2. La diferencia absoluta (3 UM/unidad) parece pequeña en el contexto del sistema, pero representa una diferencia relativa del 40% entre ambos equipos.
-En costo de insumo, la diferencia es aún más marcada: M05 con media 5.3, M12 con media 1.4. Sin embargo, M05 muestra una desviación estándar de 8.1 con un máximo de 46.2, lo que indica al menos un outlier extremo. Esto compromete la lectura de M05 — su comportamiento “típico” puede ser muy distinto del que sugiere su media.
-<strong>¿qué hace que M12 sea más eficiente que M05? Si es una diferencia estructural (ejemplo: M12 procesa productos más simples), entonces la diferencia es una composición. Si es una diferencia técnica del equipo (mejor mantenimiento, operario más capacitado, tecnología más nueva), entonces hay una oportunidad de mejora replicable hacia M05.</strong></li>
+<li>A1 es una familia coherente; los siete equipos pueden tratarse analíticamente como un grupo.</li>
+<li>C3 esconde dos equipos muy diferentes (M04 y M11): el promedio del tipo no representa a ninguno.</li>
+<li>M02 (B2) es indistinguible de A1 en costo: vale la pena revisar si la clasificación tecnológica B2 sigue siendo analíticamente útil.</li>
 </ul>
+</div>
 </div>
 </div>
 <div id="señales-de-heterogeneidad-estructural" class="section level2 hasAnchor" number="6.6">
 <h2><span class="header-section-number">6.6</span> Señales de heterogeneidad estructural<a href="análisis-exploratorio-básico.html#se%C3%B1ales-de-heterogeneidad-estructural" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>### Las distribuciones condicionales no son uniformes</p>
-<p>En conclusión , el análisis por tipo de equipo muestra diferencias muy grandes:</p>
+<p>Las secciones anteriores acumularon evidencia de que el sistema productivo no es homogéneo. Esta sección cierra el diagnóstico con dos análisis que formalizan la heterogeneidad y la convierten en una restricción metodológica concreta.</p>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:res-cost-tipoequipo">Table 6.11: </span>Tabla resumen costos por tipo de equipo
@@ -2808,10 +2801,11 @@ D4
 </tr>
 </tbody>
 </table>
+<p>Esta tabla resume lo que ya sabíamos pero ahora con propósito metodológico explícito: las distribuciones de costo dependen radicalmente del subgrupo donde se mira. C3 y D4 difieren en un factor de 7×. La pregunta natural es si esos cuatro grupos son siquiera comparables entre sí, o si están operando en universos económicos distintos por restricciones del propio proceso.</p>
 <div id="tabulación-cruzada-tipo_equipo-modalidad-num_insumos" class="section level3 hasAnchor" number="6.6.1">
 <h3><span class="header-section-number">6.6.1</span> Tabulación cruzada tipo_equipo × modalidad × num_insumos<a href="análisis-exploratorio-básico.html#tabulaci%C3%B3n-cruzada-tipo_equipo-modalidad-num_insumos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Las diferencias son tan marcadas que invitan a preguntar: ¿cada tipo de equipo es realmente comparable con los otros?
-Una tabulación cruzada contesta la pregunta y cambia el análisis:</p>
+La tabla cruzada de las tres dimensiones operativas principales (tipo_equipo × modalidad_proceso × num_insumos) revela la estructura subyacente del sistema:</p>
 <table class="table table table-striped table-hover" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:bivariado-cost-tipoequipo">Table 6.12: </span>Combinaciones observadas con resaltado en ceros
@@ -3171,36 +3165,76 @@ Z
 </tr>
 </tbody>
 </table>
-<p>El espacio operativo no es completo. No todos los equipos operan en todas las modalidades. No todas las modalidades se ejecutan con todos los números de insumos. Las combinaciones son asimétricas y muchas celdas están vacías o con muy pocas observaciones.</p>
+<p>El descubrimiento. El espacio operativo no es un cubo completo. De 24 combinaciones posibles, 11 están vacías o tienen una sola observación. D4 solo opera en (X, 1). C3 solo opera en X. Modalidad Z prácticamente no existe fuera de A1.
+Esto no es una característica del muestreo, sino del proceso real: hay restricciones técnicas y operativas que determinan qué combinaciones son factibles y cuáles no.
+Lo que parecía un dataset plano con variables categóricas independientes es en realidad un sistema con dependencias operativas:
+• El tipo de equipo determina qué modalidades de proceso son técnicamente factibles.
+• El tipo de equipo determina qué configuraciones de insumos son posibles.
+• Modalidad y número de insumos están condicionados por el equipo donde se ejecuta la orden.</p>
+<div class="alert alert-primary">
+<ul>
+<li>El espacio operativo está truncado: 11 de 24 combinaciones posibles son inexistentes o casi vacías.</li>
+<li>Las variables categóricas no son independientes; existen dependencias operativas que reflejan restricciones técnicas reales.</li>
+<li>El dataset no es una muestra aleatoria de un universo uniforme; refleja la estructura del proceso productivo real.</li>
+</ul>
 </div>
-<div id="descubrimiento-el-espacio-operativo-está-truncado" class="section level3 hasAnchor" number="6.6.2">
-<h3><span class="header-section-number">6.6.2</span> Descubrimiento: el espacio operativo está truncado<a href="análisis-exploratorio-básico.html#descubrimiento-el-espacio-operativo-est%C3%A1-truncado" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><strong>Lo que parecía un dataset plano co variables categóricas independientes es en realidad un sistema con dependencias operativas:</strong>
-- El tipo de equipo determina qué modalidades de proceso son factibles.
-- El tipo de equipo determina el número de insumos.</p>
-<p>El dataset refleja restricciones técnicas reales de la planta, no una muestra aleatoria de un universo uniforme.</p>
 </div>
 </div>
 <div id="implicaciones-metodológicas-del-descubrimiento" class="section level2 hasAnchor" number="6.7">
 <h2><span class="header-section-number">6.7</span> Implicaciones metodológicas del descubrimiento<a href="análisis-exploratorio-básico.html#implicaciones-metodol%C3%B3gicas-del-descubrimiento" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="por-qué-el-análisis-marginal-puede-ser-engañoso-confounding" class="section level3 hasAnchor" number="6.7.1">
 <h3><span class="header-section-number">6.7.1</span> Por qué el análisis marginal puede ser engañoso (confounding)<a href="análisis-exploratorio-básico.html#por-qu%C3%A9-el-an%C3%A1lisis-marginal-puede-ser-enga%C3%B1oso-confounding" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Si las categorías no son independientes, comparar costos marginalmente es engañoso. Ejemplo concreto:</p>
-<p>Si D4 solo opera en modalidad X con 1 insumo, y A1 opera en X, Y y Z con 1 o 2 insumos, entonces decir “D4 es más barato que A1” mezcla dos cosas: el efecto del equipo y el efecto de la modalidad/insumos. No sabemos si D4 es barato porque el equipo es eficiente, o porque solo se usa en las configuraciones más simples.</p>
-<p>Este tipo de error se llama confusión (confounding) y es una de las trampas clásicas de los análisis agregados.</p>
-<p>Desde este punto del capítulo, el análisis abandona la lógica “promedio por categoría” y adopta una lógica condicional: cada efecto se evalúa dentro del contexto operativo donde sí hay comparabilidad.</p>
+<p>Cuando las categorías no son independientes, comparar costos marginalmente es estadísticamente engañoso. El ejemplo más claro lo da D4:
+D4 tiene costo medio de 8.8 UM/unidad. A1 tiene costo medio de 33.0 UM/unidad. Conclusión aparente: D4 es 4× más eficiente que A1.
+Esta conclusión es defectuosa. D4 solo opera en la combinación (X, 1) —la configuración operativa más simple del sistema—. A1, en cambio, opera en seis combinaciones distintas, incluyendo las más complejas. La comparación está mezclando dos efectos:
+• El efecto del equipo (A1 vs D4).
+• El efecto de la configuración operativa (combinaciones simples vs todo el espectro).
+Sin separarlos, no sabemos si D4 es realmente más eficiente como tecnología, o si simplemente se le asignan las órdenes más fáciles. Este tipo de error tiene un nombre técnico: confusión (confounding). Es una de las trampas clásicas de los análisis agregados sobre datasets con dependencias entre variables.
+Para la dirección financiera: este descubrimiento implica que cualquier reporte que compare equipos por costo promedio sin condicionar por modalidad e insumos está produciendo conclusiones potencialmente incorrectas. Una decisión como “migrar producción al equipo D4 porque es más barato” puede ser un error técnico si D4 simplemente no puede ejecutar las órdenes complejas que actualmente se asignan a A1.
+A partir de este punto, el análisis abandona la lógica de “promedio por categoría” y adopta una lógica condicional: cada efecto se evalúa dentro del contexto operativo donde sí hay comparabilidad real.</p>
 </div>
 <div id="decisiones-de-exclusión-justificadas" class="section level3 hasAnchor" number="6.7.2">
 <h3><span class="header-section-number">6.7.2</span> Decisiones de exclusión justificadas<a href="análisis-exploratorio-básico.html#decisiones-de-exclusi%C3%B3n-justificadas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Tras el diagnóstico anterior, se adoptan tres decisiones que guían el resto del capítulo:
-Decisión 1 — Exclusión de modalidad Z. La modalidad Z corresponde a órdenes excepcionales donde se aplican las modalidades X y Y al mismo producto por solicitud del cliente. Con 14 órdenes distribuidas en 3 celdas (3.5% del dataset), no permite inferencia estadística con potencia suficiente y, al representar una composición de procesos en lugar de una modalidad alternativa, no es conceptualmente comparable con X o Y. Las órdenes con Z se excluyen del análisis principal y se caracterizan brevemente al final del capítulo (sección 6.8).
-Decisión 2 — Exclusión del tipo_equipo C3. C3 tiene solo 8 órdenes (2%), concentradas casi íntegramente en la combinación (X, 1) con un único caso en (X, 2) y cero en modalidad Y. Con este n, los intervalos de confianza son extremadamente amplios y cualquier diferencia observada queda dominada por ruido. C3 se excluye del análisis estratificado y sus estadísticos descriptivos se reportan al final con una advertencia explícita sobre su no comparabilidad.</p>
-<p>Tras estas exclusiones, el dataset principal queda conformado por r n_principal órdenes . Sobre este subconjunto se desarrolla el análisis estratificado que sigue.</p>
+<p>Tras el diagnóstico anterior, se adoptan dos exclusiones explícitas que guían el análisis estratificado del Capítulo 7:
+Exclusión 1: modalidad Z. Las 14 órdenes en Z corresponden a configuraciones excepcionales donde se aplican las modalidades X y Y al mismo producto por solicitud del cliente. Tres razones para excluirlas:
+• Conceptual: Z es una composición de procesos, no una modalidad alternativa comparable a X o Y.
+• Estadística: n=14 distribuidas en tres celdas no permite inferencia con potencia razonable.
+• Operativa: las características de Z (sobrecosto sistemático, baja frecuencia, dependencia de pedido específico) la hacen un caso especial que merece análisis separado, no comparación directa.
+Las órdenes Z se documentan brevemente como referencia descriptiva al final del Capítulo 7, sin pretensión inferencial.
+Exclusión 2: tipo de equipo C3. Las 8 órdenes de C3 (M04: 4, M11: 4) presentan dos problemas simultáneos:
+• Bajo n: intervalos de confianza tan amplios que cualquier comparación es ruido.
+• Heterogeneidad interna: M04 y M11 son tan diferentes entre sí (medias 79 vs 49) que tratarlos como grupo no tiene sentido.
+C3 se excluye del análisis estratificado y se reporta descriptivamente al final con advertencia explícita sobre su no comparabilidad.
+Tras estas exclusiones, el dataset principal queda con 373 órdenes (395 - 14 órdenes Z - 8 órdenes C3). Sobre este subconjunto se desarrolla el análisis estratificado del Capítulo 7. El dataset depurado completo (395 órdenes) se conserva como referencia y para los reportes descriptivos de los grupos excluidos.</p>
+<div class="alert alert-primary">
+<ul>
+<li>Las comparaciones marginales producen conclusiones engañosas cuando las categorías son dependientes (confounding).</li>
+<li>Modalidad Z y tipo C3 se excluyen del análisis estratificado por bajo n y por no-comparabilidad estructural.</li>
+<li>El dataset principal queda con 373 órdenes; los grupos excluidos se documentan descriptivamente al final del Capítulo 7.</li>
+</ul>
+</div>
 </div>
 </div>
 <div id="cierre-qué-sabemos-qué-no-sabemos-qué-sigue" class="section level2 hasAnchor" number="6.8">
 <h2><span class="header-section-number">6.8</span> Cierre: qué sabemos, qué no sabemos, qué sigue<a href="análisis-exploratorio-básico.html#cierre-qu%C3%A9-sabemos-qu%C3%A9-no-sabemos-qu%C3%A9-sigue" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<pre><code>  → Hipótesis que justifican el análisis estratificado</code></pre>
+<p>Qué sabemos al cerrar este capítulo.
+El sistema productivo tiene una estructura económica más compleja de la que sugiere cualquier análisis agregado. Cuatro hallazgos principales:
+1. El costo total está dominado por la transformación (85.6%), no por los insumos. Cualquier programa de eficiencia debe priorizar el componente de proceso.
+2. El sistema opera en al menos cuatro regímenes de costo distintos según tipo de equipo: estándar (A1, B2), alto-inestable (M04), alto-estable (M11), eficiente (D4). Las recomendaciones genéricas no aplican.
+3. Las variables operativas (volumen, duración) están más fuertemente acopladas que las variables económicas (costos), sugiriendo que la heterogeneidad de costo proviene principalmente de cómo y cuánto se produce, no de qué materiales se usan.
+4. El espacio operativo está truncado: el dataset refleja restricciones técnicas reales, no una muestra aleatoria. Esto invalida el análisis marginal y exige análisis estratificado.
+Qué no sabemos.
+• Si las diferencias entre equipos del mismo tipo (M15 vs M13 en A1; M04 vs M11 en C3; M05 vs M12 en D4) son estructurales (asignación diferenciada de productos) o técnicas (eficiencia real del equipo). Sin estratificar por categoría de producto, no se puede separar.
+• Si los equipos eficientes (D4) lo son por la tecnología o por la simplicidad de las configuraciones que ejecutan. La pregunta solo se puede responder con datos que actualmente no existen (D4 nunca ha operado en otras configuraciones).
+• Cuál es el efecto real del número de insumos sobre el costo cuando se controla por equipo y modalidad. La comparación marginal sugiere que dos insumos elevan el costo, pero no se sabe si esto se mantiene dentro de cada estrato.
+• Si la modalidad Y es genuinamente más estable que X, o si esa estabilidad refleja la composición particular de equipos y productos asignados a cada modalidad.
+Qué sigue.
+El Capítulo 7 retoma estas preguntas con análisis estratificado sobre el dataset principal (373 órdenes, sin Z y sin C3). La estructura del análisis estará organizada alrededor de las comparaciones que el diseño truncado del dataset sí permite hacer:
+• Efecto puro del tipo de equipo dentro del único estrato donde A1, B2 y D4 coexisten: la combinación (X, 1).
+• Efecto de modalidad y número de insumos dentro de A1, el único equipo con cobertura completa de las cuatro combinaciones (X/Y × 1/2 insumos).
+• Heterogeneidad intra-tipo y comparación de regímenes operativos a nivel de equipo individual.
+• Correlaciones condicionales dentro de A1 para verificar si las economías de escala observadas en el agregado se mantienen al controlar por equipo y modalidad.
+El Capítulo 8 formaliza las hipótesis derivadas en pruebas inferenciales con cálculo de tamaños de efecto. Las exclusiones documentadas en este capítulo restringen el alcance pero protegen la validez del análisis posterior.</p>
 
 </div>
 </div>
