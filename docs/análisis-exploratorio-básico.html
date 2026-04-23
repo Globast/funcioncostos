@@ -329,17 +329,17 @@ La desviación estándar alcanza 15.26, lo que equivale a un coeficiente de vari
 El rango intercuartílico (14.54) confirma que el 50% central de las órdenes opera entre 21.91 y 36.45 UM/unidad, un rango operativo razonablemente delimitado. Pero los extremos cuentan otra historia: el mínimo de 2.77 está muy alejado del Q1 (21.91), y el máximo de 97.18 multiplica por más de tres el Q3 (36.45). Esta asimetría sugiere que la distribución no es simétrica y que puede haber fenómenos estructurales distintos en los extremos.</p>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/ck-hist-t-1.png" alt="" width="100%" style="display: block; margin: auto;" /></p>
 <p>El histograma con la curva de densidad confirma esta lectura. La masa principal de la distribución se concentra entre el IQR, pero aparece un leve segundo abultamiento que rompe el patrón unimodal esperado. Este es una señal de una distribución bimodal que habitualmente indica que los datos provienen de dos procesos generadores distintos mezclados, no de un único proceso con ruido aleatorio.</p>
-<p>El núcleo de la distribución se concentra claramente alrededor de 29.94, con una densidad máxima cercana a los 25–30 UM. Esta región coincide con la mediana (r round(ct_med,2)) y el rango intercuartílico.
-La forma de la distribución no es simétrica. Se observa una cola derecha prolongada, que se extiende hasta valores cercanos a 97. Esta asimetría implica que, aunque la mayoría de los costos son moderados, existe una proporción pequeña de observaciones con costos significativamente más altos.
-Adicionalmente, aparece un leve segundo abultamiento en valores bajos (≈ 5–15 UM). Esto sugiere la posible existencia de subgrupos dentro del proceso, es decir, no todos los registros provienen del mismo mecanismo generador de costos.</p>
-<p>Podrían coexistir:
-- procesos simples o de baja complejidad (costos bajos)
-- procesos estándar (zona central)
-- procesos excepcionales o más complejos (cola derecha)</p>
-<p>En términos operativos, el sistema no solo presenta variabilidad, sino también estructura interna: no es un proceso homogéneo, sino una mezcla de dinámicas distintas que conviene separar antes de cualquier inferencia o optimización.</p>
-<p>El bigote superior se extiende hasta un cierto punto, pero inmediatamente aparecen múltiples observaciones por encima, marcadas en rojo. Estos son outliers superiores, y no son pocos ni aislados: forman un grupo visible.
-Existe una subpoblación de costos altos. Es decir no son casos extremos que sean puntuales. En la parte inferior no se observan outliers relevantes. El mínimo está dentro del rango esperado
-El boxplot confirma la dispersión y evidencia que el fenómeno clave no es la variabilidad general, sino la existencia de una dinámica diferenciada en costos altos, que requiere segmentación o modelado específico.</p>
+<div class="alert alert-primary">
+<p>Cuando un histograma muestra patron bimodal, el promedio numérico describe un punto que no corresponde realmente a ningún proceso real: queda entre los dos modos. Es el equivalente a calcular la “talla promedio” de una población donde conviven niños y adultos. El número existe, pero no representa a nadie.</p>
+</div>
+<p>El boxplot complementa la lectura mostrando outliers altos, que no son uno o dos casos puntuales, sino un grupo visible de órdenes con costos superiores. La cola inferior, en cambio, no presenta datos atipicos relevantes. Sugiere que el proceso tiene una capacidad limitada de bajar costos por debajo de cierto umbral, pero una capacidad considerable de superarlos hacia arriba bajo ciertas condiciones.</p>
+<div class="alert alert-primary">
+<ul>
+<li>El costo presenta volatilidad alta (CV = 51%) que cuestiona la utilidad operativa del promedio simple.</li>
+<li>La distribución es asimétrica con bimodalidad incipiente con lo cual parece mezclar al menos dos modelos operativos distintos.</li>
+<li>Los outliers superiores forman una subpoblación, no anomalías aisladas. Requieren tratamiento específico, no exclusión.</li>
+</ul>
+</div>
 </div>
 <div id="costo-unitario-de-los-insumos" class="section level3 hasAnchor" number="6.2.2">
 <h3><span class="header-section-number">6.2.2</span> Costo unitario de los insumos<a href="análisis-exploratorio-básico.html#costo-unitario-de-los-insumos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -410,15 +410,16 @@ IQR
 </tr>
 </tbody>
 </table>
-<p>El costo de insumo promedio es de 5.05 UM/unidad (DS = 4.42 UM/unidad), con un coeficiente de variación de 87.5%. El 50% de las órdenes tiene un costo de insumo por debajo de 4.18 UM/unidad, con un mínimo de 0.01 y un máximo de 46.22 UM/unidad. El rango intercuartílico es de 3.78 UM/unidad.
-El comportamiento típico se concentra en valores bajos. La mayoría de los insumos se ubican en niveles reducidos de costo, mientras que la media (5.05) es superior, lo que evidencia la influencia de valores más altos sobre el promedio. Esta diferencia confirma una asimetría positiva: pocos insumos concentran costos considerablemente mayores.
-El rango intercuartílico (3.78) delimita el comportamiento típico: el 50% central de los costos se sitúa en un intervalo relativamente acotado, lo que sugiere que existe un conjunto dominante de insumos de bajo costo. Sin embargo, este núcleo convive con una cola derecha extensa.
-En resumen:
-- comportamiento homogéneo
-- un grupo mayoritario de insumos de bajo costo
-- un conjunto reducido de insumos de costo medio
-- pocos insumos de alto impacto económico</p>
+<p>El costo de insumo promedio es de 5.05 UM/unidad, sustancialmente menor que el de transformación. Lo notable es su coeficiente de variación: 87.5%, una variabilidad relativa muy superior a la del componente de transformación (51%). En insumos, la dispersión es casi tan grande como el propio promedio.
+La distribución es marcadamente asimétrica positiva. La mediana (4.18) está claramente por debajo de la media (5.05), lo que confirma la influencia de valores altos en la cola derecha. El máximo (46.22) es nueve veces el Q3 (6.21), un ratio que revela la presencia de pocas órdenes con consumos de insumo desproporcionadamente costosos.
+Operativamente, un grupo dominante de insumos con costo bajo y una cola de insumos puntualmente costosos. ¿esos insumos caros corresponden a productos premium con precio diferenciado, o están subsidiados por la mezcla?</p>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/ck-hist-box_ci-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<div class="alert alert-primary">
+<ul>
+<li>Volatilidad relativa muy alta (CV = 87.5%), superior a la del componente de transformación.</li>
+<li>Mayoría de insumos baratos, minoría puntualmente cara.</li>
+</ul>
+</div>
 </div>
 <div id="costo-unitario-total" class="section level3 hasAnchor" number="6.2.3">
 <h3><span class="header-section-number">6.2.3</span> Costo unitario total<a href="análisis-exploratorio-básico.html#costo-unitario-total" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -490,27 +491,24 @@ IQR
 </tr>
 </tbody>
 </table>
-<p>El costo unitario total promedio es de 34.99 UM/unidad , la cercanía relativa entre ambas indica que, aunque existe asimetría, el núcleo del sistema está bien definido. Sin embargo, la media se mantiene por encima de la mediana, lo que confirma la presencia de una cola derecha..
-Un coeficiente de variación de 49.4% (DS = 17.29), la variabilidad del costo total no es despreciable . De este promedio, el 85.6% corresponde al costo de transformación y el 14.4% al costo de insumo.
-El 50% de las órdenes presenta un costo unitario total por debajo de 33.64 UM/unidad, con un rango entre 4.3 y 111.72.
-El boxplot confirma la presencia de outliers superiores múltiples, no aislados. Estos valores altos no corresponden a ruido aleatorio, sino a una fracción del sistema que sistemáticamente incurre en costos elevados.</p>
-<p>Descomposición del costo total:
-- Costo de transformación representa aproximadamente 85.6% del total
-- Costo de insumos representa aproximadamente 14.4%
-Claramente el componente dominante del costo total es el proceso de transformación, mientras que los insumos, aunque más variables, tienen menor peso relativo en el agregado.</p>
-<p>El sistema productivo opera mayoritariamente en un rango de costos relativamente estable, pero está condicionado por una fracción de casos con costos significativamente más altos. Estos casos no son marginales y deben interpretarse como parte de la estructura del proceso, no como anomalías aisladas. La clave analítica no está en el promedio, sino en entender qué condiciones generan esos costos elevados y cómo se relacionan con los componentes del costo total.</p>
+<p>El costo unitario total promedio es de 34.99 UM/unidad con CV del 49.4%, moderadamente más estable que sus componentes individuales considerados por separado. La descomposición es reveladora:
+• Transformación: 85.6% del costo total promedio.
+• Insumos: 14.4% del costo total promedio.
+Cualquier estrategia de reducción de costos enfocada exclusivamente en insumos tiene un techo del 14% sobre el costo unitario. La palanca real está en la transformación.</p>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/ck-hist-box_ctot-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
-<p>El costo unitario total hereda la asimetría de sus dos componentes. Cualquier iniciativa de reducción de costos que se concentre solo en el componente de insumos tendrá un techo muy bajo. La palanca real está en la transformación.</p>
-<div class="alert alert-info">
-<p>Los tres costos presentan distribuciones asimétricas con cola derecha pronunciada.
-En costo unitario de transformacion se observa una bimodalidad leve, es decir un segundo abultamiento en el rango bajo (≈5–15 UM), separado del principal que está alrededor ~25–30 UM. Esto podría indicar que los datos no provienen de un proceso único, sino de dos o más procesos distintos mezclados.
-En consecuencia, el sistema productivo puede no ser un único proceso homogéneo, sino una mezcla de regímenes operativos con dinámicas de costo distintas. Si esto es cierto, los estadísticos agregados están ocultando diferencias estructurales importantes</p>
+<p>El boxplot del costo total hereda los outliers superiores que ya aparecían en transformación e insumos individualmente. La presencia simultánea de cola larga en ambos componentes los amplifica al agregarlos. El costo unitario total opera mayoritariamente en un rango estable (Q1 a Q3: 25.6 a 41.7), pero está condicionado por una fracción de órdenes que estructuralmente, no por azar, incurre en costos significativamente más altos.</p>
+<div class="alert alert-primary">
+<ul>
+<li>La transformación domina la estructura de costos (85.6%): cualquier programa de mejora debe priorizarla sobre insumos.</li>
+<li>La asimetría se hereda y amplifica al agregar componentes: el promedio total subestima la cola alta.</li>
+<li>La fracción de órdenes con costo elevado no es ruido aleatorio; es una característica estructural del sistema que merece análisis específico.</li>
+</ul>
 </div>
 </div>
 </div>
 <div id="análisis-univariado-de-predictoras-numéricas" class="section level2 hasAnchor" number="6.3">
 <h2><span class="header-section-number">6.3</span> Análisis univariado de predictoras numéricas<a href="análisis-exploratorio-básico.html#an%C3%A1lisis-univariado-de-predictoras-num%C3%A9ricas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Las variables numéricas predictoras son <code>volumen_lote</code>, <code>duracion_proceso</code>, <code>cantidad_insumo_1</code> y <code>cantidad_insumo_2</code>.</p>
+<p>Tras revisar las variables respuesta surge la pregunta ¿qué características operativas explican esa variabilidad? Las cuatro predictoras numéricas describen tres dimensiones del proceso productivo: escala (volumen), intensidad temporal (duración) y consumo material (cantidades de insumo).</p>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:ck-resumen-num-predictoras">Table 6.4: </span>Resumen descriptivo de las variables numéricas seleccionadas
@@ -681,11 +679,13 @@ cantidad_insumo_2
 </tbody>
 </table>
 <ul>
-<li><p><em>Volumen de lote</em>, es la variable más heterogénea. La media de 2739.03 supera claramente a la mediana 1989 indicando asimetría positiva. El rango es muy amplio (100 a 13300) y el IQR (2063) es elevado, señal de que incluso el comportamiento “típico” presenta alta dispersión. el proceso opera con lotes muy dispares, dependiendo de los pedidos de los clientes , el proceso es make to order. No hay un tamaño estándar dominante.</p></li>
-<li><p><em>Duración del proceso</em>, es heterogéneo también pero más controlado. La media (115.79) es superior a la mediana (100), nuevamente cola derecha. El IQR muestra que la mitad de los procesos se concentra entre 60 y 150 horas, lo que define un rango operativo razonablemente estable. Sin embargo, el máximo de 482 horas apunta a procesos excepcionalmente largos.</p></li>
-<li><p><em>Cantidad de insumo 1</em>, comportamiento más discreto y concentrado. La mediana es 2 y el IQR es 2, lo que indica que la mayoría de los casos utiliza entre 1 y 3 unidades. La media (2.29) ligeramente superior a la mediana sugiere algunos valores altos, pero sin una dispersión extrema. Esta variable refleja un consumo relativamente estable y predecible, con variaciones moderadas.</p></li>
-<li><p><em>Cantidad de insumo 2</em>: Tiene menor número de observaciones, no todos las ordenes llevan insumo 2. Su mediana es 1 y el IQR es 1.25, lo que muestra una concentración aún mayor que en el insumo 1. La dispersión es baja y los valores extremos (máximo de 7) son menos pronunciados. El segundo insumo actúa como un componente opcional o complementario, con consumo bajo y controlado.</p></li>
+<li><p><em>Volumen de lote</em>. Es la variable más heterogénea. La media (2739) supera ampliamente a la mediana (1989), señal de asimetría positiva pronunciada. El rango va de 100 a 13300 unidades —un factor de 133×—. El IQR de 2063 unidades indica que incluso el comportamiento “típico” presenta dispersión muy alta. Esta heterogeneidad refleja la naturaleza make-to-order del proceso donde cada orden responde a un pedido específico y no existe un tamaño estándar dominante. La consecuencia analítica que el sistema no tiene reglas operativas uniformes y requiere segmentación por escala de producción.</p></li>
+<li><p><em>Duración del proceso</em>. Heterogénea pero más controlada. La media (115.8) horas, está moderadamente por encima de la mediana (100) horas, nuevamente con cola derecha. El IQR (60 a 150 horas) define un rango operativo razonablemente delimitado. El máximo de 482 horas señala procesos excepcionalmente largos que merecerían revisión específica.</p></li>
+<li><p><em>Cantidad de insumo 1</em>. Comportamiento mucho más concentrado. La mediana de 2 kilos y el IQR de 2 indican que la mayoría de las órdenes utiliza entre 1 y 3 kilos. La media (2.3) ligeramente superior a la mediana sugiere algunos valores altos sin dispersión extrema. Esta variable refleja un consumo relativamente estable y predecible, es positivo.</p></li>
+<li></li>
+<li><p><em>Cantidad de insumo 2</em>. Solo aparece en 124 órdenes (las que tienen num_insumos = 2). La mediana de 1 y el IQR de 1.2 muestran una concentración aún mayor. El máximo de 7 es modesto frente al de insumo 1. Funciona como componente opcional o complementario, con consumo bajo y controlado.</p></li>
 </ul>
+<p>La principal fuente de heterogeneidad del sistema productivo no está en los insumos —que son estables— sino en la escala de los lotes y la duración de los procesos. Esto tiene una implicación directa para la modelación posterior: cualquier modelo o iniciativa de mejora que ignore volumen y duración va a estar mal especificado y producirá conclusiones engañosas.</p>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box-num-predictoras-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
 <p>La principal fuente de heterogeneidad no está en los insumos, sino en el tamaño de los lotes y la duración de los procesos. Esto sugiere que cualquier modelamiento o mejora operativa debe centrarse en segmentar por escala de producción y complejidad del proceso, más que en el consumo de insumos.</p>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/hist-num-predictoras-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>

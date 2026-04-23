@@ -152,7 +152,7 @@ Cuando un histograma muestra patron bimodal, el promedio numérico describe un p
 El boxplot complementa la lectura mostrando outliers altos, que no son uno o dos casos puntuales, sino un grupo visible de órdenes con costos superiores. La cola inferior, en cambio, no presenta datos atipicos relevantes. Sugiere que el proceso tiene una capacidad limitada de bajar costos por debajo de cierto umbral, pero una capacidad considerable de superarlos hacia arriba bajo ciertas condiciones.
 
 ::: {.alert .alert-primary}
-- El costo presenta volatilidad alta (CV = `r round(ci_cv, 1)`%) que cuestiona la utilidad operativa del promedio simple.
+- El costo presenta volatilidad alta (CV = `r round(ct_cv, 1)`%) que cuestiona la utilidad operativa del promedio simple.
 - La distribución es asimétrica con bimodalidad incipiente con lo cual parece mezclar al menos dos modelos operativos distintos.
 - Los outliers superiores forman una subpoblación, no anomalías aisladas. Requieren tratamiento específico, no exclusión.
 ::: 
