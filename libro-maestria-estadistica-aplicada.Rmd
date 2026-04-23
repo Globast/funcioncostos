@@ -1034,6 +1034,11 @@ knitr::kable(
 ) %>%
   kableExtra::kable_styling(full_width = FALSE)
 
+R -e "bookdown::render_book('index.Rmd', 'bookdown::gitbook')"
+git add .
+git commit -m "JUEVES"
+git push origin main
+
 :::
 
 ::: {.column width="60%"}
@@ -1058,6 +1063,8 @@ ggplot(tabla_tipo_equipo_plot, aes(x = Categoria, y = Frecuencia)) +
   theme_bw(base_size = 12) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
   ```
+:::
+::::::
 
 ```{r equipo-id, fig.width=10, fig.height=6, message=FALSE, warning=FALSE}
 tabla_equipo_id <- datos %>%
