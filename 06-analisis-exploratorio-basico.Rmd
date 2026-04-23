@@ -1460,7 +1460,7 @@ box_ct_equipo + box_ci_equipo
 
 ```
 
-```{r tabla-resumen-tipoequipo-inline, message=FALSE, warning=FALSE}
+```{r tabla-resumen-equipoid-inline, message=FALSE, warning=FALSE}
 
 equipoid_n <- setNames(resumen_bivariado_ct_equipo$n, resumen_bivariado_ct_equipo$tipo)
 tipoequipo_media <- setNames(resumen_bivariado_ct_equipo$media, resumen_bivariado_ct_equipo$tipo)
