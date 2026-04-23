@@ -155,7 +155,12 @@ cor_A1_B2 <- datos_principal %>%
          cantidad_insumo_1, cantidad_insumo_2) %>%
   cor(use = "pairwise.complete.obs", method = "spearman") %>%
   round(3)
-cor_A1_B2
+
+
+knitr::kable(rcor_A1_B2, caption = "Correlaciones dentro de A1 y B2",
+                 format = "html",
+             table.attr = "class='table'") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
 ```
 Por qué importa este contraste. Si la correlación marginal y la correlación dentro de A1 difieren sustancialmente, significa que parte de la relación observada globalmente no es un efecto directo de la variable, sino un efecto de composición: los equipos con ciertos perfiles de volumen también tienen ciertos perfiles de costo, y eso infla o deforma la correlación marginal.
 Traducción financiera. Las economías de escala son reales dentro de A1, pero el tamaño del efecto marginal que ven los reportes tradicionales puede estar sobrestimado porque mezcla el efecto de "producir más" con el efecto de "producir en un equipo distinto".
