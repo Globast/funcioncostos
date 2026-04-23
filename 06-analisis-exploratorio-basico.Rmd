@@ -821,7 +821,6 @@ ggplot(tabla_insumo_2, aes(x = Categoria, y = Frecuencia)) +
 
 Parte del comportamiento del sistema está siendo explicado por unos cuantos casos recurrentes lo que puede sesgar interpretaciones si no se toma en cuenta,pues los patrones observados están fuertemente influenciados por los grupos más grandes. En este contexto, se debe evitar conclusiones generalizadas a partir de casos poco representativos.
 
-Tipo de equipo: La categoría A1 concentra el `r round(freq_te$Porcentaje[1], 2)`% todas las órdenes. Esto es un dato con consecuencias profundas: cualquier estadístico global del sistema está dominado por A1. Cuando un reporte ejecutivo habla de "el costo promedio del sistema", en realidad está hablando, en casi tres cuartos, del costo promedio de A1. Las categorías B2 (`r round(freq_te$Porcentaje[2], 2)`%), D4 (`r round(freq_te$Porcentaje[3], 2)`%) y especialmente C3 (`r round(freq_te$Porcentaje[4], 2)`%) tienen una representación mucho menor. C3, con apenas 8 órdenes, prácticamente no ofrece base suficiente para hacer inferencias estadísticas confiables.
 
 
 ## Análisis bivariado marginal
