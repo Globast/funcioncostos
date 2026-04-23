@@ -673,8 +673,7 @@ Gestionar outliers como categoría propia. Los valores extremos no son errores a
 
 El sistema ya muestra señales de eficiencia cuando opera a escala, pero pierde control en condiciones de baja producción y alta variabilidad. La oportunidad  está en alinear la operación hacia volúmenes mayores, procesos estandarizados y segmentación inteligente de la producción. La producción es bajo pedido y no hay un tamaño de lote estándar, pero si la oportunidad de establecer tamaños mínimos de producción y/o una politica de precios que incentive la consolidación de pedidos.
 
-
- ### Diagramas de dispersión
+### Diagramas de dispersión
 
 ```{r scatter-prioritarios, fig.width=12, fig.asp = 1, warning=FALSE, message=FALSE}
 library(dplyr)

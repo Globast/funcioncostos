@@ -178,10 +178,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.5" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado-marginal"><i class="fa fa-check"></i><b>6.5</b> 6.5 Análisis bivariado marginal</a>
 <ul>
 <li class="chapter" data-level="6.5.1" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#correlacion-pearson"><i class="fa fa-check"></i><b>6.5.1</b> Correlacion Pearson</a></li>
-<li class="chapter" data-level="6.5.2" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#matriz-spearman"><i class="fa fa-check"></i><b>6.5.2</b> Matriz Spearman</a></li>
-<li class="chapter" data-level="6.5.3" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado-modalidad-proceso"><i class="fa fa-check"></i><b>6.5.3</b> Análisis bivariado: Modalidad proceso</a></li>
-<li class="chapter" data-level="6.5.4" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado-tipo-de-equipo"><i class="fa fa-check"></i><b>6.5.4</b> Análisis bivariado: tipo de equipo</a></li>
-<li class="chapter" data-level="6.5.5" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado-equipo_id"><i class="fa fa-check"></i><b>6.5.5</b> Análisis bivariado: Equipo_id</a></li>
+<li class="chapter" data-level="6.5.2" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#diagramas-de-dispersi%C3%B3n"><i class="fa fa-check"></i><b>6.5.2</b> Diagramas de dispersión</a></li>
+<li class="chapter" data-level="6.5.3" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#matriz-spearman"><i class="fa fa-check"></i><b>6.5.3</b> Matriz Spearman</a></li>
+<li class="chapter" data-level="6.5.4" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado-modalidad-proceso"><i class="fa fa-check"></i><b>6.5.4</b> Análisis bivariado: Modalidad proceso</a></li>
+<li class="chapter" data-level="6.5.5" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado-tipo-de-equipo"><i class="fa fa-check"></i><b>6.5.5</b> Análisis bivariado: tipo de equipo</a></li>
+<li class="chapter" data-level="6.5.6" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado-equipo_id"><i class="fa fa-check"></i><b>6.5.6</b> Análisis bivariado: Equipo_id</a></li>
 </ul></li>
 <li class="chapter" data-level="6.6" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#decisiones-metodol%C3%B3gicas-derivadas-del-eda-inicial"><i class="fa fa-check"></i><b>6.6</b> Decisiones metodológicas derivadas del EDA inicial</a></li>
 <li class="chapter" data-level="6.7" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#estructura-del-espacio-operativo-sobre-el-dataset-principal"><i class="fa fa-check"></i><b>6.7</b> Estructura del espacio operativo sobre el dataset principal</a>
@@ -1523,7 +1524,9 @@ El segundo insumo introduce una dinámica distinta. Sus correlaciones, aunque mo
 <p>Focalizar en el proceso de transformación. Dado su peso en el costo total, cualquier mejora en eficiencia operativa tiene un impacto directo. Esto incluye reducción de tiempos muertos, mejoras en utilización de equipos y eliminación de variabilidad innecesaria.</p>
 <p>Gestionar outliers como categoría propia. Los valores extremos no son errores aislados, son parte del sistema. Representan casos de alta complejidad o ineficiencia. Deben ser identificados, analizados y, si es posible, rediseñados. Ignorarlos distorsiona la toma de decisiones. Sistema mensual de identificación y analisis en profundidad de outlliers.</p>
 <p>El sistema ya muestra señales de eficiencia cuando opera a escala, pero pierde control en condiciones de baja producción y alta variabilidad. La oportunidad está en alinear la operación hacia volúmenes mayores, procesos estandarizados y segmentación inteligente de la producción. La producción es bajo pedido y no hay un tamaño de lote estándar, pero si la oportunidad de establecer tamaños mínimos de producción y/o una politica de precios que incentive la consolidación de pedidos.</p>
-<p>### Diagramas de dispersión</p>
+</div>
+<div id="diagramas-de-dispersión" class="section level3 hasAnchor" number="6.5.2">
+<h3><span class="header-section-number">6.5.2</span> Diagramas de dispersión<a href="análisis-exploratorio-básico.html#diagramas-de-dispersi%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/scatter-prioritarios-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
 <p>El sistema responde en su mayoria patrones monótonos con curvaturas y cambios de régimen.</p>
 <p>Las dos primeras relaciones —volumen frente a costo de transformación y costo total— muestran una caída clara del costo a medida que aumenta el volumen, pero no de forma constante. Hay una fase inicial donde el costo disminuye con rapidez (zona de baja escala), seguida de una zona donde la pendiente se suaviza. Esto indica que las economías de escala existen, pero no son uniformes: el beneficio marginal de aumentar volumen disminuye.</p>
@@ -1542,8 +1545,8 @@ No obstante, al contrastar estos resultados con los gráficos de dispersión y l
 La presencia de asimetrías marcadas, colas largas y valores atípicos —especialmente en costos y volumen— introduce inestabilidad en los coeficientes de Pearson, que pueden subestimar o distorsionar la intensidad real de las asociaciones.
 En este contexto, variables como volumen_lote, duracion_proceso y cantidad_insumo_1 muestran patrones monótonos claros, pero no proporcionales, lo que limita la capacidad de Pearson para describirlas adecuadamente. Por esta razón, la matriz de Spearman se vuelve necesaria, ya que captura la dirección y consistencia de estas relaciones sin depender de la linealidad, proporcionando una representación más robusta del comportamiento conjunto del sistema productivo.</p>
 </div>
-<div id="matriz-spearman" class="section level3 hasAnchor" number="6.5.2">
-<h3><span class="header-section-number">6.5.2</span> Matriz Spearman<a href="análisis-exploratorio-básico.html#matriz-spearman" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="matriz-spearman" class="section level3 hasAnchor" number="6.5.3">
+<h3><span class="header-section-number">6.5.3</span> Matriz Spearman<a href="análisis-exploratorio-básico.html#matriz-spearman" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:matriz-spearman">Table 6.7: </span><span id="tab:matriz-spearman">Table 6.8: </span>Matriz de correlación de Spearman
@@ -1778,8 +1781,8 @@ cantidad_insumo_2
 ## 6.9 Cierre: qué sabemos, qué no sabemos, qué sigue
 → Hipótesis que justifican el análisis estratificado</p>
 </div>
-<div id="análisis-bivariado-modalidad-proceso" class="section level3 hasAnchor" number="6.5.3">
-<h3><span class="header-section-number">6.5.3</span> Análisis bivariado: Modalidad proceso<a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado-modalidad-proceso" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="análisis-bivariado-modalidad-proceso" class="section level3 hasAnchor" number="6.5.4">
+<h3><span class="header-section-number">6.5.4</span> Análisis bivariado: Modalidad proceso<a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado-modalidad-proceso" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:bivariado-cc-modproceso">Table 6.9: </span>Resumen Bivariado costos de transformación por modalidad de proceso
@@ -2072,8 +2075,8 @@ X ≈ 4.80, Y ≈ 5.20, Z ≈ 6.86</p>
 <p>El tamaño de muestra de Z es bajo (n = 14).</p>
 <p>Y es más estable y ligeramente más costoso que X. Pero X es más volátil.</p>
 </div>
-<div id="análisis-bivariado-tipo-de-equipo" class="section level3 hasAnchor" number="6.5.4">
-<h3><span class="header-section-number">6.5.4</span> Análisis bivariado: tipo de equipo<a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado-tipo-de-equipo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="análisis-bivariado-tipo-de-equipo" class="section level3 hasAnchor" number="6.5.5">
+<h3><span class="header-section-number">6.5.5</span> Análisis bivariado: tipo de equipo<a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado-tipo-de-equipo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/bar-categoricas-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
@@ -2424,8 +2427,8 @@ D4
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box-equipo-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
 <p>Los boxplots confirman visualmente lo que ya sugerían los resúmenes numéricos: el tipo de equipo introduce regímenes claramente diferenciados de costos, tanto en transformación como en insumos.</p>
 </div>
-<div id="análisis-bivariado-equipo_id" class="section level3 hasAnchor" number="6.5.5">
-<h3><span class="header-section-number">6.5.5</span> Análisis bivariado: Equipo_id<a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado-equipo_id" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="análisis-bivariado-equipo_id" class="section level3 hasAnchor" number="6.5.6">
+<h3><span class="header-section-number">6.5.6</span> Análisis bivariado: Equipo_id<a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado-equipo_id" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:bivariado-cc-equipo">Table 6.13: </span>Resumen bivariado de costos de transformación por equipo y tipo de equipo

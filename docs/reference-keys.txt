@@ -48,6 +48,7 @@ análisis-univariado-de-predictoras-numéricas
 análisis-univariado-de-predictoras-categóricas
 análisis-bivariado-marginal
 correlacion-pearson
+diagramas-de-dispersión
 matriz-spearman
 análisis-bivariado-modalidad-proceso
 análisis-bivariado-tipo-de-equipo
