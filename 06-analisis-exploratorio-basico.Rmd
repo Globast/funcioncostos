@@ -970,7 +970,7 @@ kable(matriz_df,
 
 - *Economías de escala.* El volumen_lote tiene correlación negativa con todos los costos: `r round(matriz_correlacion[4,1], 3)` con transformación, `r round(matriz_correlacion[4,2], 3)` con insumo, `r round(matriz_correlacion[4,3], 3)` con total. A mayor volumen, menor costo unitario. La señal es consistente y opera sobre los dos componentes simultáneamente, lo que sugiere que la escala es una palanca económica de primer orden, no un efecto secundario.
 
-- *Acoplamiento operativo.* Volumen, duración e insumo 1 están fuertemente correlacionados entre sí (entre `r round(matriz_correlacion[5,4], 3)` y `r round(matriz_correlacion[6,4], 3)`). El sistema escala de manera integrada: producir más implica procesos más largos y mayor consumo de materiales. Esto es consistente con la naturaleza física del proceso.
+- *Acoplamiento operativo.* Volumen, duración e insumo 1 están fuertemente correlacionados entre sí (entre  `r round(matriz_correlacion[6,4], 3)` y `r round(matriz_correlacion[5,4], 3)`). El sistema escala de manera integrada: producir más implica procesos más largos y mayor consumo de materiales. Esto es consistente con la naturaleza física del proceso.
 
 - *Insumo 1: el ausente económico.* La correlación entre cantidad_insumo_1 y los costos es prácticamente nula (`r round(matriz_correlacion[6,1], 3)` con transformación, `r round(matriz_correlacion[6,3], 3)` con total). Esto es un hallazgo no trivial: un mayor uso del insumo principal no se traduce en mayor costo unitario. Su relación con volumen y duración es fuerte, pero no con costo. Probable explicación: el insumo 1 escala con la producción de manera proporcional, sin introducir ineficiencia económica adicional.
 
@@ -978,8 +978,8 @@ kable(matriz_df,
 
 
 ::: {.alert .alert-primary}
-- El costo total y el de transformación son prácticamente la misma variable (r = 0.97); la palanca económica es transformación.
-- Existe economía de escala con el volumen (r ≈ -0.35), pero no perfecta: hay margen para investigar dónde se rompe.
+- El costo total y el de transformación son prácticamente la misma variable (r = `r round(matriz_correlacion[1,3], 3)`); la palanca económica es transformación.
+- Existe economía de escala con el volumen (r ≈ `r round(matriz_correlacion[4,3], 3)`), pero no perfecta: hay margen para investigar dónde se rompe.
 - El insumo 1 es operativamente acoplado al proceso pero económicamente neutro; el insumo 2 es factor de complejidad.
 ::: 
 

@@ -945,14 +945,14 @@ cantidad_insumo_2
 <ul>
 <li><p><em>Estructura interna del costo.</em> La correlación entre costo_transformacion y costo_unitario_total es de (0.971) —prácticamente- perfecta—. Confirma numéricamente lo que la descomposición ya mostraba: el costo total es casi indistinguible del costo de transformación. La correlación con costo_insumo (0.56) es moderada y refleja su menor peso relativo.</p></li>
 <li><p><em>Economías de escala.</em> El volumen_lote tiene correlación negativa con todos los costos: -0.35 con transformación, -0.294 con insumo, -0.384 con total. A mayor volumen, menor costo unitario. La señal es consistente y opera sobre los dos componentes simultáneamente, lo que sugiere que la escala es una palanca económica de primer orden, no un efecto secundario.</p></li>
-<li><p><em>Acoplamiento operativo.</em> Volumen, duración e insumo 1 están fuertemente correlacionados entre sí (entre 0.662 y 0.607). El sistema escala de manera integrada: producir más implica procesos más largos y mayor consumo de materiales. Esto es consistente con la naturaleza física del proceso.</p></li>
+<li><p><em>Acoplamiento operativo.</em> Volumen, duración e insumo 1 están fuertemente correlacionados entre sí (entre 0.607 y 0.662). El sistema escala de manera integrada: producir más implica procesos más largos y mayor consumo de materiales. Esto es consistente con la naturaleza física del proceso.</p></li>
 <li><p><em>Insumo 1: el ausente económico.</em> La correlación entre cantidad_insumo_1 y los costos es prácticamente nula (-0.031 con transformación, 0.007 con total). Esto es un hallazgo no trivial: un mayor uso del insumo principal no se traduce en mayor costo unitario. Su relación con volumen y duración es fuerte, pero no con costo. Probable explicación: el insumo 1 escala con la producción de manera proporcional, sin introducir ineficiencia económica adicional.</p></li>
 <li><p><em>Insumo 2: el factor de complejidad.</em> Sus correlaciones con costos son débiles pero positivas (0.178-0.211). Su correlación con duracion_proceso (0.339) es notable: las órdenes con dos insumos tienden a procesarse más lentamente. Esto sugiere que el segundo insumo no es un componente operativo neutro, sino un factor que introduce complejidad y, con ella, costos.</p></li>
 </ul>
 <div class="alert alert-primary">
 <ul>
-<li>El costo total y el de transformación son prácticamente la misma variable (r = 0.97); la palanca económica es transformación.</li>
-<li>Existe economía de escala con el volumen (r ≈ -0.35), pero no perfecta: hay margen para investigar dónde se rompe.</li>
+<li>El costo total y el de transformación son prácticamente la misma variable (r = 0.971); la palanca económica es transformación.</li>
+<li>Existe economía de escala con el volumen (r ≈ -0.384), pero no perfecta: hay margen para investigar dónde se rompe.</li>
 <li>El insumo 1 es operativamente acoplado al proceso pero económicamente neutro; el insumo 2 es factor de complejidad.</li>
 </ul>
 </div>
