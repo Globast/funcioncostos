@@ -1046,7 +1046,8 @@ ggplot(tabla_tipo_equipo, aes(x = Categoria, y = Frecuencia)) +
   theme_bw(base_size = 12) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-```r
+```
+
 ```{r equipo-id, fig.width=10, fig.height=6, message=FALSE, warning=FALSE}
 tabla_equipo_id <- datos %>%
   count(equipo_id, name = "Frecuencia") %>%
@@ -1077,7 +1078,8 @@ ggplot(tabla_equipo_id, aes(x = Categoria, y = Frecuencia)) +
   theme_bw(base_size = 12) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-```r
+```
+
 ```{r categoria-producto, fig.width=8, fig.height=5, message=FALSE, warning=FALSE}
 tabla_categoria_producto <- datos %>%
   count(categoria_producto, name = "Frecuencia") %>%
@@ -1108,7 +1110,8 @@ ggplot(tabla_categoria_producto, aes(x = Categoria, y = Frecuencia)) +
   theme_bw(base_size = 12) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-```r
+```
+
 ```{r modalidad-proceso, fig.width=8, fig.height=5, message=FALSE, warning=FALSE}
 tabla_modalidad_proceso <- datos %>%
   count(modalidad_proceso, name = "Frecuencia") %>%
@@ -1139,7 +1142,8 @@ ggplot(tabla_modalidad_proceso, aes(x = Categoria, y = Frecuencia)) +
   theme_bw(base_size = 12) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-```r
+```
+
 ```{r num-insumos, fig.width=8, fig.height=5, message=FALSE, warning=FALSE}
 tabla_num_insumos <- datos %>%
   count(num_insumos, name = "Frecuencia") %>%
@@ -1170,7 +1174,8 @@ ggplot(tabla_num_insumos, aes(x = Categoria, y = Frecuencia)) +
   theme_bw(base_size = 12) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-```r
+```
+
 ```{r insumo-1, fig.width=8, fig.height=5, message=FALSE, warning=FALSE}
 tabla_insumo_1 <- datos %>%
   count(insumo_1, name = "Frecuencia") %>%
@@ -1201,9 +1206,9 @@ ggplot(tabla_insumo_1, aes(x = Categoria, y = Frecuencia)) +
   theme_bw(base_size = 12) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-Si quieres usar `insumo_2` en lugar de `insumo_1`, cambia el último chunk por este:
 
-```r
+```
+
 ```{r insumo-2, fig.width=8, fig.height=5, message=FALSE, warning=FALSE}
 tabla_insumo_2 <- datos %>%
   count(insumo_2, name = "Frecuencia") %>%
@@ -1233,7 +1238,7 @@ ggplot(tabla_insumo_2, aes(x = Categoria, y = Frecuencia)) +
   ) +
   theme_bw(base_size = 12) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
+```
 
 
 
