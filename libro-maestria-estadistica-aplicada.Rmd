@@ -989,14 +989,14 @@ knitr::kable(tabla_cat, caption = "Resumen descriptivo de las variables categór
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
-Tipo de equipo: La categoría A1 concentra el 72.7% de las observaciones.  Significa que cualquier estadístico global del sistema está dominado por el comportamiento de un solo tipo de equipo. Cuando un análisis habla del "costo promedio del sistema", en realidad habla —en un 73%— del costo promedio de A1.
+Tipo de equipo: La categoría A1 concentra el `r round(freq_te$Porcentaje[1], 2)`% de las observaciones.  Significa que cualquier estadístico global del sistema está dominado por el comportamiento de un solo tipo de equipo. Cuando un análisis habla del "costo promedio del sistema", en realidad habla —en un `r round(freq_te$Porcentaje[1], 2)`%— del costo promedio de A1.
 
 Las demás categorías (B2, D4, C3) tienen participaciones mucho menores, lo que implica posible sesgo en análisis globales si no se segmenta y riesgo de conclusiones dominadas por A1.
-C3 (2.03%) es prácticamente marginal.
+C3 (`r round(freq_te$Porcentaje[3], 2)`%) es prácticamente marginal.
 Equipo específico (equipo_id): Distribución es más fragmentada, pero aún desigual. algunos equipos concentran entre 8% y 11% (M02, M09, M08), otros son casi irrelevantes (~1%)
 El sistema no es balanceado, fuerte concentración en tipo A1
-Existe heterogeneidad operativa, → distintos equipos tienen niveles de uso muy distintos
-Cualquier modelo debe considerar tipo_equipo como variable explicativa clave, equipo_id puede capturar efectos más finos (variabilidad intra-tipo) , Comparaciones entre categorías pequeñas pueden ser inestables (bajo n)
+Existe heterogeneidad operativa, es deicr distintos equipos tienen niveles de uso muy distintos
+Cualquier modelo debe considerar tipo_equipo como variable explicativa clave, equipo_id puede capturar efectos más finos (variabilidad intra-tipo) , Comparaciones entre categorías pequeñas pueden ser inestables .
 
 El sistema está estructurado alrededor de un tipo dominante (A1) y un subconjunto reducido de equipos con alta actividad. La variabilidad observada en costos, duración o volumen probablemente está condicionada por esta estructura, no solo por aleatoriedad.
 
@@ -1022,11 +1022,13 @@ matriz_correlacion <- datos %>%
   cor(use = "pairwise.complete.obs", method = "pearson") %>%
   round(3)
 
-knitr::kable(matriz_correlacion , caption = "Matriz de correlación de Pearson") %>%
+knitr::kable(matriz_correlacion , caption = "Matriz de correlación de Pearson",
+                 format = "html",
+             table.attr = "class='table'") %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
-Relación casi perfecta entre el costo de transformación y el costo unitario total (0.971). Este resultado no es sorprendente, ambas variables contienen prácticamente la misma información, por lo que analizarlas por separado aporta poco valor adicional.
+Relación casi perfecta entre el costo de transformación y el costo unitario total (`r round(matriz_correlacion[1,3], 3)`). Este resultado no es sorprendente, ambas variables contienen prácticamente la misma información, por lo que analizarlas por separado aporta poco valor adicional.
 
 Las correlaciones entre estas variables son altas y consistentes: volumen de lote, duración del proceso y cantidad de insumo 1.  (todas por encima de 0.6)
 estructura operativa coherente. A mayor volumen, mayor duración, y mayor consumo de insumos. El sistema productivo escala de manera integrada. No solo se produce más, sino que producir más implica procesos más largos y mayor uso de recursos.
@@ -1055,7 +1057,135 @@ Gestionar outliers como categoría propia. Los valores extremos no son errores a
 El sistema ya muestra señales de eficiencia cuando opera a escala, pero pierde control en condiciones de baja producción y alta variabilidad. La oportunidad  está en alinear la operación hacia volúmenes mayores, procesos estandarizados y segmentación inteligente de la producción. La producción es bajo pedido y no hay un tamaño de lote estándar, pero si la oportunidad de establecer tamaños mínimos de producción y/o una politica de precios que incentive la consolidación de pedidos.
 
 
- ### 6.5.2 Diagramas de dispersión
+ ### Diagramas de dispersión
+
+```{r scatter-prioritarios, fig.width=12, fig.height=16, warning=FALSE, message=FALSE}
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+
+# Función auxiliar para construir gráficos de dispersión
+graf_disp <- function(data, x, y, xlab, ylab, titulo, color = "#1E90FF") {
+  ggplot(data, aes(x = {{ x }}, y = {{ y }})) +
+    geom_point(alpha = 0.4, color = color) +
+    geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.9) +
+    labs(x = xlab, y = ylab, title = titulo) +
+    theme_bw() +
+    theme(
+      plot.title = element_text(size = 10, face = "bold"),
+      axis.title = element_text(size = 9)
+    )
+}
+
+# Nivel 1
+p1 <- graf_disp(
+  datos, volumen_lote, costo_transformacion,
+  "Volumen de lote", "Costo de transformación (UM/unidad)",
+  "Volumen de lote vs costo de transformación"
+)
+
+p2 <- graf_disp(
+  datos, volumen_lote, costo_unitario_total,
+  "Volumen de lote", "Costo unitario total (UM/unidad)",
+  "Volumen de lote vs costo unitario total"
+)
+
+p3 <- graf_disp(
+  datos, duracion_proceso, costo_transformacion,
+  "Duración del proceso (horas)", "Costo de transformación (UM/unidad)",
+  "Duración del proceso vs costo de transformación"
+)
+
+# Nivel 2
+p4 <- graf_disp(
+  datos, volumen_lote, duracion_proceso,
+  "Volumen de lote", "Duración del proceso (horas)",
+  "Volumen de lote vs duración del proceso"
+)
+
+p5 <- graf_disp(
+  datos, volumen_lote, cantidad_insumo_1,
+  "Volumen de lote", "Cantidad de insumo 1",
+  "Volumen de lote vs cantidad de insumo 1"
+)
+
+p6 <- graf_disp(
+  datos, duracion_proceso, cantidad_insumo_1,
+  "Duración del proceso (horas)", "Cantidad de insumo 1",
+  "Duración del proceso vs cantidad de insumo 1"
+)
+
+# Nivel 3
+p7 <- datos %>%
+  filter(num_insumos == 2) %>%
+  graf_disp(
+    duracion_proceso, cantidad_insumo_2,
+    "Duración del proceso (horas)", "Cantidad de insumo 2",
+    "Duración del proceso vs cantidad de insumo 2"
+  )
+
+p8 <- datos %>%
+  filter(num_insumos == 2) %>%
+  graf_disp(
+    costo_insumo, cantidad_insumo_2,
+    "Costo de insumo (UM/unidad)", "Cantidad de insumo 2",
+    "Costo de insumo vs cantidad de insumo 2"
+  )
+
+# Organización en dos columnas
+(p1 + p2) /
+(p3 + p4) /
+(p5 + p6) /
+(p7 + p8)
+
+```
+
+
+El sistema responde en su mayoria patrones monótonos con curvaturas y cambios de régimen.
+
+Las dos primeras relaciones —volumen frente a costo de transformación y costo total— muestran una caída clara del costo a medida que aumenta el volumen, pero no de forma constante. Hay una fase inicial donde el costo disminuye con rapidez (zona de baja escala), seguida de una zona donde la pendiente se suaviza. Esto indica que las economías de escala existen, pero no son uniformes: el beneficio marginal de aumentar volumen disminuye.
+
+La relación entre duración y costo de transformación es distinta. Aquí la tendencia es creciente, pero con forma curva: el costo aumenta con la duración hasta cierto punto y luego se estabiliza o incluso disminuye ligeramente. Esto sugiere que la duración captura más de un fenómeno: no solo esfuerzo, sino también eficiencia operativa en ciertos rangos.
+
+El vínculo entre volumen y duración es uno de los más claros: es creciente y fuertemente curvo. A mayor volumen, mayor duración, pero con una aceleración inicial que luego se modera. Este patrón es típico de procesos donde existen costos fijos y capacidades operativas.
+
+Las relaciones con cantidad de insumo 1 refuerzan esta idea. Tanto con volumen como con duración, la tendencia es creciente, pero se estabiliza en niveles altos. Esto indica que el consumo crece con la escala, pero no indefinidamente, lo que sugiere cierto grado de eficiencia en el uso de recursos.
+
+El insumo 2 introduce mayor irregularidad. Su relación con duración es creciente pero más dispersa, y con costo de insumo muestra una forma no monótona. Esto es consistente con un componente condicional o de complejidad, que no sigue reglas uniformes.
+
+Las variables se mueven juntas, pero no lo hacen de forma proporcional.
+
+
+El volumen de lote es la principal palanca de eficiencia. Los gráficos muestran que los costos unitarios caen significativamente cuando se pasa de volúmenes bajos a medios. Sin embargo, a partir de cierto punto, el beneficio se reduce. Esto implica que no se trata de maximizar volumen sin criterio, sino de operar en un rango óptimo de producción.
+
+Los lotes pequeños son estructuralmente ineficientes. No solo tienen costos más altos, sino mayor dispersión. Esto introduce incertidumbre y dificulta el control. La fragmentación de la producción está generando costo innecesario.
+
+La duración del proceso es una variable crítica pero mal controlada. No todos los procesos largos son costosos, ni todos los cortos son eficientes. Esto es una señal directa de variabilidad operativa no estandarizada. Aquí hay pérdida de eficiencia.
+
+El consumo de insumos crece con la escala, pero de forma controlada. Esto es positivo: indica que los materiales no son el principal problema. El sistema ya tiene disciplina en este frente.
+
+El segundo insumo introduce complejidad y comportamiento errático. No sigue patrones claros y está asociado a mayor variabilidad. Esto exige gestión diferenciada: no puede tratarse igual que el proceso estándar.
+
+
+
+
+La matriz de correlación de Pearson aplicada a estas variables ofrece una primera lectura de las relaciones. 
+No obstante, al contrastar estos resultados con los gráficos de dispersión y las distribuciones observadas, se evidencia que dichas relaciones no son estrictamente lineales ni homogéneas en todo el rango. 
+La presencia de asimetrías marcadas, colas largas y valores atípicos —especialmente en costos y volumen— introduce inestabilidad en los coeficientes de Pearson, que pueden subestimar o distorsionar la intensidad real de las asociaciones. 
+En este contexto, variables como volumen_lote, duracion_proceso y cantidad_insumo_1 muestran patrones monótonos claros, pero no proporcionales, lo que limita la capacidad de Pearson para describirlas adecuadamente. Por esta razón, la matriz de Spearman se vuelve necesaria, ya que captura la dirección y consistencia de estas relaciones sin depender de la linealidad, proporcionando una representación más robusta del comportamiento conjunto del sistema productivo.
+
+### Matriz Spearman
+```{r matriz-spearman}
+matriz_spearman <- datos %>%
+  select(costo_transformacion, costo_insumo, costo_unitario_total,
+         volumen_lote, duracion_proceso,
+         cantidad_insumo_1, cantidad_insumo_2) %>%
+  cor(use = "pairwise.complete.obs", method = "spearman") %>%
+  round(3)
+
+knitr::kable(matriz_spearman , caption = "Matriz de correlación de Spearman") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
+```
       ### 6.5.3 Boxplots de costo por tipo_equipo, modalidad, num_insumos
       → Diferencias muy grandes entre tipos de equipo y modalidades
   ## 6.6 Señales de heterogeneidad estructural
