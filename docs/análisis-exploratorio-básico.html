@@ -175,7 +175,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#an%C3%A1lisis-univariado-de-predictoras-num%C3%A9ricas"><i class="fa fa-check"></i><b>6.3</b> Análisis univariado de predictoras numéricas</a></li>
 <li class="chapter" data-level="6.4" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#an%C3%A1lisis-univariado-de-predictoras-categ%C3%B3ricas"><i class="fa fa-check"></i><b>6.4</b> Análisis univariado de predictoras categóricas</a></li>
-<li class="chapter" data-level="6.5" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado-marginal"><i class="fa fa-check"></i><b>6.5</b> Análisis bivariado marginal</a>
+<li class="chapter" data-level="6.5" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado"><i class="fa fa-check"></i><b>6.5</b> Análisis bivariado</a>
 <ul>
 <li class="chapter" data-level="6.5.1" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#correlacion-pearson"><i class="fa fa-check"></i><b>6.5.1</b> Correlacion Pearson</a></li>
 <li class="chapter" data-level="6.5.2" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#diagramas-de-dispersi%C3%B3n"><i class="fa fa-check"></i><b>6.5.2</b> Diagramas de dispersión</a></li>
@@ -721,8 +721,9 @@ Insumos. Tanto en insumo_1 como en insumo_2, B_T y N_T son los más frecuentes. 
 </ul>
 </div>
 </div>
-<div id="análisis-bivariado-marginal" class="section level2 hasAnchor" number="6.5">
-<h2><span class="header-section-number">6.5</span> Análisis bivariado marginal<a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado-marginal" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="análisis-bivariado" class="section level2 hasAnchor" number="6.5">
+<h2><span class="header-section-number">6.5</span> Análisis bivariado<a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>¿Cómo se relacionan las variables entre sí?. como punto de partida estándar, se presentan sin condicionar por subgrupos.</p>
 <div id="correlacion-pearson" class="section level3 hasAnchor" number="6.5.1">
 <h3><span class="header-section-number">6.5.1</span> Correlacion Pearson<a href="análisis-exploratorio-básico.html#correlacion-pearson" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <table class="table table" style="margin-left: auto; margin-right: auto;">
@@ -942,17 +943,19 @@ cantidad_insumo_2
 </tbody>
 </table>
 <ul>
-<li><p>Costo de transformación y el costo unitario total es la asociación más importante del sistema de costos, con una relación positiva casi perfecta (0.971). Desde la lógica de costos, la estructura del costo total depende más de las variables de transformación que del componente de insumos por separado.</p></li>
-<li><p>Costo de insumo y el costo unitario total (0.56). Relación positiva moderada. El costo de los insumos también contribuye al aumento del costo unitario total, aunque con una intensidad claramente menor que la del costo de transformación.</p></li>
-<li><p>Costo de transformación y costo de insumo es positiva pero baja a moderada (0.344), ambos componentes del costo no evolucionan de manera completamente independiente, aunque tampoco presentan una sincronía fuerte.</p></li>
-<li><p>Volumen de lote presenta una correlación negativa moderada con el costo unitario total (-0.384) y también con el costo de transformación (-0.35). A mayor tamaño del lote, menor costo por unidad, mejor absorción de costos fijos.</p></li>
-<li><p>El volumen de lote mantiene una relación positiva relativamente alta con la duración del proceso (0.662) y con la cantidad de insumo 1 (0.607). Los lotes más grandes demandan más tiempo de procesamiento y mayor utilización de ciertos insumos, lo cual es natural desde la ingeniería del proceso.</p></li>
-<li><p>La duración del proceso y la cantidad de insumo 1 presentan una correlación positiva alta (0.67), lo que sugiere una fuerte vinculación operativa entre ambas variables. En términos de gestión de costos, esto puede interpretarse como evidencia de que procesos más prolongados exigen mayor consumo del insumo 1, o bien que una mayor utilización de este insumo está asociada con procesos más extensos o complejos. Este hallazgo merece atención porque puede revelar un foco de ineficiencia técnica o una restricción tecnológica del proceso.</p></li>
+<li><p><em>Estructura interna del costo.</em> La correlación entre costo_transformacion y costo_unitario_total es de (0.971) —prácticamente- perfecta—. Confirma numéricamente lo que la descomposición ya mostraba: el costo total es casi indistinguible del costo de transformación. La correlación con costo_insumo (0.56) es moderada y refleja su menor peso relativo.</p></li>
+<li><p><em>Economías de escala.</em> El volumen_lote tiene correlación negativa con todos los costos: -0.35 con transformación, -0.294 con insumo, -0.384 con total. A mayor volumen, menor costo unitario. La señal es consistente y opera sobre los dos componentes simultáneamente, lo que sugiere que la escala es una palanca económica de primer orden, no un efecto secundario.</p></li>
+<li><p><em>Acoplamiento operativo.</em> Volumen, duración e insumo 1 están fuertemente correlacionados entre sí (entre 0.60 y 0.67). El sistema escala de manera integrada: producir más implica procesos más largos y mayor consumo de materiales. Esto es consistente con la naturaleza física del proceso.</p></li>
+<li><p><em>Insumo 1: el ausente económico.</em> La correlación entre cantidad_insumo_1 y los costos es prácticamente nula (-0.031 con transformación, 0.007 con total). Esto es un hallazgo no trivial: un mayor uso del insumo principal no se traduce en mayor costo unitario. Su relación con volumen y duración es fuerte, pero no con costo. Probable explicación: el insumo 1 escala con la producción de manera proporcional, sin introducir ineficiencia económica adicional.</p></li>
+<li><p><em>Insumo 2: el factor de complejidad.</em> Sus correlaciones con costos son débiles pero positivas (0.178-0.211). Su correlación con duracion_proceso (0.339) es notable: las órdenes con dos insumos tienden a procesarse más lentamente. Esto sugiere que el segundo insumo no es un componente operativo neutro, sino un factor que introduce complejidad y, con ella, costos.</p></li>
 </ul>
-<p>La relación entre duración del proceso y cantidad de insumo 2 es positiva pero moderada (0.339), mientras que la asociación entre cantidad de insumo 1 y cantidad de insumo 2 también es positiva moderada (0.367). Esto sugiere que ambos insumos participan conjuntamente en la dinámica productiva, aunque el segundo insumo parece tener un papel menos determinante que el primero dentro de la estructura operativa observada.</p>
-<p>En contraste, la cantidad de insumo 1 prácticamente no se asocia con el costo de transformación (-0.031) ni con el costo unitario total (0.007). Este resultado es importante porque indica que un mayor uso de este insumo no necesariamente se traduce en un aumento directo del costo final por unidad. La explicación posible es que su consumo está más ligado a la escala o a la duración del proceso que al encarecimiento unitario del producto.</p>
-<p>De manera similar, la cantidad de insumo 2 mantiene correlaciones positivas pero débiles con el costo de transformación (0.178), con el costo de insumo (0.213) y con el costo unitario total (0.211). Esto sugiere que su incidencia económica es secundaria dentro de la estructura global de costos, al menos en términos lineales.</p>
-<p>En síntesis, la matriz evidencia que el costo unitario total está explicado principalmente por el costo de transformación, seguido a cierta distancia por el costo de insumo. Paralelamente, el volumen del lote aparece como un factor de eficiencia, al relacionarse inversamente con el costo unitario total. En términos de finanzas corporativas y control de costos, esto implica que la rentabilidad operativa puede mejorar más mediante estrategias orientadas a optimizar el costo de transformación y aprovechar economías de escala, que mediante ajustes marginales en los insumos menos incidentes.</p>
+<div class="alert alert-primary">
+<ul>
+<li>El costo total y el de transformación son prácticamente la misma variable (r = 0.97); la palanca económica es transformación.</li>
+<li>Existe economía de escala con el volumen (r ≈ -0.35), pero no perfecta: hay margen para investigar dónde se rompe.</li>
+<li>El insumo 1 es operativamente acoplado al proceso pero económicamente neutro; el insumo 2 es factor de complejidad.</li>
+</ul>
+</div>
 </div>
 <div id="diagramas-de-dispersión" class="section level3 hasAnchor" number="6.5.2">
 <h3><span class="header-section-number">6.5.2</span> Diagramas de dispersión<a href="análisis-exploratorio-básico.html#diagramas-de-dispersi%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>

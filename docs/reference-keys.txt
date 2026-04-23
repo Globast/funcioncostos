@@ -45,7 +45,7 @@ costo-unitario-de-los-insumos
 costo-unitario-total
 análisis-univariado-de-predictoras-numéricas
 análisis-univariado-de-predictoras-categóricas
-análisis-bivariado-marginal
+análisis-bivariado
 correlacion-pearson
 diagramas-de-dispersión
 matriz-spearman
