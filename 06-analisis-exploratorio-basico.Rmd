@@ -73,7 +73,7 @@ El rango intercuartílico (`r round(ct_iqr,2)`) indica que la mitad central de l
 Sin embargo, los extremos revela algo distinto. Mientras el valor mínimo (`r round(ct_min,2)`) se mantiene dentro de lo esperado, el máximo (`r round(ct_max,2)`) se encuentra considerablemente alejado del resto. Este comportamiento puede sugerir la presencia de valores atípicos en la parte superior de la distribución, generando una cola hacia la derecha.
 En términos prácticos, esto significa que la mayoría de los procesos operan en niveles de costo relativamente estables, pero existen casos puntuales significativamente más costosos. Estos valores extremos pueden responder a procesos más complejos o a posibles inconsistencias en los datos, por lo que requieren un análisis específico antes de su inclusión en modelos o decisiones operativas.
 
-```{r ck_hist_ct,  out.width="100%",echo=FALSE}
+```{r ck-hist-t,  out.width="100%",echo=FALSE}
 library(dplyr)
 library(ggplot2)
 library(tibble)
@@ -193,7 +193,7 @@ En resumen:
 - un conjunto reducido de insumos de costo medio
 - pocos insumos de alto impacto económico
 
-```{r ck_hist_box_ci, echo=FALSE}
+```{r ck-hist-box_ci, echo=FALSE}
 
 lineas <- tibble(
   estadistico = c("Media", "Mediana", "Q1", "Q3"),
@@ -296,7 +296,7 @@ Claramente el componente dominante del costo total es el proceso de transformaci
 
 El sistema productivo opera mayoritariamente en un rango de costos relativamente estable, pero está condicionado por una fracción de casos con costos significativamente más altos. Estos casos no son marginales y deben interpretarse como parte de la estructura del proceso, no como anomalías aisladas. La clave analítica no está en el promedio, sino en entender qué condiciones generan esos costos elevados y cómo se relacionan con los componentes del costo total.
 
-```{r ck_hist_box_ctot,  echo=FALSE}
+```{r ck-hist-box_ctot,  echo=FALSE}
 
 lineas <- tibble(
   estadistico = c("Media", "Mediana", "Q1", "Q3"),
@@ -439,7 +439,7 @@ No son variables independientes: describen distintas dimensiones del mismo proce
 La principal fuente de heterogeneidad no está en los insumos, sino en el tamaño de los lotes y la duración de los procesos. Esto sugiere que cualquier modelamiento o mejora operativa debe centrarse en segmentar por escala de producción y complejidad del proceso, más que en el consumo de insumos.
 
 
-```{r box_num_predictoras,  echo=FALSE}
+```{r box-num-predictoras,  echo=FALSE}
 p_vol <- datos %>%
   ggplot(aes(x = "", y = volumen_lote)) +
   geom_boxplot(fill = "#1f77b4", alpha = 0.7) +
@@ -475,7 +475,7 @@ p_ci2 <- datos %>%
 (p_vol + p_dur) / (p_ci1 + p_ci2)
 ```
 
-```{r hist_num_predictoras,  echo=FALSE}
+```{r hist-num-predictoras,  echo=FALSE}
 library(ggplot2)
 library(dplyr)
 library(patchwork)
@@ -541,7 +541,7 @@ El sistema produce lotes de escalas muy distintas (entre 100 y 13.300 unidades),
 
 ## 6.4 Análisis univariado de predictoras categóricas
 
-```{r tabla_res_categoricas}
+```{r tabla-res-categoricas}
 vars_cat <- c("tipo_equipo", "equipo_id", "categoria_producto", 
               "modalidad_proceso", "num_insumos", "insumo_1", "insumo_2")
 
@@ -572,7 +572,7 @@ Cualquier modelo debe considerar tipo_equipo como variable explicativa clave, eq
 
 El sistema está estructurado alrededor de un tipo dominante (A1) y un subconjunto reducido de equipos con alta actividad. La variabilidad observada en costos, duración o volumen probablemente está condicionada por esta estructura, no solo por aleatoriedad.
 
-```{r freq_tipoequipo_calc, echo=FALSE}
+```{r freq-tipoequipo-calc, echo=FALSE}
 freq_te <- tabla_cat %>% filter(Variable == "tipo_equipo") %>% arrange(desc(Frecuencia))
 te_dom_cat <- freq_te$Categoria[1]
 te_dom_pct <- freq_te$Porcentaje[1]
@@ -612,7 +612,7 @@ El tipo de equipo dominante es `r te_dom_cat`, que concentra el `r te_dom_pct`% 
 
 ### Análisis bivariado: Modalidad proceso
 
-```{r bivariado_cc_modproceso}
+```{r bivariado-cc-modproceso}
 resumen_bivariado_cc_modproceso <- datos %>%
   group_by(modalidad_proceso) %>%
   summarise(
@@ -642,7 +642,7 @@ La mediana también confirma ese patrón (27.1 → 29.5 → 38.8).
 - Y es más controlado (ds ≈ 10.5, IQR más estrecho).
 - Z tiene dispersión alta en términos absolutos, pero IQR relativamente contenido. Esto indica que el costo base es alto de forma consistente, no solo por outliers.
 
-```{r bivariado_ci_modproceso}
+```{r bivariado-ci-modproceso}
 resumen_bivariado_ci_modproceso <- datos %>%
   group_by(modalidad_proceso) %>%
   summarise(
@@ -667,7 +667,7 @@ X ≈ 4.80, Y ≈ 5.20, Z ≈ 6.86
 
 La mediana de Z (≈ 4.98) está cerca de Y, el aumento en la media puede provenir de algunos valores altos . 
 
-```{r box_bivariado_mod_proceso, fig.width=9, fig.height=4.5}
+```{r box-bivariado-mod-proceso, fig.width=9, fig.height=4.5}
 
 box_ct_mod_proceso <-datos %>%
   ggplot(aes(x = modalidad_proceso, y = costo_transformacion)) +
@@ -702,7 +702,7 @@ Y es más estable y ligeramente más costoso que X. Pero  X es más volátil.
 
 ### Análisis bivariado: tipo de equipo
 
-```{r bar_categoricas, fig.width=12, fig.height=16}
+```{r bar-categoricas, fig.width=12, fig.height=16}
 library(dplyr)
 library(ggplot2)
 
@@ -728,7 +728,7 @@ ggplot(tabla_plot, aes(x = Categoria, y = Frecuencia)) +
   facet_wrap(~ Variable, ncol = 2, scales = "free")
 ```
 
-```{r bivariado_cc_tipoequipo}
+```{r bivariado-cc-tipoequipo}
 resumen_bivariado_cc <- datos %>%
   group_by(tipo_equipo) %>%
   summarise(
@@ -758,7 +758,7 @@ El tipo de equipo D4 tiene costos notablemente bajos (media cercana a 9). La dis
 
 El costo de transformación está determinado por el tipo de equipo, y la magnitud de las diferencias es significativa.
 
-```{r bivariado_ci_tipoequipo}
+```{r bivariado-ci-tipoequipo}
 resumen_bivariado_ci <- datos %>%
   group_by(tipo_equipo) %>%
   summarise(
@@ -785,7 +785,7 @@ El tipo de equipo C3 nuevamente se diferencia de forma clara. La media (≈11.25
 El tipo de equipo D4 Presenta la media más baja (≈3.58) pero su desviación estándar es alta y supera incluso a la media. Puede influir que D4 solo opera con un insumo. No puede operar con 2. La mediana (≈1.64) está muy por debajo de la media, lo que indica una asimetría extrema. D4 es generalmente eficiente, pero con episodios puntuales de alto consumo.
 
 
-```{r box_equipo, fig.width=9, fig.height=4.5}
+```{r box-equipo, fig.width=9, fig.height=4.5}
 
 box_ct_te <-datos %>%
   ggplot(aes(x = tipo_equipo, y = costo_transformacion)) +
@@ -813,7 +813,7 @@ Los boxplots confirman visualmente lo que ya sugerían los resúmenes numéricos
 
 ### Análisis bivariado: Equipo_id
 
-```{r bivariado_cc_quipo}
+```{r bivariado-cc-equipo}
 resumen_bivariado_ct_equipo <- datos %>%
   group_by(equipo_id, tipo_equipo) %>%
   summarise(
@@ -837,7 +837,7 @@ knitr::kable(
   kableExtra::kable_styling(full_width = FALSE)
 ```
 
-```{r bivariado_ci_equipo}
+```{r bivariado-ci-equipo}
 resumen_bivariado_ci_equipo <- datos %>%
   group_by(equipo_id, tipo_equipo) %>%
   summarise(
@@ -862,7 +862,7 @@ knitr::kable(
 ```
 
 
-```{r box_equipoid, fig.width=9, fig.height=4.5}
+```{r box-equipoid, fig.width=9, fig.height=4.5}
 orden_equipos <- datos %>%
   distinct(tipo_equipo, equipo_id) %>%
   arrange(tipo_equipo, equipo_id) %>%
@@ -923,7 +923,7 @@ En costo de insumo, la diferencia es aún más marcada: M05 con media 5.3, M12 c
 
 En conclusión , el análisis por tipo de equipo muestra diferencias muy grandes:
 
-```{r res_cost_tipoequipo}
+```{r res-cost-tipoequipo}
 
 tabla_resumen <- datos %>%
   group_by(tipo_equipo) %>%
@@ -946,7 +946,7 @@ kable(tabla_resumen, caption = "Tabla resumen costos por tipo de equipo") %>%
 Las diferencias son tan marcadas que invitan a preguntar: ¿cada tipo de equipo es realmente comparable con los otros?
 Una tabulación cruzada contesta la pregunta y cambia el análisis:
 
-```{r bivariado_cost_tipoequipo}
+```{r bivariado-cost-tipoequipo}
 
 tabla_dep <- datos %>%
   count(tipo_equipo, modalidad_proceso, num_insumos) %>%
@@ -982,7 +982,7 @@ Decisión 1 — Exclusión de modalidad Z. La modalidad Z corresponde a órdenes
 Decisión 2 — Exclusión del tipo_equipo C3. C3 tiene solo 8 órdenes (2%), concentradas casi íntegramente en la combinación (X, 1) con un único caso en (X, 2) y cero en modalidad Y. Con este n, los intervalos de confianza son extremadamente amplios y cualquier diferencia observada queda dominada por ruido. C3 se excluye del análisis estratificado y sus estadísticos descriptivos se reportan al final con una advertencia explícita sobre su no comparabilidad.
 Decisión 3 — Configuración universal. Tras excluir Z y C3, el equipo A1 es el único que cubre las 4 combinaciones (X × Y × 1 × 2), con 274 órdenes. Es la única base analítica donde es posible evaluar de forma limpia los efectos de modalidad y número de insumos. Los análisis multivariados profundos se desarrollarán sobre este subconjunto.
 
-```{r datos_filtrados}
+```{r datos-filtrados}
 datos_principal <- datos %>%
   filter(modalidad_proceso != "Z",
          tipo_equipo != "C3") %>%
@@ -999,7 +999,7 @@ Tras estas exclusiones, el dataset principal queda conformado por r n_principal 
 ## Estructura del espacio operativo sobre el dataset principal
 ### Mapa de combinaciones
 
-```{r mapa_combinaciones}
+```{r mapa-combinaciones}
 mapa_n <- datos_principal %>%
   count(tipo_equipo, modalidad_proceso, num_insumos) %>%
   pivot_wider(names_from = c(modalidad_proceso, num_insumos),
@@ -1027,7 +1027,7 @@ Comparación intra-equipo B2: análoga a A1 pero con n=44. Las conclusiones son 
 ### Efecto puro de tipo_equipo dentro de (X, 1)
 Esta es la pregunta que parecía obvia al inicio: ¿los equipos tienen costos distintos?
 
-```{r boxplot_cc_tipoequipo_X1, fig.width=9, fig.height=4.5}
+```{r boxplot-cc-tipoequipo_X1, fig.width=9, fig.height=4.5}
 comp_X1 <- datos_principal %>%
   filter(modalidad_proceso == "X", num_insumos == 1) %>%
   group_by(tipo_equipo) %>%
@@ -1053,7 +1053,7 @@ Implicación para la dirección financiera. D4 es efectivamente más eficiente e
 
 Este es el análisis más potente del capítulo, porque A1 es el único equipo donde todas las combinaciones tienen n suficiente.
 
-```{r estrat_A1_B2}
+```{r estrat-A1-B2}
 stats_A1 <- datos_principal %>%
   filter(tipo_equipo %in% c("A1", "B2")) %>%
   group_by(modalidad_proceso, num_insumos) %>%
@@ -1079,7 +1079,7 @@ La combinación (Y, 1) es la más eficiente y la más frecuente (n=118).
 Un análisis marginal diría que pasar de 1 a 2 insumos aumenta el costo en promedio de 27.3 a 35.8 UM/unidad (+31%). Pero esa comparación mezcla equipos, modalidades y productos.
 La comparación condicional dentro de A1 da una respuesta más fina:
 
-```{r efecto_insumos}
+```{r efecto-insumos}
 efecto_insumos <- datos_principal %>%
   filter(tipo_equipo %in% c("A1", "B2")) %>%
   group_by(modalidad_proceso, num_insumos) %>%
@@ -1111,7 +1111,7 @@ duracion_proceso ↔ costo_transformacion: +0.22 / +0.28.
 Lectura marginal: lotes más grandes son más baratos por unidad (economías de escala), procesos más largos son ligeramente más costosos.
 Pero al calcular las mismas correlaciones dentro de A1 y B2 únicamente:
 
-```{r corr_A1_B2}
+```{r corr-A1-B2}
 cor_A1_B2 <- datos_principal %>%
   filter(tipo_equipo %in% c("A1", "B2")) %>%
   select(costo_transformacion, volumen_lote, duracion_proceso,

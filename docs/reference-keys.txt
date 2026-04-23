@@ -8,6 +8,16 @@ tab:ck-resumen-ct
 tab:ck-hist-ci
 tab:ck-resumen-ctot
 tab:ck-resumen-num-predictoras
+tab:tabla-res-categoricas
+tab:bivariado-cc-modproceso
+tab:bivariado-ci-modproceso
+tab:bivariado-cc-tipoequipo
+tab:bivariado-ci-tipoequipo
+tab:bivariado-cc-equipo
+tab:bivariado-ci-equipo
+tab:res-cost-tipoequipo
+tab:bivariado-cost-tipoequipo
+tab:mapa-combinaciones
 resumen
 introducción
 objetivos-en-construcccion
