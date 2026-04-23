@@ -593,7 +593,7 @@ p_ci2_hist <- datos %>%
 
 La distribución de frecuencias de las siete variables categóricas deja ver, desde el inicio, que el sistema no está repartido de manera uniforme. Por el contrario, se concentra en pocas categorías dominantes, mientras que el resto aparece con baja frecuencia.
 
-```{r tipo-equipo,  out.width = "75%", echo=FALSE}
+```{r tipo-equipo,  out.width = "65%", echo=FALSE}
 tabla_tipo_equipo <- datos %>%
   count(tipo_equipo, name = "Frecuencia") %>%
   mutate(
@@ -639,7 +639,7 @@ grid::grid.draw(combinado)
 Tipo de equipo. A1 concentra el 72.7% de todas las órdenes. Esto es un dato con consecuencias profundas: cualquier estadístico global del sistema está dominado por A1. Cuando un reporte ejecutivo habla de "el costo promedio del sistema", en realidad está hablando, en casi tres cuartos, del costo promedio de A1. Las categorías B2 (11.4%), D4 (13.9%) y especialmente C3 (2.0%) tienen una representación mucho menor. C3 con apenas 8 órdenes está estadísticamente al borde de la inutilidad para inferencia.
 
 
-```{r equipo-id, fig.width=8, fig.height=4, message=FALSE, warning=FALSE}
+```{r equipo-id,  out.width = "65%", message=FALSE, warning=FALSE}
 tabla_equipo_id <- datos %>%
   count(equipo_id, name = "Frecuencia") %>%
   mutate(
@@ -686,7 +686,7 @@ grid::grid.draw(combinado)
 Equipo individual. Los 12 equipos tienen frecuencias entre el 1% y el 12%. M04 y M11 (los dos equipos C3) tienen 4 órdenes cada uno. Los equipos A1 están relativamente equilibrados entre sí (entre 8% y 12% cada uno). Los D4 (M05, M12) tienen 31 y 24 órdenes respectivamente.
 
 
-```{r categoria-producto, fig.width=8, fig.height=5, message=FALSE, warning=FALSE}
+```{r categoria-producto,  out.width = "65%", message=FALSE, warning=FALSE}
 tabla_categoria_producto <- datos %>%
   count(categoria_producto, name = "Frecuencia") %>%
   mutate(
@@ -735,7 +735,7 @@ Categoría de producto. La categoría 5 absorbe el 62% de la producción. La cat
 
 
 
-```{r modalidad-proceso, fig.width=8, fig.height=5, message=FALSE, warning=FALSE}
+```{r modalidad-proceso,  out.width = "65%", message=FALSE, warning=FALSE}
 tabla_modalidad_proceso <- datos %>%
   count(modalidad_proceso, name = "Frecuencia") %>%
   mutate(
@@ -784,7 +784,7 @@ Modalidad de proceso. X y Y están razonablemente balanceadas (52% y 44%). Z es 
 
 
 
-```{r num-insumos, fig.width=8, fig.height=5, message=FALSE, warning=FALSE}
+```{r num-insumos,  out.width = "65%", message=FALSE, warning=FALSE}
 tabla_num_insumos <- datos %>%
   count(num_insumos, name = "Frecuencia") %>%
   mutate(
@@ -831,7 +831,7 @@ grid::grid.draw(combinado)
 
 Número de insumos. Dos tercios de las órdenes operan con un solo insumo; un tercio con dos.
 
-```{r insumo-1, fig.width=8, fig.height=5, message=FALSE, warning=FALSE}
+```{r insumo-1,  out.width = "65%", message=FALSE, warning=FALSE}
 tabla_insumo_1 <- datos %>%
   count(insumo_1, name = "Frecuencia") %>%
   mutate(
@@ -879,7 +879,7 @@ grid::grid.draw(combinado)
 Insumos. Tanto en insumo_1 como en insumo_2, B_T y N_T son los más frecuentes. Hay insumos con presencia muy baja (R_T, V_T) que limitan la capacidad de análisis específico.
 
 
-```{r insumo-2, fig.width=8, fig.height=5, message=FALSE, warning=FALSE}
+```{r insumo-2,  out.width = "65%", message=FALSE, warning=FALSE}
 tabla_insumo_2 <- datos %>%
   count(insumo_2, name = "Frecuencia") %>%
   mutate(
