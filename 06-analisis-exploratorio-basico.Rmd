@@ -579,7 +579,7 @@ Visualmente, la fuente real de heterogeneidad no está en los insumos, sino en c
 El sistema produce lotes de escalas muy distintas (entre `r round(min(datos$volumen_lote),2)` y `r round(max(datos$volumen_lote),2)` unidades), con duraciones que van de `r round(min(datos$duracion_proceso),2)` a `r round(max(datos$duracion_proceso),2)` horas. Esta heterogeneidad refleja una lógica de producción "make-to-order" donde cada orden responde a un pedido específico. El tamaño estándar de lote no existe. El proceso no puede optimizarse con reglas uniformes; requerirá segmentación por rangos de producción.
 :::
 
-## 6.4 Análisis univariado de predictoras categóricas
+## Análisis univariado de predictoras categóricas
 
 ```{r tabla-res-categoricas}
 vars_cat <- c("tipo_equipo", "equipo_id", "categoria_producto", 
@@ -625,7 +625,7 @@ El sistema está estructurado alrededor de un tipo dominante (A1) y un subconjun
 
 El tipo de equipo dominante es `r te_dom_cat`, que concentra el `r te_dom_pct`% de las órdenes. La variable `equipo_id` tiene `r n_niveles_equipo` niveles distintos y `categoria_producto` tiene `r n_niveles_cat` niveles, lo cual exigirá tratamiento cuidadoso en los análisis inferenciales posteriores para evitar celdas con pocas observaciones.
 
-## 6.5 Análisis bivariado marginal
+## Análisis bivariado marginal
 
 ### Correlacion Pearson
 
