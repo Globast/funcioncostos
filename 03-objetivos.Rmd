@@ -9,4 +9,4 @@ Analizar y cuantificar el impacto de diversos factores productivos (equipos, mod
 1. Analizar las diferencias entre tipos de equipo y su impacto en el costo
 2. Investigar si existe igualdad de medias en los equipos de un mismo tipo.
 3. Explorar la correlación entre el costo unitario y el tiempo de conversión.
-4. Evaluar la correlación entre el costo unitario, el número de insumos y el tipo de insumos.
+4. Evaluar la asociación entre el costo unitario, el número de insumos y el tipo de insumos.

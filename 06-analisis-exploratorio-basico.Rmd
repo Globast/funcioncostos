@@ -637,39 +637,47 @@ matriz_correlacion <- datos %>%
   cor(use = "pairwise.complete.obs", method = "pearson") %>%
   round(3)
 
-knitr::kable(matriz_correlacion , caption = "Matriz de correlación de Pearson",
-                 format = "html",
-             table.attr = "class='table'") %>%
-  kableExtra::kable_styling(full_width = FALSE) 
+# 2. Aplicar formato condicional a las celdas
+# Umbral: abs(x) >= 0.7 (puedes ajustarlo según lo que consideres "relevante")
+matriz_df <- as.data.frame(matriz_correlacion)
+matriz_df[] <- lapply(matriz_df, function(x) {
+  cell_spec(x,
+            bold = ifelse(abs(x) >= 0.7 & x != 1, TRUE, FALSE),
+            color = ifelse(abs(x) >= 0.7 & x != 1, "white", "black"),
+            background = ifelse(abs(x) >= 0.7 & x != 1, "#d9534f", "transparent"))
+})
+
+# 3. Generar la tabla
+kable(matriz_df, 
+      caption = "Matriz de correlación de Pearson",
+      format = "html", 
+      escape = FALSE, 
+      table.attr = "class='table'") %>%
+  kable_styling(full_width = FALSE)
+
+
 ```
 
-Relación casi perfecta entre el costo de transformación y el costo unitario total (`r round(matriz_correlacion[1,3], 3)`). Este resultado no es sorprendente, ambas variables contienen prácticamente la misma información, por lo que analizarlas por separado aporta poco valor adicional.
+- Costo de transformación y el costo unitario total es la asociación más importante del sistema de costos, con una relación positiva casi perfecta (`r round(matriz_correlacion[1,3], 3)`). Desde la lógica de costos, la estructura del costo total depende más de las variables de transformación que del componente de insumos por separado.
 
-Las correlaciones entre estas variables son altas y consistentes: volumen de lote, duración del proceso y cantidad de insumo 1.  (todas por encima de 0.6)
-En cuanto a las variables operativas, las correlaciones son altas y consistentes entre volumen de lote, duración del proceso y cantidad de insumo 1 (todas por encima de 0.6). Este patrón refleja una estructura productiva coherente: a mayor volumen, mayor duración y mayor consumo de insumos. Es decir, el sistema escala de forma integrada.
-Relaciones con implicación económica: Se confirma la presencia de economías de escala. Es decir, aunque los procesos sean más largos y consuman más insumos en términos absolutos, el costo por unidad disminuye. 
-Relaciones débiles, pero interpretables: Procesos más largos tienden a ser más costosos, pero la variabilidad es alta. La duración no es un determinante directo del costo, sino un indicador parcial de complejidad.
-Relaciones secundarias interesantes: La cantidad de insumo 1 presenta correlaciones prácticamente nulas con los costos unitarios, es relativamente estable y no introduce grandes ineficiencias.
-El segundo insumo introduce una dinámica distinta. Sus correlaciones, aunque moderadas, sugieren que está asociado a procesos más largos y a mayores costos de insumos. No es un componente estructural del sistema, sino un factor de complejidad adicional que aparece en ciertos casos y modifica el comportamiento del proceso. No es el problema central, pero sí un elemento a gestionar.
+- Costo de insumo y el costo unitario total (`r round(matriz_correlacion[2,3], 3)`). Relación positiva moderada. El costo de los insumos también contribuye al aumento del costo unitario total, aunque con una intensidad claramente menor que la del costo de transformación. 
 
-La evidencia muestra un sistema productivo con dos fuerzas opuestas: la escala reduce el costo unitario, mientras la complejidad operativa lo presiona al alza. El costo total está dominado por la transformación, por lo que cualquier mejora relevante debe ocurrir dentro del proceso productivo, no en los insumos.
+- Costo de transformación y costo de insumo es positiva pero baja a moderada (`r round(matriz_correlacion[1,2], 3)`), ambos componentes del costo no evolucionan de manera completamente independiente, aunque tampoco presentan una sincronía fuerte. 
 
-El patrón más consistente es el de economías de escala. A mayor volumen de lote, el costo por unidad disminuye de forma sistemática. Esto no es marginal, es estructural. El sistema es más eficiente cuando opera en volúmenes altos. En contraste, los lotes pequeños concentran la mayor variabilidad y los costos más altos. 
-**La fragmentación de la producción está generando ineficiencia.**
+- Volumen de lote presenta una correlación negativa moderada con el costo unitario total (`r round(matriz_correlacion[4,3], 3)`) y también con el costo de transformación (`r round(matriz_correlacion[4,1], 3)`). A mayor tamaño del lote, menor costo por unidad, mejor absorción de costos fijos. 
 
-Procesos más largos tienden a ser más costosos, pero la relación es débil y altamente dispersa. Esto indica que la duración no está completamente bajo control o que refleja heterogeneidad en la ejecución. Aquí hay un problema de estandarización.
+- El volumen de lote mantiene una relación positiva relativamente alta con la duración del proceso (`r round(matriz_correlacion[4,5], 3)`) y con la cantidad de insumo 1 (`r round(matriz_correlacion[4,6], 3)`). Los lotes más grandes demandan más tiempo de procesamiento y mayor utilización de ciertos insumos, lo cual es natural desde la ingeniería del proceso. 
 
-Consolidar volúmenes. La operación debe orientarse a reducir la fragmentación de lotes. Esto implica revisar políticas de programación, tamaños mínimos de producción y planificación de demanda. Cada lote pequeño tiene un costo implícito alto. La optimización aquí es inmediata y medible.
+- La duración del proceso y la cantidad de insumo 1 presentan una correlación positiva alta (`r round(matriz_correlacion[5,6], 3)`), lo que sugiere una fuerte vinculación operativa entre ambas variables. En términos de gestión de costos, esto puede interpretarse como evidencia de que procesos más prolongados exigen mayor consumo del insumo 1, o bien que una mayor utilización de este insumo está asociada con procesos más extensos o complejos. Este hallazgo merece atención porque puede revelar un foco de ineficiencia técnica o una restricción tecnológica del proceso.
 
-Estandarizar procesos. La alta dispersión en la relación entre duración y costo indica variabilidad operativa. Es necesario identificar qué está generando procesos largos y bajo qué condiciones. Esto requiere segmentar por tipo de equipo, modalidad y producto, y establecer tiempos estándar. Sin control sobre la duración, no hay control sobre el costo.
+La relación entre duración del proceso y cantidad de insumo 2 es positiva pero moderada (`r round(matriz_correlacion[5,7], 3)`), mientras que la asociación entre cantidad de insumo 1 y cantidad de insumo 2 también es positiva moderada (`r round(matriz_correlacion[6,7], 3)`). Esto sugiere que ambos insumos participan conjuntamente en la dinámica productiva, aunque el segundo insumo parece tener un papel menos determinante que el primero dentro de la estructura operativa observada.
 
-Segmentar la operación. El sistema no es homogéneo. Existen al menos dos regímenes: producción simple (un insumo, menor complejidad) y producción más compleja (dos insumos, mayor duración). Estos deben gestionarse de forma diferenciada. Aplicar una lógica única a ambos introduce ineficiencia.
+En contraste, la cantidad de insumo 1 prácticamente no se asocia con el costo de transformación (`r round(matriz_correlacion[1,6], 3)`) ni con el costo unitario total (`r round(matriz_correlacion[3,6], 3)`). Este resultado es importante porque indica que un mayor uso de este insumo no necesariamente se traduce en un aumento directo del costo final por unidad. La explicación posible es que su consumo está más ligado a la escala o a la duración del proceso que al encarecimiento unitario del producto.
 
-Focalizar en el proceso de transformación. Dado su peso en el costo total, cualquier mejora en eficiencia operativa tiene un impacto directo. Esto incluye reducción de tiempos muertos, mejoras en utilización de equipos y eliminación de variabilidad innecesaria.
+De manera similar, la cantidad de insumo 2 mantiene correlaciones positivas pero débiles con el costo de transformación (`r round(matriz_correlacion[1,7], 3)`), con el costo de insumo (`r round(matriz_correlacion[2,7], 3)`) y con el costo unitario total (`r round(matriz_correlacion[3,7], 3)`). Esto sugiere que su incidencia económica es secundaria dentro de la estructura global de costos, al menos en términos lineales.
 
-Gestionar outliers como categoría propia. Los valores extremos no son errores aislados, son parte del sistema. Representan casos de alta complejidad o ineficiencia. Deben ser identificados, analizados y, si es posible, rediseñados. Ignorarlos distorsiona la toma de decisiones. Sistema mensual de identificación y analisis en profundidad de outlliers.
+En síntesis, la matriz evidencia que el costo unitario total está explicado principalmente por el costo de transformación, seguido a cierta distancia por el costo de insumo. Paralelamente, el volumen del lote aparece como un factor de eficiencia, al relacionarse inversamente con el costo unitario total. En términos de finanzas corporativas y control de costos, esto implica que la rentabilidad operativa puede mejorar más mediante estrategias orientadas a optimizar el costo de transformación y aprovechar economías de escala, que mediante ajustes marginales en los insumos menos incidentes.
 
-El sistema ya muestra señales de eficiencia cuando opera a escala, pero pierde control en condiciones de baja producción y alta variabilidad. La oportunidad  está en alinear la operación hacia volúmenes mayores, procesos estandarizados y segmentación inteligente de la producción. La producción es bajo pedido y no hay un tamaño de lote estándar, pero si la oportunidad de establecer tamaños mínimos de producción y/o una politica de precios que incentive la consolidación de pedidos.
 
 ### Diagramas de dispersión
 
