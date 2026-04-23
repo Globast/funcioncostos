@@ -653,7 +653,7 @@ kable(matriz_df,
       format = "html", 
       escape = FALSE, 
       table.attr = "class='table'") %>%
-  kable_styling(full_width = FALSE)
+  kable_styling(full_width = TRUE)
 
 
 ```
