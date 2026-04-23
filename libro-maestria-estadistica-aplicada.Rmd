@@ -806,6 +806,8 @@ vol_lote_med    <- var_num_vol$`50%`
 vol_lote_min    <- var_num_vol$minimo
 vol_lote_max    <- var_num_vol$maximo
 vol_lote_iqr    <- var_num_vol$IQR
+vol_lote_q1     <- var_num_vol$Q1
+vol_lote_q3     <- var_num_vol$Q3
 vol_lote_cv     <- vol_lote_ds / vol_lote_media * 100
 
 datos %>%
@@ -827,6 +829,8 @@ dur_proceso_ds     <- var_num_dur$ds
 dur_proceso_med    <- var_num_dur$`50%`
 dur_proceso_min    <- var_num_dur$minimo
 dur_proceso_max    <- var_num_dur$maximo
+dur_proceso_q1     <- var_num_dur$Q1
+dur_proceso_q3     <- var_num_dur$Q3
 dur_proceso_iqr    <- var_num_dur$IQR
 dur_proceso_cv     <- dur_proceso_ds / dur_proceso_media * 100
 
@@ -851,6 +855,8 @@ ci1_med    <- var_num_ci1$`50%`
 ci1_min    <- var_num_ci1$minimo
 ci1_max    <- var_num_ci1$maximo
 ci1_iqr    <- var_num_ci1$IQR
+ci1_q1     <- var_num_ci1$Q1
+ci1_q3     <- var_num_ci1$Q3
 ci1_cv     <- ci1_ds / ci1_media * 100
 
 datos %>%
@@ -874,6 +880,8 @@ ci2_med    <- var_num_ci2$`50%`
 ci2_min    <- var_num_ci2$minimo
 ci2_max    <- var_num_ci2$maximo
 ci2_iqr    <- var_num_ci2$IQR
+ci2_q1     <- var_num_ci2$Q1
+ci2_q3     <- var_num_ci2$Q3
 ci2_cv     <- ci2_ds / ci2_media * 100
 
 resumen_num_predictoras <- bind_rows(var_num_vol, var_num_dur, var_num_ci1, var_num_ci2) %>%
