@@ -620,9 +620,7 @@ grafico_tipo_equipo <- ggplot(
 
 tabla_grob <- gridExtra::tableGrob(
   tabla_tipo_equipo,
-  rows = NULL,
-  theme = gridExtra::ttheme_minimal(
-    base_size = 12
+  rows = NULL
 )
 
 combinado <- gridExtra::arrangeGrob(
@@ -668,9 +666,7 @@ grafico_equipo_id <- ggplot(
 
 tabla_grob <- gridExtra::tableGrob(
   tabla_equipo_id,
-  rows = NULL,
-  theme = gridExtra::ttheme_minimal(
-    base_size = 12
+  rows = NULL
 )
 
 combinado <- gridExtra::arrangeGrob(
@@ -717,9 +713,7 @@ grafico_categoria_producto <- ggplot(
 
 tabla_grob <- gridExtra::tableGrob(
   tabla_categoria_producto,
-  rows = NULL,
-  theme = gridExtra::ttheme_minimal(
-    base_size = 12
+  rows = NULL
 )
 
 combinado <- gridExtra::arrangeGrob(
@@ -768,9 +762,7 @@ grafico_modalidad_proceso <- ggplot(
 
 tabla_grob <- gridExtra::tableGrob(
   tabla_modalidad_proceso,
-  rows = NULL,
-  theme = gridExtra::ttheme_minimal(
-    base_size = 12
+  rows = NULL
 )
 
 combinado <- gridExtra::arrangeGrob(
@@ -819,9 +811,7 @@ grafico_num_insumos <- ggplot(
 
 tabla_grob <- gridExtra::tableGrob(
   tabla_num_insumos,
-  rows = NULL,
-  theme = gridExtra::ttheme_minimal(
-    base_size = 12
+  rows = NULL
 )
 
 combinado <- gridExtra::arrangeGrob(
@@ -868,9 +858,7 @@ grafico_insumo_1 <- ggplot(
 
 tabla_grob <- gridExtra::tableGrob(
   tabla_insumo_1,
-  rows = NULL,
-  theme = gridExtra::ttheme_minimal(
-    base_size = 12
+  rows = NULL
 )
 
 combinado <- gridExtra::arrangeGrob(
@@ -918,9 +906,7 @@ grafico_insumo_2 <- ggplot(
 
 tabla_grob <- gridExtra::tableGrob(
   tabla_insumo_2,
-  rows = NULL,
-  theme = gridExtra::ttheme_minimal(
-    base_size = 12
+  rows = NULL
 )
 
 combinado <- gridExtra::arrangeGrob(
