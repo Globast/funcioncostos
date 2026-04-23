@@ -1656,9 +1656,9 @@ box_ct_mod_proceso + box_ci_mod_proceso
 ```
 
 La modalidad Z corresponde a órdenes donde se aplican X y Y al mismo producto por requerimiento del cliente. Es una composición de procesos, no una alternativa.
-En transformación: se observa un gradiente claro X (`r modproceso_media[X]`) < Y (`r modproceso_media[Y]`) < Z (`r modproceso_media[Z]`), confirmado por la mediana. Pero la dispersión cambia entre modalidades: X tiene desviación estándar de 17.9 (proceso volátil), Y tiene `r modproceso_ds[Y]` (proceso controlado), Z tiene `r modproceso_ds[Z]` pero con IQR contenido (alto y consistente).
+En transformación: se observa un gradiente claro X (`r round(modproceso_media[X], 2)`) < Y (`r round(modproceso_media[Y], 2)`) < Z (`r round(modproceso_media[Z], 2)`), confirmado por la mediana. Pero la dispersión cambia entre modalidades: X tiene desviación estándar de 17.9 (proceso volátil), Y tiene `r round(modproceso_ds[Y], 2)` (proceso controlado), Z tiene `r round(modproceso_ds[Z], 2)` pero con IQR contenido (alto y consistente).
 
-En insumo: el patrón es más suave (X: `r modproceso_media[X]`, Y: `r modproceso_media[Y]`, Z: `r modproceso_media[Z]`), y la mediana de Z (`r modproceso_med[Z]`) está muy cerca de la de Y. El sobrecosto de Z proviene principalmente del componente de transformación, no del de insumos.
+En insumo: el patrón es más suave (X: `r round(modproceso_media[X], 2)`, Y: `r round(modproceso_media[Y], 2)`, Z: `r round(modproceso_media[Z], 2)`), y la mediana de Z (`r round(modproceso_med[Z], 2)`) está muy cerca de la de Y. El sobrecosto de Z proviene principalmente del componente de transformación, no del de insumos.
 
 Lectura económica. Y es más estable y ligeramente más caro que X. X es más volátil. Z es estructuralmente más caro y tiene un comportamiento de costo distinto: el sobrecosto de Z no es la suma simple de X+Y, sino el producto de una interacción entre procesos. Esto sugiere que cuando el cliente solicita ambas modalidades sobre el mismo producto, hay ineficiencias de coordinación o setup adicionales que elevan el costo.
 
