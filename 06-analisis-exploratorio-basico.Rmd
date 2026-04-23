@@ -638,13 +638,13 @@ matriz_correlacion <- datos %>%
   round(3)
 
 # 2. Aplicar formato condicional a las celdas
-# Umbral: abs(x) >= 0.7 (puedes ajustarlo según lo que consideres "relevante")
+# Umbral: abs(x) >= 0.5 (puedes ajustarlo según lo que consideres "relevante")
 matriz_df <- as.data.frame(matriz_correlacion)
 matriz_df[] <- lapply(matriz_df, function(x) {
   cell_spec(x,
-            bold = ifelse(abs(x) >= 0.7 & x != 1, TRUE, FALSE),
-            color = ifelse(abs(x) >= 0.7 & x != 1, "white", "black"),
-            background = ifelse(abs(x) >= 0.7 & x != 1, "#d9534f", "transparent"))
+            bold = ifelse(abs(x) >= 0.5 & x != 1, TRUE, FALSE),
+            color = ifelse(abs(x) >= 0.5 & x != 1, "white", "black"),
+            background = ifelse(abs(x) >= 0.5 & x != 1, "#d9534f", "transparent"))
 })
 
 # 3. Generar la tabla
@@ -805,30 +805,42 @@ matriz_spearman <- datos %>%
 knitr::kable(matriz_spearman , caption = "Matriz de correlación de Spearman") %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
-      ### 6.5.3 Boxplots de costo por tipo_equipo, modalidad, num_insumos
-      → Diferencias muy grandes entre tipos de equipo y modalidades
-  ## 6.6 Señales de heterogeneidad estructural
-      ### 6.6.1 Las distribuciones condicionales no son uniformes
-      ### 6.6.2 Tabulación cruzada tipo_equipo × modalidad × num_insumos
-      ### 6.6.3 Descubrimiento: el espacio operativo está truncado
-  ## 6.7 Implicaciones metodológicas del descubrimiento
-      ### 6.7.1 Por qué el análisis marginal puede ser engañoso (confounding)
-      ### 6.7.2 Decisiones de exclusión justificadas
-          - Exclusión de modalidad Z (n=14)
-          - Exclusión de tipo_equipo C3 (n=8)
-          - Identificación de A1 como configuración universal
-  ## 6.8 Generación del dataset principal
-      6.8.1 Filtrado y exportación (data_costos_principal.csv / .rds)
-      6.8.2 Verificación del dataset resultante
-  ## 6.9 Cierre: qué sabemos, qué no sabemos, qué sigue
-      → Hipótesis que justifican el análisis estratificado
+
+La matriz de Spearman permite observar relaciones monótonas, no necesariamente lineales. Esto es clave: aquí interesa si las variables se mueven en la misma dirección, aunque no lo hagan de forma proporcional. Al compararla con Pearson, se obtiene una visión más robusta del sistema.
+
+Relación extremadamente alta entre el costo de transformación y el costo total (0.961). 
+
+El volumen de lote mantiene su relación negativa con los costos (-0.269 con transformación, -0.318 con costo total), aunque más débil que en Pearson. Esto es revelador: la relación no es perfectamente lineal, pero sí consistente en dirección. A mayor volumen, el costo unitario tiende a disminuir, aunque con variabilidad. Es una señal clara de economías de escala, pero con irregularidades.
+
+El cambio más interesante aparece en la relación entre volumen y duración (0.780), así como con la cantidad de insumo 1 (0.685). Estas correlaciones son más altas que en Pearson, lo que indica que la relación es monótona fuerte pero no lineal. En términos simples: cuando el volumen aumenta, la duración y el consumo también aumentan de forma consistente, aunque no en proporción constante. El sistema escala, pero no de manera uniforme.
+
+La duración del proceso también muestra una relación más clara con el costo de transformación (0.280 frente a 0.220 en Pearson). Esto sugiere que procesos más largos tienden a ser más costosos, pero la relación no es lineal. Hay tramos donde el costo crece más rápido y otros donde se estabiliza.
+
+El insumo 1 sigue sin mostrar relación relevante con los costos (0.019 con costo de transformación). Esto confirma que su variabilidad no es determinante en el costo unitario. Sin embargo, su relación con volumen y duración es fuerte, lo que lo posiciona como parte de la dinámica operativa, no económica.
+
+El insumo 2, en cambio, muestra correlaciones moderadas con varias variables, especialmente con duración (0.304) y costo total (0.288). Esto indica que su presencia introduce complejidad y está asociada a procesos más exigentes.
 
 
+La dependencia del costo total respecto al costo de transformación sigue siendo dominante. No hay espacio para ambigüedad: la optimización debe centrarse en el proceso productivo. Ajustes en insumos tendrán impacto limitado si no se interviene la transformación.
+
+El volumen de lote mantiene su rol como principal palanca de eficiencia. Aunque la relación con el costo es menos lineal, sigue siendo negativa. Esto implica que aumentar el volumen reduce el costo unitario, pero el efecto no es constante. Hay tramos donde el beneficio es mayor y otros donde se estabiliza. Esto sugiere la existencia de niveles óptimos de producción, no simplemente “más volumen siempre es mejor”.
+
+La relación fuerte entre volumen, duración y consumo de insumos confirma que el crecimiento operativo implica mayor esfuerzo. No todo aumento de volumen es eficiente si la duración y el consumo crecen de forma desproporcionada.
+
+La duración del proceso tiene un impacto real en el costo, aunque no lineal. Esto indica que existen ineficiencias en ciertos rangos operativos. Algunos procesos largos generan costos elevados, pero otros no. Identificar condiciones donde la duración no se traduce en costo y replicarlas.
+
+El segundo insumo aparece nuevamente como factor de complejidad. 
 
 
+La planificación de producción debe orientarse a operar en rangos de volumen donde el costo unitario se estabiliza o disminuye significativamente. Esto requiere análisis más fino que una simple correlación: identificar puntos de cambio en la eficiencia.
 
+La gestión del tiempo de proceso debe pasar de descriptiva a prescriptiva. No basta con medir duración, hay que controlar su impacto en el costo. Esto implica estandarización y segmentación por tipo de operación.
 
+Los procesos que utilizan dos insumos deben ser tratados como una categoría aparte, con métricas y objetivos propios. Su complejidad los hace estructuralmente distintos.
 
+Finalmente, la no linealidad observada implica que modelos simples no capturan el comportamiento del sistema. Las decisiones basadas en promedios o relaciones lineales pueden ser engañosas. Se requiere segmentación, análisis por rangos y enfoque en condiciones operativas específicas.
+
+La conclusión es que el sistema es consistente en su dirección de comportamiento, pero irregular en su intensidad. La optimización no se logra con reglas generales, sino identificando y explotando las condiciones donde el sistema es más eficiente.
 
 ### Análisis bivariado: Modalidad proceso
 
@@ -1148,7 +1160,9 @@ las distribuciones intra-equipo son distintas: M11 tiene un IQR de 3.8 (muy esta
 En costo de insumo, la diferencia es aún más marcada: M05 con media 5.3, M12 con media 1.4. Sin embargo, M05 muestra una desviación estándar de 8.1 con un máximo de 46.2, lo que indica al menos un outlier extremo. Esto compromete la lectura de M05 — su comportamiento "típico" puede ser muy distinto del que sugiere su media.
 **¿qué hace que M12 sea más eficiente que M05? Si es una diferencia estructural (ejemplo: M12 procesa productos más simples), entonces la diferencia es una composición. Si es una diferencia técnica del equipo (mejor mantenimiento, operario más capacitado, tecnología más nueva), entonces hay una oportunidad de mejora replicable hacia M05.**
 
-
+## Señales de heterogeneidad estructural
+ ### Las distribuciones condicionales no son uniformes
+ 
 En conclusión , el análisis por tipo de equipo muestra diferencias muy grandes:
 
 ```{r res-cost-tipoequipo}
@@ -1171,7 +1185,7 @@ kable(tabla_resumen, caption = "Tabla resumen costos por tipo de equipo",
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
-
+### Tabulación cruzada tipo_equipo × modalidad × num_insumos
 
 Las diferencias son tan marcadas que invitan a preguntar: ¿cada tipo de equipo es realmente comparable con los otros?
 Una tabulación cruzada contesta la pregunta y cambia el análisis:
@@ -1193,6 +1207,7 @@ kable(tabla_dep, caption = "Combinaciones observadas con resaltado en ceros",
 ```
 El espacio operativo no es completo. No todos los equipos operan en todas las modalidades. No todas las modalidades se ejecutan con todos los números de insumos. Las combinaciones son asimétricas y muchas celdas están vacías o con muy pocas observaciones.
 
+### Descubrimiento: el espacio operativo está truncado
 **Lo que parecía un dataset plano co variables categóricas independientes es en realidad un sistema con dependencias operativas:**
 - El tipo de equipo determina qué modalidades de proceso son factibles.
 - El tipo de equipo determina el número de insumos.
@@ -1200,6 +1215,9 @@ El espacio operativo no es completo. No todos los equipos operan en todas las mo
 
 El dataset refleja restricciones técnicas reales de la planta, no una muestra aleatoria de un universo uniforme.
 
+
+## Implicaciones metodológicas del descubrimiento
+### Por qué el análisis marginal puede ser engañoso (confounding)
 Si las categorías no son independientes, comparar costos marginalmente es engañoso. Ejemplo concreto:
 
 Si D4 solo opera en modalidad X con 1 insumo, y A1 opera en X, Y y Z con 1 o 2 insumos, entonces decir "D4 es más barato que A1" mezcla dos cosas: el efecto del equipo y el efecto de la modalidad/insumos. No sabemos si D4 es barato porque el equipo es eficiente, o porque solo se usa en las configuraciones más simples.
@@ -1208,12 +1226,10 @@ Este tipo de error se llama confusión (confounding) y es una de las trampas cl�
 
 Desde este punto del capítulo, el análisis abandona la lógica "promedio por categoría" y adopta una lógica condicional: cada efecto se evalúa dentro del contexto operativo donde sí hay comparabilidad.
 
-## Decisiones metodológicas derivadas del EDA inicial
+### Decisiones de exclusión justificadas
 Tras el diagnóstico anterior, se adoptan tres decisiones  que guían el resto del capítulo:
 Decisión 1 — Exclusión de modalidad Z. La modalidad Z corresponde a órdenes excepcionales donde se aplican las modalidades X y Y al mismo producto por solicitud del cliente. Con 14 órdenes distribuidas en 3 celdas (3.5% del dataset), no permite inferencia estadística con potencia suficiente y, al representar una composición de procesos en lugar de una modalidad alternativa, no es conceptualmente comparable con X o Y. Las órdenes con Z se excluyen del análisis principal y se caracterizan brevemente al final del capítulo (sección 6.8).
 Decisión 2 — Exclusión del tipo_equipo C3. C3 tiene solo 8 órdenes (2%), concentradas casi íntegramente en la combinación (X, 1) con un único caso en (X, 2) y cero en modalidad Y. Con este n, los intervalos de confianza son extremadamente amplios y cualquier diferencia observada queda dominada por ruido. C3 se excluye del análisis estratificado y sus estadísticos descriptivos se reportan al final con una advertencia explícita sobre su no comparabilidad.
-Decisión 3 — Configuración universal. Tras excluir Z y C3, el equipo A1 es el único que cubre las 4 combinaciones (X × Y × 1 × 2), con 274 órdenes. Es la única base analítica donde es posible evaluar de forma limpia los efectos de modalidad y número de insumos. Los análisis multivariados profundos se desarrollarán sobre este subconjunto.
-
 ```{r datos-filtrados}
 datos_principal <- datos %>%
   filter(modalidad_proceso != "Z",
@@ -1228,188 +1244,12 @@ n_principal <- nrow(datos_principal)
 ```
 Tras estas exclusiones, el dataset principal queda conformado por r n_principal órdenes . Sobre este subconjunto se desarrolla el análisis estratificado que sigue.
 
-## Estructura del espacio operativo sobre el dataset principal
-### Mapa de combinaciones
-
-```{r mapa-combinaciones}
-mapa_n <- datos_principal %>%
-  count(tipo_equipo, modalidad_proceso, num_insumos) %>%
-  pivot_wider(names_from = c(modalidad_proceso, num_insumos),
-              values_from = n,
-              values_fill = 0,
-              names_sep = "_")
-
-kable(mapa_n, caption = "Tamaño muestral por combinación (dataset principal)",
-      format = "html",
-      table.attr = "class='table'") %>%
-  kableExtra::kable_styling(full_width = FALSE)
-```
+## Cierre: qué sabemos, qué no sabemos, qué sigue
+      → Hipótesis que justifican el análisis estratificado
 
 
-A1 tiene cobertura completa: 60 órdenes en (X, 1), 63 en (X, 2), 118 en (Y, 1), 33 en (Y, 2). Total: 274. Es el único equipo que permite comparar simultáneamente los efectos de modalidad y de número de insumos.
-B2 tiene cobertura en las 4 combinaciones pero con n reducido (7, 13, 18, 6). Permite análisis condicional con cautela.
-D4 opera exclusivamente en (X, 1) con 55 órdenes. No se puede estudiar si D4 cambia de comportamiento en otras modalidades o con otros insumos: esa información no existe.
-
-Este mapa define el universo de comparaciones legítimas:
-
-Comparación inter-equipos en (X, 1): es el único estrato donde A1 (n=60), B2 (n=7) y D4 (n=55) coexisten. Total: 122 órdenes. Es la única celda limpia para responder la pregunta "¿los equipos difieren en costo?".
-Comparación intra-equipo A1 (efectos de modalidad e insumos): con 274 órdenes y cobertura completa, A1 es la configuración universal para estudiar cómo varían los costos según modalidad y número de insumos.
-Comparación intra-equipo B2: análoga a A1 pero con n=44. Las conclusiones son sugestivas, no definitivas.
 
 
-## Análisis condicional: lo que revelan los estratos
-### Efecto puro de tipo_equipo dentro de (X, 1)
-Esta es la pregunta que parecía obvia al inicio: ¿los equipos tienen costos distintos?
-
-```{r boxplot-cc-tipoequipo_X1, fig.width=9, fig.height=4.5}
-comp_X1 <- datos_principal %>%
-  filter(modalidad_proceso == "X", num_insumos == 1) %>%
-  group_by(tipo_equipo) %>%
-  summarise(
-    n     = n(),
-    media = mean(costo_transformacion),
-    `50%` = median(costo_transformacion),
-    ds    = sd(costo_transformacion),
-    IQR   = IQR(costo_transformacion),
-    .groups = "drop"
-  )
-comp_X1
-```
 
 
-Interpretación. Dentro de la única celda donde los tres equipos son comparables:
 
-D4 mantiene un costo de transformación sustancialmente menor.
-A1 y B2 son relativamente similares entre sí.
-La diferencia entre D4 y los otros equipos es real, no un artefacto de la mezcla de modalidades.
-
-Implicación para la dirección financiera. D4 es efectivamente más eficiente en transformación, al menos en la configuración (X, 1). Sin embargo, el dataset no permite concluir que D4 sería igualmente eficiente en otras modalidades — simplemente porque D4 no puede operar en Y o con 2 insumos. 
-
-Este es el análisis más potente del capítulo, porque A1 es el único equipo donde todas las combinaciones tienen n suficiente.
-
-```{r estrat-A1-B2}
-stats_A1 <- datos_principal %>%
-  filter(tipo_equipo %in% c("A1", "B2")) %>%
-  group_by(modalidad_proceso, num_insumos) %>%
-  summarise(
-    n     = n(),
-    media = mean(costo_transformacion),
-    `50%` = median(costo_transformacion),
-    ds    = sd(costo_transformacion),
-    .groups = "drop"
-  )
-stats_A1
-```
-Lo que revela el análisis estratificado. Dentro de A1:
-
-El paso de 1 a 2 insumos incrementa el costo de transformación medio de manera consistente en ambas modalidades.
-La modalidad Y tiende a tener costos más estables (menor IQR) que la modalidad X.
-La combinación (Y, 1) es la más eficiente y la más frecuente (n=118).
-
-
-**la combinación más frecuente del sistema (Y, 1 en A1) es también la más eficiente. ¿Es esto resultado de una estrategia consciente de planeación, o es una coincidencia del perfil de pedidos? La respuesta define si la eficiencia es replicable o circunstancial.**
-
-### Efecto de número de insumos: comparación condicional
-Un análisis marginal diría que pasar de 1 a 2 insumos aumenta el costo en promedio de 27.3 a 35.8 UM/unidad (+31%). Pero esa comparación mezcla equipos, modalidades y productos.
-La comparación condicional dentro de A1 da una respuesta más fina:
-
-```{r efecto-insumos}
-efecto_insumos <- datos_principal %>%
-  filter(tipo_equipo %in% c("A1", "B2")) %>%
-  group_by(modalidad_proceso, num_insumos) %>%
-  summarise(
-    media_ct = mean(costo_transformacion),
-    media_ci = mean(costo_insumo),
-    .groups = "drop"
-  ) %>%
-  pivot_wider(names_from = num_insumos,
-              values_from = c(media_ct, media_ci),
-              names_sep = "_ins")
-efecto_insumos
-```
-
-El efecto de agregar un segundo insumo es:
-
-En modalidad X: incremento claro en ambos costos.
-En modalidad Y: incremento menor en transformación, más marcado en insumo.
-
-Esta es una interacción: el efecto de num_insumos no es el mismo en todas las modalidades. El análisis marginal (el que no estratifica) promedia esas dos realidades y produce un número engañoso.
-Implicación financiera. Si la empresa cobra un recargo por órdenes con dos insumos, ese recargo debería depender de la modalidad. Un recargo uniforme subsidia las órdenes complejas en X con los márgenes de las órdenes simples en Y.
-
-## Asociaciones numéricas: cuando la correlación cambia al estratificar
-Las correlaciones marginales sobre el dataset principal muestran:
-
-volumen_lote ↔ costo_transformacion: −0.35 (Pearson) / −0.27 (Spearman).
-duracion_proceso ↔ costo_transformacion: +0.22 / +0.28.
-
-Lectura marginal: lotes más grandes son más baratos por unidad (economías de escala), procesos más largos son ligeramente más costosos.
-Pero al calcular las mismas correlaciones dentro de A1 y B2 únicamente:
-
-```{r corr-A1-B2}
-cor_A1_B2 <- datos_principal %>%
-  filter(tipo_equipo %in% c("A1", "B2")) %>%
-  select(costo_transformacion, volumen_lote, duracion_proceso,
-         cantidad_insumo_1, cantidad_insumo_2) %>%
-  cor(use = "pairwise.complete.obs", method = "spearman") %>%
-  round(3)
-cor_A1_B2
-```
-Por qué importa este contraste. Si la correlación marginal y la correlación dentro de A1 difieren sustancialmente, significa que parte de la relación observada globalmente no es un efecto directo de la variable, sino un efecto de composición: los equipos con ciertos perfiles de volumen también tienen ciertos perfiles de costo, y eso infla o deforma la correlación marginal.
-Traducción financiera. Las economías de escala son reales dentro de A1, pero el tamaño del efecto marginal que ven los reportes tradicionales puede estar sobrestimado porque mezcla el efecto de "producir más" con el efecto de "producir en un equipo distinto".
-
-## Caracterización descriptiva de los subconjuntos excluidos
-Esta sección es puramente descriptiva. No se hacen inferencias, solo se documentan los subconjuntos excluidos del análisis principal para transparencia.
-### Modalidad Z (n=14)
-datos %>%
-  filter(modalidad_proceso == "Z") %>%
-  group_by(tipo_equipo) %>%
-  summarise(
-    n     = n(),
-    ct_media = mean(costo_transformacion),
-    ci_media = mean(costo_insumo),
-    ctot_media = mean(costo_unitario_total),
-    .groups = "drop"
-  )
-Observación descriptiva. Las órdenes en modalidad Z presentan un costo total promedio superior al de X y Y en A1. Esto es consistente con la definición operativa de Z (aplicación conjunta de X e Y al mismo producto), que implica mayor consumo de tiempo y recursos. La magnitud exacta del sobrecosto no es generalizable con n=14 y no se usará para ninguna conclusión. Solo sirve como referencia cualitativa para que la empresa calibre el recargo comercial aplicado a pedidos que solicitan Z.
-### Tipo de equipo C3 (n=8)
-datos %>%
-  filter(tipo_equipo == "C3") %>%
-  summarise(
-    n = n(),
-    ct_media   = mean(costo_transformacion),
-    ct_mediana = median(costo_transformacion),
-    ci_media   = mean(costo_insumo),
-    ci_mediana = median(costo_insumo)
-  )
-Observación descriptiva. C3 presenta los costos más altos del dataset tanto en transformación como en insumos. Con n=8 el intervalo de confianza es demasiado amplio para afirmar cuánto más costoso es en comparación con otros equipos, pero el patrón es consistente y amerita una revisión operativa específica —fuera del alcance de este trabajo estadístico— sobre qué justifica su uso y en qué condiciones.
-
-6.9 Síntesis: lo que cambia para el capítulo de inferencia
-6.9.1 Qué se puede afirmar después del EDA
-
-El sistema productivo no es homogéneo: tiene al menos tres regímenes operativos diferenciados por tipo de equipo (A1/B2 como regímenes estándar, D4 como régimen eficiente restringido a (X, 1), C3 como régimen excepcional).
-Dentro de A1 (configuración universal), el número de insumos y la modalidad afectan el costo de manera interactiva. El efecto de agregar un segundo insumo depende de la modalidad.
-Las economías de escala son reales pero no uniformes: pierden intensidad en volúmenes altos y presentan mayor dispersión en lotes pequeños.
-El costo de transformación domina el costo total (85%). Cualquier iniciativa de reducción debe enfocarse en procesos, no en insumos.
-
-6.9.2 Hipótesis que alimentan el capítulo 7 (inferencia)
-Con base en el EDA, las pruebas inferenciales formales que tienen sustento son:
-HipótesisPrueba aplicableEstratonH1: El costo de transformación difiere entre A1, B2 y D4ANOVA 1 vía (Welch) o Kruskal-Wallis(X, 1) únicamente122H2: Dentro de A1, la modalidad afecta el costot-test o Mann-WhitneyA1 completo274H3: Dentro de A1, el número de insumos afecta el costot-test o Mann-WhitneyA1 completo274H4: Existe interacción modalidad × num_insumos dentro de A1ANOVA 2 víasA1 completo274H5: Existe correlación entre volumen_lote y costo dentro de A1Correlación de Spearman con ICA1 completo274
-6.9.3 Comparaciones que el diseño del dataset no permite hacer
-Para transparencia metodológica, se documenta lo que el dataset no puede responder:
-
-Si D4 sería más eficiente que A1 en modalidad Y: D4 nunca operó en Y.
-Si C3 sería competitivo con volúmenes altos: los 8 casos de C3 no cubren rangos altos de volumen.
-Si la modalidad Z es más costosa que la suma de X e Y: n=14 no da potencia suficiente.
-
-Estas preguntas requerirían un diseño de recolección de datos distinto, con asignación deliberada de órdenes a configuraciones específicas para romper la dependencia entre factores.
-
-6.10 Implicaciones para la dirección financiera
-Cuatro mensajes para la toma de decisiones:
-
-La reducción de costos tiene un techo estructural del 15% si se enfoca solo en insumos. La palanca mayor está en los procesos de transformación, específicamente en los regímenes menos eficientes.
-D4 es el equipo más eficiente observado, pero su alcance es limitado. Antes de recomendar migración de producción, se requiere un estudio operativo que determine si las restricciones de D4 son técnicas o históricas.
-La política de precios probablemente está subsidiando la complejidad. Las órdenes con dos insumos son sistemáticamente más costosas, pero el recargo aplicado (si existe) no varía por modalidad. Órdenes complejas en modalidad X son las menos rentables.
-El tamaño de lote mínimo rentable debe definirse explícitamente. Los lotes pequeños concentran los mayores costos unitarios y la mayor variabilidad. Una política de lote mínimo, o una estructura de precios que incentive la consolidación de pedidos, tendría impacto medible e inmediato.
-
-
-Nota final sobre el método. Este capítulo deliberadamente empezó con una visión agregada y la desmontó progresivamente. El objetivo no fue mostrar los hallazgos de la forma más eficiente, sino hacer visible el razonamiento: cómo una primera lectura simple escondía una estructura jerárquica, por qué el análisis marginal era engañoso, y qué comparaciones sí son válidas en un dataset con espacio operativo truncado. Esta disciplina es la que separa un EDA mecánico de un EDA con criterio.

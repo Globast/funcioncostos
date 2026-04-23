@@ -53,7 +53,14 @@ matriz-spearman
 análisis-bivariado-modalidad-proceso
 análisis-bivariado-tipo-de-equipo
 análisis-bivariado-equipo_id
-decisiones-metodológicas-derivadas-del-eda-inicial
+señales-de-heterogeneidad-estructural
+tabulación-cruzada-tipo_equipo-modalidad-num_insumos
+descubrimiento-el-espacio-operativo-está-truncado
+implicaciones-metodológicas-del-descubrimiento
+por-qué-el-análisis-marginal-puede-ser-engañoso-confounding
+decisiones-de-exclusión-justificadas
+cierre-qué-sabemos-qué-no-sabemos-qué-sigue
+estratificado
 estructura-del-espacio-operativo-sobre-el-dataset-principal
 mapa-de-combinaciones
 análisis-condicional-lo-que-revelan-los-estratos
@@ -61,7 +68,6 @@ efecto-puro-de-tipo_equipo-dentro-de-x-1
 efecto-de-número-de-insumos-comparación-condicional
 asociaciones-numéricas-cuando-la-correlación-cambia-al-estratificar
 caracterización-descriptiva-de-los-subconjuntos-excluidos
-estratificado
 pruebas-de-hipótesis-sin-desarrollar
 modelos-sin-desarrollar
 ajuste-del-modelo
