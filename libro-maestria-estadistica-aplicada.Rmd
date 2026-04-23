@@ -2144,7 +2144,8 @@ datos_X1 %>%
 knitr::kable(resumen_X1_ct,
              caption = "Costo de transformación por tipo de equipo en (X, 1)") %>%
   kableExtra::kable_styling(full_width = FALSE)
-  ```
+```
+
 7.3.2 Boxplot del costo de transformación en (X, 1)
 ```{r box-X1-ct, fig.width=8, fig.height=4.5}
 datos_X1 %>%
@@ -2156,6 +2157,7 @@ datos_X1 %>%
   theme_bw() +
   facet_grid(. ~ "Costo de transformación por tipo de equipo en (X, 1)")
 ```
+
 7.3.3 Lectura
 [Aquí desarrollas la interpretación. Lo importante a destacar:]
 
@@ -2183,6 +2185,7 @@ La conclusión sobre B2 [es robusta / requiere cautela] dada la limitación de n
 7.4 Análisis intra-tipo: heterogeneidad dentro de las familias
 El análisis del Capítulo 6 (sección 6.5.6) sugirió que dentro de cada tipo de equipo existen comportamientos distintos. Esta sección lo formaliza dentro del dataset principal, donde C3 ya está excluido y la lectura de A1 y D4 se limpia de outliers extremos asociados a configuraciones excepcionales.
 7.4.1 Familia A1: ¿siete equipos coherentes?
+
 ```{r resumen-A1-equipos}
 datos_principal %>%
   filter(tipo_equipo == "A1") %>%
@@ -2258,6 +2261,7 @@ D4 contiene dos regímenes operativos (M05 y M12) con diferencias relativas sign
 7.5 Configuración universal A1: efectos de modalidad, insumos e interacción
 A1 es el único equipo con cobertura completa de las cuatro combinaciones de modalidad y número de insumos. Aquí se evalúan los efectos puros de cada factor y, crucialmente, si interactúan entre sí.
 7.5.1 Subconjunto y mapa de combinaciones
+
 ```{r subset-A1}
 datos_A1 <- datos_principal %>%
   filter(tipo_equipo == "A1")
@@ -2326,7 +2330,8 @@ datos_A1 %>%
 knitr::kable(resumen_A1_int,
              caption = "Costo de transformación por modalidad × num_insumos en A1") %>%
   kableExtra::kable_styling(full_width = FALSE)
-r{r facet-A1-interaccion, fig.width=8, fig.height=4.5}
+```
+```{r facet-A1-interaccion, fig.width=8, fig.height=4.5}
 datos_A1 %>%
   ggplot(aes(x = num_insumos, y = costo_transformacion, fill = num_insumos)) +
   geom_boxplot(outlier.colour = "red", outlier.shape = 16) +
