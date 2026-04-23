@@ -8,7 +8,6 @@ tab:ck-resumen-ct
 tab:ck-hist-ci
 tab:ck-resumen-ctot
 tab:ck-resumen-num-predictoras
-tab:tipo-equipo-tabla
 tab:equipo-id
 tab:categoria-producto
 tab:modalidad-proceso
