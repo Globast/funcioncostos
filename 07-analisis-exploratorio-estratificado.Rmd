@@ -157,7 +157,7 @@ cor_A1_B2 <- datos_principal %>%
   round(3)
 
 
-knitr::kable(rcor_A1_B2, caption = "Correlaciones dentro de A1 y B2",
+knitr::kable(cor_A1_B2, caption = "Correlaciones dentro de A1 y B2",
                  format = "html",
              table.attr = "class='table'") %>%
   kableExtra::kable_styling(full_width = FALSE) 

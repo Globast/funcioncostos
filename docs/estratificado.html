@@ -412,18 +412,134 @@ Implicación financiera. Si la empresa cobra un recargo por órdenes con dos ins
 duracion_proceso ↔︎ costo_transformacion: +0.22 / +0.28.</p>
 <p>Lectura marginal: lotes más grandes son más baratos por unidad (economías de escala), procesos más largos son ligeramente más costosos.
 Pero al calcular las mismas correlaciones dentro de A1 y B2 únicamente:</p>
-<pre><code>##                      costo_transformacion volumen_lote duracion_proceso
-## costo_transformacion                1.000       -0.278            0.139
-## volumen_lote                       -0.278        1.000            0.859
-## duracion_proceso                    0.139        0.859            1.000
-## cantidad_insumo_1                  -0.086        0.731            0.714
-## cantidad_insumo_2                   0.124        0.240            0.293
-##                      cantidad_insumo_1 cantidad_insumo_2
-## costo_transformacion            -0.086             0.124
-## volumen_lote                     0.731             0.240
-## duracion_proceso                 0.714             0.293
-## cantidad_insumo_1                1.000             0.317
-## cantidad_insumo_2                0.317             1.000</code></pre>
+<table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:corr-A1-B2">Table 7.2: </span>Correlaciones dentro de A1 y B2
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+costo_transformacion
+</th>
+<th style="text-align:right;">
+volumen_lote
+</th>
+<th style="text-align:right;">
+duracion_proceso
+</th>
+<th style="text-align:right;">
+cantidad_insumo_1
+</th>
+<th style="text-align:right;">
+cantidad_insumo_2
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+costo_transformacion
+</td>
+<td style="text-align:right;">
+1.000
+</td>
+<td style="text-align:right;">
+-0.278
+</td>
+<td style="text-align:right;">
+0.139
+</td>
+<td style="text-align:right;">
+-0.086
+</td>
+<td style="text-align:right;">
+0.124
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+volumen_lote
+</td>
+<td style="text-align:right;">
+-0.278
+</td>
+<td style="text-align:right;">
+1.000
+</td>
+<td style="text-align:right;">
+0.859
+</td>
+<td style="text-align:right;">
+0.731
+</td>
+<td style="text-align:right;">
+0.240
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+duracion_proceso
+</td>
+<td style="text-align:right;">
+0.139
+</td>
+<td style="text-align:right;">
+0.859
+</td>
+<td style="text-align:right;">
+1.000
+</td>
+<td style="text-align:right;">
+0.714
+</td>
+<td style="text-align:right;">
+0.293
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cantidad_insumo_1
+</td>
+<td style="text-align:right;">
+-0.086
+</td>
+<td style="text-align:right;">
+0.731
+</td>
+<td style="text-align:right;">
+0.714
+</td>
+<td style="text-align:right;">
+1.000
+</td>
+<td style="text-align:right;">
+0.317
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cantidad_insumo_2
+</td>
+<td style="text-align:right;">
+0.124
+</td>
+<td style="text-align:right;">
+0.240
+</td>
+<td style="text-align:right;">
+0.293
+</td>
+<td style="text-align:right;">
+0.317
+</td>
+<td style="text-align:right;">
+1.000
+</td>
+</tr>
+</tbody>
+</table>
 <p>Por qué importa este contraste. Si la correlación marginal y la correlación dentro de A1 difieren sustancialmente, significa que parte de la relación observada globalmente no es un efecto directo de la variable, sino un efecto de composición: los equipos con ciertos perfiles de volumen también tienen ciertos perfiles de costo, y eso infla o deforma la correlación marginal.
 Traducción financiera. Las economías de escala son reales dentro de A1, pero el tamaño del efecto marginal que ven los reportes tradicionales puede estar sobrestimado porque mezcla el efecto de “producir más” con el efecto de “producir en un equipo distinto”.</p>
 </div>
