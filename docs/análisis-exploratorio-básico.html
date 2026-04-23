@@ -1451,6 +1451,7 @@ Z
 </tr>
 </tbody>
 </table>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box-bivariado-mod-proceso-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
 <p>La modalidad Z corresponde a órdenes donde se aplican X y Y al mismo producto por requerimiento del cliente. Es una composición de procesos, no una alternativa.
 En transformación: se observa un gradiente claro X (27.91) &lt; Y (31.4) &lt; Z (41.62), confirmado por la mediana. Pero la dispersión cambia entre modalidades: X tiene desviación estándar de 17.9 (proceso volátil), Y tiene 10.51 (proceso controlado), Z tiene 17.33 pero con IQR contenido (alto y consistente).</p>
 <p>En insumo: el patrón es más suave (X: 27.91, Y: 31.4, Z: 41.62), y la mediana de Z (38.89) está muy cerca de la de Y. El sobrecosto de Z proviene principalmente del componente de transformación, no del de insumos.</p>
@@ -1463,20 +1464,12 @@ En transformación: se observa un gradiente claro X (27.91) &lt; Y (31.4) &lt; Z
 <li>Z tiene n=14: cualquier conclusión sobre esta modalidad debe tomarse con extrema cautela.</li>
 </ul>
 </div>
-<p>En costo de insumo, el patrón es más suave:
-X ≈ 4.80, Y ≈ 5.20, Z ≈ 6.86</p>
-<p>La mediana de Z (≈ 4.98) está cerca de Y, el aumento en la media puede provenir de algunos valores altos .</p>
-<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box-bivariado-mod-proceso-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
-<p>El sobrecosto de Z proviene principalmente de transformación, no de insumo, y además no es lineal. Es un fenómeno de interacción entre procesos, no de suma simple.</p>
-<p>En cambio, el costo de insumo sube poco y de forma relativamente lógica. Eso confirma que el problema no está en materiales, sino en cómo se ejecuta el proceso combinado.</p>
-<p>El tamaño de muestra de Z es bajo (n = 14).</p>
-<p>Y es más estable y ligeramente más costoso que X. Pero X es más volátil.</p>
 </div>
 <div id="análisis-bivariado-tipo-de-equipo" class="section level3 hasAnchor" number="6.5.5">
 <h3><span class="header-section-number">6.5.5</span> Análisis bivariado: tipo de equipo<a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado-tipo-de-equipo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:bivariado-cc-tipoequipo">Table 6.8: </span>Resumen Bivariado costos de transformación
+<span id="tab:bivariado-tipoequipo">Table 6.8: </span>Resumen descriptivo de los costos de transformación e insumo por tipo de equipo
 </caption>
 <thead>
 <tr>
@@ -1496,184 +1489,10 @@ ds
 50%
 </th>
 <th style="text-align:right;">
-minimo
+mínimo
 </th>
 <th style="text-align:right;">
-maximo
-</th>
-<th style="text-align:right;">
-Q1
-</th>
-<th style="text-align:right;">
-Q3
-</th>
-<th style="text-align:right;">
-IQR
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-A1
-</td>
-<td style="text-align:right;">
-287
-</td>
-<td style="text-align:right;">
-33.033470
-</td>
-<td style="text-align:right;">
-12.711203
-</td>
-<td style="text-align:right;">
-30.382729
-</td>
-<td style="text-align:right;">
-5.093602
-</td>
-<td style="text-align:right;">
-92.17387
-</td>
-<td style="text-align:right;">
-25.312400
-</td>
-<td style="text-align:right;">
-38.34401
-</td>
-<td style="text-align:right;">
-13.031608
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-B2
-</td>
-<td style="text-align:right;">
-45
-</td>
-<td style="text-align:right;">
-29.903980
-</td>
-<td style="text-align:right;">
-11.200180
-</td>
-<td style="text-align:right;">
-28.898809
-</td>
-<td style="text-align:right;">
-12.025943
-</td>
-<td style="text-align:right;">
-75.69041
-</td>
-<td style="text-align:right;">
-22.263955
-</td>
-<td style="text-align:right;">
-33.14837
-</td>
-<td style="text-align:right;">
-10.884414
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-C3
-</td>
-<td style="text-align:right;">
-8
-</td>
-<td style="text-align:right;">
-64.358886
-</td>
-<td style="text-align:right;">
-19.163109
-</td>
-<td style="text-align:right;">
-58.779546
-</td>
-<td style="text-align:right;">
-39.674913
-</td>
-<td style="text-align:right;">
-97.18480
-</td>
-<td style="text-align:right;">
-51.829041
-</td>
-<td style="text-align:right;">
-75.60371
-</td>
-<td style="text-align:right;">
-23.774668
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-D4
-</td>
-<td style="text-align:right;">
-55
-</td>
-<td style="text-align:right;">
-8.819827
-</td>
-<td style="text-align:right;">
-3.540393
-</td>
-<td style="text-align:right;">
-8.458577
-</td>
-<td style="text-align:right;">
-2.766110
-</td>
-<td style="text-align:right;">
-21.99044
-</td>
-<td style="text-align:right;">
-6.027059
-</td>
-<td style="text-align:right;">
-10.85749
-</td>
-<td style="text-align:right;">
-4.830435
-</td>
-</tr>
-</tbody>
-</table>
-<p>El tipo de equipo A1, presenta un costo medio de aproximadamente 33 UM/unidad, con una dispersión moderada. Su mediana cercana a 30 confirma que el comportamiento típico está bien representado y relativamente estable. Esto lo posiciona como el estándar operativo del sistema.</p>
-<p>El tipo de equipo B2 muestra un patrón muy similar a A1, aunque con costos ligeramente menores y menor variabilidad. La cercanía entre media y mediana sugiere estabilidad, pero su menor tamaño muestral limita la robustez de la comparación.</p>
-<p>El caso de C3 es claramente distinto. Presenta costos significativamente más altos (media superior a 64) y mayor dispersión. Además, el rango intercuartílico es amplio, lo que indica que no solo es costoso, sino también variable. Esto apunta a un proceso con alta complejidad o baja eficiencia estructural.</p>
-<p>El tipo de equipo D4 tiene costos notablemente bajos (media cercana a 9). La dispersión es reducida y el comportamiento es consistente. Este equipo representa una operación altamente eficiente y controlada, con baja variabilidad. qué prácticas operativas permiten ese nivel de eficiencia y si son replicables.</p>
-<p>El costo de transformación está determinado por el tipo de equipo, y la magnitud de las diferencias es significativa.</p>
-<table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>
-<span id="tab:bivariado-ci-tipoequipo">Table 6.9: </span>Resumen Bivariado costos de insumo
-</caption>
-<thead>
-<tr>
-<th style="text-align:left;">
-tipo_equipo
-</th>
-<th style="text-align:right;">
-n
-</th>
-<th style="text-align:right;">
-media
-</th>
-<th style="text-align:right;">
-ds
-</th>
-<th style="text-align:right;">
-50%
-</th>
-<th style="text-align:right;">
-minimo
-</th>
-<th style="text-align:right;">
-maximo
+máximo
 </th>
 <th style="text-align:right;">
 Q1
@@ -1687,147 +1506,288 @@ IQR
 </tr>
 </thead>
 <tbody>
+<tr grouplength="4">
+<td colspan="10" style="border-bottom: 1px solid;">
+<strong>Transformación</strong>
+</td>
+</tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
 A1
 </td>
 <td style="text-align:right;">
 287
 </td>
 <td style="text-align:right;">
-5.165089
+33.03
 </td>
 <td style="text-align:right;">
-3.899337
+12.71
 </td>
 <td style="text-align:right;">
-4.302556
+30.38
 </td>
 <td style="text-align:right;">
-0.1052334
+5.09
 </td>
 <td style="text-align:right;">
-36.70551
+92.17
 </td>
 <td style="text-align:right;">
-2.767850
+25.31
 </td>
 <td style="text-align:right;">
-6.406926
+38.34
 </td>
 <td style="text-align:right;">
-3.639076
+13.03
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
 B2
 </td>
 <td style="text-align:right;">
 45
 </td>
 <td style="text-align:right;">
-4.993411
+29.90
 </td>
 <td style="text-align:right;">
-3.259524
+11.20
 </td>
 <td style="text-align:right;">
-4.513479
+28.90
 </td>
 <td style="text-align:right;">
-0.5520079
+12.03
 </td>
 <td style="text-align:right;">
-15.22676
+75.69
 </td>
 <td style="text-align:right;">
-3.184661
+22.26
 </td>
 <td style="text-align:right;">
-5.674693
+33.15
 </td>
 <td style="text-align:right;">
-2.490032
+10.88
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
 C3
 </td>
 <td style="text-align:right;">
 8
 </td>
 <td style="text-align:right;">
-11.255688
+64.36
 </td>
 <td style="text-align:right;">
-6.102082
+19.16
 </td>
 <td style="text-align:right;">
-11.410794
+58.78
 </td>
 <td style="text-align:right;">
-2.4015355
+39.67
 </td>
 <td style="text-align:right;">
-18.16689
+97.18
 </td>
 <td style="text-align:right;">
-7.306343
+51.83
 </td>
 <td style="text-align:right;">
-16.361241
+75.60
 </td>
 <td style="text-align:right;">
-9.054897
+23.77
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
 D4
 </td>
 <td style="text-align:right;">
 55
 </td>
 <td style="text-align:right;">
-3.582194
+8.82
 </td>
 <td style="text-align:right;">
-6.364827
+3.54
 </td>
 <td style="text-align:right;">
-1.643696
+8.46
 </td>
 <td style="text-align:right;">
-0.0136519
+2.77
 </td>
 <td style="text-align:right;">
-46.21884
+21.99
 </td>
 <td style="text-align:right;">
-1.129867
+6.03
 </td>
 <td style="text-align:right;">
-4.228598
+10.86
 </td>
 <td style="text-align:right;">
-3.098730
+4.83
+</td>
+</tr>
+<tr grouplength="4">
+<td colspan="10" style="border-bottom: 1px solid;">
+<strong>Insumo</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+A1
+</td>
+<td style="text-align:right;">
+287
+</td>
+<td style="text-align:right;">
+5.17
+</td>
+<td style="text-align:right;">
+3.90
+</td>
+<td style="text-align:right;">
+4.30
+</td>
+<td style="text-align:right;">
+0.11
+</td>
+<td style="text-align:right;">
+36.71
+</td>
+<td style="text-align:right;">
+2.77
+</td>
+<td style="text-align:right;">
+6.41
+</td>
+<td style="text-align:right;">
+3.64
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+B2
+</td>
+<td style="text-align:right;">
+45
+</td>
+<td style="text-align:right;">
+4.99
+</td>
+<td style="text-align:right;">
+3.26
+</td>
+<td style="text-align:right;">
+4.51
+</td>
+<td style="text-align:right;">
+0.55
+</td>
+<td style="text-align:right;">
+15.23
+</td>
+<td style="text-align:right;">
+3.18
+</td>
+<td style="text-align:right;">
+5.67
+</td>
+<td style="text-align:right;">
+2.49
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+C3
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+11.26
+</td>
+<td style="text-align:right;">
+6.10
+</td>
+<td style="text-align:right;">
+11.41
+</td>
+<td style="text-align:right;">
+2.40
+</td>
+<td style="text-align:right;">
+18.17
+</td>
+<td style="text-align:right;">
+7.31
+</td>
+<td style="text-align:right;">
+16.36
+</td>
+<td style="text-align:right;">
+9.05
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+D4
+</td>
+<td style="text-align:right;">
+55
+</td>
+<td style="text-align:right;">
+3.58
+</td>
+<td style="text-align:right;">
+6.36
+</td>
+<td style="text-align:right;">
+1.64
+</td>
+<td style="text-align:right;">
+0.01
+</td>
+<td style="text-align:right;">
+46.22
+</td>
+<td style="text-align:right;">
+1.13
+</td>
+<td style="text-align:right;">
+4.23
+</td>
+<td style="text-align:right;">
+3.10
 </td>
 </tr>
 </tbody>
 </table>
-<p>Los tipos de equipos A1 y B2 presentan patrones similares: medias cercanas a 5 UM/unidad y medianas ligeramente inferiores. El rango intercuartílico es moderado, sugiriendo que el consumo de insumos en estos equipos es predecible y controlado.</p>
-<p>El tipo de equipo C3 nuevamente se diferencia de forma clara. La media (≈11.25) es más del doble que en A1 y B2, y la dispersión es considerable. Además, la mediana se mantiene alta. Costoso tanto en transformación como en insumos, es menos eficiente.</p>
-<p>El tipo de equipo D4 Presenta la media más baja (≈3.58) pero su desviación estándar es alta y supera incluso a la media. Puede influir que D4 solo opera con un insumo. No puede operar con 2. La mediana (≈1.64) está muy por debajo de la media, lo que indica una asimetría extrema. D4 es generalmente eficiente, pero con episodios puntuales de alto consumo.</p>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box-equipo-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
-<p>Los boxplots confirman visualmente lo que ya sugerían los resúmenes numéricos: el tipo de equipo introduce regímenes claramente diferenciados de costos, tanto en transformación como en insumos.</p>
+<p>Esta es la tabla más reveladora del capítulo. Los cuatro tipos de equipo no operan en el mismo rango de costos: están en regímenes económicos completamente distintos.
+• A1 es el estándar operativo del sistema (n=287, ~33.03 UM/unidad, dispersión moderada). Su comportamiento típico está bien caracterizado.
+• B2 es operativamente similar a A1 (~29.9), ligeramente más barato y más estable. Pero su menor n (45) limita la robustez de la comparación.
+• C3 es claramente diferente: media de 64.36 UM/unidad, IQR amplio (23.77), dispersión alta. Es costoso y impredecible. Apenas 8 órdenes —insuficientes para conclusiones inferenciales sólidas, pero suficientes para señalar que requiere análisis special.
+• D4 es notablemente eficiente: media de 8.82 UM/unidad, dispersión reducida, comportamiento consistente. Representa una operación altamente eficiente.
+En insumos el patrón se mantiene: A1 y B2 son comparables (~33.03 UM/unidad), C3 más del doble (64.36), D4 el más bajo (8.82 con alta variabilidad por al menos un outlier extremo).</p>
+<p>La pregunta inmediata. Si el sistema productivo tiene cuatro regímenes de costo tan distintos, ¿qué sentido tiene reportar un “costo promedio del sistema”? Cualquier promedio agregado describirá un valor que no representa adecuadamente a ninguno de los cuatro grupos. Esta es la primera grieta del marco analítico agregado.</p>
 </div>
 <div id="análisis-bivariado-equipo_id" class="section level3 hasAnchor" number="6.5.6">
 <h3><span class="header-section-number">6.5.6</span> Análisis bivariado: Equipo_id<a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado-equipo_id" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:bivariado-cc-equipo">Table 6.10: </span>Resumen bivariado de costos de transformación por equipo y tipo de equipo
+<span id="tab:bivariado-cc-equipo">Table 6.9: </span>Resumen bivariado de costos de transformación por equipo y tipo de equipo
 </caption>
 <thead>
 <tr>
@@ -2291,7 +2251,7 @@ D4
 </table>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:bivariado-ci-equipo">Table 6.11: </span>Resumen bivariado de costos de insumo por equipo y tipo de equipo
+<span id="tab:bivariado-ci-equipo">Table 6.10: </span>Resumen bivariado de costos de insumo por equipo y tipo de equipo
 </caption>
 <thead>
 <tr>
@@ -2779,7 +2739,7 @@ En costo de insumo, la diferencia es aún más marcada: M05 con media 5.3, M12 c
 <p>En conclusión , el análisis por tipo de equipo muestra diferencias muy grandes:</p>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:res-cost-tipoequipo">Table 6.12: </span>Tabla resumen costos por tipo de equipo
+<span id="tab:res-cost-tipoequipo">Table 6.11: </span>Tabla resumen costos por tipo de equipo
 </caption>
 <thead>
 <tr>
@@ -2847,7 +2807,7 @@ D4
 Una tabulación cruzada contesta la pregunta y cambia el análisis:</p>
 <table class="table table table-striped table-hover" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:bivariado-cost-tipoequipo">Table 6.13: </span>Combinaciones observadas con resaltado en ceros
+<span id="tab:bivariado-cost-tipoequipo">Table 6.12: </span>Combinaciones observadas con resaltado en ceros
 </caption>
 <thead>
 <tr>

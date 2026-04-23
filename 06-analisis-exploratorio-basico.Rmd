@@ -1353,11 +1353,12 @@ box_ct_te + box_ci_te
 
 
 Esta es la tabla más reveladora del capítulo. Los cuatro tipos de equipo no operan en el mismo rango de costos: están en regímenes económicos completamente distintos.
-•	A1 es el estándar operativo del sistema (n=`r tipoequipo_n[A1]`, ~`r modproceso_media[A1]` UM/unidad, dispersión moderada). Su comportamiento típico está bien caracterizado.
-•	B2 es operativamente similar a A1 (~`r resumen_transformacion_te$media` UM/unidad), ligeramente más barato y más estable. Pero su menor n (45) limita la robustez de la comparación.
-•	C3 es claramente diferente: media de `r resumen_transformacion_te$media` UM/unidad, IQR amplio, dispersión alta. Es costoso y impredecible. Apenas 8 órdenes —insuficientes para conclusiones inferenciales sólidas, pero suficientes para señalar que requiere análisis special.
-•	D4 es notablemente eficiente: media de `r resumen_transformacion_te$media` UM/unidad, dispersión reducida, comportamiento consistente. Representa una operación altamente eficiente.
-En insumos el patrón se mantiene: A1 y B2 son comparables (~`r resumen_insumo_te$media` UM/unidad), C3 más del doble (`r resumen_insumo_te$media`), D4 el más bajo (`r resumen_insumo_te$media` con alta variabilidad por al menos un outlier extremo).
+•	A1 es el estándar operativo del sistema (n=`r tipoequipo_n["A1"]`, ~`r tipoequipo_media["A1"]` UM/unidad, dispersión moderada). Su comportamiento típico está bien caracterizado.
+•	B2 es operativamente similar a A1 (~`r tipoequipo_media["B2"]`), ligeramente más barato y más estable. Pero su menor n (`r tipoequipo_n["B2"]`) limita la robustez de la comparación.
+•	C3 es claramente diferente: media de `r tipoequipo_media["C3"]` UM/unidad, IQR amplio (`r tipoequipo_iqr["C3"]`), dispersión alta. Es costoso y impredecible. Apenas `r tipoequipo_n["C3"]` órdenes —insuficientes para conclusiones inferenciales sólidas, pero suficientes para señalar que requiere análisis special.
+•	D4 es notablemente eficiente: media de `r tipoequipo_media["D4"]` UM/unidad, dispersión reducida, comportamiento consistente. Representa una operación altamente eficiente.
+En insumos el patrón se mantiene: A1 y B2 son comparables (~`r tipoequipo_media["A1"]` UM/unidad), C3 más del doble (`r tipoequipo_media["C3"]`), D4 el más bajo (`r tipoequipo_media["D4"]` con alta variabilidad por al menos un outlier extremo).
+
 La pregunta inmediata. Si el sistema productivo tiene cuatro regímenes de costo tan distintos, ¿qué sentido tiene reportar un "costo promedio del sistema"? Cualquier promedio agregado describirá un valor que no representa adecuadamente a ninguno de los cuatro grupos. Esta es la primera grieta del marco analítico agregado.
 
 
