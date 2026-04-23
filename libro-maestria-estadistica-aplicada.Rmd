@@ -1,0 +1,2634 @@
+---
+title: "Analisis del costo unitario de producción en un proceso manufacturero multifactorial"
+author: "Gloria Bastidas"
+date: "`r format(Sys.Date(), '%d/%m/%Y')`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: ["references.bib"]
+link-citations: yes
+lang: es
+description: "Maestría en Estadística Aplicada."
+---
+
+# Portada {-}
+
+<div class="portada">
+  <h1>Analisis del costo unitario de producción en un proceso manufacturero multifactorial</h1>
+  <p><strong>Maestría en Estadística Aplicada</strong></p>
+  <p>Autor: Gloria Bastidas</p>
+  <p>Institución: Universidad del Norte</p>
+  <p>Fecha: `r format(Sys.Date(), '%d/%m/%Y')`</p>
+</div>
+
+# Prefacio {-}
+
+Este libro presenta una estructura reproducible y académica para documentar un proyecto de análisis estadístico usando **R**, **bookdown**, **GitHub Codespaces** y **GitHub Pages**.
+
+Se recomienda mantener todos los datos en la carpeta `data/`, todas las imágenes en `images/` y todas las referencias en `references.bib`.
+
+```{r setup, include=FALSE}
+options(scipen = 999)
+
+library(tidyverse)
+library(janitor)
+library(skimr)
+library(knitr)
+library(kableExtra)
+library(broom)
+library(here)
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center",
+  fig.width = 7,
+  fig.height = 4.5,
+  out.width = "90%"
+)
+```
+
+<!--chapter:end:index.Rmd-->
+
+# Resumen
+
+SIN INICIAR
+
+<!--chapter:end:01-resumen.Rmd-->
+
+# Introducción
+
+La manufactura farmacéutica opera bajo presión creciente sobre sus márgenes. Los costos de conversión y de insumos representan en conjunto la mayor parte del costo de ventas en empresas de formas sólidas, y su variabilidad entre órdenes de producción puede comprometer la rentabilidad unitaria y la calidad de la información para la toma de decisiones (Basu et al., 2008; Suresh & Basu, 2008). En la práctica, los sistemas ERP registran centenares de órdenes por mes con decenas de atributos, pero los responsables de planeación rara vez disponen de evidencia estadística sobre cuáles de esos atributos explican la dispersión del costo unitario observado.
+
+La investigación académica sobre determinantes del costo ha evolucionado en tres olas sucesivas. Foster y Gupta (1990) abrieron la tradición empírica al mostrar, con datos de 37 plantas de electrónica, que el volumen es un predictor fuerte del overhead, mientras que variables de complejidad y eficiencia resultan débiles una vez controlado el tamaño. Banker et al. (1995) matizaron esa conclusión: al especificar variables transaccionales como órdenes de cambio de ingeniería y personal de planeación, los autores encontraron que las transacciones explican una proporción mayor de la varianza de overhead que el propio volumen. Paralelamente, Cooper y Kaplan (1988, 1992) articularon el marco conceptual del costeo basado en actividades, en el que la regresión múltiple ocupa un rol central para identificar y validar drivers. Anderson, Banker y Janakiraman (2003), una década después, documentaron con 7,629 empresas un fenómeno que la tradición anterior no contemplaba: los costos responden de forma asimétrica a variaciones de volumen, comportamiento conocido como 'sticky costs'.
+
+En paralelo, la ingeniería de costos desarrolló una taxonomía complementaria. Niazi et al. (2006) sistematizaron las técnicas de estimación de costo de producto y ubicaron la regresión dentro de los métodos paramétricos y analógicos. Trabajos posteriores han comparado la regresión lineal con redes neuronales y métodos de ensemble en distintos sectores (Cavalieri et al., 2004; Loyer et al., 2016), con un consenso emergente: los métodos no lineales mejoran la precisión cuando se dispone de volúmenes grandes de datos homogéneos, pero la regresión lineal conserva ventajas de interpretabilidad que son críticas cuando el objetivo es explicar —no solo predecir— la variabilidad del costo.
+
+La literatura específica sobre manufactura farmacéutica es más reducida y se orienta hacia dos focos: el costo de biosimilares y anticuerpos monoclonales (Basu et al., 2008) y la comparación económica entre tecnologías batch y continuas en formas sólidas (Matsunami et al., 2018). Estos trabajos identifican el tamaño de lote, el tipo de proceso y el rendimiento como drivers principales, pero no modelan estadísticamente la variabilidad del costo unitario a nivel de orden de producción. La escasez de estudios con esta granularidad, en particular en contextos latinoamericanos, constituye un vacío que este trabajo aborda.
+
+El problema que motiva esta tesis se ubica en una empresa farmacéutica colombiana productora de cápsulas duras y medicamentos. La empresa cuenta con 406 órdenes de producción registradas en su ERP con información estructurada sobre ocho atributos operativos: modelo de máquina, máquina individual, tamaño de lote, número de insumos, tipo de insumos, referencia de insumos, tipo de proceso y tamaño del producto. El análisis descriptivo previo muestra una dispersión notable del costo unitario de conversión y del costo unitario de insumos entre órdenes, sin que exista claridad sobre cuáles atributos explican esa variabilidad. La hipótesis de trabajo es que las variables operativas mencionadas, de forma conjunta y con interacciones, explican una proporción sustancial de la variabilidad observada, y que su cuantificación estadística permite priorizar acciones correctivas en planeación y en calidad de datos del ERP.
+
+La regresión lineal múltiple se elige como técnica principal por cuatro razones. Primero, por su alineación con la tradición empírica dominante en la literatura de cost drivers (Foster & Gupta, 1990; Banker et al., 1995; Anderson et al., 2003). Segundo, por su interpretabilidad: los coeficientes parciales permiten atribuir variación a cada driver controlando por los demás, lo cual es indispensable para el diálogo con el área financiera y de operaciones. Tercero, por su compatibilidad con pruebas diagnósticas estandarizadas (multicolinealidad, heterocedasticidad, normalidad de residuos) documentadas en textos metodológicos de referencia (Montgomery et al., 2021; Hair et al., 2018). Cuarto, porque el tamaño muestral de 406 órdenes permite estimar con razonable potencia modelos con variables categóricas codificadas como dummies, complementables con regularización Lasso o Ridge cuando la colinealidad o la alta cardinalidad lo exijan (James et al., 2021).
+
+El aporte del estudio se articula en tres ejes. En el eje teórico, extiende la evidencia empírica sobre cost drivers al sector de manufactura farmacéutica de formas sólidas, poco representado en la literatura internacional. En el eje metodológico, combina regresión múltiple con variables categóricas de alta cardinalidad a nivel de orden, modela dos variables respuesta complementarias (conversión e insumos) y contrasta la especificación lineal con alternativas regularizadas. En el eje aplicado, entrega a la empresa un conjunto de coeficientes interpretables, un ranking de drivers por poder explicativo, y recomendaciones concretas de planeación y de mejora del registro de datos en el ERP, lo cual conecta directamente con la línea de investigación de calidad de datos transaccionales que la autora viene desarrollando.
+
+<!--chapter:end:02-introduccion.Rmd-->
+
+# Objetivos EN CONSTRUCCCION
+
+## Objetivo general
+
+Analizar y cuantificar el impacto de diversos factores productivos (equipos, modalidades, productos, insumos, tiempo y volumen) sobre el costo unitario, utilizando métodos paramétricos y no paramétricos para fundamentar la toma de decisiones en evidencia técnica.
+
+## Objetivos específicos
+
+1. Analizar las diferencias entre tipos de equipo y su impacto en el costo
+2. Investigar si existe igualdad de medias en los equipos de un mismo tipo.
+3. Explorar la correlación entre el costo unitario y el tiempo de conversión.
+4. Evaluar la asociación entre el costo unitario, el número de insumos y el tipo de insumos.
+
+<!--chapter:end:03-objetivos.Rmd-->
+
+# Metodología {#metodologia}
+
+Este capítulo documenta el diseño metodológico del estudio, el proceso de obtención de los datos desde el sistema ERP, y los procedimientos de carga, verificación de integridad y depuración aplicados antes del análisis estadístico. Al final del capítulo, el dataset analítico queda conformado por las órdenes de producción que cumplen los criterios de completitud y validez operativa.
+
+## Diseño del estudio
+
+Este trabajo corresponde a un **estudio observacional, retrospectivo y transversal** sobre el proceso productivo de una empresa farmacéutica colombiana. Es observacional porque no se manipulan variables sobre el proceso; retrospectivo porque utiliza registros generados durante operaciones ya ejecutadas; y transversal porque captura información de un período acotado sin seguimiento longitudinal de unidades individuales.
+
+La muestra inicial está conformada por 404 órdenes de producción registradas en el sistema ERP durante el período de estudio, extraídas mediante consultas SQL sobre las tablas transaccionales de órdenes, consumos y tiempos, junto con la tabla de costos por período y el maestro de productos. La consolidación se realizó en Excel y posteriormente se exportó a formato CSV para garantizar reproducibilidad y trazabilidad. Tras la depuración de registros inválidos documentada en la sección 4.2.3, el dataset analítico final queda conformado por las órdenes que cubren la variedad de productos, equipos, modalidades y tamaños de lote habituales del proceso.
+
+**Limitaciones conocidas del dataset:**
+
+- **Sesgo de selección:** se excluyen registros de órdenes anuladas, abortadas o reprocesadas, limitándose exclusivamente a procesos completados.
+- **Variabilidad operativa:** la calidad del registro depende de la disciplina del operario en el momento de cierre de la orden en el ERP, lo cual introduce una fuente de error de medición no cuantificable a priori.
+- **Imprecisión en consumos:** los insumos se registran en litros equivalentes a un envase estándar; las fracciones menores se estiman visualmente ante la falta de un proceso de pesaje, lo que afecta la precisión de las cantidades reportadas.
+- **Base de valoración:** los costos se expresan en unidades monetarias por producto, calculados según la tarifa de costeo del período reportado.
+
+**Aspectos éticos y de confidencialidad.** Los datos provienen de operaciones industriales reales y contienen información sensible para la empresa. Por esta razón, los identificadores de producto, máquina e insumo fueron anonimizados en origen mediante codificación alfanumérica que preserva la estructura analítica sin revelar identidades comerciales.
+
+**Software.** Los análisis se realizan en R versión 4 o superior, con los paquetes `tidyverse` para manipulación y visualización, `Amelia` para diagnóstico de valores faltantes, `janitor` como guardia defensiva en limpieza de nombres, `kableExtra` para presentación de tablas, y `patchwork` y `gridExtra` para composición de gráficos. Todos los análisis son completamente reproducibles a partir del código fuente disponible en el repositorio.
+
+## Extracción, transformación y carga (ETL)
+
+### Carga del conjunto de datos
+
+El archivo CSV exportado desde el consolidado Excel utiliza punto y coma (`;`) como separador de columnas y punto (`.`) como separador decimal. Dado que `read_csv2` asume coma como decimal y `read_csv` asume coma como separador, se utiliza `read_delim` con especificación explícita de ambos parámetros.
+
+```{r carga-datos, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(janitor)
+library(Amelia)
+
+datos <- read_delim("data/data_costos.csv",
+                    delim = ";",
+                    locale = locale(decimal_mark = ".", encoding = "UTF-8"),
+                    show_col_types = FALSE)
+```
+
+### Verificación de la lectura
+
+Verificamos que el archivo se leyó correctamente inspeccionando las primeras filas, las dimensiones, los nombres de las columnas y la estructura de tipos detectados.
+
+```{r dims-iniciales, echo=FALSE}
+n_filas_inicial <- nrow(datos)
+n_vars <- ncol(datos)
+```
+
+```{r head}
+head(datos, n = 5)
+```
+
+```{r dim}
+dim(datos)
+```
+
+```{r colnames}
+colnames(datos)
+```
+
+```{r str-inicial}
+str(datos)
+```
+
+El conjunto de datos contiene `r n_filas_inicial` órdenes de producción y `r n_vars` variables, conforme a la definición presentada en el capítulo del diccionario de datos. Los costos `costo_transformacion` y `costo_insumo`, así como las cantidades de insumo, se leyeron correctamente como numéricos de tipo `double`. El significado, tipo analítico, unidad de medida y rol de cada una de las `r n_vars` variables se documenta en detalle en el siguiente capítulo.
+
+### Revisión de integridad de datos
+
+La revisión de integridad se estructura en tres dimensiones analíticas que pueden solaparse o converger según la naturaleza de las variables:
+
+1. **Cadenas vacías:** marcadores de ausencia implícita en variables de tipo texto.
+2. **Valores NA:** ausencia explícita de información en el sistema.
+3. **Valores con magnitud cero:** registros presentes en el dataset pero con valor numérico cero. Dado que las variables analizadas corresponden a costos, volúmenes y tiempos de proceso, la presencia de valores cero carece de sustento teórico, ya que no es consistente con la naturaleza de estas magnitudes.
+
+#### Cadenas vacías
+
+```{r conteo-vacios}
+conteo_vacios <- datos %>%
+  summarise(across(everything(), ~ sum(trimws(as.character(.)) == "", na.rm = TRUE))) %>%
+  pivot_longer(everything(), names_to = "variable", values_to = "n_vacios")
+
+total_vacios <- sum(conteo_vacios$n_vacios)
+
+knitr::kable(conteo_vacios, caption = "Conteo de cadenas vacías por variable") %>%
+  kableExtra::kable_styling(full_width = FALSE) %>%
+  kableExtra::column_spec(1, width = "12em") %>%
+  kableExtra::column_spec(2, width = "12em")
+```
+
+Se identificaron `r total_vacios` cadenas vacías en el dataset. No se requiere intervención en esta dimensión de integridad.
+
+#### Valores NA
+
+```{r conteo-na}
+conteo_na <- datos %>%
+  summarise(across(everything(), ~ sum(is.na(.)))) %>%
+  pivot_longer(everything(), names_to = "variable", values_to = "n_na")
+
+tabla_na <- conteo_na %>% filter(n_na > 0)
+
+total_na       <- sum(conteo_na$n_na)
+n_vars_con_na  <- nrow(tabla_na)
+n_na_insumo_1  <- conteo_na %>% filter(variable == "insumo_1") %>% pull(n_na)
+n_na_insumo_2  <- conteo_na %>% filter(variable == "insumo_2") %>% pull(n_na)
+pct_na_insumo_2 <- round(n_na_insumo_2 / n_filas_inicial * 100, 1)
+
+knitr::kable(tabla_na, caption = "Variables con valores NA") %>%
+  kableExtra::kable_styling(full_width = FALSE) %>%
+  kableExtra::column_spec(1, width = "12em") %>%
+  kableExtra::column_spec(2, width = "12em")
+```
+
+
+El conteo absoluto muestra un total de `r total_na` valores NA distribuidos en `r n_vars_con_na` variables del dataset. La variable `insumo_2` concentra `r n_na_insumo_2` ausencias, equivalentes al `r pct_na_insumo_2`% de las `r n_filas_inicial` órdenes; conforme a las consultas SQL de origen, estos NA no representan datos perdidos sino la ausencia estructural de un segundo insumo cuando `num_insumos < 2`, y se recodifican en la sección 4.2.4 como una categoría explícita. La variable `insumo_1` presenta `r n_na_insumo_1` ausencias, las cuales se investigan en la siguiente sección junto con los valores cero, dado que ambos fenómenos tienden a coincidir en los mismos registros.
+
+#### Valores con magnitud cero
+
+```{r conteo-ceros}
+conteo_ceros <- datos %>%
+  summarise(across(where(is.numeric), ~ sum(. == 0, na.rm = TRUE))) %>%
+  pivot_longer(everything(), names_to = "variable", values_to = "n_ceros")
+
+total_ceros <- sum(conteo_ceros$n_ceros)
+
+knitr::kable(conteo_ceros, caption = "Conteo de valores cero por variable numérica") %>%
+  kableExtra::kable_styling(full_width = FALSE) %>%
+  kableExtra::column_spec(1, width = "12em") %>%
+  kableExtra::column_spec(2, width = "12em")
+```
+
+Se identificaron `r total_ceros` registros con valores en cero distribuidos entre las variables numéricas. Los `r conteo_ceros %>% filter(variable == "cantidad_insumo_2") %>% pull(n_ceros)` ceros en `cantidad_insumo_2` coinciden con el total de órdenes que reportan un solo insumo y corresponden a una condición estructural y esperada del dataset, no a mediciones anómalas. A continuación se identifican las órdenes con valores cero en variables distintas de `cantidad_insumo_2`:
+
+```{r casos-con-ceros}
+cols_excluir <- c("cantidad_insumo_2")
+
+casos_con_ceros <- datos %>%
+  filter(if_any(
+    where(is.numeric) & -all_of(cols_excluir),
+    ~ . == 0
+  )) %>%
+  select(id_orden, volumen_lote, costo_transformacion, costo_insumo,
+         duracion_proceso, num_insumos) %>%
+  arrange(costo_transformacion)
+
+n_casos_cero <- nrow(casos_con_ceros)
+
+knitr::kable(casos_con_ceros,
+             caption = "Órdenes con valores cero en variables no estructurales",
+             format.args = list(big.mark = "")) %>%
+  kableExtra::kable_styling(full_width = FALSE)
+```
+
+Se identifican `r n_casos_cero` órdenes de producción con valores cero en variables no estructurales. Tras consulta con el área de operaciones, estas órdenes se clasifican en tres categorías causales:
+
+```{r tabla-causas, echo=FALSE}
+tabla_causas <- tribble(
+  ~Categoría, ~`Causa operativa`, ~`Órdenes`,
+  "Órdenes cerradas sin ejecutar",
+    "Volumen, tiempos y consumos en cero; en la práctica no se trabajaron",
+    4,
+  "Errores de digitación",
+    "num_insumos = 0 o cantidad_insumo_1 = NA, configuraciones no válidas del proceso",
+    4,
+  "Producción no conforme",
+    "Recursos consumidos asumidos como merma; no se asignaron al producto conforme",
+    1
+) %>%
+  bind_rows(tibble(Categoría = "**Total**", `Causa operativa` = "", `Órdenes` = 9))
+
+knitr::kable(tabla_causas, caption = "Clasificación operativa de las órdenes con valores cero") %>%
+  kableExtra::kable_styling(full_width = FALSE) %>%
+  kableExtra::column_spec(1, width = "18em") %>%
+  kableExtra::column_spec(2, width = "28em") %>%
+  kableExtra::column_spec(3, width = "6em")
+```
+
+Las tres categorías representan configuraciones no válidas para el análisis de costo unitario: en los tres casos, el costo del insumo no refleja una producción efectiva del producto conforme, por lo que su inclusión distorsionaría los estadísticos descriptivos y las estimaciones inferenciales posteriores.
+
+#### Eliminación de registros inválidos
+
+Dado que las tres categorías causales convergen en un rasgo común —ausencia de costo de insumo asignable al producto conforme— la variable `costo_insumo == 0`  se adopta como criterio de filtrado.
+
+
+```{r verificar-criterio}
+datos %>%
+  count(costo_insumo == 0) %>%
+  mutate(porcentaje = round(n / sum(n) * 100, 1))
+```
+
+```{r eliminar-invalidos}
+datos <- datos %>%
+  filter(costo_insumo != 0)
+
+n_filas_final <- nrow(datos)
+n_eliminadas  <- n_filas_inicial - n_filas_final
+pct_eliminadas <- round(n_eliminadas / n_filas_inicial * 100, 1)
+
+dim(datos)
+```
+
+Se eliminaron `r n_eliminadas` órdenes (`r pct_eliminadas`% del total) con `costo_insumo == 0`. El dataset analítico queda conformado por `r n_filas_final` órdenes, las cuales constituyen la base para todos los análisis posteriores.
+
+### Conversión de tipos
+
+Sobre el dataset ya depurado se ajustan los tipos de las variables cuya representación por defecto no corresponde a su naturaleza analítica:
+
+- La variable `periodo` viene como entero `YYYYMM`; en análisis posteriores se podrá convertir a fecha para análisis de temporalidad, pero en el presente estudio se conserva como texto, dado que no se realizarán análisis de series de tiempo.
+- La variable `num_insumos`, restringida a los valores 1 y 2, se trata como factor ordenado.
+- Las variables `tipo_equipo`, `categoria_producto`, `equipo_id`, `modalidad_proceso`, `insumo_1` e `insumo_2` se convierten a factor para los análisis inferenciales posteriores.
+- La variable `insumo_2` requiere además una recodificación explícita de los valores faltantes a la categoría `sin_segundo_insumo`, dado que el NA no representa un dato perdido sino una característica estructural de la orden (cuando `num_insumos < 2`).
+
+```{r conversion-tipos}
+datos <- datos %>%
+  mutate(
+    periodo            = as.character(periodo),
+    num_insumos        = factor(num_insumos, levels = c(1, 2), ordered = TRUE),
+    tipo_equipo        = as.factor(tipo_equipo),
+    categoria_producto = as.factor(categoria_producto),
+    equipo_id          = as.factor(equipo_id),
+    modalidad_proceso  = as.factor(modalidad_proceso),
+    insumo_1           = as.factor(insumo_1),
+    insumo_2           = factor(if_else(is.na(insumo_2), "sin_segundo_insumo", insumo_2))
+  )
+
+str(datos)
+```
+
+Tras la conversión, las variables categóricas quedan representadas como factores, el factor ordenado `num_insumos` preserva la jerarquía natural de sus niveles, y la categoría `sin_segundo_insumo` de `insumo_2` absorbe las ausencias estructurales sin pérdida de observaciones.
+
+### Consideraciones estructurales para el análisis
+
+Antes de entrar al análisis exploratorio, vale la pena dejar claros algunos puntos sobre la estructura del dataset depurado, ya que pueden prestarse a malas interpretaciones.
+
+- La variable cantidad_insumo_2 toma el valor cero cuando num_insumos = 1. Esto significa simplemente ese insumo 2 no existe en ese caso. Son ceros “estructurales” . 
+- Los costos costo_transformacion y costo_insumo están definidos como valores monetarios por unidad de producto. Permitiendo comparar directamente entre órdenes, sin importar el tamaño del lote, ya que no requieren ajustes por escala de producción.
+
+El dataset con el que se trabajará está compuesto por r n_filas_final órdenes de producción. Sobre esta base se desarrollan los análisis exploratorios e inferenciales de los siguientes capítulos.
+
+```{r exportardataset}
+# Para auditoría y reproducibilidad externa
+write_csv2(datos, "data/data_costos_limpio.csv")
+
+# Para cargar rápido en capítulos posteriores preservando tipos
+saveRDS(datos, "data/data_costos_limpio.rds")
+```
+
+<!--chapter:end:04-metodologia.Rmd-->
+
+
+---
+title: "Análisis exploratorio e inferencial"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    df_print: paged
+    theme: flatly
+---
+
+# Diccionario de campos
+
+
+```{r diccionario-datos, echo=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+library(kableExtra)
+
+diccionario <- data.frame(
+  Variable = c("periodo", "codigo_producto", "id_orden", "volumen_lote",
+               "costo_transformacion", "costo_insumo", "equipo_id", "tipo_equipo",
+               "categoria_producto", "num_insumos", "insumo_1", "insumo_2",
+               "cantidad_insumo_1", "cantidad_insumo_2", "modalidad_proceso",
+               "duracion_proceso"),
+  Descripcion = c(
+    "Año-mes contable de la orden, formato YYYYMM",
+    "Identificador único del SKU producido",
+    "Identificador único de la orden de producción",
+    "Cantidad de unidades producidas en la orden",
+    "Costo de conversión por unidad producida (mano de obra, energía, depreciación, indirectos)",
+    "Costo de materias primas e insumos por unidad producida",
+    "Identificador único de la máquina física",
+    "Familia o categoría tecnológica de la máquina (A1, B2, ...)",
+    "Clasificación del producto",
+    "Número de insumos consumidos en la orden",
+    "Identificador del primer insumo principal",
+    "Identificador del segundo insumo (NA cuando num_insumos < 2)",
+    "Cantidad consumida del insumo 1",
+    "Cantidad consumida del insumo 2",
+    "Modalidad de operación del proceso (X, Y, ...)",
+    "Tiempo total de ejecución de la orden"
+  ),
+  Tipo = c("Temporal (ordinal)", "Categórica nominal", "Categórica nominal",
+           "Numérica discreta", "Numérica continua", "Numérica continua",
+           "Categórica nominal", "Categórica nominal", "Categórica nominal",
+           "Categórica ordinal", "Categórica nominal", "Categórica nominal",
+           "Numérica continua", "Numérica continua", "Categórica nominal",
+           "Numérica continua"),
+  Unidad = c("Mes", "—", "—", "unidades", "UM/unidad", "UM/unidad",
+             "—", "—", "—", "{0, 1, 2}", "—", "—",
+             "kg / L (verificar)", "kg / L (verificar)", "—", "horas"),
+  Rol = c("Control / estratificación", "Factor de agrupación",
+          "Identificador (no entra al modelo)", "Predictora (escala)",
+          "Variable respuesta 1", "Variable respuesta 2",
+          "Predictora (efecto fijo o aleatorio)", "Predictora (factor)",
+          "Predictora (factor)", "Predictora (proxy de complejidad)",
+          "Predictora (factor)", "Predictora (factor)",
+          "Predictora (intensidad de uso)", "Predictora (intensidad de uso)",
+          "Predictora (factor)", "Predictora (intensidad temporal)"),
+  stringsAsFactors = FALSE
+)
+
+kbl(diccionario,
+    col.names = c("Variable", "Descripción", "Tipo", "Unidad",
+                  "Rol en el análisis"),
+    caption = "Diccionario de datos del proceso productivo (n = 406 órdenes)",
+    align = c("l", "l", "l", "l", "l"),
+    escape = FALSE) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = TRUE,
+    font_size = 13,
+    position = "left"
+  ) %>%
+  column_spec(1, bold = TRUE, width = "10em", monospace = TRUE) %>%
+  column_spec(2, width = "22em") %>%
+  column_spec(3, width = "10em") %>%
+  column_spec(4, width = "8em") %>%
+  column_spec(5, width = "14em") %>%
+  row_spec(0, bold = TRUE, background = "#f2f2f2")
+```
+
+
+<!--chapter:end:05-diccionario-campos.Rmd-->
+
+# Análisis Exploratorio Básico
+Este capítulo describe el comportamiento del costo unitario de producción a partir de las 395 órdenes que sobrevivieron al proceso de depuración del Capítulo 5. La premisa de entrada tratar el dataset como un universo homogéneo del proceso productivo y observar qué dice cuando se le aplica la teoria estándar del análisis exploratorio (resúmenes descriptivos, distribuciones univariadas, correlaciones, y comparaciones bivariadas marginales).
+A lo largo del recorrido, la data va a revelar que no es uniforme, que mezcla modelos operativos distintos, y que las comparaciones agregadas pueden ser engañosas. El cierre del capítulo muestra decisiones metodológicas concretas que dan paso al análisis estratificado del Capítulo 7.
+
+::: {.alert .alert-primary}
+Este capítulo responde una pregunta básica de control de gestión: ¿qué tan predecible es el costo unitario que vemos en los reportes? La respuesta corta es que el promedio del sistema oculta más de lo que muestra. 
+::: 
+
+## Carga del dataset analítico 
+Se parte del dataset depurado en el capítulo de metodología (395 órdenes de producción con tipos ajustados). La limpieza previa ya eliminó errores de digitación y validó la integridad de los registros; este capítulo se concentra en entender qué dicen esos datos.
+
+```{r setup1, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  out.width = "90%",  # Ocupa todo el ancho de la página
+  fig.width = 10,      # Ancho base en pulgadas
+  fig.asp = 0.4,       # Altura es el 50% del ancho (puedes probar 0.4 para más plano)
+  fig.align = "center"
+)
+```
+
+```{r ck_eda_setup, message=FALSE, warning=FALSE, echo=FALSE}
+library(tidyverse)
+library(patchwork)
+library(gridExtra)
+library(knitr)
+library(kableExtra)
+library(dplyr)
+library(ggplot2)
+library(tibble)
+
+
+datos <- readRDS("data/data_costos_limpio.rds") %>%
+  mutate(costo_unitario_total = costo_transformacion + costo_insumo)
+n_total <- nrow(datos)
+```
+El dataset contiene `r n_total` órdenes de producción y `r ncol(datos)` variables.
+
+## Análisis univariado de variables respuesta
+Las tres variables respuesta del estudio son `costo_transformacion` (costo de conversión por unidad producida), `costo_insumo` (costo de materias primas por unidad producida) y su agregado `costo_unitario_total`. Se analizan en paralelo porque responden a lógicas operativas distintas: el costo de transformación mide la eficiencia del proceso productivo (mano de obra, energía, depreciación, indirectos por unidad), mientras que el costo de insumo refleja decisiones de formulación y consumo de materias primas.
+
+Analizar las tres en paralelo permite separar responsabilidades y esfuerzos de gestión y que pueden tener dinámicas independientes.
+ 
+### Costo unitario de conversión o de transformacion
+
+```{r ck-resumen-ct, echo=FALSE}
+datos %>%
+  summarise(
+    n       = length(costo_transformacion),
+    media   = mean(costo_transformacion),
+    ds      = sd(costo_transformacion),
+    `50%`   = median(costo_transformacion),
+    minimo  = min(costo_transformacion),
+    maximo  = max(costo_transformacion),
+    Q1      = quantile(costo_transformacion, 0.25),
+    Q3      = quantile(costo_transformacion, 0.75),
+    IQR     = IQR(costo_transformacion)
+  ) -> resumen_ct
+
+knitr::kable(resumen_ct, 
+             caption = "Resumen del costo de transformación",
+             format = "html",
+             table.attr = "class='table'") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
+
+```
+
+```{r ck_resumen_ct_calc, echo=FALSE}
+ct_media   <- resumen_ct$media
+ct_ds      <- resumen_ct$ds
+ct_med     <- resumen_ct$`50%`
+ct_min     <- resumen_ct$minimo
+ct_max     <- resumen_ct$maximo
+ct_iqr     <- resumen_ct$IQR
+ct_q1     <- resumen_ct$Q1
+ct_q3     <- resumen_ct$Q3
+ct_cv      <- ct_ds / ct_media * 100
+```
+
+Se obtuvo un costo medio de conversión por unidad de `r round(ct_media, 2)` UM/unidad (DS = `r round(ct_ds, 2)` UM/unidad), con un coeficiente de variación de `r round(ct_cv, 1)`%. El 50% de las órdenes presenta un costo de conversión por debajo de `r round(ct_med, 2)` UM/unidad. 
+La desviación estándar alcanza `r round(ct_ds,2)`, lo que equivale a un coeficiente de variación de `r round(ct_cv,1)`%. Quiere decir que los costos fluctúan de manera importante respecto al promedio. 
+El rango intercuartílico (`r round(ct_iqr,2)`) confirma que el 50% central de las órdenes opera entre `r round(ct_q1,2)` y `r round(ct_q3,2)` UM/unidad, un rango operativo razonablemente delimitado. Pero los extremos cuentan otra historia: el mínimo de `r round(ct_min,2)` está muy alejado del Q1 (`r round(ct_q1,2)`), y el máximo de `r round(ct_max,2)` multiplica por más de tres el Q3 (`r round(ct_q3,2)`). Esta asimetría sugiere que la distribución no es simétrica y que puede haber fenómenos estructurales distintos en los extremos.
+
+```{r ck-hist-t,  out.width="100%",echo=FALSE}
+
+lineas <- tibble(
+  estadistico = c("Media", "Mediana", "Q1", "Q3"),
+  valor = c(
+    resumen_ct$media,
+    resumen_ct$`50%`,
+    as.numeric(resumen_ct$Q1),
+    as.numeric(resumen_ct$Q3)
+  )
+)
+
+p_hist_cc<-datos %>%
+  ggplot(aes(x = costo_transformacion)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 30,
+                 fill = "#ACAEAF",
+                 color = "#616161",
+                 alpha = 0.6) +
+  geom_density(linewidth = 1.2) +
+  
+  geom_vline(data = lineas,
+             aes(xintercept = valor, color = estadistico, linetype = estadistico),
+             linewidth = 0.9) +
+
+  scale_color_manual(values = c(
+    "Media"   = "#551196",
+    "Mediana" = "#1a9850",
+    "Q1"      = "#f46d43",
+    "Q3"      = "#a71c1c"
+  )) +
+  scale_linetype_manual(values = c(
+    "Media"   = "longdash",
+    "Mediana" = "longdash",
+    "Q1"      = "dotted",
+    "Q3"      = "dotted"
+  )) +
+
+  labs(x = "Costo de transformación (UM/unidad)",
+       y = "Densidad",
+       color = "Estadístico",
+       linetype = "Estadístico") +
+  theme_bw() +
+  theme(legend.position = "right") +
+  facet_grid(. ~ "Distribución del costo de transformación")
+
+p_box_cc<-datos %>%
+  ggplot(aes(x = "", y = costo_transformacion)) +
+  geom_boxplot(fill = "#ACAEAF", color = "#616161", outlier.color = "red") +
+  stat_summary(fun = mean, geom = "point", shape = 20, size = 3, color = "black") +
+  labs(x = "",
+       y = "Costo de transformación (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Boxplot del costo de transformación")
+
+p_hist_cc + p_box_cc
+
+```
+
+El histograma con la curva de densidad confirma esta lectura. La masa principal de la distribución se concentra entre el IQR, pero aparece un leve segundo abultamiento que rompe el patrón unimodal esperado. Este es una señal de una distribución bimodal que habitualmente indica que los datos provienen de dos procesos generadores distintos mezclados, no de un único proceso con ruido aleatorio.
+
+
+::: {.alert .alert-primary}
+Cuando un histograma muestra patron bimodal, el promedio numérico describe un punto que no corresponde realmente a ningún proceso real: queda entre los dos modos. Es el equivalente a calcular la "talla promedio" de una población donde conviven niños y adultos. El número existe, pero no representa a nadie.
+::: 
+
+El boxplot complementa la lectura mostrando outliers altos, que no son uno o dos casos puntuales, sino un grupo visible de órdenes con costos superiores. La cola inferior, en cambio, no presenta datos atipicos relevantes. Sugiere que el proceso tiene una capacidad limitada de bajar costos por debajo de cierto umbral, pero una capacidad considerable de superarlos hacia arriba bajo ciertas condiciones.
+
+::: {.alert .alert-primary}
+- El costo presenta volatilidad alta (CV = `r round(ct_cv, 1)`%) que cuestiona la utilidad operativa del promedio simple.
+- La distribución es asimétrica con bimodalidad incipiente con lo cual parece mezclar al menos dos modelos operativos distintos.
+- Los outliers superiores forman una subpoblación, no anomalías aisladas. Requieren tratamiento específico, no exclusión.
+::: 
+
+
+### Costo unitario de los insumos 
+
+```{r ck-hist-ci, echo=FALSE}
+datos %>%
+  summarise(
+    n       = length(costo_insumo),
+    media   = mean(costo_insumo),
+    ds      = sd(costo_insumo),
+    `50%`   = median(costo_insumo),
+    minimo  = min(costo_insumo),
+    maximo  = max(costo_insumo),
+    Q1      = quantile(costo_insumo, 0.25),
+    Q3      = quantile(costo_insumo, 0.75),
+    IQR     = IQR(costo_insumo)
+  ) -> resumen_ci
+
+knitr::kable(resumen_ci, caption = "Resumen del costo de insumo",
+               format = "html",
+             table.attr = "class='table'") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
+
+```
+
+```{r ck-resumen-ci-calc, echo=FALSE}
+ci_media  <- resumen_ci$media
+ci_ds     <- resumen_ci$ds
+ci_med    <- resumen_ci$`50%`
+ci_min    <- resumen_ci$minimo
+ci_max    <- resumen_ci$maximo
+ci_iqr    <- resumen_ci$IQR
+ci_q1     <- resumen_ci$Q1
+ci_q3     <- resumen_ci$Q3
+ci_cv     <- ci_ds / ci_media * 100
+```
+
+El costo de insumo promedio es de `r round(ci_media, 2)` UM/unidad, sustancialmente menor que el de transformación. Lo notable es su coeficiente de variación: `r round(ci_cv, 1)`%, una variabilidad relativa muy superior a la del componente de transformación (`r round(ct_cv, 1)`%). En insumos, la dispersión es casi tan grande como el propio promedio.
+La distribución es marcadamente asimétrica positiva. La mediana (`r round(ci_med, 2)`) está claramente por debajo de la media (`r round(ci_media, 2)`), lo que confirma la influencia de valores altos en la cola derecha. El máximo (`r round(ci_max, 2)`) es nueve veces el Q3 (`r round(ci_q3, 2)`), un ratio que revela la presencia de pocas órdenes con consumos de insumo desproporcionadamente costosos.
+Operativamente,  un grupo dominante de insumos con costo bajo y una cola de insumos puntualmente costosos.  ¿esos insumos caros corresponden a productos premium con precio diferenciado, o están subsidiados por la mezcla?
+
+```{r ck-hist-box_ci, echo=FALSE}
+
+lineas <- tibble(
+  estadistico = c("Media", "Mediana", "Q1", "Q3"),
+  valor = c(
+    resumen_ci$media,
+    resumen_ci$`50%`,
+    as.numeric(resumen_ci$Q1),
+    as.numeric(resumen_ci$Q3)
+  )
+)
+p_hist_ci <- datos %>%
+  ggplot(aes(x = costo_insumo)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 30,
+                 fill = "#ACAEAF",
+                 color = "#616161",
+                 alpha = 0.6) +
+  geom_density(color = "darkgreen", linewidth = 1.2) +
+   
+  geom_vline(data = lineas,
+             aes(xintercept = valor, color = estadistico, linetype = estadistico),
+             linewidth = 0.9) +
+  scale_color_manual(values = c(
+    "Media"   = "#551196",
+    "Mediana" = "#1a9850",
+    "Q1"      = "#f46d43",
+    "Q3"      = "#a71c1c"
+  )) +
+  scale_linetype_manual(values = c(
+    "Media"   = "longdash",
+    "Mediana" = "longdash",
+    "Q1"      = "dotted",
+    "Q3"      = "dotted"
+  )) +
+  labs(x = "Costo de insumo (UM/unidad)",
+       y = "Densidad",
+       color = "Estadístico",
+       linetype = "Estadístico") +
+  theme_bw() +
+  theme(legend.position = "right") +
+  facet_grid(. ~ "Distribución del costo de insumo")
+
+
+p_box_ci <- datos %>%
+  ggplot(aes(x = "", y = costo_insumo)) +
+  geom_boxplot(fill = "#ACAEAF", color = "#616161", outlier.color = "red") +
+  stat_summary(fun = mean, geom = "point", shape = 20, size = 3, color = "black") +
+  labs(x = "", y = "Costo de insumo (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Boxplot del costo de insumo")
+
+p_hist_ci + p_box_ci
+```
+
+
+::: {.alert .alert-primary}
+- Volatilidad relativa muy alta (CV = `r round(ci_cv, 1)`%), superior a la del componente de transformación.
+- Mayoría de insumos baratos, minoría puntualmente cara.
+::: 
+
+
+### Costo unitario total
+
+La variable `costo_unitario_total` se deriva como la suma de `costo_transformacion` y `costo_insumo`, y representa el costo total por unidad de producto.
+
+```{r ck-resumen-ctot, echo=TRUE, echo=FALSE}
+datos %>%
+  summarise(
+    n       = length(costo_unitario_total),
+    media   = mean(costo_unitario_total),
+    ds      = sd(costo_unitario_total),
+    `50%`   = median(costo_unitario_total),
+    minimo  = min(costo_unitario_total),
+    maximo  = max(costo_unitario_total),
+    Q1      = quantile(costo_unitario_total, 0.25),
+    Q3      = quantile(costo_unitario_total, 0.75),
+    IQR     = IQR(costo_unitario_total)
+  ) -> resumen_ctot
+knitr::kable(resumen_ctot, caption = "Resumen del costo unitario total",
+                 format = "html",
+             table.attr = "class='table'") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
+```
+
+```{r ck-resumen-ctot-calc, echo=FALSE}
+cu_media  <- resumen_ctot$media
+cu_ds     <- resumen_ctot$ds
+cu_med    <- resumen_ctot$`50%`
+cu_min    <- resumen_ctot$minimo
+cu_max    <- resumen_ctot$maximo
+cu_iqr    <- resumen_ctot$IQR
+cu_q1    <- resumen_ctot$Q1
+cu_q3    <- resumen_ctot$Q3
+cu_cv     <- cu_ds / cu_media * 100
+
+prop_ct <- round(ct_media / cu_media * 100, 1)
+prop_ci <- round(ci_media / cu_media * 100, 1)
+```
+
+
+El costo unitario total promedio es de `r round(cu_media, 2)` UM/unidad con CV del `r round(cu_cv, 1)`%, moderadamente más estable que sus componentes individuales considerados por separado. La descomposición es reveladora:
+•	Transformación: 85.6% del costo total promedio.
+•	Insumos: 14.4% del costo total promedio.
+Cualquier estrategia de reducción de costos enfocada exclusivamente en insumos tiene un techo del 14% sobre el costo unitario. La palanca real está en la transformación.
+
+```{r ck-hist-box_ctot,  echo=FALSE}
+
+lineas <- tibble(
+  estadistico = c("Media", "Mediana", "Q1", "Q3"),
+  valor = c(
+    resumen_ctot$media,
+    resumen_ctot$`50%`,
+    as.numeric(resumen_ctot$Q1),
+    as.numeric(resumen_ctot$Q3)
+  )
+)
+p_hist_ct <- datos %>%
+  ggplot(aes(x = costo_unitario_total)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 30,
+                 fill = "#ACAEAF",
+                 color = "white",
+                 alpha = 0.6) +
+  geom_density(color = "#4d004b", linewidth = 1.2) +
+
+  
+  geom_vline(data = lineas,
+             aes(xintercept = valor, color = estadistico, linetype = estadistico),
+             linewidth = 0.9) +
+  scale_color_manual(values = c(
+    "Media"   = "#551196",
+    "Mediana" = "#1a9850",
+    "Q1"      = "#f46d43",
+    "Q3"      = "#a71c1c"
+  )) +
+  scale_linetype_manual(values = c(
+    "Media"   = "longdash",
+    "Mediana" = "longdash",
+    "Q1"      = "dotted",
+    "Q3"      = "dotted"
+  )) +
+  labs(x = "Costo unitario total (UM/unidad)",
+       y = "Densidad",
+       color = "Estadístico",
+       linetype = "Estadístico") +
+  theme_bw() +
+  theme(legend.position = "right") +
+  facet_grid(. ~ "Distribución del costo unitario total")
+  
+p_box_ct <- datos %>%
+  ggplot(aes(x = "", y = costo_unitario_total)) +
+  geom_boxplot(fill = "#ACAEAF", color = "#616161", outlier.color = "red") +
+  stat_summary(fun = mean, geom = "point", shape = 20, size = 3, color = "black") +
+  labs(x = "", y = "Costo unitario total (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Boxplot del costo unitario total")
+
+p_hist_ct + p_box_ct
+```
+
+
+El boxplot del costo total hereda los outliers superiores que ya aparecían en transformación e insumos individualmente. La presencia simultánea de cola larga en ambos componentes los amplifica al agregarlos. El costo unitario total opera mayoritariamente en un rango estable (Q1 a Q3: `r round(cu_q1, 1)` a `r round(cu_q3, 1)`), pero está condicionado por una fracción de órdenes que estructuralmente, no por azar, incurre en costos significativamente más altos.
+
+::: {.alert .alert-primary}
+- La transformación domina la estructura de costos (85.6%): cualquier programa de mejora debe priorizarla sobre insumos.
+- La asimetría se hereda y amplifica al agregar componentes: el promedio total subestima la cola alta.
+- La fracción de órdenes con costo elevado no es ruido aleatorio; es una característica estructural del sistema que merece análisis específico.
+:::
+
+## Análisis univariado de predictoras numéricas
+Tras revisar las variables respuesta surge la pregunta ¿qué características operativas explican esa variabilidad? Las cuatro predictoras numéricas describen tres dimensiones del proceso productivo: escala (volumen), intensidad temporal (duración) y consumo material (cantidades de insumo).
+
+```{r ck-resumen-num-predictoras, echo=FALSE}
+datos %>%
+  summarise(
+    n = length(volumen_lote),
+    media = mean(volumen_lote),
+    ds = sd(volumen_lote),
+    `50%` = median(volumen_lote),
+    minimo = min(volumen_lote),
+    maximo = max(volumen_lote),
+    Q1 = quantile(volumen_lote, 0.25),
+    Q3 = quantile(volumen_lote, 0.75),
+    IQR = IQR(volumen_lote)
+  ) %>%
+  mutate(variable = "volumen_lote") -> var_num_vol
+
+vol_lote_media  <- var_num_vol$media
+vol_lote_ds     <- var_num_vol$ds
+vol_lote_med    <- var_num_vol$`50%`
+vol_lote_min    <- var_num_vol$minimo
+vol_lote_max    <- var_num_vol$maximo
+vol_lote_iqr    <- var_num_vol$IQR
+vol_lote_q1     <- var_num_vol$Q1
+vol_lote_q3     <- var_num_vol$Q3
+vol_lote_cv     <- vol_lote_ds / vol_lote_media * 100
+
+datos %>%
+  summarise(
+    n = length(duracion_proceso),
+    media = mean(duracion_proceso),
+    ds = sd(duracion_proceso),
+    `50%` = median(duracion_proceso),
+    minimo = min(duracion_proceso),
+    maximo = max(duracion_proceso),
+    Q1 = quantile(duracion_proceso, 0.25),
+    Q3 = quantile(duracion_proceso, 0.75),
+    IQR = IQR(duracion_proceso)
+  ) %>%
+  mutate(variable = "duracion_proceso") -> var_num_dur
+
+dur_proceso_media  <- var_num_dur$media
+dur_proceso_ds     <- var_num_dur$ds
+dur_proceso_med    <- var_num_dur$`50%`
+dur_proceso_min    <- var_num_dur$minimo
+dur_proceso_max    <- var_num_dur$maximo
+dur_proceso_q1     <- var_num_dur$Q1
+dur_proceso_q3     <- var_num_dur$Q3
+dur_proceso_iqr    <- var_num_dur$IQR
+dur_proceso_cv     <- dur_proceso_ds / dur_proceso_media * 100
+
+datos %>%
+  filter(num_insumos >= 1) %>%
+  summarise(
+    n = length(cantidad_insumo_1),
+    media = mean(cantidad_insumo_1),
+    ds = sd(cantidad_insumo_1),
+    `50%` = median(cantidad_insumo_1),
+    minimo = min(cantidad_insumo_1),
+    maximo = max(cantidad_insumo_1),
+    Q1 = quantile(cantidad_insumo_1, 0.25),
+    Q3 = quantile(cantidad_insumo_1, 0.75),
+    IQR = IQR(cantidad_insumo_1)
+  ) %>%
+  mutate(variable = "cantidad_insumo_1") -> var_num_ci1
+
+ci1_media  <- var_num_ci1$media
+ci1_ds     <- var_num_ci1$ds
+ci1_med    <- var_num_ci1$`50%`
+ci1_min    <- var_num_ci1$minimo
+ci1_max    <- var_num_ci1$maximo
+ci1_iqr    <- var_num_ci1$IQR
+ci1_q1     <- var_num_ci1$Q1
+ci1_q3     <- var_num_ci1$Q3
+ci1_cv     <- ci1_ds / ci1_media * 100
+
+datos %>%
+  filter(num_insumos == 2) %>%
+  summarise(
+    n = length(cantidad_insumo_2),
+    media = mean(cantidad_insumo_2),
+    ds = sd(cantidad_insumo_2),
+    `50%` = median(cantidad_insumo_2),
+    minimo = min(cantidad_insumo_2),
+    maximo = max(cantidad_insumo_2),
+    Q1 = quantile(cantidad_insumo_2, 0.25),
+    Q3 = quantile(cantidad_insumo_2, 0.75),
+    IQR = IQR(cantidad_insumo_2)
+  ) %>%
+  mutate(variable = "cantidad_insumo_2") -> var_num_ci2
+
+ci2_media  <- var_num_ci2$media
+ci2_ds     <- var_num_ci2$ds
+ci2_med    <- var_num_ci2$`50%`
+ci2_min    <- var_num_ci2$minimo
+ci2_max    <- var_num_ci2$maximo
+ci2_iqr    <- var_num_ci2$IQR
+ci2_q1     <- var_num_ci2$Q1
+ci2_q3     <- var_num_ci2$Q3
+ci2_cv     <- ci2_ds / ci2_media * 100
+
+resumen_num_predictoras <- bind_rows(var_num_vol, var_num_dur, var_num_ci1, var_num_ci2) %>%
+  select(variable, everything())%>%
+  mutate(across(where(is.numeric) & !n, ~ round(.x, 2)))
+knitr::kable(resumen_num_predictoras, caption = "Resumen descriptivo de las variables numéricas seleccionadas",
+                 format = "html",
+             table.attr = "class='table'") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
+```
+
+- *Volumen de lote*. Es la variable más heterogénea. La media (`r round(vol_lote_media, 1)`) supera ampliamente a la mediana (`r round(vol_lote_med, 1)`), señal de asimetría positiva pronunciada. El rango va de `r round(vol_lote_min, 1)` a `r round(vol_lote_max, 1)` unidades —un factor de 133×—. El IQR de `r round(vol_lote_iqr, 1)` unidades indica que incluso el comportamiento "típico" presenta dispersión muy alta. Esta heterogeneidad refleja la naturaleza make-to-order del proceso donde cada orden responde a un pedido específico y no existe un tamaño estándar dominante. La consecuencia analítica que el sistema no tiene reglas operativas uniformes y requiere segmentación por escala de producción.
+  
+- *Duración del proceso*. Heterogénea pero más controlada. La media (`r round(dur_proceso_media, 1)`) horas, está moderadamente por encima de la mediana (`r round(dur_proceso_med, 1)`) horas, nuevamente con cola derecha. El IQR (`r round(dur_proceso_q1, 1)` a `r round(dur_proceso_q3, 1)` horas) define un rango operativo razonablemente delimitado. El máximo de `r round(dur_proceso_max, 1)` horas señala procesos excepcionalmente largos que merecerían revisión específica.
+  
+- *Cantidad de insumo 1*. Comportamiento mucho más concentrado. La mediana de `r round(ci1_med, 1)` kilos y el IQR de `r round(ci1_iqr, 1)` indican que la mayoría de las órdenes utiliza entre `r round(ci1_q1, 1)` y `r round(ci1_q3, 1)` kilos. La media (`r round(ci1_media, 1)`) ligeramente superior a la mediana sugiere algunos valores altos sin dispersión extrema. Esta variable refleja un consumo relativamente estable y predecible, es positivo.
+- 
+- *Cantidad de insumo 2*. Solo aparece en 124 órdenes (las que tienen num_insumos = 2). La mediana de `r round(ci2_med, 1)` y el IQR de `r round(ci2_iqr, 1)` muestran una concentración aún mayor. El máximo de `r round(ci2_max, 1)` es modesto frente al de insumo 1. Funciona como componente opcional o complementario, con consumo bajo y controlado.
+  
+La principal fuente de heterogeneidad del sistema productivo no está en los insumos —que son estables— sino en la escala de los lotes y la duración de los procesos. Esto tiene una implicación directa para la modelación posterior: cualquier modelo o iniciativa de mejora que ignore volumen y duración va a estar mal especificado y producirá conclusiones engañosas.
+
+
+```{r box-num-predictoras, fig.asp = 0.5, echo=FALSE}
+p_vol <- datos %>%
+  ggplot(aes(x = "", y = volumen_lote)) +
+  geom_boxplot(fill = "#1f77b4", alpha = 0.7) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 4, color = "black") +
+  labs(title = "Distribución del volumen de lote", y = "Unidades", x = "") +
+  theme_bw()
+
+p_dur <- datos %>%
+  ggplot(aes(x = "", y = duracion_proceso)) +
+  geom_boxplot(fill = "#1f77b4", alpha = 0.7) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 4, color = "black") +
+  labs(title = "Distribución de la duración de proceso", y = "Horas", x = "") +
+  theme_bw()
+
+p_ci1 <- datos %>%
+  filter(num_insumos >= 1) %>%
+  ggplot(aes(x = "", y = cantidad_insumo_1)) +
+  geom_boxplot(fill = "#1f77b4", alpha = 0.7) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 4, color = "black") +
+  labs(title = "Cantidad de insumo 1 (órdenes con insumo)",
+       y = "Litros equivalentes", x = "") +
+  theme_bw()
+
+p_ci2 <- datos %>%
+  filter(num_insumos == 2) %>%
+  ggplot(aes(x = "", y = cantidad_insumo_2)) +
+  geom_boxplot(fill = "#1f77b4", alpha = 0.7) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 4, color = "black") +
+  labs(title = "Cantidad de insumo 2 (órdenes con segundo insumo)",
+       y = "Litros equivalentes", x = "") +
+  theme_bw()
+
+p_vol + p_dur + p_ci1 + p_ci2
+```
+
+::: {.alert .alert-primary}
+- La heterogeneidad del costo proviene principalmente de volumen y duración, no del consumo de insumos.
+- El volumen de lote varía 133× entre el mínimo y el máximo: la naturaleza make-to-order impide pensar en un proceso estándar.
+- Los insumos están bajo control: el problema no son los materiales sino cómo y cuánto se produce.
+::: 
+
+
+```{r hist-num-predictoras,  echo=FALSE}
+
+p_vol_hist <- datos %>%
+  ggplot(aes(x = volumen_lote)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 30,
+                 fill = "#1f77b4",
+                 color = "white",
+                 alpha = 0.7) +
+  geom_density(linewidth = 1.2) +
+  labs(title = "Distribución del volumen de lote",
+       x = "Unidades", y = "Densidad") +
+  theme_bw()
+
+p_dur_hist <- datos %>%
+  ggplot(aes(x = duracion_proceso)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 30,
+                 fill = "#1f77b4",
+                 color = "white",
+                 alpha = 0.7) +
+  geom_density(linewidth = 1.2) +
+  labs(title = "Distribución de la duración de proceso",
+       x = "Horas", y = "Densidad") +
+  theme_bw()
+
+p_ci1_hist <- datos %>%
+  filter(num_insumos >= 1) %>%
+  ggplot(aes(x = cantidad_insumo_1)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 25,
+                 fill = "#1f77b4",
+                 color = "white",
+                 alpha = 0.7) +
+  geom_density(linewidth = 1.2) +
+  labs(title = "Cantidad de insumo 1 (órdenes con insumo)",
+       x = "Litros equivalentes", y = "Densidad") +
+  theme_bw()
+
+p_ci2_hist <- datos %>%
+  filter(num_insumos == 2) %>%
+  ggplot(aes(x = cantidad_insumo_2)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 20,
+                 fill = "#1f77b4",
+                 color = "white",
+                 alpha = 0.7) +
+  geom_density(linewidth = 1.2) +
+  labs(title = "Cantidad de insumo 2 (órdenes con segundo insumo)",
+       x = "Litros equivalentes", y = "Densidad") +
+  theme_bw()
+
+(p_vol_hist + p_dur_hist) / (p_ci1_hist + p_ci2_hist)
+```
+
+
+
+## Análisis univariado de predictoras categóricas
+
+La distribución de frecuencias de las siete variables categóricas deja ver, desde el inicio, que el sistema no está repartido de manera uniforme. Por el contrario, se concentra en pocas categorías dominantes, mientras que el resto aparece con baja frecuencia.
+
+```{r tipo-equipo,  out.width = "60%", echo=FALSE}
+tabla_tipo_equipo <- datos %>%
+  count(tipo_equipo, name = "Frecuencia") %>%
+  mutate(
+    Porcentaje = round(100 * Frecuencia / sum(Frecuencia), 2),
+    Categoria = as.character(tipo_equipo),
+    Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")
+  ) %>%
+  select(Categoria, Frecuencia, Porcentaje)
+
+grafico_tipo_equipo <- ggplot(
+  tabla_tipo_equipo %>% mutate(Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")),
+  aes(x = Categoria, y = Frecuencia)
+) +
+  geom_col(fill = "#008B8B", width = 0.6) +
+  geom_text(aes(label = Etiqueta), vjust = -0.5, size = 3.5) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(
+    title = "Distribución de tipo_equipo",
+    x = "Categoría",
+    y = "Frecuencia"
+  ) +
+  theme_bw(base_size = 12) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+tabla_grob <- gridExtra::tableGrob(
+  tabla_tipo_equipo,
+  rows = NULL
+)
+
+combinado <- gridExtra::arrangeGrob(
+  tabla_grob,
+  ggplotGrob(grafico_tipo_equipo),
+  ncol = 2,
+  widths = c(1, 2),
+  top = grid::textGrob(
+    "Tipo de equipo: tabla de frecuencias y gráfico de barras",
+    gp = grid::gpar(fontsize = 14, fontface = "bold")
+  )
+)
+
+grid::grid.draw(combinado)
+```
+Tipo de equipo. A1 concentra el 72.7% de todas las órdenes. Esto es un dato con consecuencias profundas: cualquier estadístico global del sistema está dominado por A1. Cuando un reporte ejecutivo habla de "el costo promedio del sistema", en realidad está hablando, en casi tres cuartos, del costo promedio de A1. Las categorías B2 (11.4%), D4 (13.9%) y especialmente C3 (2.0%) tienen una representación mucho menor. C3 con apenas 8 órdenes está estadísticamente al borde de la inutilidad para inferencia.
+
+
+```{r equipo-id,  out.width = "60%", message=FALSE, warning=FALSE}
+tabla_equipo_id <- datos %>%
+  count(equipo_id, name = "Frecuencia") %>%
+  mutate(
+    Porcentaje = round(100 * Frecuencia / sum(Frecuencia), 2),
+    Categoria = as.character(equipo_id),
+    Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")
+  ) %>%
+  select(Categoria, Frecuencia, Porcentaje)
+
+grafico_equipo_id <- ggplot(
+  tabla_equipo_id %>% mutate(Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")),
+  aes(x = Categoria, y = Frecuencia)
+) +
+  geom_col(fill = "#008B8B", width = 0.6) +
+  geom_text(aes(label = Etiqueta), vjust = -0.5, size = 3.5) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(
+    title = "Distribución de equipo_id",
+    x = "Categoría",
+    y = "Frecuencia"
+  ) +
+  theme_bw(base_size = 10) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+tabla_grob <- gridExtra::tableGrob(
+  tabla_equipo_id,
+  rows = NULL
+)
+
+combinado <- gridExtra::arrangeGrob(
+  tabla_grob,
+  ggplotGrob(grafico_equipo_id),
+  ncol = 2,
+  widths = c(1, 2),
+  top = grid::textGrob(
+    "Equipo ID: tabla de frecuencias y gráfico de barras",
+    gp = grid::gpar(fontsize = 14, fontface = "bold")
+  )
+)
+
+grid::grid.draw(combinado)
+
+```
+Equipo individual. Los 12 equipos tienen frecuencias entre el 1% y el 12%. M04 y M11 (los dos equipos C3) tienen 4 órdenes cada uno. Los equipos A1 están relativamente equilibrados entre sí (entre 8% y 12% cada uno). Los D4 (M05, M12) tienen 31 y 24 órdenes respectivamente.
+
+
+```{r categoria-producto,  out.width = "60%", message=FALSE, warning=FALSE}
+tabla_categoria_producto <- datos %>%
+  count(categoria_producto, name = "Frecuencia") %>%
+  mutate(
+    Porcentaje = round(100 * Frecuencia / sum(Frecuencia), 2),
+    Categoria = as.character(categoria_producto),
+    Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")
+  ) %>%
+  select(Categoria, Frecuencia, Porcentaje)
+
+grafico_categoria_producto <- ggplot(
+  tabla_categoria_producto %>% mutate(Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")),
+  aes(x = Categoria, y = Frecuencia)
+) +
+  geom_col(fill = "#008B8B", width = 0.6) +
+  geom_text(aes(label = Etiqueta), vjust = -0.5, size = 3.5) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(
+    title = "Distribución de categoria_producto",
+    x = "Categoría",
+    y = "Frecuencia"
+  ) +
+  theme_bw(base_size = 12) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+tabla_grob <- gridExtra::tableGrob(
+  tabla_categoria_producto,
+  rows = NULL
+)
+
+combinado <- gridExtra::arrangeGrob(
+  tabla_grob,
+  ggplotGrob(grafico_categoria_producto),
+  ncol = 2,
+  widths = c(1, 2),
+  top = grid::textGrob(
+    "Categoría de producto: tabla de frecuencias y gráfico de barras",
+    gp = grid::gpar(fontsize = 14, fontface = "bold")
+  )
+)
+
+grid::grid.draw(combinado)
+
+```
+
+Categoría de producto. La categoría 5 absorbe el 62% de la producción. La categoría 6 tiene una sola orden. Este desequilibrio impone limitaciones al análisis: no hay base muestral para hacer comparaciones estables entre todas las categorías.
+
+
+
+```{r modalidad-proceso,  out.width = "60%", message=FALSE, warning=FALSE}
+tabla_modalidad_proceso <- datos %>%
+  count(modalidad_proceso, name = "Frecuencia") %>%
+  mutate(
+    Porcentaje = round(100 * Frecuencia / sum(Frecuencia), 2),
+    Categoria = as.character(modalidad_proceso),
+    Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")
+  ) %>%
+  select(Categoria, Frecuencia, Porcentaje)
+
+grafico_modalidad_proceso <- ggplot(
+  tabla_modalidad_proceso %>% mutate(Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")),
+  aes(x = Categoria, y = Frecuencia)
+) +
+  geom_col(fill = "#008B8B", width = 0.6) +
+  geom_text(aes(label = Etiqueta), vjust = -0.5, size = 3.5) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(
+    title = "Distribución de modalidad_proceso",
+    x = "Categoría",
+    y = "Frecuencia"
+  ) +
+  theme_bw(base_size = 12) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+tabla_grob <- gridExtra::tableGrob(
+  tabla_modalidad_proceso,
+  rows = NULL
+)
+
+combinado <- gridExtra::arrangeGrob(
+  tabla_grob,
+  ggplotGrob(grafico_modalidad_proceso),
+  ncol = 2,
+  widths = c(1, 2),
+  top = grid::textGrob(
+    "Modalidad de proceso: tabla de frecuencias y gráfico de barras",
+    gp = grid::gpar(fontsize = 14, fontface = "bold")
+  )
+)
+
+grid::grid.draw(combinado)
+
+```
+
+Modalidad de proceso. X y Y están razonablemente balanceadas (52% y 44%). Z es marginal (3.5%, 14 órdenes).
+
+
+
+```{r num-insumos,  out.width = "60%", message=FALSE, warning=FALSE}
+tabla_num_insumos <- datos %>%
+  count(num_insumos, name = "Frecuencia") %>%
+  mutate(
+    Porcentaje = round(100 * Frecuencia / sum(Frecuencia), 2),
+    Categoria = as.character(num_insumos),
+    Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")
+  ) %>%
+  select(Categoria, Frecuencia, Porcentaje)
+
+grafico_num_insumos <- ggplot(
+  tabla_num_insumos %>% mutate(Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")),
+  aes(x = Categoria, y = Frecuencia)
+) +
+  geom_col(fill = "#008B8B", width = 0.6) +
+  geom_text(aes(label = Etiqueta), vjust = -0.5, size = 3.5) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(
+    title = "Distribución de num_insumos",
+    x = "Categoría",
+    y = "Frecuencia"
+  ) +
+  theme_bw(base_size = 12) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+tabla_grob <- gridExtra::tableGrob(
+  tabla_num_insumos,
+  rows = NULL
+)
+
+combinado <- gridExtra::arrangeGrob(
+  tabla_grob,
+  ggplotGrob(grafico_num_insumos),
+  ncol = 2,
+  widths = c(1, 2),
+  top = grid::textGrob(
+    "Número de insumos: tabla de frecuencias y gráfico de barras",
+    gp = grid::gpar(fontsize = 14, fontface = "bold")
+  )
+)
+
+grid::grid.draw(combinado)
+
+```
+
+Número de insumos. Dos tercios de las órdenes operan con un solo insumo; un tercio con dos.
+
+```{r insumo-1,  out.width = "60%", message=FALSE, warning=FALSE}
+tabla_insumo_1 <- datos %>%
+  count(insumo_1, name = "Frecuencia") %>%
+  mutate(
+    Porcentaje = round(100 * Frecuencia / sum(Frecuencia), 2),
+    Categoria = as.character(insumo_1),
+    Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")
+  ) %>%
+  select(Categoria, Frecuencia, Porcentaje)
+
+grafico_insumo_1 <- ggplot(
+  tabla_insumo_1 %>% mutate(Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")),
+  aes(x = Categoria, y = Frecuencia)
+) +
+  geom_col(fill = "#008B8B", width = 0.6) +
+  geom_text(aes(label = Etiqueta), vjust = -0.5, size = 3.5) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(
+    title = "Distribución de insumo_1",
+    x = "Categoría",
+    y = "Frecuencia"
+  ) +
+  theme_bw(base_size = 12) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+tabla_grob <- gridExtra::tableGrob(
+  tabla_insumo_1,
+  rows = NULL
+)
+
+combinado <- gridExtra::arrangeGrob(
+  tabla_grob,
+  ggplotGrob(grafico_insumo_1),
+  ncol = 2,
+  widths = c(1, 2),
+  top = grid::textGrob(
+    "Distribución de insumo_1: tabla de frecuencias y gráfico de barras",
+    gp = grid::gpar(fontsize = 14, fontface = "bold")
+  )
+)
+
+grid::grid.draw(combinado)
+
+
+```
+Insumos. Tanto en insumo_1 como en insumo_2, B_T y N_T son los más frecuentes. Hay insumos con presencia muy baja (R_T, V_T) que limitan la capacidad de análisis específico.
+
+
+```{r insumo-2,  out.width = "60%", message=FALSE, warning=FALSE}
+tabla_insumo_2 <- datos %>%
+  count(insumo_2, name = "Frecuencia") %>%
+  mutate(
+    Porcentaje = round(100 * Frecuencia / sum(Frecuencia), 2),
+    Categoria = as.character(insumo_2),
+    Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")
+  ) %>%
+  select(Categoria, Frecuencia, Porcentaje)
+
+grafico_insumo_2 <- ggplot(
+  tabla_insumo_2 %>% mutate(Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")),
+  aes(x = Categoria, y = Frecuencia)
+) +
+  geom_col(fill = "#008B8B", width = 0.6) +
+  geom_text(aes(label = Etiqueta), vjust = -0.5, size = 3.5) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(
+    title = "Distribución de insumo_2",
+    x = "Categoría",
+    y = "Frecuencia"
+  ) +
+  theme_bw(base_size = 12) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+tabla_grob <- gridExtra::tableGrob(
+  tabla_insumo_2,
+  rows = NULL
+)
+
+combinado <- gridExtra::arrangeGrob(
+  tabla_grob,
+  ggplotGrob(grafico_insumo_2),
+  ncol = 2,
+  widths = c(1, 2),
+  top = grid::textGrob(
+    "Distribución de insumo_2: tabla de frecuencias y gráfico de barras",
+    gp = grid::gpar(fontsize = 14, fontface = "bold")
+  )
+)
+
+grid::grid.draw(combinado)
+
+```
+
+La fuerte concentración en A1 sugiere dos cosas: (i) cualquier modelo debe considerar tipo_equipo como variable explicativa central; (ii) las comparaciones entre categorías minoritarias serán inestables por bajo n. Esto anticipa que el análisis no podrá tratar a todos los grupos de la misma manera.
+
+::: {.alert .alert-primary}
+- A1 representa el 73% de las órdenes: el "costo del sistema" es mayoritariamente el "costo de A1".
+- C3 (8 órdenes) está al borde de la inutilidad estadística; cualquier conclusión sobre C3 será especulativa.
+- Los desbalances en categorías de producto y en insumos minoritarios obligarán a agrupaciones o exclusiones en análisis posteriores.
+::: 
+
+
+## Análisis bivariado 
+¿Cómo se relacionan las variables entre sí?. como punto de partida estándar, se presentan sin condicionar por subgrupos. 
+
+### Correlacion Pearson
+
+```{r matriz-correlacion}
+matriz_correlacion <- datos %>%
+  select(costo_transformacion, costo_insumo, costo_unitario_total,
+         volumen_lote, duracion_proceso,
+         cantidad_insumo_1, cantidad_insumo_2) %>%
+  cor(use = "pairwise.complete.obs", method = "pearson") %>%
+  round(3)
+
+# 2. Aplicar formato condicional a las celdas
+# Umbral: abs(x) >= 0.5 (puedes ajustarlo según lo que consideres "relevante")
+matriz_df <- as.data.frame(matriz_correlacion)
+matriz_df[] <- lapply(matriz_df, function(x) {
+  cell_spec(x,
+            bold = ifelse(abs(x) >= 0.5 & x != 1, TRUE, FALSE),
+            color = ifelse(abs(x) >= 0.5 & x != 1, "white", "black"),
+            background = ifelse(abs(x) >= 0.5 & x != 1, "#d9534f", "transparent"))
+})
+
+# 3. Generar la tabla
+kable(matriz_df, 
+      caption = "Matriz de correlación de Pearson",
+      format = "html", 
+      escape = FALSE, 
+      table.attr = "class='table'") %>%
+  kable_styling(full_width = TRUE)
+
+
+```
+- *Estructura interna del costo.* La correlación entre costo_transformacion y costo_unitario_total es de (`r round(matriz_correlacion[1,3], 3)`) —prácticamente- perfecta—. Confirma numéricamente lo que la descomposición ya mostraba: el costo total es casi indistinguible del costo de transformación. La correlación con costo_insumo (`r round(matriz_correlacion[2,3], 3)`) es moderada y refleja su menor peso relativo.
+
+- *Economías de escala.* El volumen_lote tiene correlación negativa con todos los costos: `r round(matriz_correlacion[4,1], 3)` con transformación, `r round(matriz_correlacion[4,2], 3)` con insumo, `r round(matriz_correlacion[4,3], 3)` con total. A mayor volumen, menor costo unitario. La señal es consistente y opera sobre los dos componentes simultáneamente, lo que sugiere que la escala es una palanca económica de primer orden, no un efecto secundario.
+
+- *Acoplamiento operativo.* Volumen, duración e insumo 1 están fuertemente correlacionados entre sí (entre  `r round(matriz_correlacion[6,4], 3)` y `r round(matriz_correlacion[5,4], 3)`). El sistema escala de manera integrada: producir más implica procesos más largos y mayor consumo de materiales. Esto es consistente con la naturaleza física del proceso.
+
+- *Insumo 1: el ausente económico.* La correlación entre cantidad_insumo_1 y los costos es prácticamente nula (`r round(matriz_correlacion[6,1], 3)` con transformación, `r round(matriz_correlacion[6,3], 3)` con total). Esto es un hallazgo no trivial: un mayor uso del insumo principal no se traduce en mayor costo unitario. Su relación con volumen y duración es fuerte, pero no con costo. Probable explicación: el insumo 1 escala con la producción de manera proporcional, sin introducir ineficiencia económica adicional.
+
+- *Insumo 2: el factor de complejidad.* Sus correlaciones con costos son débiles pero positivas (`r round(matriz_correlacion[7,1], 3)`-`r round(matriz_correlacion[7,3], 3)`). Su correlación con duracion_proceso (`r round(matriz_correlacion[5,7], 3)`) es notable: las órdenes con dos insumos tienden a procesarse más lentamente. Esto sugiere que el segundo insumo no es un componente operativo neutro, sino un factor que introduce complejidad y, con ella, costos.
+
+
+::: {.alert .alert-primary}
+- El costo total y el de transformación son prácticamente la misma variable (r = `r round(matriz_correlacion[1,3], 3)`); la palanca económica es transformación.
+- Existe economía de escala con el volumen (r ≈ `r round(matriz_correlacion[4,3], 3)`), pero no perfecta: hay margen para investigar dónde se rompe.
+- El insumo 1 es operativamente acoplado al proceso pero económicamente neutro; el insumo 2 es factor de complejidad.
+::: 
+
+
+### Diagramas de dispersión
+
+```{r scatter-prioritarios, fig.asp = 1.2, warning=FALSE, message=FALSE}
+
+# Función auxiliar para construir gráficos de dispersión
+graf_disp <- function(data, x, y, xlab, ylab, titulo, color = "#1E90FF") {
+  ggplot(data, aes(x = {{ x }}, y = {{ y }})) +
+    geom_point(alpha = 0.4, color = color) +
+    geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.9) +
+    labs(x = xlab, y = ylab, title = titulo) +
+    theme_bw() +
+    theme(
+      plot.title = element_text(size = 10, face = "bold"),
+      axis.title = element_text(size = 9)
+    )
+}
+
+# Nivel 1
+p1 <- graf_disp(
+  datos, volumen_lote, costo_transformacion,
+  "Volumen de lote", "Costo de transformación (UM/unidad)",
+  "Volumen de lote vs costo de transformación"
+)
+
+p2 <- graf_disp(
+  datos, volumen_lote, costo_unitario_total,
+  "Volumen de lote", "Costo unitario total (UM/unidad)",
+  "Volumen de lote vs costo unitario total"
+)
+
+p3 <- graf_disp(
+  datos, duracion_proceso, costo_transformacion,
+  "Duración del proceso (horas)", "Costo de transformación (UM/unidad)",
+  "Duración del proceso vs costo de transformación"
+)
+
+# Nivel 2
+p4 <- graf_disp(
+  datos, volumen_lote, duracion_proceso,
+  "Volumen de lote", "Duración del proceso (horas)",
+  "Volumen de lote vs duración del proceso"
+)
+
+p5 <- graf_disp(
+  datos, volumen_lote, cantidad_insumo_1,
+  "Volumen de lote", "Cantidad de insumo 1",
+  "Volumen de lote vs cantidad de insumo 1"
+)
+
+p6 <- graf_disp(
+  datos, duracion_proceso, cantidad_insumo_1,
+  "Duración del proceso (horas)", "Cantidad de insumo 1",
+  "Duración del proceso vs cantidad de insumo 1"
+)
+
+# Nivel 3
+p7 <- datos %>%
+  filter(num_insumos == 2) %>%
+  graf_disp(
+    duracion_proceso, cantidad_insumo_2,
+    "Duración del proceso (horas)", "Cantidad de insumo 2",
+    "Duración del proceso vs cantidad de insumo 2"
+  )
+
+p8 <- datos %>%
+  filter(num_insumos == 2) %>%
+  graf_disp(
+    costo_insumo, cantidad_insumo_2,
+    "Costo de insumo (UM/unidad)", "Cantidad de insumo 2",
+    "Costo de insumo vs cantidad de insumo 2"
+  )
+
+# Organización en dos columnas
+(p1 + p2) /
+(p3 + p4) /
+(p5 + p6) /
+(p7 + p8)
+
+```
+
+- *Volumen vs. costo (transformación y total).* La nube de puntos muestra una caída pronunciada del costo en la zona de bajo volumen, seguida de un aplanamiento progresivo. Es decir, las economías de escala existen pero son decrecientes: el primer salto de volumen reduce mucho el costo unitario; los siguientes saltos reducen cada vez menos. Esta forma curva es típica de procesos con costos fijos significativos: el primer aumento de volumen los diluye intensamente, pero después la mejora marginal se atenúa.
+
+- *Duración vs. costo de transformación.* La relación es creciente pero con curvatura. El costo aumenta con la duración hasta cierto punto y luego se estabiliza o incluso desciende ligeramente. Esto sugiere que la duración captura más de un fenómeno: no solo esfuerzo, sino también eficiencia operativa diferenciada en distintos rangos. Los procesos cortos pueden ser baratos por naturaleza simple o caros por mala asignación; los procesos largos pueden ser caros por complejidad real o eficientes en términos relativos a su carga.
+
+- *Volumen vs. duración.* Relación creciente, fuertemente curva, con aceleración inicial que se modera. Patrón típico de procesos con capacidades técnicas operativas: hasta cierto punto, más volumen requiere proporcionalmente más tiempo; pasado un umbral, el proceso "se acomoda" y la pendiente se reduce.
+
+- *Implicación analítica.* La matriz de Pearson, basada en relaciones lineales, subestima estas asociaciones. Cuando la verdadera relación es monótona pero curva, Pearson reporta un coeficiente menor que el real. Esto justifica complementar con la correlación de Spearman.
+
+
+
+::: {.alert .alert-primary}
+- Las economías de escala son reales pero decrecientes; el sistema tiene un rango óptimo de operación que no es "el máximo posible".
+- La duración del proceso captura múltiples fenómenos (esfuerzo + eficiencia); requiere análisis estratificado para separarlos.
+- Pearson subestima las asociaciones reales por la no-linealidad del sistema; conviene complementar con Spearman.
+
+::: 
+
+
+### Matriz Spearman
+```{r matriz-spearman}
+matriz_spearman <- datos %>%
+  select(costo_transformacion, costo_insumo, costo_unitario_total,
+         volumen_lote, duracion_proceso,
+         cantidad_insumo_1, cantidad_insumo_2) %>%
+  cor(use = "pairwise.complete.obs", method = "spearman") %>%
+  round(3)
+
+# 2. Aplicar formato condicional a las celdas
+# Umbral: abs(x) >= 0.5 (puedes ajustarlo según lo que consideres "relevante")
+matriz_resaltada <- as.data.frame(matriz_spearman)
+matriz_resaltada[] <- lapply(matriz_resaltada, function(x) {
+  cell_spec(x,
+            bold = ifelse(abs(x) >= 0.5 & x != 1, TRUE, FALSE),
+            color = ifelse(abs(x) >= 0.5 & x != 1, "white", "black"),
+            background = ifelse(abs(x) >= 0.5 & x != 1, "#d9534f", "transparent"))
+})
+
+# 3. Generar la tabla
+kable(matriz_resaltada, 
+      caption = "Matriz de correlación de Spearman",
+      format = "html", 
+      escape = FALSE, 
+      table.attr = "class='table'") %>%
+  kable_styling(full_width = TRUE)
+```
+
+
+Spearman mide asociaciones monótonas (no necesariamente lineales) y resulta más robusto frente a asimetrías y outliers.
+Comparando ambas matrices:
+
+Las relaciones operativas se fortalecen. Volumen-duración pasa de `r round(matriz_correlacion[5,4], 3)` a `r matriz_spearman[5, 4]`. Volumen-insumo 1 pasa de `r round(matriz_correlacion[7,4], 3)` a `r matriz_spearman[7, 4]`. Esto confirma que la relación es monótona fuerte pero no lineal: cuando una variable sube, la otra sube de manera consistente, pero no en proporción constante.
+
+Las economías de escala se debilitan ligeramente. Volumen-costo total pasa de `r round(matriz_correlacion[3,4], 3)` a `r matriz_spearman[3, 4]`. La relación inversa sigue presente, pero con dispersión real: a mayor volumen, costo unitario menor, pero no de forma uniforme.
+
+El segundo insumo gana presencia. Sus correlaciones con costos suben en Spearman. Esto indica que su efecto no es lineal sino más bien "por presencia": el simple hecho de operar con dos insumos cambia el régimen de costos más que la cantidad específica del segundo insumo.
+
+Lectura conjunta de ambas matrices. El sistema productivo es consistente en dirección pero irregular en intensidad. Las relaciones existen y van en el sentido económico esperado (escala reduce costo, complejidad aumenta costo), pero no son uniformes a lo largo de los rangos de las variables. Esto significa que modelos simples basados en linealidad pueden producir conclusiones engañosas: las decisiones basadas en promedios y elasticidades constantes pueden subestimar o sobreestimar efectos reales. Se requiere segmentación.
+
+
+
+::: {.alert .alert-primary}
+- Las relaciones operativas son monótonas fuertes pero no lineales; los modelos lineales subestiman su intensidad.
+- Las economías de escala son reales pero irregulares; existen rangos donde el beneficio marginal cambia.
+- Las decisiones basadas en promedios pueden ser engañosas; se requiere análisis por rangos y segmentos.
+::: 
+
+
+### Análisis bivariado: Modalidad proceso
+
+
+```{r tabla-resumen-modproceso, message=FALSE, warning=FALSE}
+resumen_transformacion <- datos %>%
+  group_by(modalidad_proceso) %>%
+  summarise(
+    n = sum(!is.na(costo_transformacion)),
+    media = mean(costo_transformacion, na.rm = TRUE),
+    ds = sd(costo_transformacion, na.rm = TRUE),
+    `50%` = median(costo_transformacion, na.rm = TRUE),
+    mínimo = min(costo_transformacion, na.rm = TRUE),
+    máximo = max(costo_transformacion, na.rm = TRUE),
+    Q1 = quantile(costo_transformacion, 0.25, na.rm = TRUE),
+    Q3 = quantile(costo_transformacion, 0.75, na.rm = TRUE),
+    IQR = IQR(costo_transformacion, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  rename(modalidad = modalidad_proceso) %>%
+  mutate(across(c(media, ds, `50%`, mínimo, máximo, Q1, Q3, IQR), ~ round(., 2)))
+
+resumen_insumo <- datos %>%
+  group_by(modalidad_proceso) %>%
+  summarise(
+    n = sum(!is.na(costo_insumo)),
+    media = mean(costo_insumo, na.rm = TRUE),
+    ds = sd(costo_insumo, na.rm = TRUE),
+    `50%` = median(costo_insumo, na.rm = TRUE),
+    mínimo = min(costo_insumo, na.rm = TRUE),
+    máximo = max(costo_insumo, na.rm = TRUE),
+    Q1 = quantile(costo_insumo, 0.25, na.rm = TRUE),
+    Q3 = quantile(costo_insumo, 0.75, na.rm = TRUE),
+    IQR = IQR(costo_insumo, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  rename(modalidad = modalidad_proceso) %>%
+  mutate(across(c(media, ds, `50%`, mínimo, máximo, Q1, Q3, IQR), ~ round(., 2)))
+
+tabla_resumen_modproceso <- bind_rows(resumen_transformacion, resumen_insumo)
+
+knitr::kable(
+  tabla_resumen_modproceso,
+  caption = "Resumen descriptivo de los costos de transformación e insumo por modalidad de proceso",
+  format = "html",
+  col.names = c("modalidad", "n", "media", "ds", "50%", "mínimo", "máximo", "Q1", "Q3", "IQR"),
+  table.attr = "class='table'"
+) %>%
+  kableExtra::kable_styling(full_width = FALSE) %>%
+  kableExtra::pack_rows("Transformación", 1, nrow(resumen_transformacion)) %>%
+  kableExtra::pack_rows("Insumo", nrow(resumen_transformacion) + 1, nrow(tabla_resumen_modproceso))
+```
+
+```{r tabla-resumen-modproceso-inline, message=FALSE, warning=FALSE}
+modproceso_media <- setNames(resumen_transformacion$media, resumen_transformacion$modalidad)
+modproceso_ds    <- setNames(resumen_transformacion$ds, resumen_transformacion$modalidad)
+modproceso_med   <- setNames(resumen_transformacion$`50%`, resumen_transformacion$modalidad)
+modproceso_min   <- setNames(resumen_transformacion$mínimo, resumen_transformacion$modalidad)
+modproceso_max   <- setNames(resumen_transformacion$máximo, resumen_transformacion$modalidad)
+modproceso_iqr   <- setNames(resumen_transformacion$IQR, resumen_transformacion$modalidad)
+modproceso_q1    <- setNames(resumen_transformacion$Q1, resumen_transformacion$modalidad)
+modproceso_q3    <- setNames(resumen_transformacion$Q3, resumen_transformacion$modalidad)
+modproceso_cv    <- setNames(resumen_transformacion$ds / resumen_transformacion$media * 100,
+                             resumen_transformacion$modalidad)
+
+ci_modproceso_media <- setNames(resumen_insumo$media, resumen_insumo$modalidad)
+ci_modproceso_ds    <- setNames(resumen_insumo$ds, resumen_insumo$modalidad)
+ci_modproceso_med   <- setNames(resumen_insumo$`50%`, resumen_insumo$modalidad)
+ci_modproceso_min   <- setNames(resumen_insumo$mínimo, resumen_insumo$modalidad)
+ci_modproceso_max   <- setNames(resumen_insumo$máximo, resumen_insumo$modalidad)
+ci_modproceso_iqr   <- setNames(resumen_insumo$IQR, resumen_insumo$modalidad)
+ci_modproceso_q1    <- setNames(resumen_insumo$Q1, resumen_insumo$modalidad)
+ci_modproceso_q3    <- setNames(resumen_insumo$Q3, resumen_insumo$modalidad)
+ci_modproceso_cv    <- setNames(resumen_insumo$ds / resumen_insumo$media * 100,
+                                resumen_insumo$modalidad)
+```
+
+
+```{r box-bivariado-mod-proceso, fig.width=9, fig.height=4.5}
+
+box_ct_mod_proceso <-datos %>%
+  ggplot(aes(x = modalidad_proceso, y = costo_transformacion)) +
+  geom_boxplot(fill = "#87CEFA", outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "darkblue") +
+  labs(x = "Tipo de equipo",
+       y = "Costo de transformación (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Costo de transformación por modalidad de proceso ")
+
+
+box_ci_mod_proceso <- datos %>%
+  ggplot(aes(x = modalidad_proceso, y = costo_insumo)) +
+  geom_boxplot(fill = "#b2df8a", outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "darkgreen") +
+  labs(x = "Modalidad de proceso",
+       y = "Costo de insumo (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Costo de insumo por modalidad de proceso")
+
+box_ct_mod_proceso + box_ci_mod_proceso
+```
+
+La modalidad Z corresponde a órdenes donde se aplican X y Y al mismo producto por requerimiento del cliente. Es una composición de procesos, no una alternativa.
+En transformación: se observa un gradiente claro X (`r round(modproceso_media["X"], 2)`) < Y (`r round(modproceso_media["Y"], 2)`) < Z (`r round(modproceso_media["Z"], 2)`), confirmado por la mediana. Pero la dispersión cambia entre modalidades: X tiene desviación estándar de 17.9 (proceso volátil), Y tiene `r round(modproceso_ds["Y"], 2)` (proceso controlado), Z tiene `r round(modproceso_ds["Z"], 2)` pero con IQR contenido (alto y consistente).
+
+En insumo: el patrón es más suave (X: `r round(modproceso_media["X"], 2)`, Y: `r round(modproceso_media["Y"], 2)`, Z: `r round(modproceso_media["Z"], 2)`), y la mediana de Z (`r round(modproceso_med["Z"], 2)`) está muy cerca de la de Y. El sobrecosto de Z proviene principalmente del componente de transformación, no del de insumos.
+
+Lectura económica. Y es más estable y ligeramente más caro que X. X es más volátil. Z es estructuralmente más caro y tiene un comportamiento de costo distinto: el sobrecosto de Z no es la suma simple de X+Y, sino el producto de una interacción entre procesos. Esto sugiere que cuando el cliente solicita ambas modalidades sobre el mismo producto, hay ineficiencias de coordinación o setup adicionales que elevan el costo.
+
+Limitación crítica. Cualquier conclusión cuantitativa sobre Z tiene intervalos de confianza muy amplios. Z aparece aquí como observación cualitativa, no como base para inferencia.
+
+
+::: {.alert .alert-primary}
+- Y es más estable y predecible; X es más volátil y barato en promedio.
+- El sobrecosto de Z es estructural (en transformación) y refleja interacción entre procesos, no suma.
+- Z tiene n=14: cualquier conclusión sobre esta modalidad debe tomarse con extrema cautela.
+::: 
+
+ 
+
+### Análisis bivariado: tipo de equipo
+
+```{r bivariado-tipoequipo}
+resumen_transformacion_te <- datos %>%
+  group_by(tipo_equipo) %>%
+  summarise(
+    n = sum(!is.na(costo_transformacion)),
+    media = mean(costo_transformacion, na.rm = TRUE),
+    ds = sd(costo_transformacion, na.rm = TRUE),
+    `50%` = median(costo_transformacion, na.rm = TRUE),
+    mínimo = min(costo_transformacion, na.rm = TRUE),
+    máximo = max(costo_transformacion, na.rm = TRUE),
+    Q1 = quantile(costo_transformacion, 0.25, na.rm = TRUE),
+    Q3 = quantile(costo_transformacion, 0.75, na.rm = TRUE),
+    IQR = IQR(costo_transformacion, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  rename(tipo = tipo_equipo) %>%
+  mutate(across(c(media, ds, `50%`, mínimo, máximo, Q1, Q3, IQR), ~ round(., 2)))
+
+resumen_insumo_te <- datos %>%
+  group_by(tipo_equipo) %>%
+  summarise(
+    n = sum(!is.na(costo_insumo)),
+    media = mean(costo_insumo, na.rm = TRUE),
+    ds = sd(costo_insumo, na.rm = TRUE),
+    `50%` = median(costo_insumo, na.rm = TRUE),
+    mínimo = min(costo_insumo, na.rm = TRUE),
+    máximo = max(costo_insumo, na.rm = TRUE),
+    Q1 = quantile(costo_insumo, 0.25, na.rm = TRUE),
+    Q3 = quantile(costo_insumo, 0.75, na.rm = TRUE),
+    IQR = IQR(costo_insumo, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  rename(tipo = tipo_equipo) %>%
+  mutate(across(c(media, ds, `50%`, mínimo, máximo, Q1, Q3, IQR), ~ round(., 2)))
+
+tabla_resumen_tipoequipo <- bind_rows(resumen_transformacion_te, resumen_insumo_te)
+
+knitr::kable(
+  tabla_resumen_tipoequipo,
+  caption = "Resumen descriptivo de los costos de transformación e insumo por tipo de equipo",
+  format = "html",
+  col.names = c("tipo_equipo", "n", "media", "ds", "50%", "mínimo", "máximo", "Q1", "Q3", "IQR"),
+  table.attr = "class='table'"
+) %>%
+  kableExtra::kable_styling(full_width = FALSE) %>%
+  kableExtra::pack_rows("Transformación", 1, nrow(resumen_transformacion_te)) %>%
+  kableExtra::pack_rows("Insumo", nrow(resumen_transformacion_te) + 1, nrow(tabla_resumen_tipoequipo)) 
+```
+
+```{r tabla-resumen-tipoequipo-inline, message=FALSE, warning=FALSE}
+tipoequipo_name <- c("X", "Y", "Z")
+tipoequipo_n <- setNames(resumen_transformacion_te$n, resumen_transformacion_te$tipo)
+tipoequipo_media <- setNames(resumen_transformacion_te$media, resumen_transformacion_te$tipo)
+tipoequipo_ds    <- setNames(resumen_transformacion_te$ds, resumen_transformacion_te$tipo)
+tipoequipo_med   <- setNames(resumen_transformacion_te$`50%`, resumen_transformacion_te$tipo)
+tipoequipo_min   <- setNames(resumen_transformacion_te$mínimo, resumen_transformacion_te$tipo)
+tipoequipo_max   <- setNames(resumen_transformacion_te$máximo, resumen_transformacion_te$tipo)
+tipoequipo_iqr   <- setNames(resumen_transformacion_te$IQR, resumen_transformacion_te$tipo)
+tipoequipo_q1    <- setNames(resumen_transformacion_te$Q1, resumen_transformacion_te$tipo)
+tipoequipo_q3    <- setNames(resumen_transformacion_te$Q3, resumen_transformacion_te$tipo)
+tipoequipo_cv    <- setNames(resumen_transformacion_te$ds / resumen_transformacion_te$media * 100,
+                             resumen_transformacion_te$tipo)
+
+ci_tipoequipo_media <- setNames(resumen_insumo_te$media, resumen_insumo_te$tipo)
+ci_tipoequipo_ds    <- setNames(resumen_insumo_te$ds, resumen_insumo_te$tipo)
+ci_tipoequipo_med   <- setNames(resumen_insumo_te$`50%`, resumen_insumo_te$tipo)
+ci_tipoequipo_min   <- setNames(resumen_insumo_te$mínimo, resumen_insumo_te$tipo)
+ci_tipoequipo_max   <- setNames(resumen_insumo_te$máximo, resumen_insumo_te$tipo)
+ci_tipoequipo_iqr   <- setNames(resumen_insumo_te$IQR, resumen_insumo_te$tipo)
+ci_tipoequipo_q1    <- setNames(resumen_insumo_te$Q1, resumen_insumo_te$tipo)
+ci_tipoequipo_q3    <- setNames(resumen_insumo_te$Q3, resumen_insumo_te$tipo)
+ci_tipoequipo_cv    <- setNames(resumen_insumo_te$ds / resumen_insumo_te$media * 100,
+                                resumen_insumo_te$tipo)
+```
+
+
+```{r box-equipo, fig.width=9, fig.height=4.5}
+
+box_ct_te <-datos %>%
+  ggplot(aes(x = tipo_equipo, y = costo_transformacion)) +
+  geom_boxplot(fill = "#87CEFA", outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "darkblue") +
+  labs(x = "Tipo de equipo",
+       y = "Costo de transformación (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Costo de transformación por tipo de equipo")
+
+
+box_ci_te <- datos %>%
+  ggplot(aes(x = tipo_equipo, y = costo_insumo)) +
+  geom_boxplot(fill = "#b2df8a", outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "darkgreen") +
+  labs(x = "Tipo de equipo",
+       y = "Costo de insumo (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Costo de insumo por tipo de equipo")
+
+box_ct_te + box_ci_te 
+```
+
+
+Esta es la tabla más reveladora del capítulo. Los cuatro tipos de equipo no operan en el mismo rango de costos: están en regímenes económicos completamente distintos.
+•	A1 es el estándar operativo del sistema (n=`r tipoequipo_n["A1"]`, ~`r tipoequipo_media["A1"]` UM/unidad, dispersión moderada). Su comportamiento típico está bien caracterizado.
+•	B2 es operativamente similar a A1 (~`r tipoequipo_media["B2"]`), ligeramente más barato y más estable. Pero su menor n (`r tipoequipo_n["B2"]`) limita la robustez de la comparación.
+•	C3 es claramente diferente: media de `r tipoequipo_media["C3"]` UM/unidad, IQR amplio (`r tipoequipo_iqr["C3"]`), dispersión alta. Es costoso y impredecible. Apenas `r tipoequipo_n["C3"]` órdenes —insuficientes para conclusiones inferenciales sólidas, pero suficientes para señalar que requiere análisis special.
+•	D4 es notablemente eficiente: media de `r tipoequipo_media["D4"]` UM/unidad, dispersión reducida, comportamiento consistente. Representa una operación altamente eficiente.
+En insumos el patrón se mantiene: A1 y B2 son comparables (~`r tipoequipo_media["A1"]` UM/unidad), C3 más del doble (`r tipoequipo_media["C3"]`), D4 el más bajo (`r tipoequipo_media["D4"]` con alta variabilidad por al menos un outlier extremo).
+
+La pregunta inmediata. Si el sistema productivo tiene cuatro regímenes de costo tan distintos, ¿qué sentido tiene reportar un "costo promedio del sistema"? Cualquier promedio agregado describirá un valor que no representa adecuadamente a ninguno de los cuatro grupos. Esta es la primera grieta del marco analítico agregado.
+
+::: {.alert .alert-primary}
+- El sistema opera en cuatro regímenes de costo claramente diferenciados, no en uno solo.
+- C3 está en un régimen de alto costo y alta variabilidad; D4 en uno de bajo costo y alta consistencia.
+- Cualquier estadístico agregado es engañoso: el "promedio del sistema" no representa a ningún tipo de equipo individualmente.
+::: 
+
+
+### Análisis bivariado: Equipo_id
+
+```{r bivariado-cc-equipo}
+resumen_bivariado_ct_equipo <- datos %>%
+  group_by(equipo_id, tipo_equipo) %>%
+  summarise(
+    n = length(costo_transformacion),
+    media = mean(costo_transformacion),
+    ds = sd(costo_transformacion),
+    `50%` = median(costo_transformacion),
+    minimo = min(costo_transformacion),
+    maximo = max(costo_transformacion),
+    Q1 = quantile(costo_transformacion, 0.25),
+    Q3 = quantile(costo_transformacion, 0.75),
+    IQR = IQR(costo_transformacion),
+    .groups = "drop"
+  ) %>%
+  arrange(tipo_equipo, equipo_id)
+
+knitr::kable(
+  resumen_bivariado_ct_equipo,
+  caption = "Resumen bivariado de costos de transformación por equipo y tipo de equipo",
+                 format = "html",
+             table.attr = "class='table'") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
+```
+
+```{r bivariado-ci-equipo}
+resumen_bivariado_ci_equipo <- datos %>%
+  group_by(equipo_id, tipo_equipo) %>%
+  summarise(
+    n = length(costo_insumo),
+    media = mean(costo_insumo),
+    ds = sd(costo_insumo),
+    `50%` = median(costo_insumo),
+    minimo = min(costo_insumo),
+    maximo = max(costo_insumo),
+    Q1 = quantile(costo_insumo, 0.25),
+    Q3 = quantile(costo_insumo, 0.75),
+    IQR = IQR(costo_insumo),
+    .groups = "drop"
+  ) %>%
+  arrange(tipo_equipo, equipo_id)
+
+knitr::kable(
+  resumen_bivariado_ci_equipo,
+  caption = "Resumen bivariado de costos de insumo por equipo y tipo de equipo",
+                 format = "html",
+             table.attr = "class='table'") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
+```
+
+
+```{r box-equipoid, fig.width=9, fig.height=4.5}
+orden_equipos <- datos %>%
+  distinct(tipo_equipo, equipo_id) %>%
+  arrange(tipo_equipo, equipo_id) %>%
+  pull(equipo_id)
+
+  box_ct_equipo <- datos %>%
+  mutate(
+    equipo_id = factor(equipo_id, levels = orden_equipos)
+  ) %>%
+  ggplot(aes(x = equipo_id, y = costo_transformacion, fill = tipo_equipo)) +
+  geom_boxplot(outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "black") +
+  labs(x = "Equipo",
+       y = "Costo de transformación (UM/unidad)",
+       fill = "Tipo de equipo") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  facet_grid(. ~ "Costo de transformación por equipo")
+
+box_ci_equipo <- datos %>%
+  mutate(
+    equipo_id = factor(equipo_id, levels = orden_equipos)
+  ) %>%
+  ggplot(aes(x = equipo_id, y = costo_insumo, fill = tipo_equipo)) +
+  geom_boxplot(outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "black") +
+  labs(x = "Equipo",
+       y = "Costo de insumo (UM/unidad)",
+       fill = "Tipo de equipo") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  facet_grid(. ~ "Costo de insumo por equipo")
+
+box_ct_equipo + box_ci_equipo
+
+```
+
+```{r tabla-resumen-equipoid-inline, message=FALSE, warning=FALSE}
+
+equipoid_n <- setNames(resumen_bivariado_ct_equipo$n, resumen_bivariado_ct_equipo$tipo)
+tipoequipo_media <- setNames(resumen_bivariado_ct_equipo$media, resumen_bivariado_ct_equipo$tipo)
+tipoequipo_ds    <- setNames(resumen_bivariado_ct_equipo$ds, resumen_bivariado_ct_equipo$tipo)
+tipoequipo_med   <- setNames(resumen_bivariado_ct_equipo$`50%`, resumen_bivariado_ct_equipo$tipo)
+tipoequipo_min   <- setNames(resumen_bivariado_ct_equipo$mínimo, resumen_bivariado_ct_equipo$tipo)
+tipoequipo_max   <- setNames(resumen_bivariado_ct_equipo$máximo, resumen_bivariado_ct_equipo$tipo)
+tipoequipo_iqr   <- setNames(resumen_bivariado_ct_equipo$IQR, resumen_bivariado_ct_equipo$tipo)
+tipoequipo_q1    <- setNames(resumen_bivariado_ct_equipo$Q1, resumen_bivariado_ct_equipo$tipo)
+tipoequipo_q3    <- setNames(resumen_bivariado_ct_equipo$Q3, resumen_bivariado_ct_equipo$tipo)
+tipoequipo_cv    <- setNames(resumen_bivariado_ct_equipo$ds / resumen_bivariado_ct_equipo$media * 100,
+                             resumen_bivariado_ct_equipo$tipo)
+
+ci_tipoequipo_media <- setNames(resumen_bivariado_ci_equipo$media, resumen_bivariado_ci_equipo$tipo)
+ci_tipoequipo_ds    <- setNames(resumen_bivariado_ci_equipo$ds, resumen_bivariado_ci_equipo$tipo)
+ci_tipoequipo_med   <- setNames(resumen_bivariado_ci_equipo$`50%`, resumen_bivariado_ci_equipo$tipo)
+ci_tipoequipo_min   <- setNames(resumen_bivariado_ci_equipo$mínimo, resumen_bivariado_ci_equipo$tipo)
+ci_tipoequipo_max   <- setNames(resumen_bivariado_ci_equipo$máximo, resumen_bivariado_ci_equipo$tipo)
+ci_tipoequipo_iqr   <- setNames(resumen_bivariado_ci_equipo$IQR, resumen_bivariado_ci_equipo$tipo)
+ci_tipoequipo_q1    <- setNames(resumen_bivariado_ci_equipo$Q1, resumen_bivariado_ci_equipo$tipo)
+ci_tipoequipo_q3    <- setNames(resumen_bivariado_ci_equipo$Q3, resumen_bivariado_ci_equipo$tipo)
+ci_tipoequipo_cv    <- setNames(resumen_bivariado_ci_equipo$ds / resumen_bivariado_ci_equipo$media * 100,
+                                resumen_bivariado_ci_equipo$tipo)
+```
+
+A1: una familia coherente. Los siete equipos A1 muestran medias de transformación entre 30 y 38 UM/unidad. La variabilidad dentro de cada equipo (IQR entre 10 y 16) es comparable. La variabilidad entre equipos es modesta. Los siete se comportan como una familia homogénea. M15 destaca ligeramente como el más caro del grupo, pero la diferencia respecto al más barato (M13) es de apenas 7-8 UM/unidad —irrelevante frente a los 50+ UM que separan a C3 de D4—. Operativamente, esto significa que la planificación puede asignar órdenes a cualquier equipo A1 con expectativas razonablemente predecibles.
+
+B2: un solo equipo. M02 es el único equipo B2. Su perfil (29.9, 4.99) es indistinguible visualmente del cluster A1. Esto plantea una pregunta operativa relevante: si B2 opera con costos similares a los A1, ¿qué justifica mantenerlas como categorías separadas? La respuesta puede ser técnica (diferencias de fabricante, año o capacidad que no se traducen en costo unitario) u organizacional (clasificación heredada que ya no refleja diferencias económicas).
+
+C3: dos equipos heterogéneos entre sí. Aquí es donde la subdivisión por equipo individual cambia más radicalmente la lectura. M04 promedia 79 UM/unidad; M11 promedia 49 UM/unidad. La diferencia entre estos dos equipos del mismo tipo (30 UM/unidad) es mayor que la diferencia entre los tipos A1 y D4 (que es de unas 25 UM). Tratarlos como un grupo "C3" da un promedio (64.4) que no representa a ninguno de los dos. Adicionalmente, M11 tiene IQR estrecho (3.8) mientras M04 tiene IQR amplio (17.0): M04 no solo es más caro, también es menos predecible. La decisión metodológica que sigue (excluir C3 del análisis estratificado) queda doblemente justificada: por bajo n y por heterogeneidad interna.
+
+D4: dos equipos eficientes pero distintos. M05 promedia 10.1, M12 promedia 7.2. La diferencia absoluta (3 UM/unidad) parece pequeña pero representa un 40% de variación relativa. En insumos la diferencia es aún más marcada (5.3 vs 1.4). Sin embargo, M05 muestra un máximo de 46.2 con desviación estándar de 8.1, lo que indica al menos un outlier extremo que distorsiona su media. La pregunta operativa relevante: ¿qué hace que M12 sea más eficiente que M05? Si es estructural (productos asignados más simples), es composición. Si es técnico (mejor mantenimiento, mejor operario), es una oportunidad de mejora replicable.
+
+::: {.alert .alert-primary}
+- A1 es una familia coherente; los siete equipos pueden tratarse analíticamente como un grupo.
+- C3 esconde dos equipos muy diferentes (M04 y M11): el promedio del tipo no representa a ninguno.
+- M02 (B2) es indistinguible de A1 en costo: vale la pena revisar si la clasificación tecnológica B2 sigue siendo analíticamente útil.
+::: 
+
+
+
+## Señales de heterogeneidad estructural
+ ### Las distribuciones condicionales no son uniformes
+ 
+Las secciones anteriores acumularon evidencia de que el sistema productivo no es homogéneo. Esta sección cierra el diagnóstico con dos análisis que formalizan la heterogeneidad y la convierten en una restricción metodológica concreta.
+
+```{r res-cost-tipoequipo}
+
+tabla_resumen <- datos %>%
+  group_by(tipo_equipo) %>%
+  summarise(
+    costo_transformacion_medio = mean(costo_transformacion),
+    costo_insumo_medio = mean(costo_insumo),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    costo_transformacion_medio = round(costo_transformacion_medio, 1),
+    costo_insumo_medio = round(costo_insumo_medio, 1)
+  )
+
+kable(tabla_resumen, caption = "Tabla resumen costos por tipo de equipo",
+                 format = "html",
+             table.attr = "class='table'") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
+```
+Esta tabla resume lo que ya sabíamos pero ahora con propósito metodológico explícito: las distribuciones de costo dependen radicalmente del subgrupo donde se mira. C3 y D4 difieren en un factor de 7×. La pregunta natural es si esos cuatro grupos son siquiera comparables entre sí, o si están operando en universos económicos distintos por restricciones del propio proceso.
+
+### Tabulación cruzada tipo_equipo × modalidad × num_insumos
+
+Las diferencias son tan marcadas que invitan a preguntar: ¿cada tipo de equipo es realmente comparable con los otros?
+La tabla cruzada de las tres dimensiones operativas principales (tipo_equipo × modalidad_proceso × num_insumos) revela la estructura subyacente del sistema:
+
+```{r bivariado-cost-tipoequipo}
+
+tabla_dep <- datos %>%
+  count(tipo_equipo, modalidad_proceso, num_insumos) %>%
+  complete(tipo_equipo, modalidad_proceso, num_insumos, fill = list(n = 0)) %>%
+  arrange(tipo_equipo, modalidad_proceso, num_insumos)
+
+filas_vacias <- which(tabla_dep$n == 0)
+
+kable(tabla_dep, caption = "Combinaciones observadas con resaltado en ceros",
+                 format = "html",
+             table.attr = "class='table'") %>%
+  kableExtra::kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover")) %>%
+  row_spec(filas_vacias, bold = TRUE, background = "#FFE6E6", color = "#D32F2F") # Rojo claro para resaltar
+```
+
+El descubrimiento. El espacio operativo no es un cubo completo. De 24 combinaciones posibles, 11 están vacías o tienen una sola observación. D4 solo opera en (X, 1). C3 solo opera en X. Modalidad Z prácticamente no existe fuera de A1.
+Esto no es una característica del muestreo, sino del proceso real: hay restricciones técnicas y operativas que determinan qué combinaciones son factibles y cuáles no.
+Lo que parecía un dataset plano con variables categóricas independientes es en realidad un sistema con dependencias operativas:
+•	El tipo de equipo determina qué modalidades de proceso son técnicamente factibles.
+•	El tipo de equipo determina qué configuraciones de insumos son posibles.
+•	Modalidad y número de insumos están condicionados por el equipo donde se ejecuta la orden.
+
+::: {.alert .alert-primary}
+- El espacio operativo está truncado: 11 de 24 combinaciones posibles son inexistentes o casi vacías.
+- Las variables categóricas no son independientes; existen dependencias operativas que reflejan restricciones técnicas reales.
+- El dataset no es una muestra aleatoria de un universo uniforme; refleja la estructura del proceso productivo real.
+::: 
+
+## Implicaciones metodológicas del descubrimiento
+### Por qué el análisis marginal puede ser engañoso (confounding)
+Cuando las categorías no son independientes, comparar costos marginalmente es estadísticamente engañoso. El ejemplo más claro lo da D4:
+D4 tiene costo medio de 8.8 UM/unidad. A1 tiene costo medio de 33.0 UM/unidad. Conclusión aparente: D4 es 4× más eficiente que A1.
+Esta conclusión es defectuosa. D4 solo opera en la combinación (X, 1) —la configuración operativa más simple del sistema—. A1, en cambio, opera en seis combinaciones distintas, incluyendo las más complejas. La comparación está mezclando dos efectos:
+•	El efecto del equipo (A1 vs D4).
+•	El efecto de la configuración operativa (combinaciones simples vs todo el espectro).
+Sin separarlos, no sabemos si D4 es realmente más eficiente como tecnología, o si simplemente se le asignan las órdenes más fáciles. Este tipo de error tiene un nombre técnico: confusión (confounding). Es una de las trampas clásicas de los análisis agregados sobre datasets con dependencias entre variables.
+Para la dirección financiera: este descubrimiento implica que cualquier reporte que compare equipos por costo promedio sin condicionar por modalidad e insumos está produciendo conclusiones potencialmente incorrectas. Una decisión como "migrar producción al equipo D4 porque es más barato" puede ser un error técnico si D4 simplemente no puede ejecutar las órdenes complejas que actualmente se asignan a A1.
+A partir de este punto, el análisis abandona la lógica de "promedio por categoría" y adopta una lógica condicional: cada efecto se evalúa dentro del contexto operativo donde sí hay comparabilidad real.
+
+
+### Decisiones de exclusión justificadas
+Tras el diagnóstico anterior, se adoptan dos exclusiones explícitas que guían el análisis estratificado del Capítulo 7:
+Exclusión 1: modalidad Z. Las 14 órdenes en Z corresponden a configuraciones excepcionales donde se aplican las modalidades X y Y al mismo producto por solicitud del cliente. Tres razones para excluirlas:
+•	Conceptual: Z es una composición de procesos, no una modalidad alternativa comparable a X o Y.
+•	Estadística: n=14 distribuidas en tres celdas no permite inferencia con potencia razonable.
+•	Operativa: las características de Z (sobrecosto sistemático, baja frecuencia, dependencia de pedido específico) la hacen un caso especial que merece análisis separado, no comparación directa.
+Las órdenes Z se documentan brevemente como referencia descriptiva al final del Capítulo 7, sin pretensión inferencial.
+Exclusión 2: tipo de equipo C3. Las 8 órdenes de C3 (M04: 4, M11: 4) presentan dos problemas simultáneos:
+•	Bajo n: intervalos de confianza tan amplios que cualquier comparación es ruido.
+•	Heterogeneidad interna: M04 y M11 son tan diferentes entre sí (medias 79 vs 49) que tratarlos como grupo no tiene sentido.
+C3 se excluye del análisis estratificado y se reporta descriptivamente al final con advertencia explícita sobre su no comparabilidad.
+Tras estas exclusiones, el dataset principal queda con 373 órdenes (395 - 14 órdenes Z - 8 órdenes C3). Sobre este subconjunto se desarrolla el análisis estratificado del Capítulo 7. El dataset depurado completo (395 órdenes) se conserva como referencia y para los reportes descriptivos de los grupos excluidos.
+
+
+```{r datos-filtrados}
+datos_principal <- datos %>%
+  filter(modalidad_proceso != "Z",
+         tipo_equipo != "C3") %>%
+  mutate(modalidad_proceso = droplevels(modalidad_proceso),
+         tipo_equipo       = droplevels(tipo_equipo))
+
+write_csv2(datos_principal, "data/data_costos_principal.csv")
+saveRDS(datos_principal, "data/data_costos_principal.rds")
+
+n_principal <- nrow(datos_principal)
+```
+
+::: {.alert .alert-primary}
+- Las comparaciones marginales producen conclusiones engañosas cuando las categorías son dependientes (confounding).
+- Modalidad Z y tipo C3 se excluyen del análisis estratificado por bajo n y por no-comparabilidad estructural.
+- El dataset principal queda con 373 órdenes; los grupos excluidos se documentan descriptivamente al final del Capítulo 7.
+::: 
+
+
+## Cierre: qué sabemos, qué no sabemos, qué sigue
+Qué sabemos al cerrar este capítulo.
+El sistema productivo tiene una estructura económica más compleja de la que sugiere cualquier análisis agregado. Cuatro hallazgos principales:
+1.	El costo total está dominado por la transformación (85.6%), no por los insumos. Cualquier programa de eficiencia debe priorizar el componente de proceso.
+2.	El sistema opera en al menos cuatro regímenes de costo distintos según tipo de equipo: estándar (A1, B2), alto-inestable (M04), alto-estable (M11), eficiente (D4). Las recomendaciones genéricas no aplican.
+3.	Las variables operativas (volumen, duración) están más fuertemente acopladas que las variables económicas (costos), sugiriendo que la heterogeneidad de costo proviene principalmente de cómo y cuánto se produce, no de qué materiales se usan.
+4.	El espacio operativo está truncado: el dataset refleja restricciones técnicas reales, no una muestra aleatoria. Esto invalida el análisis marginal y exige análisis estratificado.
+Qué no sabemos.
+•	Si las diferencias entre equipos del mismo tipo (M15 vs M13 en A1; M04 vs M11 en C3; M05 vs M12 en D4) son estructurales (asignación diferenciada de productos) o técnicas (eficiencia real del equipo). Sin estratificar por categoría de producto, no se puede separar.
+•	Si los equipos eficientes (D4) lo son por la tecnología o por la simplicidad de las configuraciones que ejecutan. La pregunta solo se puede responder con datos que actualmente no existen (D4 nunca ha operado en otras configuraciones).
+•	Cuál es el efecto real del número de insumos sobre el costo cuando se controla por equipo y modalidad. La comparación marginal sugiere que dos insumos elevan el costo, pero no se sabe si esto se mantiene dentro de cada estrato.
+•	Si la modalidad Y es genuinamente más estable que X, o si esa estabilidad refleja la composición particular de equipos y productos asignados a cada modalidad.
+Qué sigue.
+El Capítulo 7 retoma estas preguntas con análisis estratificado sobre el dataset principal (373 órdenes, sin Z y sin C3). La estructura del análisis estará organizada alrededor de las comparaciones que el diseño truncado del dataset sí permite hacer:
+•	Efecto puro del tipo de equipo dentro del único estrato donde A1, B2 y D4 coexisten: la combinación (X, 1).
+•	Efecto de modalidad y número de insumos dentro de A1, el único equipo con cobertura completa de las cuatro combinaciones (X/Y × 1/2 insumos).
+•	Heterogeneidad intra-tipo y comparación de regímenes operativos a nivel de equipo individual.
+•	Correlaciones condicionales dentro de A1 para verificar si las economías de escala observadas en el agregado se mantienen al controlar por equipo y modalidad.
+El Capítulo 8 formaliza las hipótesis derivadas en pruebas inferenciales con cálculo de tamaños de efecto. Las exclusiones documentadas en este capítulo restringen el alcance pero protegen la validez del análisis posterior.
+
+
+<!--chapter:end:06-analisis-exploratorio-basico.Rmd-->
+
+# Análisis Exploratorio Estratificado
+
+```{r setup-eda7, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(patchwork)
+library(gridExtra)
+library(knitr)
+library(kableExtra)
+
+# Dataset principal: sin modalidad Z, sin tipo C3
+datos_principal <- readRDS("data/data_costos_principal.rds")
+
+# Dataset depurado completo: para los grupos excluidos
+datos_completo <- readRDS("data/data_costos_limpio.rds") %>%
+  mutate(costo_unitario_total = costo_transformacion + costo_insumo)
+r{r dims-eda7, echo=FALSE}
+n_principal <- nrow(datos_principal)
+n_completo  <- nrow(datos_completo)
+n_excluidas <- n_completo - n_principal
+```
+
+El dataset principal contiene r n_principal órdenes (las r n_excluidas excluidas se conservan en datos_completo para la sección 7.8). Sobre datos_principal se desarrolla todo el análisis estratificado de las secciones 7.2 a 7.7.
+
+7.2 Mapa del espacio operativo válido
+Antes de cualquier análisis, conviene caracterizar formalmente qué comparaciones son válidas dentro del dataset principal. La tabulación cruzada de las tres dimensiones operativas indica cuáles celdas tienen suficientes observaciones y cuáles están vacías.
+7.2.1 Tabulación de combinaciones
+```{r mapa-combinaciones}
+mapa_n <- datos_principal %>%
+  count(tipo_equipo, modalidad_proceso, num_insumos) %>%
+  arrange(tipo_equipo, modalidad_proceso, num_insumos)
+
+knitr::kable(mapa_n,
+             caption = "Combinaciones observadas en el dataset principal") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+```
+
+```{r mapa-pivote}
+mapa_n %>%
+  unite("config", modalidad_proceso, num_insumos, sep = "_") %>%
+  pivot_wider(names_from = config, values_from = n, values_fill = 0) %>%
+  knitr::kable(caption = "Tamaño muestral por combinación (formato matricial)") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+```
+Lectura del mapa. Las celdas con mayor n marcan el universo de comparaciones donde la inferencia tiene sustento estadístico. Las celdas vacías o con n bajo definen las preguntas que el dataset no puede responder.
+7.2.2 Identificación de comparaciones válidas
+Tres comparaciones son metodológicamente sólidas dentro del dataset principal:
+
+Inter-equipos en (X, 1): la única celda donde A1, B2 y D4 coexisten con n suficiente. Es el único estrato donde la pregunta "¿los equipos difieren en costo?" tiene respuesta limpia.
+Intra-A1 (modalidad × num_insumos): A1 es el único equipo con cobertura completa de las cuatro combinaciones (X/Y × 1/2). Permite estudiar efectos de modalidad e insumos sin contaminación entre equipos.
+Intra-B2 (modalidad × num_insumos): B2 también cubre las cuatro combinaciones, con n más reducido. Permite análisis condicional con cautela y comparación cualitativa con A1.
+
+Estas tres comparaciones organizan las secciones 7.3 a 7.5.
+Conclusiones (Mapa operativo):
+
+El dataset principal admite tres tipos de comparaciones condicionales válidas; el resto requiere supuestos no verificables.
+A1 es la configuración universal del análisis: única con cobertura completa.
+(X, 1) es el único estrato inter-equipos limpio.
+
+
+7.3 Efecto puro del tipo de equipo dentro de (X, 1)
+Esta es la pregunta que parecía obvia al inicio del Capítulo 6 y que terminó siendo metodológicamente delicada: ¿los equipos difieren realmente en costo, o esa diferencia se confundía con la modalidad y los insumos?
+7.3.1 Subconjunto y estadísticos descriptivos
+```{r subset-X1}
+datos_X1 <- datos_principal %>%
+  filter(modalidad_proceso == "X", num_insumos == 1)
+
+n_X1 <- nrow(datos_X1)
+```
+
+El estrato (X, 1) contiene r n_X1 órdenes. La distribución por tipo de equipo es:
+
+```{r resumen-X1-ct}
+datos_X1 %>%
+  group_by(tipo_equipo) %>%
+  summarise(
+    n      = length(costo_transformacion),
+    media  = mean(costo_transformacion),
+    ds     = sd(costo_transformacion),
+    `50%`  = median(costo_transformacion),
+    minimo = min(costo_transformacion),
+    maximo = max(costo_transformacion),
+    Q1     = quantile(costo_transformacion, 0.25),
+    Q3     = quantile(costo_transformacion, 0.75),
+    IQR    = IQR(costo_transformacion),
+    .groups = "drop"
+  ) -> resumen_X1_ct
+
+knitr::kable(resumen_X1_ct,
+             caption = "Costo de transformación por tipo de equipo en (X, 1)") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+  ```
+7.3.2 Boxplot del costo de transformación en (X, 1)
+```{r box-X1-ct, fig.width=8, fig.height=4.5}
+datos_X1 %>%
+  ggplot(aes(x = tipo_equipo, y = costo_transformacion)) +
+  geom_boxplot(fill = "#87CEFA", outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "darkblue") +
+  labs(x = "Tipo de equipo",
+       y = "Costo de transformación (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Costo de transformación por tipo de equipo en (X, 1)")
+```
+7.3.3 Lectura
+[Aquí desarrollas la interpretación. Lo importante a destacar:]
+
+Magnitud de la diferencia entre A1, B2 y D4 dentro de (X, 1).
+Si la diferencia entre D4 y A1 que aparecía en el Capítulo 6 (sección 6.5.5) se mantiene cuando se controla el estrato.
+Si la posición relativa de B2 cambia respecto al análisis marginal.
+Discusión del n: B2 tiene n=7 en este estrato, lo cual limita la robustez de la conclusión.
+
+
+Para completar esta sección:
+
+Replicar el análisis para costo_insumo dentro de (X, 1): tabla resumen y boxplot. Usa el mismo patrón cambiando costo_transformacion por costo_insumo.
+Replicar para costo_unitario_total dentro de (X, 1).
+Generar un gráfico combinado con patchwork que muestre los tres boxplots lado a lado para facilitar comparación.
+Interpretar las diferencias entre los tres costos: ¿el ranking de equipos se mantiene en transformación, insumo y total? Si cambia, anótalo como hallazgo relevante.
+
+Conclusiones (Efecto puro de tipo de equipo en (X, 1)):
+
+[A redactar tras completar el análisis. Plantilla:]
+Dentro del único estrato comparable, el ranking de equipos por costo es: ___.
+La diferencia D4 vs A1 [se mantiene / se reduce / se invierte] respecto al análisis marginal del Capítulo 6.
+La conclusión sobre B2 [es robusta / requiere cautela] dada la limitación de n=7.
+
+
+7.4 Análisis intra-tipo: heterogeneidad dentro de las familias
+El análisis del Capítulo 6 (sección 6.5.6) sugirió que dentro de cada tipo de equipo existen comportamientos distintos. Esta sección lo formaliza dentro del dataset principal, donde C3 ya está excluido y la lectura de A1 y D4 se limpia de outliers extremos asociados a configuraciones excepcionales.
+7.4.1 Familia A1: ¿siete equipos coherentes?
+```{r resumen-A1-equipos}
+datos_principal %>%
+  filter(tipo_equipo == "A1") %>%
+  group_by(equipo_id) %>%
+  summarise(
+    n      = length(costo_transformacion),
+    media  = mean(costo_transformacion),
+    ds     = sd(costo_transformacion),
+    `50%`  = median(costo_transformacion),
+    Q1     = quantile(costo_transformacion, 0.25),
+    Q3     = quantile(costo_transformacion, 0.75),
+    IQR    = IQR(costo_transformacion),
+    .groups = "drop"
+  ) %>%
+  arrange(media) -> resumen_A1_eq
+
+knitr::kable(resumen_A1_eq,
+             caption = "Costo de transformación por equipo dentro de A1") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+```
+```{r box-A1-equipos, fig.width=10, fig.height=4.5}
+datos_principal %>%
+  filter(tipo_equipo == "A1") %>%
+  ggplot(aes(x = reorder(equipo_id, costo_transformacion, FUN = median),
+             y = costo_transformacion)) +
+  geom_boxplot(fill = "#fcae91", outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "black") +
+  labs(x = "Equipo (ordenado por mediana)",
+       y = "Costo de transformación (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Costo de transformación por equipo dentro de A1")
+
+```
+Lectura. [A desarrollar. Puntos clave:]
+
+¿El rango de medias entre los siete equipos A1 es estrecho o amplio?
+¿Hay equipos con dispersión interna marcadamente distinta?
+¿La conclusión del Capítulo 6 ("A1 es una familia coherente") se sostiene tras eliminar las órdenes Z?
+
+
+Para completar esta subsección:
+
+Replicar el análisis con costo_insumo dentro de A1.
+Calcular el coeficiente de variación entre las medianas de los siete equipos A1. Una variación intra-tipo baja confirma la hipótesis de "familia coherente". Calcula así: sd(medianas) / mean(medianas) * 100.
+Comparar las medias actuales con las del Capítulo 6 (M15 era 38.0, M13 era 30.3, etc.). ¿La exclusión de Z modificó significativamente algún equipo? Construye una tabla con dos columnas: media_cap6 y media_cap7.
+
+7.4.2 B2: un único equipo, ¿comparabilidad con A1?
+B2 está representado por un único equipo (M02). Toda conclusión sobre "el tipo B2" es en realidad una conclusión sobre M02. Esta sección compara su perfil con el cluster A1 para responder: ¿la categoría B2 aporta información distintiva respecto a A1?
+Para completar esta subsección:
+
+Construir una tabla resumen con M02 (B2) y los siete equipos A1, ordenados por media de costo de transformación, para visualizar dónde se ubica M02 en el ranking.
+Generar un boxplot conjunto con los ocho equipos (siete A1 + M02), coloreando por tipo (A1 en color cálido, M02 en color frío). Si M02 se mezcla visualmente con los A1, eso refuerza el hallazgo del Capítulo 6 sobre la indistinguibilidad económica.
+Replicar para costo_insumo.
+Discutir la implicación operativa: si M02 es indistinguible, ¿qué justifica mantener B2 como categoría tecnológica separada? Esta pregunta debe trasladarse al área técnica de la empresa, no resolverse estadísticamente.
+
+7.4.3 D4: dos equipos eficientes pero distintos
+D4 contiene dos equipos (M05 y M12) con perfil eficiente pero comportamientos diferentes entre sí.
+Para completar esta subsección:
+
+Construir tablas resumen separadas para M05 y M12 en costos de transformación e insumo. Calcular adicionalmente el coeficiente de variación.
+Boxplot comparativo M05 vs M12 para los dos costos. Marcar visualmente los outliers (M05 tenía un máximo de 46.2 en costo de insumo).
+Análisis de outliers en M05: identificar la(s) orden(es) responsables de los valores extremos. Mostrar qué configuración tienen (volumen, duración, insumos) y discutir si parecen estructurales o circunstanciales.
+Restricción operativa: M05 y M12 solo operan en (X, 1). El análisis de su eficiencia no puede extrapolarse a otras configuraciones. Documentar esta limitación.
+
+Conclusiones (Heterogeneidad intra-tipo):
+
+[A redactar tras completar las tres subsecciones. Plantilla:]
+A1 [confirma / no confirma] su carácter de familia coherente tras la exclusión de Z.
+B2 (M02) [se mantiene / se separa] del perfil A1, lo cual sugiere que la categoría tecnológica B2 [es / no es] analíticamente útil.
+D4 contiene dos regímenes operativos (M05 y M12) con diferencias relativas significativas; el análisis a nivel "tipo D4" es engañoso.
+
+
+7.5 Configuración universal A1: efectos de modalidad, insumos e interacción
+A1 es el único equipo con cobertura completa de las cuatro combinaciones de modalidad y número de insumos. Aquí se evalúan los efectos puros de cada factor y, crucialmente, si interactúan entre sí.
+7.5.1 Subconjunto y mapa de combinaciones
+```{r subset-A1}
+datos_A1 <- datos_principal %>%
+  filter(tipo_equipo == "A1")
+
+n_A1 <- nrow(datos_A1)
+datos_A1 %>%
+  count(modalidad_proceso, num_insumos) %>%
+  pivot_wider(names_from = num_insumos, values_from = n, values_fill = 0,
+              names_prefix = "ins_") %>%
+  knitr::kable(caption = "Combinaciones observadas dentro de A1") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+```
+
+A1 contiene r n_A1 órdenes distribuidas en cuatro celdas de tamaño suficiente. Esto permite analizar simultáneamente los dos factores y su interacción.
+7.5.2 Efecto principal: modalidad de proceso dentro de A1
+```{r resumen-A1-mod}
+datos_A1 %>%
+  group_by(modalidad_proceso) %>%
+  summarise(
+    n      = length(costo_transformacion),
+    media  = mean(costo_transformacion),
+    ds     = sd(costo_transformacion),
+    `50%`  = median(costo_transformacion),
+    Q1     = quantile(costo_transformacion, 0.25),
+    Q3     = quantile(costo_transformacion, 0.75),
+    IQR    = IQR(costo_transformacion),
+    .groups = "drop"
+  ) -> resumen_A1_mod
+
+knitr::kable(resumen_A1_mod,
+             caption = "Costo de transformación por modalidad dentro de A1") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+```
+```{r box-A1-mod, fig.width=7, fig.height=4.5}
+datos_A1 %>%
+  ggplot(aes(x = modalidad_proceso, y = costo_transformacion)) +
+  geom_boxplot(fill = "#a1d99b", outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "black") +
+  labs(x = "Modalidad de proceso",
+       y = "Costo de transformación (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Costo de transformación por modalidad dentro de A1")
+```
+Lectura. [A desarrollar. Comparar con la sección 6.5.4 del Capítulo 6, donde X y Y se analizaron sobre todo el dataset. ¿La diferencia X vs Y se mantiene, se amplía o se reduce al restringir a A1?]
+7.5.3 Efecto principal: número de insumos dentro de A1
+Para completar esta subsección:
+
+Construir el resumen descriptivo de costo_transformacion agrupando por num_insumos dentro de A1, siguiendo el patrón de la sección 7.5.2.
+Generar el boxplot correspondiente.
+Comparar con el análisis marginal del Capítulo 6. En el agregado, el paso de 1 a 2 insumos elevaba la media de 27.3 a 35.8. Calcular el equivalente dentro de A1 puro.
+Replicar para costo_insumo.
+
+7.5.4 Interacción modalidad × número de insumos
+Esta es la pregunta más fina del análisis estratificado: ¿el efecto de tener dos insumos depende de la modalidad? Si las dos modalidades responden de forma distinta a la complejidad de insumos, hay interacción.
+```{r resumen-A1-interaccion}
+datos_A1 %>%
+  group_by(modalidad_proceso, num_insumos) %>%
+  summarise(
+    n     = length(costo_transformacion),
+    media = mean(costo_transformacion),
+    ds    = sd(costo_transformacion),
+    `50%` = median(costo_transformacion),
+    .groups = "drop"
+  ) -> resumen_A1_int
+
+knitr::kable(resumen_A1_int,
+             caption = "Costo de transformación por modalidad × num_insumos en A1") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+r{r facet-A1-interaccion, fig.width=8, fig.height=4.5}
+datos_A1 %>%
+  ggplot(aes(x = num_insumos, y = costo_transformacion, fill = num_insumos)) +
+  geom_boxplot(outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "black") +
+  labs(x = "Número de insumos",
+       y = "Costo de transformación (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ modalidad_proceso) +
+  theme(legend.position = "none")
+```
+
+```{r interaccion-plot-A1, fig.width=7, fig.height=4.5}
+resumen_A1_int %>%
+  ggplot(aes(x = num_insumos, y = media,
+             color = modalidad_proceso, group = modalidad_proceso)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 3) +
+  labs(x = "Número de insumos",
+       y = "Costo medio de transformación (UM/unidad)",
+       color = "Modalidad") +
+  theme_bw() +
+  facet_grid(. ~ "Gráfico de interacción modalidad × num_insumos")
+```
+
+Cómo leer el gráfico de interacción. Si las dos líneas son paralelas, no hay interacción: el efecto de pasar de 1 a 2 insumos es el mismo en X que en Y. Si las líneas se cruzan o tienen pendientes distintas, sí hay interacción: el efecto de los insumos depende de la modalidad.
+Lectura económica. [A desarrollar. Si hay interacción significativa, las implicaciones para política de precios son directas: el recargo por órdenes con dos insumos no debería ser uniforme; debe diferenciarse por modalidad.]
+
+Para completar esta sección:
+
+Replicar todos los análisis para costo_insumo dentro de A1: tabla cruzada, boxplots por facet y gráfico de interacción.
+Construir el gráfico de interacción para costo_unitario_total.
+Calcular las diferencias absolutas y relativas del efecto de num_insumos dentro de cada modalidad. Por ejemplo: en X, ¿cuánto sube el costo medio al pasar de 1 a 2 insumos? ¿Y en Y? Si las dos magnitudes son muy distintas, eso confirma interacción.
+
+Conclusiones (Configuración universal A1):
+
+[A redactar. Plantilla:]
+Dentro de A1, la modalidad Y es [más estable / más volátil] que X.
+El efecto de pasar de 1 a 2 insumos es de [magnitud] en modalidad X y de [magnitud] en modalidad Y.
+[Existe / no existe] interacción significativa modalidad × num_insumos; las implicaciones de pricing son [...].
+
+
+7.6 Combinaciones de insumos restringidas a A1 y B2
+El Capítulo 6 (sección que tienes en tu render actual) analizó las combinaciones de insumos sobre el dataset completo. Aquí se replica restringiendo a A1 y B2 —los únicos equipos con cobertura amplia de combinaciones— para verificar si los patrones se mantienen tras controlar por equipo.
+7.6.1 Tabla resumen restringida
+```{r insumos-A1B2-construccion}
+datos_principal %>%
+  filter(tipo_equipo %in% c("A1", "B2")) %>%
+  mutate(insumo_combinado = paste(insumo_1, insumo_2, sep = " + ")) -> datos_AB
+
+datos_AB %>%
+  group_by(insumo_combinado) %>%
+  summarise(
+    n      = length(costo_transformacion),
+    media  = mean(costo_transformacion),
+    ds     = sd(costo_transformacion),
+    `50%`  = median(costo_transformacion),
+    Q1     = quantile(costo_transformacion, 0.25),
+    Q3     = quantile(costo_transformacion, 0.75),
+    IQR    = IQR(costo_transformacion),
+    .groups = "drop"
+  ) %>%
+  arrange(desc(n)) -> resumen_insumos_AB
+
+knitr::kable(resumen_insumos_AB,
+             caption = "Costo de transformación por combinación de insumos (A1 + B2)") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+```
+
+7.6.2 Comparación con el análisis del Capítulo 6
+Para completar esta subsección:
+
+Construir una tabla diferencial que muestre, para cada combinación de insumos:
+
+Media en el dataset completo (Capítulo 6).
+Media restringida a A1 + B2 (este capítulo).
+Diferencia absoluta y porcentual.
+
+Si la diferencia es pequeña, el patrón del Capítulo 6 era robusto. Si es grande, el patrón estaba contaminado por D4 o por C3.
+Identificar combinaciones que cambian de ranking. Por ejemplo, si una combinación era barata en el agregado pero cara restringida a A1+B2, eso indica que su bajo costo provenía de D4.
+Discutir el insumo N_O. En el Capítulo 6 era el principal driver de costo. Verificar si dentro de A1 y B2 mantiene ese rol o si pierde fuerza.
+
+7.6.3 Boxplot
+Para completar esta subsección:
+
+Generar el boxplot de costo_transformacion por insumo_combinado restringido a A1 y B2. Usar coord_flip() por la cantidad de combinaciones.
+Replicar para costo_insumo.
+Generar un gráfico facet que separe A1 y B2, para visualizar si las combinaciones se comportan igual en ambos equipos o si hay diferencias.
+
+Conclusiones (Combinaciones de insumos):
+
+[A redactar. Plantilla:]
+Las combinaciones más caras en el agregado [se confirman / cambian] al restringir a A1 + B2.
+El insumo N_O [mantiene / pierde] su rol como driver principal cuando se elimina la influencia de D4.
+[La política de pricing por insumos puede / no puede] generalizarse a todos los equipos.
+
+
+7.7 Correlaciones condicionales
+El análisis de correlaciones del Capítulo 6 mezcló los cuatro tipos de equipo. Aquí se calculan dentro de A1 únicamente para verificar si las asociaciones observadas globalmente son artefactos de la composición o relaciones genuinas dentro de un régimen homogéneo.
+7.7.1 Matriz de correlación dentro de A1
+```{r corr-A1}
+datos_A1 %>%
+  select(costo_transformacion, costo_insumo, costo_unitario_total,
+         volumen_lote, duracion_proceso,
+         cantidad_insumo_1, cantidad_insumo_2) %>%
+  cor(use = "pairwise.complete.obs", method = "spearman") %>%
+  round(3) -> corr_A1
+
+knitr::kable(corr_A1,
+             caption = "Matriz de correlación de Spearman dentro de A1") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+```
+7.7.2 Comparación marginal vs condicional
+Para completar esta subsección:
+
+Calcular la matriz de Pearson dentro de A1, siguiendo el mismo patrón.
+Construir una tabla comparativa con tres columnas:
+
+Correlación marginal (Capítulo 6).
+Correlación dentro de A1 (este capítulo).
+Diferencia.
+
+Selecciona los pares más relevantes: volumen-costo, duración-costo, insumo 1-costo, insumo 2-costo.
+Identificar paradojas de Simpson o cambios de signo. Si alguna correlación cambia de signo o se debilita drásticamente al condicionar, eso indica que la correlación marginal era un artefacto.
+Verificar las economías de escala. En el agregado, volumen-costo era -0.32 (Spearman). Dentro de A1, debería seguir siendo negativa pero quizá más débil (porque el rango de volumen es similar dentro de A1). Si es muy diferente, hay que explicar por qué.
+
+7.7.3 Diagramas de dispersión condicionales
+Para completar esta subsección:
+
+Generar diagramas de dispersión volumen_lote vs costo_transformacion facetados por modalidad dentro de A1. Esto muestra si las economías de escala operan igual en X que en Y.
+Replicar para duracion_proceso vs costo_transformacion.
+Generar un solo gráfico con volumen_lote vs costo_transformacion coloreando por equipo dentro de A1, para evaluar si todos los equipos A1 siguen el mismo patrón o si hay equipos que escapan.
+
+Conclusiones (Correlaciones condicionales):
+
+[A redactar. Plantilla:]
+Las economías de escala dentro de A1 son [más fuertes / más débiles / similares] que en el agregado.
+La correlación duración-costo [se mantiene / cambia] al condicionar; esto sugiere [...].
+[Sí / no] hay evidencia de paradoja de Simpson en las correlaciones agregadas.
+
+
+7.8 Caracterización descriptiva de los subconjuntos excluidos
+Esta sección documenta brevemente las órdenes excluidas del análisis estratificado. El propósito no es inferir, sino dejar trazabilidad y aportar referencia cualitativa sobre estos subconjuntos para el área operativa.
+7.8.1 Modalidad Z (n = 14)
+```{r descripcion-Z}
+datos_completo %>%
+  filter(modalidad_proceso == "Z") %>%
+  group_by(tipo_equipo) %>%
+  summarise(
+    n          = n(),
+    ct_media   = mean(costo_transformacion),
+    ct_mediana = median(costo_transformacion),
+    ci_media   = mean(costo_insumo),
+    ci_mediana = median(costo_insumo),
+    ctot_media = mean(costo_unitario_total),
+    .groups = "drop"
+  ) %>%
+  knitr::kable(caption = "Descriptivos de las órdenes en modalidad Z") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+```
+Observación cualitativa. [A desarrollar. Las órdenes Z presentan costo total promedio superior a las de X y Y, consistente con su naturaleza de proceso compuesto. La magnitud del sobrecosto observado (≈ 41 vs 28-31 UM/unidad) es referencial; con n=14 no permite inferencia formal pero puede orientar el recargo comercial aplicado a pedidos Z.]
+7.8.2 Tipo de equipo C3 (n = 8)
+```{r descripcion-C3}
+datos_completo %>%
+  filter(tipo_equipo == "C3") %>%
+  group_by(equipo_id) %>%
+  summarise(
+    n          = n(),
+    ct_media   = mean(costo_transformacion),
+    ct_mediana = median(costo_transformacion),
+    ci_media   = mean(costo_insumo),
+    ci_mediana = median(costo_insumo),
+    .groups = "drop"
+  ) %>%
+  knitr::kable(caption = "Descriptivos de las órdenes en tipo C3, por equipo") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+```
+Observación cualitativa. [A desarrollar. M04 y M11 tienen perfiles muy distintos entre sí (≈ 79 vs 49 UM/unidad). M04 combina alto costo y alta variabilidad. Ambos equipos merecen revisión operativa específica fuera del alcance de este trabajo estadístico, dado que con n=4 cada uno cualquier estimación es altamente inestable.]
+Conclusiones (Subconjuntos excluidos):
+
+Las órdenes Z muestran sobrecosto sistemático en transformación; el área comercial debería verificar si se está cobrando recargo proporcional.
+El tipo C3 contiene dos regímenes operativos heterogéneos (M04 y M11) que merecen análisis caso por caso.
+Con los n disponibles (14 y 8), ninguna conclusión sobre estos grupos puede extrapolarse al sistema general.
+
+
+7.9 Síntesis e implicaciones
+7.9.1 Qué se puede afirmar después del EDA estratificado
+[A redactar consolidando los hallazgos de las secciones 7.3 a 7.7. Plantilla con cuatro mensajes:]
+
+Sobre los efectos puros de cada factor (qué se confirma del Cap 6 y qué se modifica).
+Sobre la interacción modalidad × insumos dentro de A1 (si existe y de qué magnitud).
+Sobre la robustez de los hallazgos del análisis marginal (qué se sostiene y qué era artefacto).
+Sobre las economías de escala (si operan igual dentro de un régimen homogéneo).
+
+7.9.2 Hipótesis para el capítulo de inferencia
+Con base en el EDA estratificado, las pruebas inferenciales formales que tienen sustento son:
+HipótesisPrueba aplicableEstraton aproxH1: El costo de transformación difiere entre A1, B2 y D4ANOVA o Kruskal-Wallis(X, 1) únicamente~120H2: Dentro de A1, la modalidad afecta el costot-test o Mann-WhitneyA1 completo~270H3: Dentro de A1, el número de insumos afecta el costot-test o Mann-WhitneyA1 completo~270H4: Existe interacción modalidad × num_insumos en A1ANOVA 2 víasA1 completo~270H5: Existe correlación volumen-costo dentro de A1Correlación de Spearman con ICA1 completo~270H6: Las correlaciones marginales y condicionales difierenComparación de coeficientesAgregado vs A1373 vs ~270
+[Ajustar los n aproximados según el resultado real al renderizar.]
+7.9.3 Comparaciones que el dataset no permite hacer
+Para transparencia metodológica, conviene documentar lo que el dataset no puede responder a pesar de la profundización:
+
+Si D4 sería más eficiente que A1 en modalidad Y o con dos insumos: D4 nunca operó en esas configuraciones.
+Si C3 sería competitivo con volúmenes altos: las 8 órdenes de C3 no cubren rangos altos.
+Si la modalidad Z es más costosa que la suma simple de X e Y: n=14 no da potencia.
+Si las diferencias entre equipos del mismo tipo (M15 vs M13 en A1; M05 vs M12 en D4) son estructurales o técnicas: requiere estratificación adicional por categoría de producto.
+
+Estas preguntas requerirían un diseño de recolección de datos distinto, con asignación deliberada de órdenes a configuraciones específicas para romper la dependencia entre factores.
+7.9.4 Implicaciones para la dirección financiera
+[A desarrollar tras completar el análisis. Cuatro mensajes esperados:]
+
+Sobre el techo de eficiencia y la palanca real de costos.
+Sobre la política de pricing por modalidad y número de insumos.
+Sobre la asignación de órdenes a equipos.
+Sobre la oportunidad de estandarización (qué hace M12 más eficiente que M05).
+
+
+Notas sobre el código
+Patrones que se repiten y que conviene tener identificados al replicar:
+
+Resumen estadístico con las nueve métricas estándar (n, media, ds, 50%, mínimo, máximo, Q1, Q3, IQR) usando summarise(). Si lo aplicas mucho, conviene definir una función helper:
+
+rresumen_costo <- function(df, var, ...) {
+  df %>%
+    group_by(...) %>%
+    summarise(
+      n      = length(.data[[var]]),
+      media  = mean(.data[[var]], na.rm = TRUE),
+      ds     = sd(.data[[var]], na.rm = TRUE),
+      `50%`  = median(.data[[var]], na.rm = TRUE),
+      Q1     = quantile(.data[[var]], 0.25, na.rm = TRUE),
+      Q3     = quantile(.data[[var]], 0.75, na.rm = TRUE),
+      IQR    = IQR(.data[[var]], na.rm = TRUE),
+      .groups = "drop"
+    )
+}
+Definida una vez al inicio del capítulo, simplifica todos los summarise() posteriores. Decisión tuya si la usas o mantienes el patrón explícito del profesor.
+
+Boxplot estándar: la combinación geom_boxplot + stat_summary(fun = mean) + facet_grid(. ~ "Título") se repite muchas veces. Podrías encapsularla en una función, pero al estilo del profesor conviene mantenerla explícita en cada chunk para que el código sea didácticamente legible.
+Nombres de chunks: prefijar todos con eda7- para evitar colisiones con los chunks del Capítulo 6 al renderizar el libro completo. Por ejemplo: eda7-subset-X1, eda7-resumen-A1-mod, etc.
+
+<!--chapter:end:07-analisis-exploratorio-estratificado.Rmd-->
+
+# Pruebas de Hipótesis SIN DESARROLLAR
+
+
+La hipótesis "el tipo de equipo afecta el costo" debe reformularse cuando el tipo agrupa equipos heterogéneos. Para C3 y D4, la pregunta correcta es a nivel de equipo individual, no de tipo.
+M02 (único B2) no permite una prueba de "tipo B2 vs tipo A1"; la prueba real es "M02 vs cluster de equipos A1".
+Para A1 con sus siete equipos, una prueba de homogeneidad interna (ANOVA o Kruskal-Wallis sobre los 7 equipos) podría confirmar formalmente que la familia es coherente. Si esa prueba no rechaza, se justifica tratarlos como un solo grupo en análisis posteriores.
+
+<!--chapter:end:08-pruebas-hipotesis.Rmd-->
+
+# Modelos SIN DESARROLLAR
+
+En esta sección se ajusta un modelo lineal simple como ejemplo base. Si la base contiene `mpg`, `wt` y `hp`, se usa esa especificación.
+
+## Ajuste del modelo
+
+```{r modelo-lineal}
+if (all(c("mpg", "wt", "hp") %in% names(datos))) {
+  modelo_lm <- lm(mpg ~ wt + hp, data = datos)
+
+  broom::tidy(modelo_lm) |>
+    knitr::kable(caption = "Coeficientes del modelo lineal.") |>
+    kableExtra::kable_styling(full_width = FALSE)
+}
+```
+
+## Medidas de ajuste
+
+```{r ajuste-modelo}
+if (exists("modelo_lm")) {
+  broom::glance(modelo_lm) |>
+    knitr::kable(caption = "Medidas globales de ajuste del modelo lineal.") |>
+    kableExtra::kable_styling(full_width = FALSE)
+}
+```
+
+## Gráfico de observados vs ajustados
+
+```{r observados-ajustados, fig.cap="Comparación entre valores observados y ajustados."}
+if (exists("modelo_lm")) {
+  datos_ajuste <- datos |>
+    dplyr::mutate(ajustado = fitted(modelo_lm))
+
+  ggplot(datos_ajuste, aes(x = ajustado, y = mpg)) +
+    geom_point() +
+    geom_abline(slope = 1, intercept = 0, linetype = 2) +
+    labs(
+      title = "Valores observados frente a ajustados",
+      x = "Valor ajustado",
+      y = "Valor observado"
+    ) +
+    theme_minimal()
+}
+```
+
+<!--chapter:end:09-modelos.Rmd-->
+
+# Conclusión
+
+<!--chapter:end:10-conclusion.Rmd-->
+
+# Bibliografía
+
+<!--chapter:end:11-bibliografia.Rmd-->
+

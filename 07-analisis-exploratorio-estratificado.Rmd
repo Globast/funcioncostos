@@ -1,223 +1,511 @@
-# estratificado
-Capítulo 7 — Análisis Exploratorio Estratificado
-  7.1 Carga del dataset principal (n=373 tras exclusiones)
-  7.2 Mapa del espacio operativo válido
-      → Qué comparaciones son posibles dentro del dataset principal
-  7.3 Efecto puro del tipo de equipo en (X, 1)
-      → La única celda limpia inter-equipos
-  7.4 Análisis intra-tipo: heterogeneidad dentro de las familias
-      7.4.1 A1: siete equipos, familia coherente
-      7.4.2 B2: un solo equipo, comparabilidad con A1
-      7.4.3 D4: dos equipos con regímenes distintos
-      → Hallazgo: la clasificación por tipo agrega información distinta en cada tipo
-  7.5 Análisis dentro de A1: configuración universal
-      7.5.1 Efecto de modalidad_proceso
-      7.5.2 Efecto de num_insumos
-      7.5.3 Interacción modalidad × num_insumos
-  7.6 Correlaciones condicionales
-      7.6.1 Dentro de A1
-      7.6.2 Comparación marginal vs condicional
-      → Cómo cambian las asociaciones al estratificar
-  7.7 Análisis por combinación de insumos
-      (esto que ya tienes en el render actual)
-  7.8 Sección de referencia: subconjuntos excluidos
-      7.8.1 Modalidad Z descriptiva
-      7.8.2 Tipo C3 descriptivo
-  7.9 Síntesis e implicaciones
-      7.9.1 Qué se puede afirmar después del EDA estratificado
-      7.9.2 Hipótesis que alimentan el capítulo de inferencia
-      7.9.3 Comparaciones que el diseño NO permite
-      7.9.4 Implicaciones para la dirección financiera
+# Análisis Exploratorio Estratificado
 
-      
+```{r setup-eda7, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(patchwork)
+library(gridExtra)
+library(knitr)
+library(kableExtra)
 
-## Estructura del espacio operativo sobre el dataset principal
-### Mapa de combinaciones
+# Dataset principal: sin modalidad Z, sin tipo C3
+datos_principal <- readRDS("data/data_costos_principal.rds")
 
+# Dataset depurado completo: para los grupos excluidos
+datos_completo <- readRDS("data/data_costos_limpio.rds") %>%
+  mutate(costo_unitario_total = costo_transformacion + costo_insumo)
+r{r dims-eda7, echo=FALSE}
+n_principal <- nrow(datos_principal)
+n_completo  <- nrow(datos_completo)
+n_excluidas <- n_completo - n_principal
+```
+
+El dataset principal contiene r n_principal órdenes (las r n_excluidas excluidas se conservan en datos_completo para la sección 7.8). Sobre datos_principal se desarrolla todo el análisis estratificado de las secciones 7.2 a 7.7.
+
+7.2 Mapa del espacio operativo válido
+Antes de cualquier análisis, conviene caracterizar formalmente qué comparaciones son válidas dentro del dataset principal. La tabulación cruzada de las tres dimensiones operativas indica cuáles celdas tienen suficientes observaciones y cuáles están vacías.
+7.2.1 Tabulación de combinaciones
 ```{r mapa-combinaciones}
 mapa_n <- datos_principal %>%
   count(tipo_equipo, modalidad_proceso, num_insumos) %>%
-  pivot_wider(names_from = c(modalidad_proceso, num_insumos),
-              values_from = n,
-              values_fill = 0,
-              names_sep = "_")
+  arrange(tipo_equipo, modalidad_proceso, num_insumos)
 
-kable(mapa_n, caption = "Tamaño muestral por combinación (dataset principal)",
-      format = "html",
-      table.attr = "class='table'") %>%
+knitr::kable(mapa_n,
+             caption = "Combinaciones observadas en el dataset principal") %>%
   kableExtra::kable_styling(full_width = FALSE)
 ```
 
+```{r mapa-pivote}
+mapa_n %>%
+  unite("config", modalidad_proceso, num_insumos, sep = "_") %>%
+  pivot_wider(names_from = config, values_from = n, values_fill = 0) %>%
+  knitr::kable(caption = "Tamaño muestral por combinación (formato matricial)") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+```
+Lectura del mapa. Las celdas con mayor n marcan el universo de comparaciones donde la inferencia tiene sustento estadístico. Las celdas vacías o con n bajo definen las preguntas que el dataset no puede responder.
+7.2.2 Identificación de comparaciones válidas
+Tres comparaciones son metodológicamente sólidas dentro del dataset principal:
 
-A1 tiene cobertura completa: 60 órdenes en (X, 1), 63 en (X, 2), 118 en (Y, 1), 33 en (Y, 2). Total: 274. Es el único equipo que permite comparar simultáneamente los efectos de modalidad y de número de insumos.
-B2 tiene cobertura en las 4 combinaciones pero con n reducido (7, 13, 18, 6). Permite análisis condicional con cautela.
-D4 opera exclusivamente en (X, 1) con 55 órdenes. No se puede estudiar si D4 cambia de comportamiento en otras modalidades o con otros insumos: esa información no existe.
+Inter-equipos en (X, 1): la única celda donde A1, B2 y D4 coexisten con n suficiente. Es el único estrato donde la pregunta "¿los equipos difieren en costo?" tiene respuesta limpia.
+Intra-A1 (modalidad × num_insumos): A1 es el único equipo con cobertura completa de las cuatro combinaciones (X/Y × 1/2). Permite estudiar efectos de modalidad e insumos sin contaminación entre equipos.
+Intra-B2 (modalidad × num_insumos): B2 también cubre las cuatro combinaciones, con n más reducido. Permite análisis condicional con cautela y comparación cualitativa con A1.
 
-Este mapa define el universo de comparaciones legítimas:
+Estas tres comparaciones organizan las secciones 7.3 a 7.5.
+Conclusiones (Mapa operativo):
 
-Comparación inter-equipos en (X, 1): es el único estrato donde A1 (n=60), B2 (n=7) y D4 (n=55) coexisten. Total: 122 órdenes. Es la única celda limpia para responder la pregunta "¿los equipos difieren en costo?".
-Comparación intra-equipo A1 (efectos de modalidad e insumos): con 274 órdenes y cobertura completa, A1 es la configuración universal para estudiar cómo varían los costos según modalidad y número de insumos.
-Comparación intra-equipo B2: análoga a A1 pero con n=44. Las conclusiones son sugestivas, no definitivas.
+El dataset principal admite tres tipos de comparaciones condicionales válidas; el resto requiere supuestos no verificables.
+A1 es la configuración universal del análisis: única con cobertura completa.
+(X, 1) es el único estrato inter-equipos limpio.
 
 
-## Análisis condicional: lo que revelan los estratos
-### Efecto puro de tipo_equipo dentro de (X, 1)
-Esta es la pregunta que parecía obvia al inicio: ¿los equipos tienen costos distintos?
+7.3 Efecto puro del tipo de equipo dentro de (X, 1)
+Esta es la pregunta que parecía obvia al inicio del Capítulo 6 y que terminó siendo metodológicamente delicada: ¿los equipos difieren realmente en costo, o esa diferencia se confundía con la modalidad y los insumos?
+7.3.1 Subconjunto y estadísticos descriptivos
+```{r subset-X1}
+datos_X1 <- datos_principal %>%
+  filter(modalidad_proceso == "X", num_insumos == 1)
 
-```{r boxplot-cc-tipoequipo_X1, fig.width=9, fig.height=4.5}
-comp_X1 <- datos_principal %>%
-  filter(modalidad_proceso == "X", num_insumos == 1) %>%
+n_X1 <- nrow(datos_X1)
+```
+
+El estrato (X, 1) contiene r n_X1 órdenes. La distribución por tipo de equipo es:
+
+```{r resumen-X1-ct}
+datos_X1 %>%
   group_by(tipo_equipo) %>%
   summarise(
-    n     = n(),
-    media = mean(costo_transformacion),
-    `50%` = median(costo_transformacion),
-    ds    = sd(costo_transformacion),
-    IQR   = IQR(costo_transformacion),
+    n      = length(costo_transformacion),
+    media  = mean(costo_transformacion),
+    ds     = sd(costo_transformacion),
+    `50%`  = median(costo_transformacion),
+    minimo = min(costo_transformacion),
+    maximo = max(costo_transformacion),
+    Q1     = quantile(costo_transformacion, 0.25),
+    Q3     = quantile(costo_transformacion, 0.75),
+    IQR    = IQR(costo_transformacion),
     .groups = "drop"
-  )
-comp_X1
+  ) -> resumen_X1_ct
+
+knitr::kable(resumen_X1_ct,
+             caption = "Costo de transformación por tipo de equipo en (X, 1)") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+  ```
+7.3.2 Boxplot del costo de transformación en (X, 1)
+```{r box-X1-ct, fig.width=8, fig.height=4.5}
+datos_X1 %>%
+  ggplot(aes(x = tipo_equipo, y = costo_transformacion)) +
+  geom_boxplot(fill = "#87CEFA", outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "darkblue") +
+  labs(x = "Tipo de equipo",
+       y = "Costo de transformación (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Costo de transformación por tipo de equipo en (X, 1)")
 ```
+7.3.3 Lectura
+[Aquí desarrollas la interpretación. Lo importante a destacar:]
+
+Magnitud de la diferencia entre A1, B2 y D4 dentro de (X, 1).
+Si la diferencia entre D4 y A1 que aparecía en el Capítulo 6 (sección 6.5.5) se mantiene cuando se controla el estrato.
+Si la posición relativa de B2 cambia respecto al análisis marginal.
+Discusión del n: B2 tiene n=7 en este estrato, lo cual limita la robustez de la conclusión.
 
 
-Interpretación. Dentro de la única celda donde los tres equipos son comparables:
+Para completar esta sección:
 
-D4 mantiene un costo de transformación sustancialmente menor.
-A1 y B2 son relativamente similares entre sí.
-La diferencia entre D4 y los otros equipos es real, no un artefacto de la mezcla de modalidades.
+Replicar el análisis para costo_insumo dentro de (X, 1): tabla resumen y boxplot. Usa el mismo patrón cambiando costo_transformacion por costo_insumo.
+Replicar para costo_unitario_total dentro de (X, 1).
+Generar un gráfico combinado con patchwork que muestre los tres boxplots lado a lado para facilitar comparación.
+Interpretar las diferencias entre los tres costos: ¿el ranking de equipos se mantiene en transformación, insumo y total? Si cambia, anótalo como hallazgo relevante.
 
-Implicación para la dirección financiera. D4 es efectivamente más eficiente en transformación, al menos en la configuración (X, 1). Sin embargo, el dataset no permite concluir que D4 sería igualmente eficiente en otras modalidades — simplemente porque D4 no puede operar en Y o con 2 insumos. 
+Conclusiones (Efecto puro de tipo de equipo en (X, 1)):
 
-Este es el análisis más potente del capítulo, porque A1 es el único equipo donde todas las combinaciones tienen n suficiente.
+[A redactar tras completar el análisis. Plantilla:]
+Dentro del único estrato comparable, el ranking de equipos por costo es: ___.
+La diferencia D4 vs A1 [se mantiene / se reduce / se invierte] respecto al análisis marginal del Capítulo 6.
+La conclusión sobre B2 [es robusta / requiere cautela] dada la limitación de n=7.
 
-```{r estrat-A1-B2}
-stats_A1 <- datos_principal %>%
-  filter(tipo_equipo %in% c("A1", "B2")) %>%
-  group_by(modalidad_proceso, num_insumos) %>%
+
+7.4 Análisis intra-tipo: heterogeneidad dentro de las familias
+El análisis del Capítulo 6 (sección 6.5.6) sugirió que dentro de cada tipo de equipo existen comportamientos distintos. Esta sección lo formaliza dentro del dataset principal, donde C3 ya está excluido y la lectura de A1 y D4 se limpia de outliers extremos asociados a configuraciones excepcionales.
+7.4.1 Familia A1: ¿siete equipos coherentes?
+```{r resumen-A1-equipos}
+datos_principal %>%
+  filter(tipo_equipo == "A1") %>%
+  group_by(equipo_id) %>%
   summarise(
-    n     = n(),
-    media = mean(costo_transformacion),
-    `50%` = median(costo_transformacion),
-    ds    = sd(costo_transformacion),
-    .groups = "drop"
-  )
-stats_A1
-```
-Lo que revela el análisis estratificado. Dentro de A1:
-
-El paso de 1 a 2 insumos incrementa el costo de transformación medio de manera consistente en ambas modalidades.
-La modalidad Y tiende a tener costos más estables (menor IQR) que la modalidad X.
-La combinación (Y, 1) es la más eficiente y la más frecuente (n=118).
-
-
-**la combinación más frecuente del sistema (Y, 1 en A1) es también la más eficiente. ¿Es esto resultado de una estrategia consciente de planeación, o es una coincidencia del perfil de pedidos? La respuesta define si la eficiencia es replicable o circunstancial.**
-
-### Efecto de número de insumos: comparación condicional
-Un análisis marginal diría que pasar de 1 a 2 insumos aumenta el costo en promedio de 27.3 a 35.8 UM/unidad (+31%). Pero esa comparación mezcla equipos, modalidades y productos.
-La comparación condicional dentro de A1 da una respuesta más fina:
-
-```{r efecto-insumos}
-efecto_insumos <- datos_principal %>%
-  filter(tipo_equipo %in% c("A1", "B2")) %>%
-  group_by(modalidad_proceso, num_insumos) %>%
-  summarise(
-    media_ct = mean(costo_transformacion),
-    media_ci = mean(costo_insumo),
+    n      = length(costo_transformacion),
+    media  = mean(costo_transformacion),
+    ds     = sd(costo_transformacion),
+    `50%`  = median(costo_transformacion),
+    Q1     = quantile(costo_transformacion, 0.25),
+    Q3     = quantile(costo_transformacion, 0.75),
+    IQR    = IQR(costo_transformacion),
     .groups = "drop"
   ) %>%
-  pivot_wider(names_from = num_insumos,
-              values_from = c(media_ct, media_ci),
-              names_sep = "_ins")
-efecto_insumos
+  arrange(media) -> resumen_A1_eq
+
+knitr::kable(resumen_A1_eq,
+             caption = "Costo de transformación por equipo dentro de A1") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+```
+```{r box-A1-equipos, fig.width=10, fig.height=4.5}
+datos_principal %>%
+  filter(tipo_equipo == "A1") %>%
+  ggplot(aes(x = reorder(equipo_id, costo_transformacion, FUN = median),
+             y = costo_transformacion)) +
+  geom_boxplot(fill = "#fcae91", outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "black") +
+  labs(x = "Equipo (ordenado por mediana)",
+       y = "Costo de transformación (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Costo de transformación por equipo dentro de A1")
+
+```
+Lectura. [A desarrollar. Puntos clave:]
+
+¿El rango de medias entre los siete equipos A1 es estrecho o amplio?
+¿Hay equipos con dispersión interna marcadamente distinta?
+¿La conclusión del Capítulo 6 ("A1 es una familia coherente") se sostiene tras eliminar las órdenes Z?
+
+
+Para completar esta subsección:
+
+Replicar el análisis con costo_insumo dentro de A1.
+Calcular el coeficiente de variación entre las medianas de los siete equipos A1. Una variación intra-tipo baja confirma la hipótesis de "familia coherente". Calcula así: sd(medianas) / mean(medianas) * 100.
+Comparar las medias actuales con las del Capítulo 6 (M15 era 38.0, M13 era 30.3, etc.). ¿La exclusión de Z modificó significativamente algún equipo? Construye una tabla con dos columnas: media_cap6 y media_cap7.
+
+7.4.2 B2: un único equipo, ¿comparabilidad con A1?
+B2 está representado por un único equipo (M02). Toda conclusión sobre "el tipo B2" es en realidad una conclusión sobre M02. Esta sección compara su perfil con el cluster A1 para responder: ¿la categoría B2 aporta información distintiva respecto a A1?
+Para completar esta subsección:
+
+Construir una tabla resumen con M02 (B2) y los siete equipos A1, ordenados por media de costo de transformación, para visualizar dónde se ubica M02 en el ranking.
+Generar un boxplot conjunto con los ocho equipos (siete A1 + M02), coloreando por tipo (A1 en color cálido, M02 en color frío). Si M02 se mezcla visualmente con los A1, eso refuerza el hallazgo del Capítulo 6 sobre la indistinguibilidad económica.
+Replicar para costo_insumo.
+Discutir la implicación operativa: si M02 es indistinguible, ¿qué justifica mantener B2 como categoría tecnológica separada? Esta pregunta debe trasladarse al área técnica de la empresa, no resolverse estadísticamente.
+
+7.4.3 D4: dos equipos eficientes pero distintos
+D4 contiene dos equipos (M05 y M12) con perfil eficiente pero comportamientos diferentes entre sí.
+Para completar esta subsección:
+
+Construir tablas resumen separadas para M05 y M12 en costos de transformación e insumo. Calcular adicionalmente el coeficiente de variación.
+Boxplot comparativo M05 vs M12 para los dos costos. Marcar visualmente los outliers (M05 tenía un máximo de 46.2 en costo de insumo).
+Análisis de outliers en M05: identificar la(s) orden(es) responsables de los valores extremos. Mostrar qué configuración tienen (volumen, duración, insumos) y discutir si parecen estructurales o circunstanciales.
+Restricción operativa: M05 y M12 solo operan en (X, 1). El análisis de su eficiencia no puede extrapolarse a otras configuraciones. Documentar esta limitación.
+
+Conclusiones (Heterogeneidad intra-tipo):
+
+[A redactar tras completar las tres subsecciones. Plantilla:]
+A1 [confirma / no confirma] su carácter de familia coherente tras la exclusión de Z.
+B2 (M02) [se mantiene / se separa] del perfil A1, lo cual sugiere que la categoría tecnológica B2 [es / no es] analíticamente útil.
+D4 contiene dos regímenes operativos (M05 y M12) con diferencias relativas significativas; el análisis a nivel "tipo D4" es engañoso.
+
+
+7.5 Configuración universal A1: efectos de modalidad, insumos e interacción
+A1 es el único equipo con cobertura completa de las cuatro combinaciones de modalidad y número de insumos. Aquí se evalúan los efectos puros de cada factor y, crucialmente, si interactúan entre sí.
+7.5.1 Subconjunto y mapa de combinaciones
+```{r subset-A1}
+datos_A1 <- datos_principal %>%
+  filter(tipo_equipo == "A1")
+
+n_A1 <- nrow(datos_A1)
+datos_A1 %>%
+  count(modalidad_proceso, num_insumos) %>%
+  pivot_wider(names_from = num_insumos, values_from = n, values_fill = 0,
+              names_prefix = "ins_") %>%
+  knitr::kable(caption = "Combinaciones observadas dentro de A1") %>%
+  kableExtra::kable_styling(full_width = FALSE)
 ```
 
-El efecto de agregar un segundo insumo es:
+A1 contiene r n_A1 órdenes distribuidas en cuatro celdas de tamaño suficiente. Esto permite analizar simultáneamente los dos factores y su interacción.
+7.5.2 Efecto principal: modalidad de proceso dentro de A1
+```{r resumen-A1-mod}
+datos_A1 %>%
+  group_by(modalidad_proceso) %>%
+  summarise(
+    n      = length(costo_transformacion),
+    media  = mean(costo_transformacion),
+    ds     = sd(costo_transformacion),
+    `50%`  = median(costo_transformacion),
+    Q1     = quantile(costo_transformacion, 0.25),
+    Q3     = quantile(costo_transformacion, 0.75),
+    IQR    = IQR(costo_transformacion),
+    .groups = "drop"
+  ) -> resumen_A1_mod
 
-En modalidad X: incremento claro en ambos costos.
-En modalidad Y: incremento menor en transformación, más marcado en insumo.
+knitr::kable(resumen_A1_mod,
+             caption = "Costo de transformación por modalidad dentro de A1") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+```
+```{r box-A1-mod, fig.width=7, fig.height=4.5}
+datos_A1 %>%
+  ggplot(aes(x = modalidad_proceso, y = costo_transformacion)) +
+  geom_boxplot(fill = "#a1d99b", outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "black") +
+  labs(x = "Modalidad de proceso",
+       y = "Costo de transformación (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ "Costo de transformación por modalidad dentro de A1")
+```
+Lectura. [A desarrollar. Comparar con la sección 6.5.4 del Capítulo 6, donde X y Y se analizaron sobre todo el dataset. ¿La diferencia X vs Y se mantiene, se amplía o se reduce al restringir a A1?]
+7.5.3 Efecto principal: número de insumos dentro de A1
+Para completar esta subsección:
 
-Esta es una interacción: el efecto de num_insumos no es el mismo en todas las modalidades. El análisis marginal (el que no estratifica) promedia esas dos realidades y produce un número engañoso.
-Implicación financiera. Si la empresa cobra un recargo por órdenes con dos insumos, ese recargo debería depender de la modalidad. Un recargo uniforme subsidia las órdenes complejas en X con los márgenes de las órdenes simples en Y.
+Construir el resumen descriptivo de costo_transformacion agrupando por num_insumos dentro de A1, siguiendo el patrón de la sección 7.5.2.
+Generar el boxplot correspondiente.
+Comparar con el análisis marginal del Capítulo 6. En el agregado, el paso de 1 a 2 insumos elevaba la media de 27.3 a 35.8. Calcular el equivalente dentro de A1 puro.
+Replicar para costo_insumo.
 
-## Asociaciones numéricas: cuando la correlación cambia al estratificar
-Las correlaciones marginales sobre el dataset principal muestran:
+7.5.4 Interacción modalidad × número de insumos
+Esta es la pregunta más fina del análisis estratificado: ¿el efecto de tener dos insumos depende de la modalidad? Si las dos modalidades responden de forma distinta a la complejidad de insumos, hay interacción.
+```{r resumen-A1-interaccion}
+datos_A1 %>%
+  group_by(modalidad_proceso, num_insumos) %>%
+  summarise(
+    n     = length(costo_transformacion),
+    media = mean(costo_transformacion),
+    ds    = sd(costo_transformacion),
+    `50%` = median(costo_transformacion),
+    .groups = "drop"
+  ) -> resumen_A1_int
 
-volumen_lote ↔ costo_transformacion: −0.35 (Pearson) / −0.27 (Spearman).
-duracion_proceso ↔ costo_transformacion: +0.22 / +0.28.
+knitr::kable(resumen_A1_int,
+             caption = "Costo de transformación por modalidad × num_insumos en A1") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+r{r facet-A1-interaccion, fig.width=8, fig.height=4.5}
+datos_A1 %>%
+  ggplot(aes(x = num_insumos, y = costo_transformacion, fill = num_insumos)) +
+  geom_boxplot(outlier.colour = "red", outlier.shape = 16) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "black") +
+  labs(x = "Número de insumos",
+       y = "Costo de transformación (UM/unidad)") +
+  theme_bw() +
+  facet_grid(. ~ modalidad_proceso) +
+  theme(legend.position = "none")
+```
 
-Lectura marginal: lotes más grandes son más baratos por unidad (economías de escala), procesos más largos son ligeramente más costosos.
-Pero al calcular las mismas correlaciones dentro de A1 y B2 únicamente:
+```{r interaccion-plot-A1, fig.width=7, fig.height=4.5}
+resumen_A1_int %>%
+  ggplot(aes(x = num_insumos, y = media,
+             color = modalidad_proceso, group = modalidad_proceso)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 3) +
+  labs(x = "Número de insumos",
+       y = "Costo medio de transformación (UM/unidad)",
+       color = "Modalidad") +
+  theme_bw() +
+  facet_grid(. ~ "Gráfico de interacción modalidad × num_insumos")
+```
 
-```{r corr-A1-B2}
-cor_A1_B2 <- datos_principal %>%
+Cómo leer el gráfico de interacción. Si las dos líneas son paralelas, no hay interacción: el efecto de pasar de 1 a 2 insumos es el mismo en X que en Y. Si las líneas se cruzan o tienen pendientes distintas, sí hay interacción: el efecto de los insumos depende de la modalidad.
+Lectura económica. [A desarrollar. Si hay interacción significativa, las implicaciones para política de precios son directas: el recargo por órdenes con dos insumos no debería ser uniforme; debe diferenciarse por modalidad.]
+
+Para completar esta sección:
+
+Replicar todos los análisis para costo_insumo dentro de A1: tabla cruzada, boxplots por facet y gráfico de interacción.
+Construir el gráfico de interacción para costo_unitario_total.
+Calcular las diferencias absolutas y relativas del efecto de num_insumos dentro de cada modalidad. Por ejemplo: en X, ¿cuánto sube el costo medio al pasar de 1 a 2 insumos? ¿Y en Y? Si las dos magnitudes son muy distintas, eso confirma interacción.
+
+Conclusiones (Configuración universal A1):
+
+[A redactar. Plantilla:]
+Dentro de A1, la modalidad Y es [más estable / más volátil] que X.
+El efecto de pasar de 1 a 2 insumos es de [magnitud] en modalidad X y de [magnitud] en modalidad Y.
+[Existe / no existe] interacción significativa modalidad × num_insumos; las implicaciones de pricing son [...].
+
+
+7.6 Combinaciones de insumos restringidas a A1 y B2
+El Capítulo 6 (sección que tienes en tu render actual) analizó las combinaciones de insumos sobre el dataset completo. Aquí se replica restringiendo a A1 y B2 —los únicos equipos con cobertura amplia de combinaciones— para verificar si los patrones se mantienen tras controlar por equipo.
+7.6.1 Tabla resumen restringida
+```{r insumos-A1B2-construccion}
+datos_principal %>%
   filter(tipo_equipo %in% c("A1", "B2")) %>%
-  select(costo_transformacion, volumen_lote, duracion_proceso,
+  mutate(insumo_combinado = paste(insumo_1, insumo_2, sep = " + ")) -> datos_AB
+
+datos_AB %>%
+  group_by(insumo_combinado) %>%
+  summarise(
+    n      = length(costo_transformacion),
+    media  = mean(costo_transformacion),
+    ds     = sd(costo_transformacion),
+    `50%`  = median(costo_transformacion),
+    Q1     = quantile(costo_transformacion, 0.25),
+    Q3     = quantile(costo_transformacion, 0.75),
+    IQR    = IQR(costo_transformacion),
+    .groups = "drop"
+  ) %>%
+  arrange(desc(n)) -> resumen_insumos_AB
+
+knitr::kable(resumen_insumos_AB,
+             caption = "Costo de transformación por combinación de insumos (A1 + B2)") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+```
+
+7.6.2 Comparación con el análisis del Capítulo 6
+Para completar esta subsección:
+
+Construir una tabla diferencial que muestre, para cada combinación de insumos:
+
+Media en el dataset completo (Capítulo 6).
+Media restringida a A1 + B2 (este capítulo).
+Diferencia absoluta y porcentual.
+
+Si la diferencia es pequeña, el patrón del Capítulo 6 era robusto. Si es grande, el patrón estaba contaminado por D4 o por C3.
+Identificar combinaciones que cambian de ranking. Por ejemplo, si una combinación era barata en el agregado pero cara restringida a A1+B2, eso indica que su bajo costo provenía de D4.
+Discutir el insumo N_O. En el Capítulo 6 era el principal driver de costo. Verificar si dentro de A1 y B2 mantiene ese rol o si pierde fuerza.
+
+7.6.3 Boxplot
+Para completar esta subsección:
+
+Generar el boxplot de costo_transformacion por insumo_combinado restringido a A1 y B2. Usar coord_flip() por la cantidad de combinaciones.
+Replicar para costo_insumo.
+Generar un gráfico facet que separe A1 y B2, para visualizar si las combinaciones se comportan igual en ambos equipos o si hay diferencias.
+
+Conclusiones (Combinaciones de insumos):
+
+[A redactar. Plantilla:]
+Las combinaciones más caras en el agregado [se confirman / cambian] al restringir a A1 + B2.
+El insumo N_O [mantiene / pierde] su rol como driver principal cuando se elimina la influencia de D4.
+[La política de pricing por insumos puede / no puede] generalizarse a todos los equipos.
+
+
+7.7 Correlaciones condicionales
+El análisis de correlaciones del Capítulo 6 mezcló los cuatro tipos de equipo. Aquí se calculan dentro de A1 únicamente para verificar si las asociaciones observadas globalmente son artefactos de la composición o relaciones genuinas dentro de un régimen homogéneo.
+7.7.1 Matriz de correlación dentro de A1
+```{r corr-A1}
+datos_A1 %>%
+  select(costo_transformacion, costo_insumo, costo_unitario_total,
+         volumen_lote, duracion_proceso,
          cantidad_insumo_1, cantidad_insumo_2) %>%
   cor(use = "pairwise.complete.obs", method = "spearman") %>%
-  round(3)
+  round(3) -> corr_A1
 
-
-knitr::kable(cor_A1_B2, caption = "Correlaciones dentro de A1 y B2",
-                 format = "html",
-             table.attr = "class='table'") %>%
-  kableExtra::kable_styling(full_width = FALSE) 
+knitr::kable(corr_A1,
+             caption = "Matriz de correlación de Spearman dentro de A1") %>%
+  kableExtra::kable_styling(full_width = FALSE)
 ```
-Por qué importa este contraste. Si la correlación marginal y la correlación dentro de A1 difieren sustancialmente, significa que parte de la relación observada globalmente no es un efecto directo de la variable, sino un efecto de composición: los equipos con ciertos perfiles de volumen también tienen ciertos perfiles de costo, y eso infla o deforma la correlación marginal.
-Traducción financiera. Las economías de escala son reales dentro de A1, pero el tamaño del efecto marginal que ven los reportes tradicionales puede estar sobrestimado porque mezcla el efecto de "producir más" con el efecto de "producir en un equipo distinto".
+7.7.2 Comparación marginal vs condicional
+Para completar esta subsección:
 
-## Caracterización descriptiva de los subconjuntos excluidos
-Esta sección es puramente descriptiva. No se hacen inferencias, solo se documentan los subconjuntos excluidos del análisis principal para transparencia.
-### Modalidad Z (n=14)
-datos %>%
+Calcular la matriz de Pearson dentro de A1, siguiendo el mismo patrón.
+Construir una tabla comparativa con tres columnas:
+
+Correlación marginal (Capítulo 6).
+Correlación dentro de A1 (este capítulo).
+Diferencia.
+
+Selecciona los pares más relevantes: volumen-costo, duración-costo, insumo 1-costo, insumo 2-costo.
+Identificar paradojas de Simpson o cambios de signo. Si alguna correlación cambia de signo o se debilita drásticamente al condicionar, eso indica que la correlación marginal era un artefacto.
+Verificar las economías de escala. En el agregado, volumen-costo era -0.32 (Spearman). Dentro de A1, debería seguir siendo negativa pero quizá más débil (porque el rango de volumen es similar dentro de A1). Si es muy diferente, hay que explicar por qué.
+
+7.7.3 Diagramas de dispersión condicionales
+Para completar esta subsección:
+
+Generar diagramas de dispersión volumen_lote vs costo_transformacion facetados por modalidad dentro de A1. Esto muestra si las economías de escala operan igual en X que en Y.
+Replicar para duracion_proceso vs costo_transformacion.
+Generar un solo gráfico con volumen_lote vs costo_transformacion coloreando por equipo dentro de A1, para evaluar si todos los equipos A1 siguen el mismo patrón o si hay equipos que escapan.
+
+Conclusiones (Correlaciones condicionales):
+
+[A redactar. Plantilla:]
+Las economías de escala dentro de A1 son [más fuertes / más débiles / similares] que en el agregado.
+La correlación duración-costo [se mantiene / cambia] al condicionar; esto sugiere [...].
+[Sí / no] hay evidencia de paradoja de Simpson en las correlaciones agregadas.
+
+
+7.8 Caracterización descriptiva de los subconjuntos excluidos
+Esta sección documenta brevemente las órdenes excluidas del análisis estratificado. El propósito no es inferir, sino dejar trazabilidad y aportar referencia cualitativa sobre estos subconjuntos para el área operativa.
+7.8.1 Modalidad Z (n = 14)
+```{r descripcion-Z}
+datos_completo %>%
   filter(modalidad_proceso == "Z") %>%
   group_by(tipo_equipo) %>%
   summarise(
-    n     = n(),
-    ct_media = mean(costo_transformacion),
-    ci_media = mean(costo_insumo),
-    ctot_media = mean(costo_unitario_total),
-    .groups = "drop"
-  )
-Observación descriptiva. Las órdenes en modalidad Z presentan un costo total promedio superior al de X y Y en A1. Esto es consistente con la definición operativa de Z (aplicación conjunta de X e Y al mismo producto), que implica mayor consumo de tiempo y recursos. La magnitud exacta del sobrecosto no es generalizable con n=14 y no se usará para ninguna conclusión. Solo sirve como referencia cualitativa para que la empresa calibre el recargo comercial aplicado a pedidos que solicitan Z.
-### Tipo de equipo C3 (n=8)
-datos %>%
-  filter(tipo_equipo == "C3") %>%
-  summarise(
-    n = n(),
+    n          = n(),
     ct_media   = mean(costo_transformacion),
     ct_mediana = median(costo_transformacion),
     ci_media   = mean(costo_insumo),
-    ci_mediana = median(costo_insumo)
-  )
-Observación descriptiva. C3 presenta los costos más altos del dataset tanto en transformación como en insumos. Con n=8 el intervalo de confianza es demasiado amplio para afirmar cuánto más costoso es en comparación con otros equipos, pero el patrón es consistente y amerita una revisión operativa específica —fuera del alcance de este trabajo estadístico— sobre qué justifica su uso y en qué condiciones.
+    ci_mediana = median(costo_insumo),
+    ctot_media = mean(costo_unitario_total),
+    .groups = "drop"
+  ) %>%
+  knitr::kable(caption = "Descriptivos de las órdenes en modalidad Z") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+```
+Observación cualitativa. [A desarrollar. Las órdenes Z presentan costo total promedio superior a las de X y Y, consistente con su naturaleza de proceso compuesto. La magnitud del sobrecosto observado (≈ 41 vs 28-31 UM/unidad) es referencial; con n=14 no permite inferencia formal pero puede orientar el recargo comercial aplicado a pedidos Z.]
+7.8.2 Tipo de equipo C3 (n = 8)
+```{r descripcion-C3}
+datos_completo %>%
+  filter(tipo_equipo == "C3") %>%
+  group_by(equipo_id) %>%
+  summarise(
+    n          = n(),
+    ct_media   = mean(costo_transformacion),
+    ct_mediana = median(costo_transformacion),
+    ci_media   = mean(costo_insumo),
+    ci_mediana = median(costo_insumo),
+    .groups = "drop"
+  ) %>%
+  knitr::kable(caption = "Descriptivos de las órdenes en tipo C3, por equipo") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+```
+Observación cualitativa. [A desarrollar. M04 y M11 tienen perfiles muy distintos entre sí (≈ 79 vs 49 UM/unidad). M04 combina alto costo y alta variabilidad. Ambos equipos merecen revisión operativa específica fuera del alcance de este trabajo estadístico, dado que con n=4 cada uno cualquier estimación es altamente inestable.]
+Conclusiones (Subconjuntos excluidos):
 
-6.9 Síntesis: lo que cambia para el capítulo de inferencia
-6.9.1 Qué se puede afirmar después del EDA
+Las órdenes Z muestran sobrecosto sistemático en transformación; el área comercial debería verificar si se está cobrando recargo proporcional.
+El tipo C3 contiene dos regímenes operativos heterogéneos (M04 y M11) que merecen análisis caso por caso.
+Con los n disponibles (14 y 8), ninguna conclusión sobre estos grupos puede extrapolarse al sistema general.
 
-El sistema productivo no es homogéneo: tiene al menos tres regímenes operativos diferenciados por tipo de equipo (A1/B2 como regímenes estándar, D4 como régimen eficiente restringido a (X, 1), C3 como régimen excepcional).
-Dentro de A1 (configuración universal), el número de insumos y la modalidad afectan el costo de manera interactiva. El efecto de agregar un segundo insumo depende de la modalidad.
-Las economías de escala son reales pero no uniformes: pierden intensidad en volúmenes altos y presentan mayor dispersión en lotes pequeños.
-El costo de transformación domina el costo total (85%). Cualquier iniciativa de reducción debe enfocarse en procesos, no en insumos.
 
-6.9.2 Hipótesis que alimentan el capítulo 7 (inferencia)
-Con base en el EDA, las pruebas inferenciales formales que tienen sustento son:
-HipótesisPrueba aplicableEstratonH1: El costo de transformación difiere entre A1, B2 y D4ANOVA 1 vía (Welch) o Kruskal-Wallis(X, 1) únicamente122H2: Dentro de A1, la modalidad afecta el costot-test o Mann-WhitneyA1 completo274H3: Dentro de A1, el número de insumos afecta el costot-test o Mann-WhitneyA1 completo274H4: Existe interacción modalidad × num_insumos dentro de A1ANOVA 2 víasA1 completo274H5: Existe correlación entre volumen_lote y costo dentro de A1Correlación de Spearman con ICA1 completo274
-6.9.3 Comparaciones que el diseño del dataset no permite hacer
-Para transparencia metodológica, se documenta lo que el dataset no puede responder:
+7.9 Síntesis e implicaciones
+7.9.1 Qué se puede afirmar después del EDA estratificado
+[A redactar consolidando los hallazgos de las secciones 7.3 a 7.7. Plantilla con cuatro mensajes:]
 
-Si D4 sería más eficiente que A1 en modalidad Y: D4 nunca operó en Y.
-Si C3 sería competitivo con volúmenes altos: los 8 casos de C3 no cubren rangos altos de volumen.
-Si la modalidad Z es más costosa que la suma de X e Y: n=14 no da potencia suficiente.
+Sobre los efectos puros de cada factor (qué se confirma del Cap 6 y qué se modifica).
+Sobre la interacción modalidad × insumos dentro de A1 (si existe y de qué magnitud).
+Sobre la robustez de los hallazgos del análisis marginal (qué se sostiene y qué era artefacto).
+Sobre las economías de escala (si operan igual dentro de un régimen homogéneo).
+
+7.9.2 Hipótesis para el capítulo de inferencia
+Con base en el EDA estratificado, las pruebas inferenciales formales que tienen sustento son:
+HipótesisPrueba aplicableEstraton aproxH1: El costo de transformación difiere entre A1, B2 y D4ANOVA o Kruskal-Wallis(X, 1) únicamente~120H2: Dentro de A1, la modalidad afecta el costot-test o Mann-WhitneyA1 completo~270H3: Dentro de A1, el número de insumos afecta el costot-test o Mann-WhitneyA1 completo~270H4: Existe interacción modalidad × num_insumos en A1ANOVA 2 víasA1 completo~270H5: Existe correlación volumen-costo dentro de A1Correlación de Spearman con ICA1 completo~270H6: Las correlaciones marginales y condicionales difierenComparación de coeficientesAgregado vs A1373 vs ~270
+[Ajustar los n aproximados según el resultado real al renderizar.]
+7.9.3 Comparaciones que el dataset no permite hacer
+Para transparencia metodológica, conviene documentar lo que el dataset no puede responder a pesar de la profundización:
+
+Si D4 sería más eficiente que A1 en modalidad Y o con dos insumos: D4 nunca operó en esas configuraciones.
+Si C3 sería competitivo con volúmenes altos: las 8 órdenes de C3 no cubren rangos altos.
+Si la modalidad Z es más costosa que la suma simple de X e Y: n=14 no da potencia.
+Si las diferencias entre equipos del mismo tipo (M15 vs M13 en A1; M05 vs M12 en D4) son estructurales o técnicas: requiere estratificación adicional por categoría de producto.
 
 Estas preguntas requerirían un diseño de recolección de datos distinto, con asignación deliberada de órdenes a configuraciones específicas para romper la dependencia entre factores.
+7.9.4 Implicaciones para la dirección financiera
+[A desarrollar tras completar el análisis. Cuatro mensajes esperados:]
 
-6.10 Implicaciones para la dirección financiera
-Cuatro mensajes para la toma de decisiones:
-
-La reducción de costos tiene un techo estructural del 15% si se enfoca solo en insumos. La palanca mayor está en los procesos de transformación, específicamente en los regímenes menos eficientes.
-D4 es el equipo más eficiente observado, pero su alcance es limitado. Antes de recomendar migración de producción, se requiere un estudio operativo que determine si las restricciones de D4 son técnicas o históricas.
-La política de precios probablemente está subsidiando la complejidad. Las órdenes con dos insumos son sistemáticamente más costosas, pero el recargo aplicado (si existe) no varía por modalidad. Órdenes complejas en modalidad X son las menos rentables.
-El tamaño de lote mínimo rentable debe definirse explícitamente. Los lotes pequeños concentran los mayores costos unitarios y la mayor variabilidad. Una política de lote mínimo, o una estructura de precios que incentive la consolidación de pedidos, tendría impacto medible e inmediato.
+Sobre el techo de eficiencia y la palanca real de costos.
+Sobre la política de pricing por modalidad y número de insumos.
+Sobre la asignación de órdenes a equipos.
+Sobre la oportunidad de estandarización (qué hace M12 más eficiente que M05).
 
 
-Nota final sobre el método. Este capítulo deliberadamente empezó con una visión agregada y la desmontó progresivamente. El objetivo no fue mostrar los hallazgos de la forma más eficiente, sino hacer visible el razonamiento: cómo una primera lectura simple escondía una estructura jerárquica, por qué el análisis marginal era engañoso, y qué comparaciones sí son válidas en un dataset con espacio operativo truncado. Esta disciplina es la que separa un EDA mecánico de un EDA con criterio.
+Notas sobre el código
+Patrones que se repiten y que conviene tener identificados al replicar:
+
+Resumen estadístico con las nueve métricas estándar (n, media, ds, 50%, mínimo, máximo, Q1, Q3, IQR) usando summarise(). Si lo aplicas mucho, conviene definir una función helper:
+
+rresumen_costo <- function(df, var, ...) {
+  df %>%
+    group_by(...) %>%
+    summarise(
+      n      = length(.data[[var]]),
+      media  = mean(.data[[var]], na.rm = TRUE),
+      ds     = sd(.data[[var]], na.rm = TRUE),
+      `50%`  = median(.data[[var]], na.rm = TRUE),
+      Q1     = quantile(.data[[var]], 0.25, na.rm = TRUE),
+      Q3     = quantile(.data[[var]], 0.75, na.rm = TRUE),
+      IQR    = IQR(.data[[var]], na.rm = TRUE),
+      .groups = "drop"
+    )
+}
+Definida una vez al inicio del capítulo, simplifica todos los summarise() posteriores. Decisión tuya si la usas o mantienes el patrón explícito del profesor.
+
+Boxplot estándar: la combinación geom_boxplot + stat_summary(fun = mean) + facet_grid(. ~ "Título") se repite muchas veces. Podrías encapsularla en una función, pero al estilo del profesor conviene mantenerla explícita en cada chunk para que el código sea didácticamente legible.
+Nombres de chunks: prefijar todos con eda7- para evitar colisiones con los chunks del Capítulo 6 al renderizar el libro completo. Por ejemplo: eda7-subset-X1, eda7-resumen-A1-mod, etc.
