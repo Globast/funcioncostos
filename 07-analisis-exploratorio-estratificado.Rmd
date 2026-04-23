@@ -21,7 +21,6 @@ n_completo  <- nrow(datos_completo)
 n_excluidas <- n_completo - n_principal
 ```
 
-El dataset principal contiene r n_principal órdenes (las r n_excluidas excluidas se conservan en datos_completo para la sección 7.8). Sobre datos_principal se desarrolla todo el análisis estratificado de las secciones 7.2 a 7.7.
 
 7.2 Mapa del espacio operativo válido
 Antes de cualquier análisis, conviene caracterizar formalmente qué comparaciones son válidas dentro del dataset principal. La tabulación cruzada de las tres dimensiones operativas indica cuáles celdas tienen suficientes observaciones y cuáles están vacías.
@@ -497,8 +496,8 @@ Notas sobre el código
 Patrones que se repiten y que conviene tener identificados al replicar:
 
 Resumen estadístico con las nueve métricas estándar (n, media, ds, 50%, mínimo, máximo, Q1, Q3, IQR) usando summarise(). Si lo aplicas mucho, conviene definir una función helper:
-
-rresumen_costo <- function(df, var, ...) {
+```{r rremunencosto}
+resumen_costo <- function(df, var, ...) {
   df %>%
     group_by(...) %>%
     summarise(
@@ -512,6 +511,7 @@ rresumen_costo <- function(df, var, ...) {
       .groups = "drop"
     )
 }
+```
 Definida una vez al inicio del capítulo, simplifica todos los summarise() posteriores. Decisión tuya si la usas o mantienes el patrón explícito del profesor.
 
 Boxplot estándar: la combinación geom_boxplot + stat_summary(fun = mean) + facet_grid(. ~ "Título") se repite muchas veces. Podrías encapsularla en una función, pero al estilo del profesor conviene mantenerla explícita en cada chunk para que el código sea didácticamente legible.

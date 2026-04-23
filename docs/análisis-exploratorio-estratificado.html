@@ -227,7 +227,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="análisis-exploratorio-estratificado" class="section level1 hasAnchor" number="7">
 <h1><span class="header-section-number">Capítulo 7</span> Análisis Exploratorio Estratificado<a href="análisis-exploratorio-estratificado.html#an%C3%A1lisis-exploratorio-estratificado" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>El dataset principal contiene r n_principal órdenes (las r n_excluidas excluidas se conservan en datos_completo para la sección 7.8). Sobre datos_principal se desarrolla todo el análisis estratificado de las secciones 7.2 a 7.7.</p>
 7.2 Mapa del espacio operativo válido
 Antes de cualquier análisis, conviene caracterizar formalmente qué comparaciones son válidas dentro del dataset principal. La tabulación cruzada de las tres dimensiones operativas indica cuáles celdas tienen suficientes observaciones y cuáles están vacías.
 7.2.1 Tabulación de combinaciones
@@ -2141,21 +2140,7 @@ Sobre la oportunidad de estandarización (qué hace M12 más eficiente que M05).
 <p>Notas sobre el código
 Patrones que se repiten y que conviene tener identificados al replicar:</p>
 <p>Resumen estadístico con las nueve métricas estándar (n, media, ds, 50%, mínimo, máximo, Q1, Q3, IQR) usando summarise(). Si lo aplicas mucho, conviene definir una función helper:</p>
-<p>rresumen_costo &lt;- function(df, var, …) {
-df %&gt;%
-group_by(…) %&gt;%
-summarise(
-n = length(.data[[var]]),
-media = mean(.data[[var]], na.rm = TRUE),
-ds = sd(.data[[var]], na.rm = TRUE),
-<code>50%</code> = median(.data[[var]], na.rm = TRUE),
-Q1 = quantile(.data[[var]], 0.25, na.rm = TRUE),
-Q3 = quantile(.data[[var]], 0.75, na.rm = TRUE),
-IQR = IQR(.data[[var]], na.rm = TRUE),
-.groups = “drop”
-)
-}
-Definida una vez al inicio del capítulo, simplifica todos los summarise() posteriores. Decisión tuya si la usas o mantienes el patrón explícito del profesor.</p>
+<p>Definida una vez al inicio del capítulo, simplifica todos los summarise() posteriores. Decisión tuya si la usas o mantienes el patrón explícito del profesor.</p>
 <p>Boxplot estándar: la combinación geom_boxplot + stat_summary(fun = mean) + facet_grid(. ~ “Título”) se repite muchas veces. Podrías encapsularla en una función, pero al estilo del profesor conviene mantenerla explícita en cada chunk para que el código sea didácticamente legible.
 Nombres de chunks: prefijar todos con eda7- para evitar colisiones con los chunks del Capítulo 6 al renderizar el libro completo. Por ejemplo: eda7-subset-X1, eda7-resumen-A1-mod, etc.</p>
 
