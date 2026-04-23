@@ -21,6 +21,10 @@ library(patchwork)
 library(gridExtra)
 library(knitr)
 library(kableExtra)
+library(dplyr)
+library(ggplot2)
+library(tibble)
+
 
 datos <- readRDS("data/data_costos_limpio.rds") %>%
   mutate(costo_unitario_total = costo_transformacion + costo_insumo)
@@ -74,9 +78,6 @@ Sin embargo, los extremos revela algo distinto. Mientras el valor mínimo (`r ro
 En términos prácticos, esto significa que la mayoría de los procesos operan en niveles de costo relativamente estables, pero existen casos puntuales significativamente más costosos. Estos valores extremos pueden responder a procesos más complejos o a posibles inconsistencias en los datos, por lo que requieren un análisis específico antes de su inclusión en modelos o decisiones operativas.
 
 ```{r ck-hist-t,  out.width="100%",echo=FALSE}
-library(dplyr)
-library(ggplot2)
-library(tibble)
 
 lineas <- tibble(
   estadistico = c("Media", "Mediana", "Q1", "Q3"),
@@ -519,9 +520,6 @@ p_vol + p_dur + p_ci1 + p_ci2
 La principal fuente de heterogeneidad no está en los insumos, sino en el tamaño de los lotes y la duración de los procesos. Esto sugiere que cualquier modelamiento o mejora operativa debe centrarse en segmentar por escala de producción y complejidad del proceso, más que en el consumo de insumos.
 
 ```{r hist-num-predictoras,  echo=FALSE}
-library(ggplot2)
-library(dplyr)
-library(patchwork)
 
 p_vol_hist <- datos %>%
   ggplot(aes(x = volumen_lote)) +
@@ -676,10 +674,6 @@ El sistema ya muestra señales de eficiencia cuando opera a escala, pero pierde 
 ### Diagramas de dispersión
 
 ```{r scatter-prioritarios, fig.width=12, fig.height=16, warning=FALSE, message=FALSE}
-
-library(dplyr)
-library(ggplot2)
-library(patchwork)
 
 # Función auxiliar para construir gráficos de dispersión
 graf_disp <- function(data, x, y, xlab, ylab, titulo, color = "#1E90FF") {
@@ -925,8 +919,6 @@ Y es más estable y ligeramente más costoso que X. Pero  X es más volátil.
 ### Análisis bivariado: tipo de equipo
 
 ```{r bar-categoricas, fig.width=12, fig.height=16}
-library(dplyr)
-library(ggplot2)
 
 tabla_plot <- tabla_cat %>%
   mutate(Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)"))
