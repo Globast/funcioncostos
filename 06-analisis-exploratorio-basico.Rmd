@@ -676,7 +676,7 @@ El sistema ya muestra señales de eficiencia cuando opera a escala, pero pierde 
 
  ### Diagramas de dispersión
 
-```{r scatter-prioritarios, fig.width=12, fig.height=16, warning=FALSE, message=FALSE}
+```{r scatter-prioritarios, fig.width=12, fig.asp = 1, warning=FALSE, message=FALSE}
 library(dplyr)
 library(ggplot2)
 library(patchwork)
