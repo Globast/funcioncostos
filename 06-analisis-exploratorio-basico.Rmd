@@ -616,6 +616,7 @@ knitr::kable(
 :::
 
 ::: {.column width="60%"}
+
 ```{r tipo-equipo-grafico, echo=FALSE, message=FALSE, warning=FALSE}
 tabla_tipo_equipo_plot <- datos %>%
   count(tipo_equipo, name = "Frecuencia") %>%
@@ -636,7 +637,7 @@ ggplot(tabla_tipo_equipo_plot, aes(x = Categoria, y = Frecuencia)) +
   ) +
   theme_bw(base_size = 12) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
-  ```
+```
 :::
 ::::::
 
