@@ -242,10 +242,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="análisis-exploratorio-básico" class="section level1 hasAnchor" number="6">
 <h1><span class="header-section-number">Capítulo 6</span> Análisis Exploratorio Básico<a href="análisis-exploratorio-básico.html#an%C3%A1lisis-exploratorio-b%C3%A1sico" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>Este capítulo describe el comportamiento del costo unitario de producción a partir de las 395 órdenes que sobrevivieron al proceso de depuración del Capítulo 5. La premisa de entrada tratar el dataset como un universo homogéneo del proceso productivo y observar qué dice cuando se le aplica la teoria estándar del análisis exploratorio (resúmenes descriptivos, distribuciones univariadas, correlaciones, y comparaciones bivariadas marginales).
-A lo largo del recorrido, la data va a revelar que no es uniforme, que mezcla modelos operativos distintos, y que las comparaciones agregadas pueden ser engañosas. El cierre del capítulo muestra decisiones metodológicas concretas que dan paso al análisis estratificado del Capítulo 7.
-::: {.alert .alert-primary}
-Este capítulo responde una pregunta básica de control de gestión: ¿qué tan predecible es el costo unitario que vemos en los reportes? La respuesta corta es que el promedio del sistema oculta más de lo que muestra.
-:::</p>
+A lo largo del recorrido, la data va a revelar que no es uniforme, que mezcla modelos operativos distintos, y que las comparaciones agregadas pueden ser engañosas. El cierre del capítulo muestra decisiones metodológicas concretas que dan paso al análisis estratificado del Capítulo 7.</p>
+<div class="alert alert-primary">
+<p>Este capítulo responde una pregunta básica de control de gestión: ¿qué tan predecible es el costo unitario que vemos en los reportes? La respuesta corta es que el promedio del sistema oculta más de lo que muestra.</p>
+</div>
 <div id="carga-del-dataset-analítico" class="section level2 hasAnchor" number="6.1">
 <h2><span class="header-section-number">6.1</span> Carga del dataset analítico<a href="análisis-exploratorio-básico.html#carga-del-dataset-anal%C3%ADtico" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Se parte del dataset depurado en el capítulo de metodología (395 órdenes de producción con tipos ajustados). La limpieza previa ya eliminó errores de digitación y validó la integridad de los registros; este capítulo se concentra en entender qué dicen esos datos.</p>
@@ -325,11 +325,10 @@ IQR
 </tbody>
 </table>
 <p>Se obtuvo un costo medio de conversión por unidad de 29.94 UM/unidad (DS = 15.26 UM/unidad), con un coeficiente de variación de 51%. El 50% de las órdenes presenta un costo de conversión por debajo de 29.09 UM/unidad.
-La desviación estándar alcanza 15.26, lo que equivale a un coeficiente de variación de 51%. Quiere decir que los costos fluctúan de manera importante respecto al promedio.</p>
-<p>El rango intercuartílico (14.54) indica que la mitad central de los datos se sitúa en un intervalo relativamente acotado, lo que describe el comportamiento típico del proceso.
-Sin embargo, los extremos revela algo distinto. Mientras el valor mínimo (2.77) se mantiene dentro de lo esperado, el máximo (97.18) se encuentra considerablemente alejado del resto. Este comportamiento puede sugerir la presencia de valores atípicos en la parte superior de la distribución, generando una cola hacia la derecha.
-En términos prácticos, esto significa que la mayoría de los procesos operan en niveles de costo relativamente estables, pero existen casos puntuales significativamente más costosos. Estos valores extremos pueden responder a procesos más complejos o a posibles inconsistencias en los datos, por lo que requieren un análisis específico antes de su inclusión en modelos o decisiones operativas.</p>
+La desviación estándar alcanza 15.26, lo que equivale a un coeficiente de variación de 51%. Quiere decir que los costos fluctúan de manera importante respecto al promedio.
+El rango intercuartílico (14.54) confirma que el 50% central de las órdenes opera entre 21.91 y 36.45 UM/unidad, un rango operativo razonablemente delimitado. Pero los extremos cuentan otra historia: el mínimo de 2.77 está muy alejado del Q1 (21.91), y el máximo de 97.18 multiplica por más de tres el Q3 (36.45). Esta asimetría sugiere que la distribución no es simétrica y que puede haber fenómenos estructurales distintos en los extremos.</p>
 <p><img src="libro-maestria-estadistica-aplicada_files/figure-html/ck-hist-t-1.png" alt="" width="100%" style="display: block; margin: auto;" /></p>
+<p>El histograma con la curva de densidad confirma esta lectura. La masa principal de la distribución se concentra entre el IQR, pero aparece un leve segundo abultamiento que rompe el patrón unimodal esperado. Este es una señal de una distribución bimodal que habitualmente indica que los datos provienen de dos procesos generadores distintos mezclados, no de un único proceso con ruido aleatorio.</p>
 <p>El núcleo de la distribución se concentra claramente alrededor de 29.94, con una densidad máxima cercana a los 25–30 UM. Esta región coincide con la mediana (r round(ct_med,2)) y el rango intercuartílico.
 La forma de la distribución no es simétrica. Se observa una cola derecha prolongada, que se extiende hasta valores cercanos a 97. Esta asimetría implica que, aunque la mayoría de los costos son moderados, existe una proporción pequeña de observaciones con costos significativamente más altos.
 Adicionalmente, aparece un leve segundo abultamiento en valores bajos (≈ 5–15 UM). Esto sugiere la posible existencia de subgrupos dentro del proceso, es decir, no todos los registros provienen del mismo mecanismo generador de costos.</p>
