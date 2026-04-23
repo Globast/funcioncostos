@@ -557,7 +557,9 @@ tabla_cat <- map_dfr(vars_cat, function(v) {
 }) %>%
   mutate(Porcentaje = round(Porcentaje, 2))
 
-knitr::kable(tabla_cat, caption = "Resumen descriptivo de las variables categóricas seleccionadas") %>%
+knitr::kable(tabla_cat, caption = "Resumen descriptivo de las variables categóricas seleccionadas",
+                 format = "html",
+             table.attr = "class='table'") %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
@@ -628,7 +630,9 @@ resumen_bivariado_cc_modproceso <- datos %>%
     .groups = "drop"
   )
 
-  knitr::kable(resumen_bivariado_cc_modproceso , caption = "Resumen Bivariado costos de transformación por modalidad de proceso") %>%
+  knitr::kable(resumen_bivariado_cc_modproceso , caption = "Resumen Bivariado costos de transformación por modalidad de proceso",
+                 format = "html",
+             table.attr = "class='table'") %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
@@ -658,7 +662,9 @@ resumen_bivariado_ci_modproceso <- datos %>%
     .groups = "drop"
   )
 
-    knitr::kable(resumen_bivariado_ci_modproceso , caption = "Resumen Bivariado costos de insumo por modalidad de proceso") %>%
+    knitr::kable(resumen_bivariado_ci_modproceso , caption = "Resumen Bivariado costos de insumo por modalidad de proceso",
+                 format = "html",
+             table.attr = "class='table'") %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
@@ -744,7 +750,9 @@ resumen_bivariado_cc <- datos %>%
     .groups = "drop"
   )
 
-  knitr::kable(resumen_bivariado_cc , caption = "Resumen Bivariado costos de transformación") %>%
+  knitr::kable(resumen_bivariado_cc , caption = "Resumen Bivariado costos de transformación",
+                 format = "html",
+             table.attr = "class='table'") %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
@@ -774,7 +782,9 @@ resumen_bivariado_ci <- datos %>%
     .groups = "drop"
   )
 
-    knitr::kable(resumen_bivariado_ci , caption = "Resumen Bivariado costos de insumo") %>%
+    knitr::kable(resumen_bivariado_ci , caption = "Resumen Bivariado costos de insumo",
+                 format = "html",
+             table.attr = "class='table'") %>%
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
@@ -832,9 +842,10 @@ resumen_bivariado_ct_equipo <- datos %>%
 
 knitr::kable(
   resumen_bivariado_ct_equipo,
-  caption = "Resumen bivariado de costos de transformación por equipo y tipo de equipo"
-) %>%
-  kableExtra::kable_styling(full_width = FALSE)
+  caption = "Resumen bivariado de costos de transformación por equipo y tipo de equipo",
+                 format = "html",
+             table.attr = "class='table'") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
 ```
 
 ```{r bivariado-ci-equipo}
@@ -856,9 +867,10 @@ resumen_bivariado_ci_equipo <- datos %>%
 
 knitr::kable(
   resumen_bivariado_ci_equipo,
-  caption = "Resumen bivariado de costos de insumo por equipo y tipo de equipo"
-) %>%
-  kableExtra::kable_styling(full_width = FALSE)
+  caption = "Resumen bivariado de costos de insumo por equipo y tipo de equipo",
+                 format = "html",
+             table.attr = "class='table'") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
 ```
 
 
@@ -937,8 +949,10 @@ tabla_resumen <- datos %>%
     costo_insumo_medio = round(costo_insumo_medio, 1)
   )
 
-kable(tabla_resumen, caption = "Tabla resumen costos por tipo de equipo") %>%
-  kable_styling(full_width = FALSE)
+kable(tabla_resumen, caption = "Tabla resumen costos por tipo de equipo",
+                 format = "html",
+             table.attr = "class='table'") %>%
+  kableExtra::kable_styling(full_width = FALSE) 
 ```
 
 
@@ -955,8 +969,10 @@ tabla_dep <- datos %>%
 
 filas_vacias <- which(tabla_dep$n == 0)
 
-kable(tabla_dep, caption = "Combinaciones observadas con resaltado en ceros") %>%
-  kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover")) %>%
+kable(tabla_dep, caption = "Combinaciones observadas con resaltado en ceros",
+                 format = "html",
+             table.attr = "class='table'") %>%
+  kableExtra::kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover")) %>%
   row_spec(filas_vacias, bold = TRUE, background = "#FFE6E6", color = "#D32F2F") # Rojo claro para resaltar
 ```
 El espacio operativo no es completo. No todos los equipos operan en todas las modalidades. No todas las modalidades se ejecutan con todos los números de insumos. Las combinaciones son asimétricas y muchas celdas están vacías o con muy pocas observaciones.
@@ -1007,8 +1023,10 @@ mapa_n <- datos_principal %>%
               values_fill = 0,
               names_sep = "_")
 
-kable(mapa_n, caption = "Tamaño muestral por combinación (dataset principal)") %>%
-  kable_styling(full_width = FALSE)
+kable(mapa_n, caption = "Tamaño muestral por combinación (dataset principal)",
+      format = "html",
+      table.attr = "class='table'") %>%
+  kableExtra::kable_styling(full_width = FALSE)
 ```
 
 
