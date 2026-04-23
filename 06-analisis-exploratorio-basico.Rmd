@@ -595,6 +595,7 @@ La distribución de frecuencias de las siete variables categóricas deja ver, de
 
 :::::: {.columns}
 ::: {.column width="40%"}
+
 ```{r tipo-equipo-tabla, echo=FALSE, message=FALSE, warning=FALSE}
 tabla_tipo_equipo <- datos %>%
   count(tipo_equipo, name = "Frecuencia") %>%
@@ -611,10 +612,6 @@ knitr::kable(
 ) %>%
   kableExtra::kable_styling(full_width = FALSE)
 
-R -e "bookdown::render_book('index.Rmd', 'bookdown::gitbook')"
-git add .
-git commit -m "JUEVES"
-git push origin main
 ```
 :::
 
