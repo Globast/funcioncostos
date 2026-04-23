@@ -1038,7 +1038,7 @@ R -e "bookdown::render_book('index.Rmd', 'bookdown::gitbook')"
 git add .
 git commit -m "JUEVES"
 git push origin main
-
+```
 :::
 
 ::: {.column width="60%"}
