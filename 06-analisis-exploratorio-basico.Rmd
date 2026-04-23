@@ -478,12 +478,13 @@ knitr::kable(resumen_num_predictoras, caption = "Resumen descriptivo de las vari
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
+
 - *Volumen de lote*. Es la variable más heterogénea. La media (`r round(vol_lote_media, 1)`) supera ampliamente a la mediana (`r round(vol_lote_med, 1)`), señal de asimetría positiva pronunciada. El rango va de `r round(vol_lote_min, 1)` a `r round(vol_lote_max, 1)` unidades —un factor de 133×—. El IQR de `r round(vol_lote_iqr, 1)` unidades indica que incluso el comportamiento "típico" presenta dispersión muy alta. Esta heterogeneidad refleja la naturaleza make-to-order del proceso donde cada orden responde a un pedido específico y no existe un tamaño estándar dominante. La consecuencia analítica que el sistema no tiene reglas operativas uniformes y requiere segmentación por escala de producción.
   
 - *Duración del proceso*. Heterogénea pero más controlada. La media (`r round(dur_proceso_media, 1)`) horas, está moderadamente por encima de la mediana (`r round(dur_proceso_med, 1)`) horas, nuevamente con cola derecha. El IQR (`r round(dur_proceso_q1, 1)` a `r round(dur_proceso_q3, 1)` horas) define un rango operativo razonablemente delimitado. El máximo de `r round(dur_proceso_max, 1)` horas señala procesos excepcionalmente largos que merecerían revisión específica.
   
 - *Cantidad de insumo 1*. Comportamiento mucho más concentrado. La mediana de `r round(ci1_med, 1)` kilos y el IQR de `r round(ci1_iqr, 1)` indican que la mayoría de las órdenes utiliza entre `r round(ci1_q1, 1)` y `r round(ci1_q3, 1)` kilos. La media (`r round(ci1_media, 1)`) ligeramente superior a la mediana sugiere algunos valores altos sin dispersión extrema. Esta variable refleja un consumo relativamente estable y predecible, es positivo.
-- 
+  
 - *Cantidad de insumo 2*. Solo aparece en 124 órdenes (las que tienen num_insumos = 2). La mediana de `r round(ci2_med, 1)` y el IQR de `r round(ci2_iqr, 1)` muestran una concentración aún mayor. El máximo de `r round(ci2_max, 1)` es modesto frente al de insumo 1. Funciona como componente opcional o complementario, con consumo bajo y controlado.
   
 La principal fuente de heterogeneidad del sistema productivo no está en los insumos —que son estables— sino en la escala de los lotes y la duración de los procesos. Esto tiene una implicación directa para la modelación posterior: cualquier modelo o iniciativa de mejora que ignore volumen y duración va a estar mal especificado y producirá conclusiones engañosas.
@@ -522,7 +523,59 @@ p_ci2 <- datos %>%
        y = "Litros equivalentes", x = "") +
   theme_bw()
 
-p_vol + p_dur + p_ci1 + p_ci2
+
+p_vol_hist <- datos %>%
+  ggplot(aes(x = volumen_lote)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 30,
+                 fill = "#1f77b4",
+                 color = "white",
+                 alpha = 0.7) +
+  geom_density(linewidth = 1.2) +
+  labs(title = "Distribución del volumen de lote",
+       x = "Unidades", y = "Densidad") +
+  theme_bw()
+
+p_dur_hist <- datos %>%
+  ggplot(aes(x = duracion_proceso)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 30,
+                 fill = "#1f77b4",
+                 color = "white",
+                 alpha = 0.7) +
+  geom_density(linewidth = 1.2) +
+  labs(title = "Distribución de la duración de proceso",
+       x = "Horas", y = "Densidad") +
+  theme_bw()
+
+p_ci1_hist <- datos %>%
+  filter(num_insumos >= 1) %>%
+  ggplot(aes(x = cantidad_insumo_1)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 25,
+                 fill = "#1f77b4",
+                 color = "white",
+                 alpha = 0.7) +
+  geom_density(linewidth = 1.2) +
+  labs(title = "Cantidad de insumo 1 (órdenes con insumo)",
+       x = "Litros equivalentes", y = "Densidad") +
+  theme_bw()
+
+p_ci2_hist <- datos %>%
+  filter(num_insumos == 2) %>%
+  ggplot(aes(x = cantidad_insumo_2)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 20,
+                 fill = "#1f77b4",
+                 color = "white",
+                 alpha = 0.7) +
+  geom_density(linewidth = 1.2) +
+  labs(title = "Cantidad de insumo 2 (órdenes con segundo insumo)",
+       x = "Litros equivalentes", y = "Densidad") +
+  theme_bw()
+
+
+(p_vol + p_vol_hist) /  (p_dur + p_dur_hist) / (p_ci1 + p_ci2_hist) / (p_ci2 + p_ci2_hist)
 ```
 
 ::: {.alert .alert-primary}
