@@ -593,7 +593,7 @@ p_ci2_hist <- datos %>%
 
 La distribución de frecuencias de las siete variables categóricas deja ver, desde el inicio, que el sistema no está repartido de manera uniforme. Por el contrario, se concentra en pocas categorías dominantes, mientras que el resto aparece con baja frecuencia.
 
-```{r tipo-equipo,  echo=FALSE}
+```{r tipo-equipo, fig.width=8, fig.height=4, echo=FALSE}
 tabla_tipo_equipo <- datos %>%
   count(tipo_equipo, name = "Frecuencia") %>%
   mutate(
@@ -639,7 +639,7 @@ grid::grid.draw(combinado)
 Tipo de equipo. A1 concentra el 72.7% de todas las órdenes. Esto es un dato con consecuencias profundas: cualquier estadístico global del sistema está dominado por A1. Cuando un reporte ejecutivo habla de "el costo promedio del sistema", en realidad está hablando, en casi tres cuartos, del costo promedio de A1. Las categorías B2 (11.4%), D4 (13.9%) y especialmente C3 (2.0%) tienen una representación mucho menor. C3 con apenas 8 órdenes está estadísticamente al borde de la inutilidad para inferencia.
 
 
-```{r equipo-id, fig.width=10, fig.height=6, message=FALSE, warning=FALSE}
+```{r equipo-id, fig.width=8, fig.height=4, message=FALSE, warning=FALSE}
 tabla_equipo_id <- datos %>%
   count(equipo_id, name = "Frecuencia") %>%
   mutate(
