@@ -430,13 +430,15 @@ knitr::kable(resumen_num_predictoras, caption = "Resumen descriptivo de las vari
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
-No son variables independientes: describen distintas dimensiones del mismo proceso productivo.
-- Volumen de lote,  es la variable más heterogénea. La media supera claramente a la mediana, lo que indica asimetría positiva. El rango es muy amplio (100 a 13300) y el IQR (2063) es elevado, señal de que incluso el comportamiento “típico” presenta alta dispersión. el proceso opera con lotes muy dispares, dependiendo de los pedidos de los clientes , el proceso es make to order.  No hay un tamaño estándar dominante.
-- Duración del proceso, es heterogéneo también pero más controlado. La media es superior a la mediana, nuevamente cola derecha. El IQR muestra que la mitad de los procesos se concentra entre 60 y 150 horas, lo que define un rango operativo razonablemente estable. Sin embargo, el máximo de 482 horas apunta a procesos excepcionalmente largos.
-- Cantidad de insumo 1, comportamiento más discreto y concentrado. La mediana es 2 y el IQR es 2, lo que indica que la mayoría de los casos utiliza entre 1 y 3 unidades. La media (2.29) ligeramente superior a la mediana sugiere algunos valores altos, pero sin una dispersión extrema. Esta variable refleja un consumo relativamente estable y predecible, con variaciones moderadas.
-- Cantidad de insumo 2: Tiene menor número de observaciones, no todos las ordenes llevan insumo 2. Su mediana es 1 y el IQR es 1.25, lo que muestra una concentración aún mayor que en el insumo 1. La dispersión es baja y los valores extremos (máximo 7) son menos pronunciados. Esto sugiere que el segundo insumo actúa como un componente opcional o complementario, con consumo bajo y controlado.
 
-La principal fuente de heterogeneidad no está en los insumos, sino en el tamaño de los lotes y la duración de los procesos. Esto sugiere que cualquier modelamiento o mejora operativa debe centrarse en segmentar por escala de producción y complejidad del proceso, más que en el consumo de insumos.
+- *Volumen de lote*,  es la variable más heterogénea. La media supera claramente a la mediana indicando asimetría positiva. El rango es muy amplio (100 a 13300) y el IQR (2063) es elevado, señal de que incluso el comportamiento “típico” presenta alta dispersión. el proceso opera con lotes muy dispares, dependiendo de los pedidos de los clientes , el proceso es make to order.  No hay un tamaño estándar dominante.
+
+- *Duración del proceso*, es heterogéneo también pero más controlado. La media es superior a la mediana, nuevamente cola derecha. El IQR muestra que la mitad de los procesos se concentra entre 60 y 150 horas, lo que define un rango operativo razonablemente estable. Sin embargo, el máximo de 482 horas apunta a procesos excepcionalmente largos.
+
+- *Cantidad de insumo 1*, comportamiento más discreto y concentrado. La mediana es 2 y el IQR es 2, lo que indica que la mayoría de los casos utiliza entre 1 y 3 unidades. La media (2.29) ligeramente superior a la mediana sugiere algunos valores altos, pero sin una dispersión extrema. Esta variable refleja un consumo relativamente estable y predecible, con variaciones moderadas.
+
+- *Cantidad de insumo 2*: Tiene menor número de observaciones, no todos las ordenes llevan insumo 2. Su mediana es 1 y el IQR es 1.25, lo que muestra una concentración aún mayor que en el insumo 1. La dispersión es baja y los valores extremos (máximo 7) son menos pronunciados. Esto sugiere que el segundo insumo actúa como un componente opcional o complementario, con consumo bajo y controlado.
+
 
 
 ```{r box-num-predictoras, fig.asp = 0.6, echo=FALSE}
@@ -472,8 +474,10 @@ p_ci2 <- datos %>%
        y = "Litros equivalentes", x = "") +
   theme_bw()
 
-(p_vol + p_dur + p_ci1 + p_ci2)
+p_vol + p_dur + p_ci1 + p_ci2
 ```
+
+La principal fuente de heterogeneidad no está en los insumos, sino en el tamaño de los lotes y la duración de los procesos. Esto sugiere que cualquier modelamiento o mejora operativa debe centrarse en segmentar por escala de producción y complejidad del proceso, más que en el consumo de insumos.
 
 ```{r hist-num-predictoras,  echo=FALSE}
 library(ggplot2)
