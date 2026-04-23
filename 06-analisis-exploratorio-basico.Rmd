@@ -593,6 +593,27 @@ p_ci2_hist <- datos %>%
 
 La distribución de frecuencias de las siete variables categóricas deja ver, desde el inicio, que el sistema no está repartido de manera uniforme. Por el contrario, se concentra en pocas categorías dominantes, mientras que el resto aparece con baja frecuencia.
 
+```{r tipo-equipo-tabla, echo=FALSE, message=FALSE, warning=FALSE}
+tabla_tipo_equipo <- datos %>%
+  count(tipo_equipo, name = "Frecuencia") %>%
+  mutate(
+    Porcentaje = round(100 * Frecuencia / sum(Frecuencia), 2),
+    Categoria = as.character(tipo_equipo)
+  ) %>%
+  select(Categoria, Frecuencia, Porcentaje)
+
+knitr::kable(
+  tabla_tipo_equipo,
+  caption = "Tabla de frecuencias de tipo_equipo",
+  format = "html"
+) %>%
+  kableExtra::kable_styling(full_width = FALSE)
+
+```
+
+
+:::::: {.columns}
+::: {.column width="40%"}
 
 ```{r tipo-equipo-grafico, fig.width=5, fig.height=4, echo=FALSE, message=FALSE, warning=FALSE}
 tabla_tipo_equipo_plot <- datos %>%
@@ -616,30 +637,12 @@ ggplot(tabla_tipo_equipo_plot, aes(x = Categoria, y = Frecuencia)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-:::::: {.columns}
-::: {.column width="40%"}
-
-```{r tipo-equipo-tabla, echo=FALSE, message=FALSE, warning=FALSE}
-tabla_tipo_equipo <- datos %>%
-  count(tipo_equipo, name = "Frecuencia") %>%
-  mutate(
-    Porcentaje = round(100 * Frecuencia / sum(Frecuencia), 2),
-    Categoria = as.character(tipo_equipo)
-  ) %>%
-  select(Categoria, Frecuencia, Porcentaje)
-
-knitr::kable(
-  tabla_tipo_equipo,
-  caption = "Tabla de frecuencias de tipo_equipo",
-  format = "html"
-) %>%
-  kableExtra::kable_styling(full_width = FALSE)
-
-```
 :::
 
 ::: {.column width="60%"}
+
 A1 concentra el 72.7% de todas las órdenes. Esto es un dato con consecuencias profundas: cualquier estadístico global del sistema está dominado por A1. Cuando un reporte ejecutivo habla de "el costo promedio del sistema", en realidad está hablando, en casi tres cuartos, del costo promedio de A1. Las categorías B2 (11.4%), D4 (13.9%) y especialmente C3 (2.0%) tienen una representación mucho menor. C3 con apenas 8 órdenes está estadísticamente al borde de la inutilidad para inferencia.
+
 :::
 ::::::
 
