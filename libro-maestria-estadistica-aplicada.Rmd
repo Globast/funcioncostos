@@ -1,3 +1,426 @@
+---
+title: "Analisis del costo unitario de producción en un proceso manufacturero multifactorial"
+author: "Gloria Bastidas"
+date: "`r format(Sys.Date(), '%d/%m/%Y')`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: ["references.bib"]
+link-citations: yes
+lang: es
+description: "Maestría en Estadística Aplicada."
+---
+
+# Portada {-}
+
+<div class="portada">
+  <h1>Analisis del costo unitario de producción en un proceso manufacturero multifactorial</h1>
+  <p><strong>Maestría en Estadística Aplicada</strong></p>
+  <p>Autor: Gloria Bastidas</p>
+  <p>Institución: Universidad del Norte</p>
+  <p>Fecha: `r format(Sys.Date(), '%d/%m/%Y')`</p>
+</div>
+
+# Prefacio {-}
+
+Este libro presenta una estructura reproducible y académica para documentar un proyecto de análisis estadístico usando **R**, **bookdown**, **GitHub Codespaces** y **GitHub Pages**.
+
+Se recomienda mantener todos los datos en la carpeta `data/`, todas las imágenes en `images/` y todas las referencias en `references.bib`.
+
+```{r setup, include=FALSE}
+options(scipen = 999)
+
+library(tidyverse)
+library(janitor)
+library(skimr)
+library(knitr)
+library(kableExtra)
+library(broom)
+library(here)
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center",
+  fig.width = 7,
+  fig.height = 4.5,
+  out.width = "90%"
+)
+```
+
+<!--chapter:end:index.Rmd-->
+
+# Resumen
+
+SIN INICIAR
+
+<!--chapter:end:01-resumen.Rmd-->
+
+# Introducción
+
+La manufactura farmacéutica opera bajo presión creciente sobre sus márgenes. Los costos de conversión y de insumos representan en conjunto la mayor parte del costo de ventas en empresas de formas sólidas, y su variabilidad entre órdenes de producción puede comprometer la rentabilidad unitaria y la calidad de la información para la toma de decisiones (Basu et al., 2008; Suresh & Basu, 2008). En la práctica, los sistemas ERP registran centenares de órdenes por mes con decenas de atributos, pero los responsables de planeación rara vez disponen de evidencia estadística sobre cuáles de esos atributos explican la dispersión del costo unitario observado.
+
+La investigación académica sobre determinantes del costo ha evolucionado en tres olas sucesivas. Foster y Gupta (1990) abrieron la tradición empírica al mostrar, con datos de 37 plantas de electrónica, que el volumen es un predictor fuerte del overhead, mientras que variables de complejidad y eficiencia resultan débiles una vez controlado el tamaño. Banker et al. (1995) matizaron esa conclusión: al especificar variables transaccionales como órdenes de cambio de ingeniería y personal de planeación, los autores encontraron que las transacciones explican una proporción mayor de la varianza de overhead que el propio volumen. Paralelamente, Cooper y Kaplan (1988, 1992) articularon el marco conceptual del costeo basado en actividades, en el que la regresión múltiple ocupa un rol central para identificar y validar drivers. Anderson, Banker y Janakiraman (2003), una década después, documentaron con 7,629 empresas un fenómeno que la tradición anterior no contemplaba: los costos responden de forma asimétrica a variaciones de volumen, comportamiento conocido como 'sticky costs'.
+
+En paralelo, la ingeniería de costos desarrolló una taxonomía complementaria. Niazi et al. (2006) sistematizaron las técnicas de estimación de costo de producto y ubicaron la regresión dentro de los métodos paramétricos y analógicos. Trabajos posteriores han comparado la regresión lineal con redes neuronales y métodos de ensemble en distintos sectores (Cavalieri et al., 2004; Loyer et al., 2016), con un consenso emergente: los métodos no lineales mejoran la precisión cuando se dispone de volúmenes grandes de datos homogéneos, pero la regresión lineal conserva ventajas de interpretabilidad que son críticas cuando el objetivo es explicar —no solo predecir— la variabilidad del costo.
+
+La literatura específica sobre manufactura farmacéutica es más reducida y se orienta hacia dos focos: el costo de biosimilares y anticuerpos monoclonales (Basu et al., 2008) y la comparación económica entre tecnologías batch y continuas en formas sólidas (Matsunami et al., 2018). Estos trabajos identifican el tamaño de lote, el tipo de proceso y el rendimiento como drivers principales, pero no modelan estadísticamente la variabilidad del costo unitario a nivel de orden de producción. La escasez de estudios con esta granularidad, en particular en contextos latinoamericanos, constituye un vacío que este trabajo aborda.
+
+El problema que motiva esta tesis se ubica en una empresa farmacéutica colombiana productora de cápsulas duras y medicamentos. La empresa cuenta con 406 órdenes de producción registradas en su ERP con información estructurada sobre ocho atributos operativos: modelo de máquina, máquina individual, tamaño de lote, número de insumos, tipo de insumos, referencia de insumos, tipo de proceso y tamaño del producto. El análisis descriptivo previo muestra una dispersión notable del costo unitario de conversión y del costo unitario de insumos entre órdenes, sin que exista claridad sobre cuáles atributos explican esa variabilidad. La hipótesis de trabajo es que las variables operativas mencionadas, de forma conjunta y con interacciones, explican una proporción sustancial de la variabilidad observada, y que su cuantificación estadística permite priorizar acciones correctivas en planeación y en calidad de datos del ERP.
+
+La regresión lineal múltiple se elige como técnica principal por cuatro razones. Primero, por su alineación con la tradición empírica dominante en la literatura de cost drivers (Foster & Gupta, 1990; Banker et al., 1995; Anderson et al., 2003). Segundo, por su interpretabilidad: los coeficientes parciales permiten atribuir variación a cada driver controlando por los demás, lo cual es indispensable para el diálogo con el área financiera y de operaciones. Tercero, por su compatibilidad con pruebas diagnósticas estandarizadas (multicolinealidad, heterocedasticidad, normalidad de residuos) documentadas en textos metodológicos de referencia (Montgomery et al., 2021; Hair et al., 2018). Cuarto, porque el tamaño muestral de 406 órdenes permite estimar con razonable potencia modelos con variables categóricas codificadas como dummies, complementables con regularización Lasso o Ridge cuando la colinealidad o la alta cardinalidad lo exijan (James et al., 2021).
+
+El aporte del estudio se articula en tres ejes. En el eje teórico, extiende la evidencia empírica sobre cost drivers al sector de manufactura farmacéutica de formas sólidas, poco representado en la literatura internacional. En el eje metodológico, combina regresión múltiple con variables categóricas de alta cardinalidad a nivel de orden, modela dos variables respuesta complementarias (conversión e insumos) y contrasta la especificación lineal con alternativas regularizadas. En el eje aplicado, entrega a la empresa un conjunto de coeficientes interpretables, un ranking de drivers por poder explicativo, y recomendaciones concretas de planeación y de mejora del registro de datos en el ERP, lo cual conecta directamente con la línea de investigación de calidad de datos transaccionales que la autora viene desarrollando.
+
+<!--chapter:end:02-introduccion.Rmd-->
+
+# Objetivos EN CONSTRUCCCION
+
+## Objetivo general
+
+Analizar y cuantificar el impacto de diversos factores productivos (equipos, modalidades, productos, insumos, tiempo y volumen) sobre el costo unitario, utilizando métodos paramétricos y no paramétricos para fundamentar la toma de decisiones en evidencia técnica.
+
+## Objetivos específicos
+
+1. Analizar las diferencias entre tipos de equipo y su impacto en el costo
+2. Investigar si existe igualdad de medias en los equipos de un mismo tipo.
+3. Explorar la correlación entre el costo unitario y el tiempo de conversión.
+4. Evaluar la asociación entre el costo unitario, el número de insumos y el tipo de insumos.
+
+<!--chapter:end:03-objetivos.Rmd-->
+
+# Metodología {#metodologia}
+
+Este capítulo documenta el diseño metodológico del estudio, el proceso de obtención de los datos desde el sistema ERP, y los procedimientos de carga, verificación de integridad y depuración aplicados antes del análisis estadístico. Al final del capítulo, el dataset analítico queda conformado por las órdenes de producción que cumplen los criterios de completitud y validez operativa.
+
+## Diseño del estudio
+
+Este trabajo corresponde a un **estudio observacional, retrospectivo y transversal** sobre el proceso productivo de una empresa farmacéutica colombiana. Es observacional porque no se manipulan variables sobre el proceso; retrospectivo porque utiliza registros generados durante operaciones ya ejecutadas; y transversal porque captura información de un período acotado sin seguimiento longitudinal de unidades individuales.
+
+La muestra inicial está conformada por 404 órdenes de producción registradas en el sistema ERP durante el período de estudio, extraídas mediante consultas SQL sobre las tablas transaccionales de órdenes, consumos y tiempos, junto con la tabla de costos por período y el maestro de productos. La consolidación se realizó en Excel y posteriormente se exportó a formato CSV para garantizar reproducibilidad y trazabilidad. Tras la depuración de registros inválidos documentada en la sección 4.2.3, el dataset analítico final queda conformado por las órdenes que cubren la variedad de productos, equipos, modalidades y tamaños de lote habituales del proceso.
+
+**Limitaciones conocidas del dataset:**
+
+- **Sesgo de selección:** se excluyen registros de órdenes anuladas, abortadas o reprocesadas, limitándose exclusivamente a procesos completados.
+- **Variabilidad operativa:** la calidad del registro depende de la disciplina del operario en el momento de cierre de la orden en el ERP, lo cual introduce una fuente de error de medición no cuantificable a priori.
+- **Imprecisión en consumos:** los insumos se registran en litros equivalentes a un envase estándar; las fracciones menores se estiman visualmente ante la falta de un proceso de pesaje, lo que afecta la precisión de las cantidades reportadas.
+- **Base de valoración:** los costos se expresan en unidades monetarias por producto, calculados según la tarifa de costeo del período reportado.
+
+**Aspectos éticos y de confidencialidad.** Los datos provienen de operaciones industriales reales y contienen información sensible para la empresa. Por esta razón, los identificadores de producto, máquina e insumo fueron anonimizados en origen mediante codificación alfanumérica que preserva la estructura analítica sin revelar identidades comerciales.
+
+**Software.** Los análisis se realizan en R versión 4 o superior, con los paquetes `tidyverse` para manipulación y visualización, `Amelia` para diagnóstico de valores faltantes, `janitor` como guardia defensiva en limpieza de nombres, `kableExtra` para presentación de tablas, y `patchwork` y `gridExtra` para composición de gráficos. Todos los análisis son completamente reproducibles a partir del código fuente disponible en el repositorio.
+
+## Extracción, transformación y carga (ETL)
+
+### Carga del conjunto de datos
+
+El archivo CSV exportado desde el consolidado Excel utiliza punto y coma (`;`) como separador de columnas y punto (`.`) como separador decimal. Dado que `read_csv2` asume coma como decimal y `read_csv` asume coma como separador, se utiliza `read_delim` con especificación explícita de ambos parámetros.
+
+```{r carga-datos, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(janitor)
+library(Amelia)
+
+datos <- read_delim("data/data_costos.csv",
+                    delim = ";",
+                    locale = locale(decimal_mark = ".", encoding = "UTF-8"),
+                    show_col_types = FALSE)
+```
+
+### Verificación de la lectura
+
+Verificamos que el archivo se leyó correctamente inspeccionando las primeras filas, las dimensiones, los nombres de las columnas y la estructura de tipos detectados.
+
+```{r dims-iniciales, echo=FALSE}
+n_filas_inicial <- nrow(datos)
+n_vars <- ncol(datos)
+```
+
+```{r head}
+head(datos, n = 5)
+```
+
+```{r dim}
+dim(datos)
+```
+
+```{r colnames}
+colnames(datos)
+```
+
+```{r str-inicial}
+str(datos)
+```
+
+El conjunto de datos contiene `r n_filas_inicial` órdenes de producción y `r n_vars` variables, conforme a la definición presentada en el capítulo del diccionario de datos. Los costos `costo_transformacion` y `costo_insumo`, así como las cantidades de insumo, se leyeron correctamente como numéricos de tipo `double`. El significado, tipo analítico, unidad de medida y rol de cada una de las `r n_vars` variables se documenta en detalle en el siguiente capítulo.
+
+### Revisión de integridad de datos
+
+La revisión de integridad se estructura en tres dimensiones analíticas que pueden solaparse o converger según la naturaleza de las variables:
+
+1. **Cadenas vacías:** marcadores de ausencia implícita en variables de tipo texto.
+2. **Valores NA:** ausencia explícita de información en el sistema.
+3. **Valores con magnitud cero:** registros presentes en el dataset pero con valor numérico cero. Dado que las variables analizadas corresponden a costos, volúmenes y tiempos de proceso, la presencia de valores cero carece de sustento teórico, ya que no es consistente con la naturaleza de estas magnitudes.
+
+#### Cadenas vacías
+
+```{r conteo-vacios}
+conteo_vacios <- datos %>%
+  summarise(across(everything(), ~ sum(trimws(as.character(.)) == "", na.rm = TRUE))) %>%
+  pivot_longer(everything(), names_to = "variable", values_to = "n_vacios")
+
+total_vacios <- sum(conteo_vacios$n_vacios)
+
+knitr::kable(conteo_vacios, caption = "Conteo de cadenas vacías por variable") %>%
+  kableExtra::kable_styling(full_width = FALSE) %>%
+  kableExtra::column_spec(1, width = "12em") %>%
+  kableExtra::column_spec(2, width = "12em")
+```
+
+Se identificaron `r total_vacios` cadenas vacías en el dataset. No se requiere intervención en esta dimensión de integridad.
+
+#### Valores NA
+
+```{r conteo-na}
+conteo_na <- datos %>%
+  summarise(across(everything(), ~ sum(is.na(.)))) %>%
+  pivot_longer(everything(), names_to = "variable", values_to = "n_na")
+
+tabla_na <- conteo_na %>% filter(n_na > 0)
+
+total_na       <- sum(conteo_na$n_na)
+n_vars_con_na  <- nrow(tabla_na)
+n_na_insumo_1  <- conteo_na %>% filter(variable == "insumo_1") %>% pull(n_na)
+n_na_insumo_2  <- conteo_na %>% filter(variable == "insumo_2") %>% pull(n_na)
+pct_na_insumo_2 <- round(n_na_insumo_2 / n_filas_inicial * 100, 1)
+
+knitr::kable(tabla_na, caption = "Variables con valores NA") %>%
+  kableExtra::kable_styling(full_width = FALSE) %>%
+  kableExtra::column_spec(1, width = "12em") %>%
+  kableExtra::column_spec(2, width = "12em")
+```
+
+
+El conteo absoluto muestra un total de `r total_na` valores NA distribuidos en `r n_vars_con_na` variables del dataset. La variable `insumo_2` concentra `r n_na_insumo_2` ausencias, equivalentes al `r pct_na_insumo_2`% de las `r n_filas_inicial` órdenes; conforme a las consultas SQL de origen, estos NA no representan datos perdidos sino la ausencia estructural de un segundo insumo cuando `num_insumos < 2`, y se recodifican en la sección 4.2.4 como una categoría explícita. La variable `insumo_1` presenta `r n_na_insumo_1` ausencias, las cuales se investigan en la siguiente sección junto con los valores cero, dado que ambos fenómenos tienden a coincidir en los mismos registros.
+
+#### Valores con magnitud cero
+
+```{r conteo-ceros}
+conteo_ceros <- datos %>%
+  summarise(across(where(is.numeric), ~ sum(. == 0, na.rm = TRUE))) %>%
+  pivot_longer(everything(), names_to = "variable", values_to = "n_ceros")
+
+total_ceros <- sum(conteo_ceros$n_ceros)
+
+knitr::kable(conteo_ceros, caption = "Conteo de valores cero por variable numérica") %>%
+  kableExtra::kable_styling(full_width = FALSE) %>%
+  kableExtra::column_spec(1, width = "12em") %>%
+  kableExtra::column_spec(2, width = "12em")
+```
+
+Se identificaron `r total_ceros` registros con valores en cero distribuidos entre las variables numéricas. Los `r conteo_ceros %>% filter(variable == "cantidad_insumo_2") %>% pull(n_ceros)` ceros en `cantidad_insumo_2` coinciden con el total de órdenes que reportan un solo insumo y corresponden a una condición estructural y esperada del dataset, no a mediciones anómalas. A continuación se identifican las órdenes con valores cero en variables distintas de `cantidad_insumo_2`:
+
+```{r casos-con-ceros}
+cols_excluir <- c("cantidad_insumo_2")
+
+casos_con_ceros <- datos %>%
+  filter(if_any(
+    where(is.numeric) & -all_of(cols_excluir),
+    ~ . == 0
+  )) %>%
+  select(id_orden, volumen_lote, costo_transformacion, costo_insumo,
+         duracion_proceso, num_insumos) %>%
+  arrange(costo_transformacion)
+
+n_casos_cero <- nrow(casos_con_ceros)
+
+knitr::kable(casos_con_ceros,
+             caption = "Órdenes con valores cero en variables no estructurales",
+             format.args = list(big.mark = "")) %>%
+  kableExtra::kable_styling(full_width = FALSE)
+```
+
+Se identifican `r n_casos_cero` órdenes de producción con valores cero en variables no estructurales. Tras consulta con el área de operaciones, estas órdenes se clasifican en tres categorías causales:
+
+```{r tabla-causas, echo=FALSE}
+tabla_causas <- tribble(
+  ~Categoría, ~`Causa operativa`, ~`Órdenes`,
+  "Órdenes cerradas sin ejecutar",
+    "Volumen, tiempos y consumos en cero; en la práctica no se trabajaron",
+    4,
+  "Errores de digitación",
+    "num_insumos = 0 o cantidad_insumo_1 = NA, configuraciones no válidas del proceso",
+    4,
+  "Producción no conforme",
+    "Recursos consumidos asumidos como merma; no se asignaron al producto conforme",
+    1
+) %>%
+  bind_rows(tibble(Categoría = "**Total**", `Causa operativa` = "", `Órdenes` = 9))
+
+knitr::kable(tabla_causas, caption = "Clasificación operativa de las órdenes con valores cero") %>%
+  kableExtra::kable_styling(full_width = FALSE) %>%
+  kableExtra::column_spec(1, width = "18em") %>%
+  kableExtra::column_spec(2, width = "28em") %>%
+  kableExtra::column_spec(3, width = "6em")
+```
+
+Las tres categorías representan configuraciones no válidas para el análisis de costo unitario: en los tres casos, el costo del insumo no refleja una producción efectiva del producto conforme, por lo que su inclusión distorsionaría los estadísticos descriptivos y las estimaciones inferenciales posteriores.
+
+#### Eliminación de registros inválidos
+
+Dado que las tres categorías causales convergen en un rasgo común —ausencia de costo de insumo asignable al producto conforme— la variable `costo_insumo == 0`  se adopta como criterio de filtrado.
+
+
+```{r verificar-criterio}
+datos %>%
+  count(costo_insumo == 0) %>%
+  mutate(porcentaje = round(n / sum(n) * 100, 1))
+```
+
+```{r eliminar-invalidos}
+datos <- datos %>%
+  filter(costo_insumo != 0)
+
+n_filas_final <- nrow(datos)
+n_eliminadas  <- n_filas_inicial - n_filas_final
+pct_eliminadas <- round(n_eliminadas / n_filas_inicial * 100, 1)
+
+dim(datos)
+```
+
+Se eliminaron `r n_eliminadas` órdenes (`r pct_eliminadas`% del total) con `costo_insumo == 0`. El dataset analítico queda conformado por `r n_filas_final` órdenes, las cuales constituyen la base para todos los análisis posteriores.
+
+### Conversión de tipos
+
+Sobre el dataset ya depurado se ajustan los tipos de las variables cuya representación por defecto no corresponde a su naturaleza analítica:
+
+- La variable `periodo` viene como entero `YYYYMM`; en análisis posteriores se podrá convertir a fecha para análisis de temporalidad, pero en el presente estudio se conserva como texto, dado que no se realizarán análisis de series de tiempo.
+- La variable `num_insumos`, restringida a los valores 1 y 2, se trata como factor ordenado.
+- Las variables `tipo_equipo`, `categoria_producto`, `equipo_id`, `modalidad_proceso`, `insumo_1` e `insumo_2` se convierten a factor para los análisis inferenciales posteriores.
+- La variable `insumo_2` requiere además una recodificación explícita de los valores faltantes a la categoría `sin_segundo_insumo`, dado que el NA no representa un dato perdido sino una característica estructural de la orden (cuando `num_insumos < 2`).
+
+```{r conversion-tipos}
+datos <- datos %>%
+  mutate(
+    periodo            = as.character(periodo),
+    num_insumos        = factor(num_insumos, levels = c(1, 2), ordered = TRUE),
+    tipo_equipo        = as.factor(tipo_equipo),
+    categoria_producto = as.factor(categoria_producto),
+    equipo_id          = as.factor(equipo_id),
+    modalidad_proceso  = as.factor(modalidad_proceso),
+    insumo_1           = as.factor(insumo_1),
+    insumo_2           = factor(if_else(is.na(insumo_2), "sin_segundo_insumo", insumo_2))
+  )
+
+str(datos)
+```
+
+Tras la conversión, las variables categóricas quedan representadas como factores, el factor ordenado `num_insumos` preserva la jerarquía natural de sus niveles, y la categoría `sin_segundo_insumo` de `insumo_2` absorbe las ausencias estructurales sin pérdida de observaciones.
+
+### Consideraciones estructurales para el análisis
+
+Antes de entrar al análisis exploratorio, vale la pena dejar claros algunos puntos sobre la estructura del dataset depurado, ya que pueden prestarse a malas interpretaciones.
+
+- La variable cantidad_insumo_2 toma el valor cero cuando num_insumos = 1. Esto significa simplemente ese insumo 2 no existe en ese caso. Son ceros “estructurales” . 
+- Los costos costo_transformacion y costo_insumo están definidos como valores monetarios por unidad de producto. Permitiendo comparar directamente entre órdenes, sin importar el tamaño del lote, ya que no requieren ajustes por escala de producción.
+
+El dataset con el que se trabajará está compuesto por r n_filas_final órdenes de producción. Sobre esta base se desarrollan los análisis exploratorios e inferenciales de los siguientes capítulos.
+
+```{r exportardataset}
+# Para auditoría y reproducibilidad externa
+write_csv2(datos, "data/data_costos_limpio.csv")
+
+# Para cargar rápido en capítulos posteriores preservando tipos
+saveRDS(datos, "data/data_costos_limpio.rds")
+```
+
+<!--chapter:end:04-metodologia.Rmd-->
+
+
+---
+title: "Análisis exploratorio e inferencial"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    df_print: paged
+    theme: flatly
+---
+
+# Diccionario de campos
+
+
+```{r diccionario-datos, echo=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+library(kableExtra)
+
+diccionario <- data.frame(
+  Variable = c("periodo", "codigo_producto", "id_orden", "volumen_lote",
+               "costo_transformacion", "costo_insumo", "equipo_id", "tipo_equipo",
+               "categoria_producto", "num_insumos", "insumo_1", "insumo_2",
+               "cantidad_insumo_1", "cantidad_insumo_2", "modalidad_proceso",
+               "duracion_proceso"),
+  Descripcion = c(
+    "Año-mes contable de la orden, formato YYYYMM",
+    "Identificador único del SKU producido",
+    "Identificador único de la orden de producción",
+    "Cantidad de unidades producidas en la orden",
+    "Costo de conversión por unidad producida (mano de obra, energía, depreciación, indirectos)",
+    "Costo de materias primas e insumos por unidad producida",
+    "Identificador único de la máquina física",
+    "Familia o categoría tecnológica de la máquina (A1, B2, ...)",
+    "Clasificación del producto",
+    "Número de insumos consumidos en la orden",
+    "Identificador del primer insumo principal",
+    "Identificador del segundo insumo (NA cuando num_insumos < 2)",
+    "Cantidad consumida del insumo 1",
+    "Cantidad consumida del insumo 2",
+    "Modalidad de operación del proceso (X, Y, ...)",
+    "Tiempo total de ejecución de la orden"
+  ),
+  Tipo = c("Temporal (ordinal)", "Categórica nominal", "Categórica nominal",
+           "Numérica discreta", "Numérica continua", "Numérica continua",
+           "Categórica nominal", "Categórica nominal", "Categórica nominal",
+           "Categórica ordinal", "Categórica nominal", "Categórica nominal",
+           "Numérica continua", "Numérica continua", "Categórica nominal",
+           "Numérica continua"),
+  Unidad = c("Mes", "—", "—", "unidades", "UM/unidad", "UM/unidad",
+             "—", "—", "—", "{0, 1, 2}", "—", "—",
+             "kg / L (verificar)", "kg / L (verificar)", "—", "horas"),
+  Rol = c("Control / estratificación", "Factor de agrupación",
+          "Identificador (no entra al modelo)", "Predictora (escala)",
+          "Variable respuesta 1", "Variable respuesta 2",
+          "Predictora (efecto fijo o aleatorio)", "Predictora (factor)",
+          "Predictora (factor)", "Predictora (proxy de complejidad)",
+          "Predictora (factor)", "Predictora (factor)",
+          "Predictora (intensidad de uso)", "Predictora (intensidad de uso)",
+          "Predictora (factor)", "Predictora (intensidad temporal)"),
+  stringsAsFactors = FALSE
+)
+
+kbl(diccionario,
+    col.names = c("Variable", "Descripción", "Tipo", "Unidad",
+                  "Rol en el análisis"),
+    caption = "Diccionario de datos del proceso productivo (n = 406 órdenes)",
+    align = c("l", "l", "l", "l", "l"),
+    escape = FALSE) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = TRUE,
+    font_size = 13,
+    position = "left"
+  ) %>%
+  column_spec(1, bold = TRUE, width = "10em", monospace = TRUE) %>%
+  column_spec(2, width = "22em") %>%
+  column_spec(3, width = "10em") %>%
+  column_spec(4, width = "8em") %>%
+  column_spec(5, width = "14em") %>%
+  row_spec(0, bold = TRUE, background = "#f2f2f2")
+```
+
+
+<!--chapter:end:05-diccionario-campos.Rmd-->
+
 # Análisis Exploratorio Básico
 Este capítulo describe el comportamiento del costo unitario de producción a partir de las 395 órdenes que sobrevivieron al proceso de depuración del Capítulo 5. La premisa de entrada tratar el dataset como un universo homogéneo del proceso productivo y observar qué dice cuando se le aplica la teoria estándar del análisis exploratorio (resúmenes descriptivos, distribuciones univariadas, correlaciones, y comparaciones bivariadas marginales).
 A lo largo del recorrido, la data va a revelar que no es uniforme, que mezcla modelos operativos distintos, y que las comparaciones agregadas pueden ser engañosas. El cierre del capítulo muestra decisiones metodológicas concretas que dan paso al análisis estratificado del Capítulo 7.
@@ -1610,3 +2033,291 @@ Tras estas exclusiones, el dataset principal queda conformado por r n_principal 
 
 ## Cierre: qué sabemos, qué no sabemos, qué sigue
       → Hipótesis que justifican el análisis estratificado
+
+<!--chapter:end:06-analisis-exploratorio-basico.Rmd-->
+
+# estratificado
+Capítulo 7 — Análisis Exploratorio Estratificado
+  7.1 Carga del dataset principal (n=373 tras exclusiones)
+  7.2 Mapa del espacio operativo válido
+      → Qué comparaciones son posibles dentro del dataset principal
+  7.3 Efecto puro del tipo de equipo en (X, 1)
+      → La única celda limpia inter-equipos
+  7.4 Análisis intra-tipo: heterogeneidad dentro de las familias
+      7.4.1 A1: siete equipos, familia coherente
+      7.4.2 B2: un solo equipo, comparabilidad con A1
+      7.4.3 D4: dos equipos con regímenes distintos
+      → Hallazgo: la clasificación por tipo agrega información distinta en cada tipo
+  7.5 Análisis dentro de A1: configuración universal
+      7.5.1 Efecto de modalidad_proceso
+      7.5.2 Efecto de num_insumos
+      7.5.3 Interacción modalidad × num_insumos
+  7.6 Correlaciones condicionales
+      7.6.1 Dentro de A1
+      7.6.2 Comparación marginal vs condicional
+      → Cómo cambian las asociaciones al estratificar
+  7.7 Análisis por combinación de insumos
+      (esto que ya tienes en el render actual)
+  7.8 Sección de referencia: subconjuntos excluidos
+      7.8.1 Modalidad Z descriptiva
+      7.8.2 Tipo C3 descriptivo
+  7.9 Síntesis e implicaciones
+      7.9.1 Qué se puede afirmar después del EDA estratificado
+      7.9.2 Hipótesis que alimentan el capítulo de inferencia
+      7.9.3 Comparaciones que el diseño NO permite
+      7.9.4 Implicaciones para la dirección financiera
+
+      
+
+## Estructura del espacio operativo sobre el dataset principal
+### Mapa de combinaciones
+
+```{r mapa-combinaciones}
+mapa_n <- datos_principal %>%
+  count(tipo_equipo, modalidad_proceso, num_insumos) %>%
+  pivot_wider(names_from = c(modalidad_proceso, num_insumos),
+              values_from = n,
+              values_fill = 0,
+              names_sep = "_")
+
+kable(mapa_n, caption = "Tamaño muestral por combinación (dataset principal)",
+      format = "html",
+      table.attr = "class='table'") %>%
+  kableExtra::kable_styling(full_width = FALSE)
+```
+
+
+A1 tiene cobertura completa: 60 órdenes en (X, 1), 63 en (X, 2), 118 en (Y, 1), 33 en (Y, 2). Total: 274. Es el único equipo que permite comparar simultáneamente los efectos de modalidad y de número de insumos.
+B2 tiene cobertura en las 4 combinaciones pero con n reducido (7, 13, 18, 6). Permite análisis condicional con cautela.
+D4 opera exclusivamente en (X, 1) con 55 órdenes. No se puede estudiar si D4 cambia de comportamiento en otras modalidades o con otros insumos: esa información no existe.
+
+Este mapa define el universo de comparaciones legítimas:
+
+Comparación inter-equipos en (X, 1): es el único estrato donde A1 (n=60), B2 (n=7) y D4 (n=55) coexisten. Total: 122 órdenes. Es la única celda limpia para responder la pregunta "¿los equipos difieren en costo?".
+Comparación intra-equipo A1 (efectos de modalidad e insumos): con 274 órdenes y cobertura completa, A1 es la configuración universal para estudiar cómo varían los costos según modalidad y número de insumos.
+Comparación intra-equipo B2: análoga a A1 pero con n=44. Las conclusiones son sugestivas, no definitivas.
+
+
+## Análisis condicional: lo que revelan los estratos
+### Efecto puro de tipo_equipo dentro de (X, 1)
+Esta es la pregunta que parecía obvia al inicio: ¿los equipos tienen costos distintos?
+
+```{r boxplot-cc-tipoequipo_X1, fig.width=9, fig.height=4.5}
+comp_X1 <- datos_principal %>%
+  filter(modalidad_proceso == "X", num_insumos == 1) %>%
+  group_by(tipo_equipo) %>%
+  summarise(
+    n     = n(),
+    media = mean(costo_transformacion),
+    `50%` = median(costo_transformacion),
+    ds    = sd(costo_transformacion),
+    IQR   = IQR(costo_transformacion),
+    .groups = "drop"
+  )
+comp_X1
+```
+
+
+Interpretación. Dentro de la única celda donde los tres equipos son comparables:
+
+D4 mantiene un costo de transformación sustancialmente menor.
+A1 y B2 son relativamente similares entre sí.
+La diferencia entre D4 y los otros equipos es real, no un artefacto de la mezcla de modalidades.
+
+Implicación para la dirección financiera. D4 es efectivamente más eficiente en transformación, al menos en la configuración (X, 1). Sin embargo, el dataset no permite concluir que D4 sería igualmente eficiente en otras modalidades — simplemente porque D4 no puede operar en Y o con 2 insumos. 
+
+Este es el análisis más potente del capítulo, porque A1 es el único equipo donde todas las combinaciones tienen n suficiente.
+
+```{r estrat-A1-B2}
+stats_A1 <- datos_principal %>%
+  filter(tipo_equipo %in% c("A1", "B2")) %>%
+  group_by(modalidad_proceso, num_insumos) %>%
+  summarise(
+    n     = n(),
+    media = mean(costo_transformacion),
+    `50%` = median(costo_transformacion),
+    ds    = sd(costo_transformacion),
+    .groups = "drop"
+  )
+stats_A1
+```
+Lo que revela el análisis estratificado. Dentro de A1:
+
+El paso de 1 a 2 insumos incrementa el costo de transformación medio de manera consistente en ambas modalidades.
+La modalidad Y tiende a tener costos más estables (menor IQR) que la modalidad X.
+La combinación (Y, 1) es la más eficiente y la más frecuente (n=118).
+
+
+**la combinación más frecuente del sistema (Y, 1 en A1) es también la más eficiente. ¿Es esto resultado de una estrategia consciente de planeación, o es una coincidencia del perfil de pedidos? La respuesta define si la eficiencia es replicable o circunstancial.**
+
+### Efecto de número de insumos: comparación condicional
+Un análisis marginal diría que pasar de 1 a 2 insumos aumenta el costo en promedio de 27.3 a 35.8 UM/unidad (+31%). Pero esa comparación mezcla equipos, modalidades y productos.
+La comparación condicional dentro de A1 da una respuesta más fina:
+
+```{r efecto-insumos}
+efecto_insumos <- datos_principal %>%
+  filter(tipo_equipo %in% c("A1", "B2")) %>%
+  group_by(modalidad_proceso, num_insumos) %>%
+  summarise(
+    media_ct = mean(costo_transformacion),
+    media_ci = mean(costo_insumo),
+    .groups = "drop"
+  ) %>%
+  pivot_wider(names_from = num_insumos,
+              values_from = c(media_ct, media_ci),
+              names_sep = "_ins")
+efecto_insumos
+```
+
+El efecto de agregar un segundo insumo es:
+
+En modalidad X: incremento claro en ambos costos.
+En modalidad Y: incremento menor en transformación, más marcado en insumo.
+
+Esta es una interacción: el efecto de num_insumos no es el mismo en todas las modalidades. El análisis marginal (el que no estratifica) promedia esas dos realidades y produce un número engañoso.
+Implicación financiera. Si la empresa cobra un recargo por órdenes con dos insumos, ese recargo debería depender de la modalidad. Un recargo uniforme subsidia las órdenes complejas en X con los márgenes de las órdenes simples en Y.
+
+## Asociaciones numéricas: cuando la correlación cambia al estratificar
+Las correlaciones marginales sobre el dataset principal muestran:
+
+volumen_lote ↔ costo_transformacion: −0.35 (Pearson) / −0.27 (Spearman).
+duracion_proceso ↔ costo_transformacion: +0.22 / +0.28.
+
+Lectura marginal: lotes más grandes son más baratos por unidad (economías de escala), procesos más largos son ligeramente más costosos.
+Pero al calcular las mismas correlaciones dentro de A1 y B2 únicamente:
+
+```{r corr-A1-B2}
+cor_A1_B2 <- datos_principal %>%
+  filter(tipo_equipo %in% c("A1", "B2")) %>%
+  select(costo_transformacion, volumen_lote, duracion_proceso,
+         cantidad_insumo_1, cantidad_insumo_2) %>%
+  cor(use = "pairwise.complete.obs", method = "spearman") %>%
+  round(3)
+cor_A1_B2
+```
+Por qué importa este contraste. Si la correlación marginal y la correlación dentro de A1 difieren sustancialmente, significa que parte de la relación observada globalmente no es un efecto directo de la variable, sino un efecto de composición: los equipos con ciertos perfiles de volumen también tienen ciertos perfiles de costo, y eso infla o deforma la correlación marginal.
+Traducción financiera. Las economías de escala son reales dentro de A1, pero el tamaño del efecto marginal que ven los reportes tradicionales puede estar sobrestimado porque mezcla el efecto de "producir más" con el efecto de "producir en un equipo distinto".
+
+## Caracterización descriptiva de los subconjuntos excluidos
+Esta sección es puramente descriptiva. No se hacen inferencias, solo se documentan los subconjuntos excluidos del análisis principal para transparencia.
+### Modalidad Z (n=14)
+datos %>%
+  filter(modalidad_proceso == "Z") %>%
+  group_by(tipo_equipo) %>%
+  summarise(
+    n     = n(),
+    ct_media = mean(costo_transformacion),
+    ci_media = mean(costo_insumo),
+    ctot_media = mean(costo_unitario_total),
+    .groups = "drop"
+  )
+Observación descriptiva. Las órdenes en modalidad Z presentan un costo total promedio superior al de X y Y en A1. Esto es consistente con la definición operativa de Z (aplicación conjunta de X e Y al mismo producto), que implica mayor consumo de tiempo y recursos. La magnitud exacta del sobrecosto no es generalizable con n=14 y no se usará para ninguna conclusión. Solo sirve como referencia cualitativa para que la empresa calibre el recargo comercial aplicado a pedidos que solicitan Z.
+### Tipo de equipo C3 (n=8)
+datos %>%
+  filter(tipo_equipo == "C3") %>%
+  summarise(
+    n = n(),
+    ct_media   = mean(costo_transformacion),
+    ct_mediana = median(costo_transformacion),
+    ci_media   = mean(costo_insumo),
+    ci_mediana = median(costo_insumo)
+  )
+Observación descriptiva. C3 presenta los costos más altos del dataset tanto en transformación como en insumos. Con n=8 el intervalo de confianza es demasiado amplio para afirmar cuánto más costoso es en comparación con otros equipos, pero el patrón es consistente y amerita una revisión operativa específica —fuera del alcance de este trabajo estadístico— sobre qué justifica su uso y en qué condiciones.
+
+6.9 Síntesis: lo que cambia para el capítulo de inferencia
+6.9.1 Qué se puede afirmar después del EDA
+
+El sistema productivo no es homogéneo: tiene al menos tres regímenes operativos diferenciados por tipo de equipo (A1/B2 como regímenes estándar, D4 como régimen eficiente restringido a (X, 1), C3 como régimen excepcional).
+Dentro de A1 (configuración universal), el número de insumos y la modalidad afectan el costo de manera interactiva. El efecto de agregar un segundo insumo depende de la modalidad.
+Las economías de escala son reales pero no uniformes: pierden intensidad en volúmenes altos y presentan mayor dispersión en lotes pequeños.
+El costo de transformación domina el costo total (85%). Cualquier iniciativa de reducción debe enfocarse en procesos, no en insumos.
+
+6.9.2 Hipótesis que alimentan el capítulo 7 (inferencia)
+Con base en el EDA, las pruebas inferenciales formales que tienen sustento son:
+HipótesisPrueba aplicableEstratonH1: El costo de transformación difiere entre A1, B2 y D4ANOVA 1 vía (Welch) o Kruskal-Wallis(X, 1) únicamente122H2: Dentro de A1, la modalidad afecta el costot-test o Mann-WhitneyA1 completo274H3: Dentro de A1, el número de insumos afecta el costot-test o Mann-WhitneyA1 completo274H4: Existe interacción modalidad × num_insumos dentro de A1ANOVA 2 víasA1 completo274H5: Existe correlación entre volumen_lote y costo dentro de A1Correlación de Spearman con ICA1 completo274
+6.9.3 Comparaciones que el diseño del dataset no permite hacer
+Para transparencia metodológica, se documenta lo que el dataset no puede responder:
+
+Si D4 sería más eficiente que A1 en modalidad Y: D4 nunca operó en Y.
+Si C3 sería competitivo con volúmenes altos: los 8 casos de C3 no cubren rangos altos de volumen.
+Si la modalidad Z es más costosa que la suma de X e Y: n=14 no da potencia suficiente.
+
+Estas preguntas requerirían un diseño de recolección de datos distinto, con asignación deliberada de órdenes a configuraciones específicas para romper la dependencia entre factores.
+
+6.10 Implicaciones para la dirección financiera
+Cuatro mensajes para la toma de decisiones:
+
+La reducción de costos tiene un techo estructural del 15% si se enfoca solo en insumos. La palanca mayor está en los procesos de transformación, específicamente en los regímenes menos eficientes.
+D4 es el equipo más eficiente observado, pero su alcance es limitado. Antes de recomendar migración de producción, se requiere un estudio operativo que determine si las restricciones de D4 son técnicas o históricas.
+La política de precios probablemente está subsidiando la complejidad. Las órdenes con dos insumos son sistemáticamente más costosas, pero el recargo aplicado (si existe) no varía por modalidad. Órdenes complejas en modalidad X son las menos rentables.
+El tamaño de lote mínimo rentable debe definirse explícitamente. Los lotes pequeños concentran los mayores costos unitarios y la mayor variabilidad. Una política de lote mínimo, o una estructura de precios que incentive la consolidación de pedidos, tendría impacto medible e inmediato.
+
+
+Nota final sobre el método. Este capítulo deliberadamente empezó con una visión agregada y la desmontó progresivamente. El objetivo no fue mostrar los hallazgos de la forma más eficiente, sino hacer visible el razonamiento: cómo una primera lectura simple escondía una estructura jerárquica, por qué el análisis marginal era engañoso, y qué comparaciones sí son válidas en un dataset con espacio operativo truncado. Esta disciplina es la que separa un EDA mecánico de un EDA con criterio.
+
+<!--chapter:end:07-analisis-exploratorio-estratificado.Rmd-->
+
+# Pruebas de Hipótesis SIN DESARROLLAR
+
+
+La hipótesis "el tipo de equipo afecta el costo" debe reformularse cuando el tipo agrupa equipos heterogéneos. Para C3 y D4, la pregunta correcta es a nivel de equipo individual, no de tipo.
+M02 (único B2) no permite una prueba de "tipo B2 vs tipo A1"; la prueba real es "M02 vs cluster de equipos A1".
+Para A1 con sus siete equipos, una prueba de homogeneidad interna (ANOVA o Kruskal-Wallis sobre los 7 equipos) podría confirmar formalmente que la familia es coherente. Si esa prueba no rechaza, se justifica tratarlos como un solo grupo en análisis posteriores.
+
+<!--chapter:end:08-pruebas-hipotesis.Rmd-->
+
+# Modelos SIN DESARROLLAR
+
+En esta sección se ajusta un modelo lineal simple como ejemplo base. Si la base contiene `mpg`, `wt` y `hp`, se usa esa especificación.
+
+## Ajuste del modelo
+
+```{r modelo-lineal}
+if (all(c("mpg", "wt", "hp") %in% names(datos))) {
+  modelo_lm <- lm(mpg ~ wt + hp, data = datos)
+
+  broom::tidy(modelo_lm) |>
+    knitr::kable(caption = "Coeficientes del modelo lineal.") |>
+    kableExtra::kable_styling(full_width = FALSE)
+}
+```
+
+## Medidas de ajuste
+
+```{r ajuste-modelo}
+if (exists("modelo_lm")) {
+  broom::glance(modelo_lm) |>
+    knitr::kable(caption = "Medidas globales de ajuste del modelo lineal.") |>
+    kableExtra::kable_styling(full_width = FALSE)
+}
+```
+
+## Gráfico de observados vs ajustados
+
+```{r observados-ajustados, fig.cap="Comparación entre valores observados y ajustados."}
+if (exists("modelo_lm")) {
+  datos_ajuste <- datos |>
+    dplyr::mutate(ajustado = fitted(modelo_lm))
+
+  ggplot(datos_ajuste, aes(x = ajustado, y = mpg)) +
+    geom_point() +
+    geom_abline(slope = 1, intercept = 0, linetype = 2) +
+    labs(
+      title = "Valores observados frente a ajustados",
+      x = "Valor ajustado",
+      y = "Valor observado"
+    ) +
+    theme_minimal()
+}
+```
+
+<!--chapter:end:09-modelos.Rmd-->
+
+# Conclusión
+
+<!--chapter:end:10-conclusion.Rmd-->
+
+# Bibliografía
+
+<!--chapter:end:11-bibliografia.Rmd-->
+
