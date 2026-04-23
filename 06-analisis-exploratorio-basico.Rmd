@@ -986,7 +986,7 @@ kable(matriz_df,
 
 ### Diagramas de dispersión
 
-```{r scatter-prioritarios, fig.asp = 0.7, warning=FALSE, message=FALSE}
+```{r scatter-prioritarios, fig.asp = 1, warning=FALSE, message=FALSE}
 
 # Función auxiliar para construir gráficos de dispersión
 graf_disp <- function(data, x, y, xlab, ylab, titulo, color = "#1E90FF") {
