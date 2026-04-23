@@ -1630,37 +1630,6 @@ ci_modproceso_cv    <- setNames(resumen_insumo$ds / resumen_insumo$media * 100,
                                 resumen_insumo$modalidad)
 ```
 
-```{r bivariado-cc-modproceso}
-cc_modproceso <- datos %>%
-  group_by(modalidad_proceso) %>%
-  summarise(
-    n = length(costo_transformacion),
-    media = mean(costo_transformacion),
-    ds = sd(costo_transformacion),
-    `50%` = median(costo_transformacion),
-    minimo = min(costo_transformacion),
-    maximo = max(costo_transformacion),
-    Q1 = quantile(costo_transformacion, 0.25),
-    Q3 = quantile(costo_transformacion, 0.75),
-    IQR = IQR(costo_transformacion),
-    .groups = "drop"
-  )
-modproceso_media  <- cc_modproceso$media
-modproceso_ds     <- cc_modproceso$ds
-modproceso_med    <- cc_modproceso$`50%`
-modproceso_min    <- cc_modproceso$minimo
-modproceso_max    <- cc_modproceso$maximo
-modproceso_iqr    <- cc_modproceso$IQR
-modproceso_q1     <- cc_modproceso$Q1
-modproceso_q3     <- cc_modproceso$Q3
-modproceso_cv     <- modproceso_ds / modproceso_media * 100
-
-  knitr::kable(cc_modproceso , caption = "Resumen Bivariado costos de transformación por modalidad de proceso",
-                 format = "html",
-             table.attr = "class='table'") %>%
-  kableExtra::kable_styling(full_width = FALSE) 
-
-```
 La modalidad Z corresponde a órdenes donde se aplican X y Y al mismo producto por requerimiento del cliente. Es una composición de procesos, no una alternativa.
 En transformación: se observa un gradiente claro X (`r modproceso_media[1]`) < Y (`r modproceso_media[2]`) < Z (`r modproceso_media[3]`), confirmado por la mediana. Pero la dispersión cambia entre modalidades: X tiene desviación estándar de 17.9 (proceso volátil), Y tiene `r modproceso_ds[2]` (proceso controlado), Z tiene `r modproceso_ds[3]` pero con IQR contenido (alto y consistente).
 
@@ -1678,36 +1647,6 @@ Limitación crítica. El n de Z es de `r cc_modproceso$n[3]` órdenes. Cualquier
 ::: 
 
 
-```{r bivariado-ci-modproceso}
-ci_modproceso <- datos %>%
-  group_by(modalidad_proceso) %>%
-  summarise(
-    n = length(costo_insumo),
-    media = mean(costo_insumo),
-    ds = sd(costo_insumo),
-    `50%` = median(costo_insumo),
-    minimo = min(costo_insumo),
-    maximo = max(costo_insumo),
-    Q1 = quantile(costo_insumo, 0.25),
-    Q3 = quantile(costo_insumo, 0.75),
-    IQR = IQR(costo_insumo),
-    .groups = "drop"
-  )
-ci_modproceso_media  <- ci_modproceso$media
-ci_modproceso_ds     <- ci_modproceso$ds
-ci_modproceso_med    <- ci_modproceso$`50%`
-ci_modproceso_min    <- ci_modproceso$minimo
-ci_modproceso_max    <- ci_modproceso$maximo
-ci_modproceso_iqr    <- ci_modproceso$IQR
-modproceso_q1     <- cc_modproceso$Q1
-modproceso_q3     <- cc_modproceso$Q3
-modproceso_cv     <- modproceso_ds / modproceso_media * 100
-
-    knitr::kable(resumen_bivariado_ci_modproceso , caption = "Resumen Bivariado costos de insumo por modalidad de proceso",
-                 format = "html",
-             table.attr = "class='table'") %>%
-  kableExtra::kable_styling(full_width = FALSE) 
-```
 
 En costo de insumo, el patrón es más suave:
 X ≈ 4.80, Y ≈ 5.20, Z ≈ 6.86
