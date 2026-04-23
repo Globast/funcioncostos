@@ -1724,7 +1724,7 @@ knitr::kable(
   kableExtra::pack_rows("Insumo", nrow(resumen_transformacion_te) + 1, nrow(tabla_resumen_tipoequipo)) 
 ```
 
-```{r tabla-resumen-modproceso-inline, message=FALSE, warning=FALSE}
+```{r tabla-resumen-tipoequipo-inline, message=FALSE, warning=FALSE}
 tipoequipo_n <- setNames(resumen_transformacion_te$n, resumen_transformacion_te$tipo)
 tipoequipo_media <- setNames(resumen_transformacion_te$media, resumen_transformacion_te$tipo)
 tipoequipo_ds    <- setNames(resumen_transformacion_te$ds, resumen_transformacion_te$tipo)
