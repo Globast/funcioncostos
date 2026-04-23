@@ -800,6 +800,14 @@ datos %>%
   ) %>%
   mutate(variable = "volumen_lote") -> var_num_vol
 
+vol_lote_media  <- var_num_vol$media
+vol_lote_ds     <- var_num_vol$ds
+vol_lote_med    <- var_num_vol$`50%`
+vol_lote_min    <- var_num_vol$minimo
+vol_lote_max    <- var_num_vol$maximo
+vol_lote_iqr    <- var_num_vol$IQR
+vol_lote_cv     <- vol_lote_ds / vol_lote_media * 100
+
 datos %>%
   summarise(
     n = length(duracion_proceso),
@@ -813,6 +821,14 @@ datos %>%
     IQR = IQR(duracion_proceso)
   ) %>%
   mutate(variable = "duracion_proceso") -> var_num_dur
+
+dur_proceso_media  <- var_num_dur$media
+dur_proceso_ds     <- var_num_dur$ds
+dur_proceso_med    <- var_num_dur$`50%`
+dur_proceso_min    <- var_num_dur$minimo
+dur_proceso_max    <- var_num_dur$maximo
+dur_proceso_iqr    <- var_num_dur$IQR
+dur_proceso_cv     <- dur_proceso_ds / dur_proceso_media * 100
 
 datos %>%
   filter(num_insumos >= 1) %>%
@@ -829,6 +845,14 @@ datos %>%
   ) %>%
   mutate(variable = "cantidad_insumo_1") -> var_num_ci1
 
+ci1_media  <- var_num_ci1$media
+ci1_ds     <- var_num_ci1$ds
+ci1_med    <- var_num_ci1$`50%`
+ci1_min    <- var_num_ci1$minimo
+ci1_max    <- var_num_ci1$maximo
+ci1_iqr    <- var_num_ci1$IQR
+ci1_cv     <- ci1_ds / ci1_media * 100
+
 datos %>%
   filter(num_insumos == 2) %>%
   summarise(
@@ -844,6 +868,14 @@ datos %>%
   ) %>%
   mutate(variable = "cantidad_insumo_2") -> var_num_ci2
 
+ci2_media  <- var_num_ci2$media
+ci2_ds     <- var_num_ci2$ds
+ci2_med    <- var_num_ci2$`50%`
+ci2_min    <- var_num_ci2$minimo
+ci2_max    <- var_num_ci2$maximo
+ci2_iqr    <- var_num_ci2$IQR
+ci2_cv     <- ci2_ds / ci2_media * 100
+
 resumen_num_predictoras <- bind_rows(var_num_vol, var_num_dur, var_num_ci1, var_num_ci2) %>%
   select(variable, everything())%>%
   mutate(across(where(is.numeric) & !n, ~ round(.x, 2)))
@@ -853,14 +885,13 @@ knitr::kable(resumen_num_predictoras, caption = "Resumen descriptivo de las vari
   kableExtra::kable_styling(full_width = FALSE) 
 ```
 
+- *Volumen de lote*,  es la variable más heterogénea. La media de `r round(vol_lote_media,2)` supera claramente a la mediana `r round(vol_lote_med,2)` indicando asimetría positiva. El rango es muy amplio (`r round(vol_lote_min,2)` a `r round(vol_lote_max,2)`) y el IQR (`r round(vol_lote_iqr,2)`) es elevado, señal de que incluso el comportamiento “típico” presenta alta dispersión. el proceso opera con lotes muy dispares, dependiendo de los pedidos de los clientes , el proceso es make to order.  No hay un tamaño estándar dominante.
 
-- *Volumen de lote*,  es la variable más heterogénea. La media de `r round(vol_media,2)` supera claramente a la mediana `r round(vol_mediana,2)` indicando asimetría positiva. El rango es muy amplio (`r round(vol_min,2)` a `r round(vol_max,2)`) y el IQR (`r round(vol_iqr,2)`) es elevado, señal de que incluso el comportamiento “típico” presenta alta dispersión. el proceso opera con lotes muy dispares, dependiendo de los pedidos de los clientes , el proceso es make to order.  No hay un tamaño estándar dominante.
+- *Duración del proceso*, es heterogéneo también pero más controlado. La media  (`r round(dur_proceso_media,2)`) es superior a la mediana (`r round(dur_proceso_mediana,2)`), nuevamente cola derecha. El IQR muestra que la mitad de los procesos se concentra entre 60 y 150 horas, lo que define un rango operativo razonablemente estable. Sin embargo, el máximo de 482 horas apunta a procesos excepcionalmente largos.
 
-- *Duración del proceso*, es heterogéneo también pero más controlado. La media  (`r round(dur_media,2)`) es superior a la mediana (`r round(dur_mediana,2)`), nuevamente cola derecha. El IQR muestra que la mitad de los procesos se concentra entre 60 y 150 horas, lo que define un rango operativo razonablemente estable. Sin embargo, el máximo de 482 horas apunta a procesos excepcionalmente largos.
+- *Cantidad de insumo 1*, comportamiento más discreto y concentrado. La mediana es `r round(ci1_med,2)` y el IQR es `r round(ci1_iqr,2)`, lo que indica que la mayoría de los casos utiliza entre `r round(ci1_Q1,2)` y `r round(ci1_Q3,2)` unidades. La media (`r round(ci1_media,2)`) ligeramente superior a la mediana sugiere algunos valores altos, pero sin una dispersión extrema. Esta variable refleja un consumo relativamente estable y predecible, con variaciones moderadas.
 
-- *Cantidad de insumo 1*, comportamiento más discreto y concentrado. La mediana es `r round(ci1_mediana,2)` y el IQR es `r round(ci1_iqr,2)`, lo que indica que la mayoría de los casos utiliza entre `r round(ci1_Q1,2)` y `r round(ci1_Q3,2)` unidades. La media (`r round(ci1_media,2)`) ligeramente superior a la mediana sugiere algunos valores altos, pero sin una dispersión extrema. Esta variable refleja un consumo relativamente estable y predecible, con variaciones moderadas.
-
-- *Cantidad de insumo 2*: Tiene menor número de observaciones, no todos las ordenes llevan insumo 2. Su mediana es `r round(ci2_mediana,2)` y el IQR es `r round(ci2_iqr,2)`, lo que muestra una concentración aún mayor que en el insumo 1. La dispersión es baja y los valores extremos (máximo de `r round(ci2_max,2)`) son menos pronunciados. El segundo insumo actúa como un componente opcional o complementario, con consumo bajo y controlado.
+- *Cantidad de insumo 2*: Tiene menor número de observaciones, no todos las ordenes llevan insumo 2. Su mediana es `r round(ci2_med,2)` y el IQR es `r round(ci2_iqr,2)`, lo que muestra una concentración aún mayor que en el insumo 1. La dispersión es baja y los valores extremos (máximo de `r round(ci2_max,2)`) son menos pronunciados. El segundo insumo actúa como un componente opcional o complementario, con consumo bajo y controlado.
 
 
 
