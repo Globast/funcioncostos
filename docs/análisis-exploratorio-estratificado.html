@@ -1,0 +1,2228 @@
+<!DOCTYPE html>
+<html lang="es" xml:lang="es">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capítulo 7 Análisis Exploratorio Estratificado | Análisis exploratorio e inferencial</title>
+  <meta name="description" content="Maestría en Estadística Aplicada." />
+  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capítulo 7 Análisis Exploratorio Estratificado | Análisis exploratorio e inferencial" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Maestría en Estadística Aplicada." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capítulo 7 Análisis Exploratorio Estratificado | Análisis exploratorio e inferencial" />
+  
+  <meta name="twitter:description" content="Maestría en Estadística Aplicada." />
+  
+
+<meta name="author" content="Gloria Bastidas" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="análisis-exploratorio-básico.html"/>
+<link rel="next" href="pruebas-de-hipótesis-sin-desarrollar.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Libro Académico</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Portada</a></li>
+<li class="chapter" data-level="" data-path="prefacio.html"><a href="prefacio.html"><i class="fa fa-check"></i>Prefacio</a></li>
+<li class="chapter" data-level="1" data-path="resumen.html"><a href="resumen.html"><i class="fa fa-check"></i><b>1</b> Resumen</a></li>
+<li class="chapter" data-level="2" data-path="introducción.html"><a href="introducción.html"><i class="fa fa-check"></i><b>2</b> Introducción</a></li>
+<li class="chapter" data-level="3" data-path="objetivos-en-construcccion.html"><a href="objetivos-en-construcccion.html"><i class="fa fa-check"></i><b>3</b> Objetivos EN CONSTRUCCCION</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="objetivos-en-construcccion.html"><a href="objetivos-en-construcccion.html#objetivo-general"><i class="fa fa-check"></i><b>3.1</b> Objetivo general</a></li>
+<li class="chapter" data-level="3.2" data-path="objetivos-en-construcccion.html"><a href="objetivos-en-construcccion.html#objetivos-espec%C3%ADficos"><i class="fa fa-check"></i><b>3.2</b> Objetivos específicos</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="metodologia.html"><a href="metodologia.html"><i class="fa fa-check"></i><b>4</b> Metodología</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="metodologia.html"><a href="metodologia.html#dise%C3%B1o-del-estudio"><i class="fa fa-check"></i><b>4.1</b> Diseño del estudio</a></li>
+<li class="chapter" data-level="4.2" data-path="metodologia.html"><a href="metodologia.html#extracci%C3%B3n-transformaci%C3%B3n-y-carga-etl"><i class="fa fa-check"></i><b>4.2</b> Extracción, transformación y carga (ETL)</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="metodologia.html"><a href="metodologia.html#carga-del-conjunto-de-datos"><i class="fa fa-check"></i><b>4.2.1</b> Carga del conjunto de datos</a></li>
+<li class="chapter" data-level="4.2.2" data-path="metodologia.html"><a href="metodologia.html#verificaci%C3%B3n-de-la-lectura"><i class="fa fa-check"></i><b>4.2.2</b> Verificación de la lectura</a></li>
+<li class="chapter" data-level="4.2.3" data-path="metodologia.html"><a href="metodologia.html#revisi%C3%B3n-de-integridad-de-datos"><i class="fa fa-check"></i><b>4.2.3</b> Revisión de integridad de datos</a></li>
+<li class="chapter" data-level="4.2.4" data-path="metodologia.html"><a href="metodologia.html#conversi%C3%B3n-de-tipos"><i class="fa fa-check"></i><b>4.2.4</b> Conversión de tipos</a></li>
+<li class="chapter" data-level="4.2.5" data-path="metodologia.html"><a href="metodologia.html#consideraciones-estructurales-para-el-an%C3%A1lisis"><i class="fa fa-check"></i><b>4.2.5</b> Consideraciones estructurales para el análisis</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="diccionario-de-campos.html"><a href="diccionario-de-campos.html"><i class="fa fa-check"></i><b>5</b> Diccionario de campos</a></li>
+<li class="chapter" data-level="6" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html"><i class="fa fa-check"></i><b>6</b> Análisis Exploratorio Básico</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#carga-del-dataset-anal%C3%ADtico"><i class="fa fa-check"></i><b>6.1</b> Carga del dataset analítico</a></li>
+<li class="chapter" data-level="6.2" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#an%C3%A1lisis-univariado-de-variables-respuesta"><i class="fa fa-check"></i><b>6.2</b> Análisis univariado de variables respuesta</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#costo-unitario-de-conversi%C3%B3n-o-de-transformacion"><i class="fa fa-check"></i><b>6.2.1</b> Costo unitario de conversión o de transformacion</a></li>
+<li class="chapter" data-level="6.2.2" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#costo-unitario-de-los-insumos"><i class="fa fa-check"></i><b>6.2.2</b> Costo unitario de los insumos</a></li>
+<li class="chapter" data-level="6.2.3" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#costo-unitario-total"><i class="fa fa-check"></i><b>6.2.3</b> Costo unitario total</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#an%C3%A1lisis-univariado-de-predictoras-num%C3%A9ricas"><i class="fa fa-check"></i><b>6.3</b> Análisis univariado de predictoras numéricas</a></li>
+<li class="chapter" data-level="6.4" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#an%C3%A1lisis-univariado-de-predictoras-categ%C3%B3ricas"><i class="fa fa-check"></i><b>6.4</b> Análisis univariado de predictoras categóricas</a></li>
+<li class="chapter" data-level="6.5" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado"><i class="fa fa-check"></i><b>6.5</b> Análisis bivariado</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#correlacion-pearson"><i class="fa fa-check"></i><b>6.5.1</b> Correlacion Pearson</a></li>
+<li class="chapter" data-level="6.5.2" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#diagramas-de-dispersi%C3%B3n"><i class="fa fa-check"></i><b>6.5.2</b> Diagramas de dispersión</a></li>
+<li class="chapter" data-level="6.5.3" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#matriz-spearman"><i class="fa fa-check"></i><b>6.5.3</b> Matriz Spearman</a></li>
+<li class="chapter" data-level="6.5.4" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado-modalidad-proceso"><i class="fa fa-check"></i><b>6.5.4</b> Análisis bivariado: Modalidad proceso</a></li>
+<li class="chapter" data-level="6.5.5" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado-tipo-de-equipo"><i class="fa fa-check"></i><b>6.5.5</b> Análisis bivariado: tipo de equipo</a></li>
+<li class="chapter" data-level="6.5.6" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado-equipo_id"><i class="fa fa-check"></i><b>6.5.6</b> Análisis bivariado: Equipo_id</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#se%C3%B1ales-de-heterogeneidad-estructural"><i class="fa fa-check"></i><b>6.6</b> Señales de heterogeneidad estructural</a>
+<ul>
+<li class="chapter" data-level="6.6.1" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#tabulaci%C3%B3n-cruzada-tipo_equipo-modalidad-num_insumos"><i class="fa fa-check"></i><b>6.6.1</b> Tabulación cruzada tipo_equipo × modalidad × num_insumos</a></li>
+</ul></li>
+<li class="chapter" data-level="6.7" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#implicaciones-metodol%C3%B3gicas-del-descubrimiento"><i class="fa fa-check"></i><b>6.7</b> Implicaciones metodológicas del descubrimiento</a>
+<ul>
+<li class="chapter" data-level="6.7.1" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#por-qu%C3%A9-el-an%C3%A1lisis-marginal-puede-ser-enga%C3%B1oso-confounding"><i class="fa fa-check"></i><b>6.7.1</b> Por qué el análisis marginal puede ser engañoso (confounding)</a></li>
+<li class="chapter" data-level="6.7.2" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#decisiones-de-exclusi%C3%B3n-justificadas"><i class="fa fa-check"></i><b>6.7.2</b> Decisiones de exclusión justificadas</a></li>
+</ul></li>
+<li class="chapter" data-level="6.8" data-path="análisis-exploratorio-básico.html"><a href="análisis-exploratorio-básico.html#cierre-qu%C3%A9-sabemos-qu%C3%A9-no-sabemos-qu%C3%A9-sigue"><i class="fa fa-check"></i><b>6.8</b> Cierre: qué sabemos, qué no sabemos, qué sigue</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="análisis-exploratorio-estratificado.html"><a href="análisis-exploratorio-estratificado.html"><i class="fa fa-check"></i><b>7</b> Análisis Exploratorio Estratificado</a></li>
+<li class="chapter" data-level="8" data-path="pruebas-de-hipótesis-sin-desarrollar.html"><a href="pruebas-de-hipótesis-sin-desarrollar.html"><i class="fa fa-check"></i><b>8</b> Pruebas de Hipótesis SIN DESARROLLAR</a></li>
+<li class="chapter" data-level="9" data-path="modelos-sin-desarrollar.html"><a href="modelos-sin-desarrollar.html"><i class="fa fa-check"></i><b>9</b> Modelos SIN DESARROLLAR</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="modelos-sin-desarrollar.html"><a href="modelos-sin-desarrollar.html#ajuste-del-modelo"><i class="fa fa-check"></i><b>9.1</b> Ajuste del modelo</a></li>
+<li class="chapter" data-level="9.2" data-path="modelos-sin-desarrollar.html"><a href="modelos-sin-desarrollar.html#medidas-de-ajuste"><i class="fa fa-check"></i><b>9.2</b> Medidas de ajuste</a></li>
+<li class="chapter" data-level="9.3" data-path="modelos-sin-desarrollar.html"><a href="modelos-sin-desarrollar.html#gr%C3%A1fico-de-observados-vs-ajustados"><i class="fa fa-check"></i><b>9.3</b> Gráfico de observados vs ajustados</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="conclusión.html"><a href="conclusión.html"><i class="fa fa-check"></i><b>10</b> Conclusión</a></li>
+<li class="chapter" data-level="11" data-path="bibliografía.html"><a href="bibliografía.html"><i class="fa fa-check"></i><b>11</b> Bibliografía</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/">Publicado con GitHub Pages</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Análisis exploratorio e inferencial</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="análisis-exploratorio-estratificado" class="section level1 hasAnchor" number="7">
+<h1><span class="header-section-number">Capítulo 7</span> Análisis Exploratorio Estratificado<a href="análisis-exploratorio-estratificado.html#an%C3%A1lisis-exploratorio-estratificado" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>El dataset principal contiene r n_principal órdenes (las r n_excluidas excluidas se conservan en datos_completo para la sección 7.8). Sobre datos_principal se desarrolla todo el análisis estratificado de las secciones 7.2 a 7.7.</p>
+7.2 Mapa del espacio operativo válido
+Antes de cualquier análisis, conviene caracterizar formalmente qué comparaciones son válidas dentro del dataset principal. La tabulación cruzada de las tres dimensiones operativas indica cuáles celdas tienen suficientes observaciones y cuáles están vacías.
+7.2.1 Tabulación de combinaciones
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:mapa-combinaciones">Table 7.1: </span><span id="tab:mapa-combinaciones">Table 7.2: </span>Combinaciones observadas en el dataset principal
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+tipo_equipo
+</th>
+<th style="text-align:left;">
+modalidad_proceso
+</th>
+<th style="text-align:left;">
+num_insumos
+</th>
+<th style="text-align:right;">
+n
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+A1
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+60
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A1
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+63
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A1
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+118
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A1
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+33
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B2
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B2
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+13
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B2
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+18
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B2
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D4
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+55
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:mapa-pivote">Table 7.3: </span><span id="tab:mapa-pivote">Table 7.4: </span>Tamaño muestral por combinación (formato matricial)
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+tipo_equipo
+</th>
+<th style="text-align:right;">
+X_1
+</th>
+<th style="text-align:right;">
+X_2
+</th>
+<th style="text-align:right;">
+Y_1
+</th>
+<th style="text-align:right;">
+Y_2
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+A1
+</td>
+<td style="text-align:right;">
+60
+</td>
+<td style="text-align:right;">
+63
+</td>
+<td style="text-align:right;">
+118
+</td>
+<td style="text-align:right;">
+33
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B2
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D4
+</td>
+<td style="text-align:right;">
+55
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<p>Lectura del mapa. Las celdas con mayor n marcan el universo de comparaciones donde la inferencia tiene sustento estadístico. Las celdas vacías o con n bajo definen las preguntas que el dataset no puede responder.
+7.2.2 Identificación de comparaciones válidas
+Tres comparaciones son metodológicamente sólidas dentro del dataset principal:</p>
+<p>Inter-equipos en (X, 1): la única celda donde A1, B2 y D4 coexisten con n suficiente. Es el único estrato donde la pregunta “¿los equipos difieren en costo?” tiene respuesta limpia.
+Intra-A1 (modalidad × num_insumos): A1 es el único equipo con cobertura completa de las cuatro combinaciones (X/Y × 1/2). Permite estudiar efectos de modalidad e insumos sin contaminación entre equipos.
+Intra-B2 (modalidad × num_insumos): B2 también cubre las cuatro combinaciones, con n más reducido. Permite análisis condicional con cautela y comparación cualitativa con A1.</p>
+<p>Estas tres comparaciones organizan las secciones 7.3 a 7.5.
+Conclusiones (Mapa operativo):</p>
+<p>El dataset principal admite tres tipos de comparaciones condicionales válidas; el resto requiere supuestos no verificables.
+A1 es la configuración universal del análisis: única con cobertura completa.
+(X, 1) es el único estrato inter-equipos limpio.</p>
+<p>7.3 Efecto puro del tipo de equipo dentro de (X, 1)
+Esta es la pregunta que parecía obvia al inicio del Capítulo 6 y que terminó siendo metodológicamente delicada: ¿los equipos difieren realmente en costo, o esa diferencia se confundía con la modalidad y los insumos?
+7.3.1 Subconjunto y estadísticos descriptivos</p>
+<p>El estrato (X, 1) contiene r n_X1 órdenes. La distribución por tipo de equipo es:</p>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:resumen-X1-ct">Table 7.5: </span><span id="tab:resumen-X1-ct">Table 7.6: </span>Costo de transformación por tipo de equipo en (X, 1)
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+tipo_equipo
+</th>
+<th style="text-align:right;">
+n
+</th>
+<th style="text-align:right;">
+media
+</th>
+<th style="text-align:right;">
+ds
+</th>
+<th style="text-align:right;">
+50%
+</th>
+<th style="text-align:right;">
+minimo
+</th>
+<th style="text-align:right;">
+maximo
+</th>
+<th style="text-align:right;">
+Q1
+</th>
+<th style="text-align:right;">
+Q3
+</th>
+<th style="text-align:right;">
+IQR
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+A1
+</td>
+<td style="text-align:right;">
+60
+</td>
+<td style="text-align:right;">
+31.653737
+</td>
+<td style="text-align:right;">
+11.715412
+</td>
+<td style="text-align:right;">
+29.735868
+</td>
+<td style="text-align:right;">
+8.756984
+</td>
+<td style="text-align:right;">
+80.57443
+</td>
+<td style="text-align:right;">
+25.154262
+</td>
+<td style="text-align:right;">
+34.38846
+</td>
+<td style="text-align:right;">
+9.234201
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B2
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+29.646597
+</td>
+<td style="text-align:right;">
+14.760690
+</td>
+<td style="text-align:right;">
+28.898809
+</td>
+<td style="text-align:right;">
+12.025943
+</td>
+<td style="text-align:right;">
+50.22381
+</td>
+<td style="text-align:right;">
+19.164527
+</td>
+<td style="text-align:right;">
+39.02428
+</td>
+<td style="text-align:right;">
+19.859757
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D4
+</td>
+<td style="text-align:right;">
+55
+</td>
+<td style="text-align:right;">
+8.819827
+</td>
+<td style="text-align:right;">
+3.540393
+</td>
+<td style="text-align:right;">
+8.458577
+</td>
+<td style="text-align:right;">
+2.766110
+</td>
+<td style="text-align:right;">
+21.99044
+</td>
+<td style="text-align:right;">
+6.027059
+</td>
+<td style="text-align:right;">
+10.85749
+</td>
+<td style="text-align:right;">
+4.830435
+</td>
+</tr>
+</tbody>
+</table>
+<p>7.3.2 Boxplot del costo de transformación en (X, 1)
+<img src="libro-maestria-estadistica-aplicada_files/figure-html/box-X1-ct-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<p>7.3.3 Lectura
+[Aquí desarrollas la interpretación. Lo importante a destacar:]</p>
+<p>Magnitud de la diferencia entre A1, B2 y D4 dentro de (X, 1).
+Si la diferencia entre D4 y A1 que aparecía en el Capítulo 6 (sección 6.5.5) se mantiene cuando se controla el estrato.
+Si la posición relativa de B2 cambia respecto al análisis marginal.
+Discusión del n: B2 tiene n=7 en este estrato, lo cual limita la robustez de la conclusión.</p>
+<p>Para completar esta sección:</p>
+<p>Replicar el análisis para costo_insumo dentro de (X, 1): tabla resumen y boxplot. Usa el mismo patrón cambiando costo_transformacion por costo_insumo.
+Replicar para costo_unitario_total dentro de (X, 1).
+Generar un gráfico combinado con patchwork que muestre los tres boxplots lado a lado para facilitar comparación.
+Interpretar las diferencias entre los tres costos: ¿el ranking de equipos se mantiene en transformación, insumo y total? Si cambia, anótalo como hallazgo relevante.</p>
+<p>Conclusiones (Efecto puro de tipo de equipo en (X, 1)):</p>
+<p>[A redactar tras completar el análisis. Plantilla:]
+Dentro del único estrato comparable, el ranking de equipos por costo es: ___.
+La diferencia D4 vs A1 [se mantiene / se reduce / se invierte] respecto al análisis marginal del Capítulo 6.
+La conclusión sobre B2 [es robusta / requiere cautela] dada la limitación de n=7.</p>
+<p>7.4 Análisis intra-tipo: heterogeneidad dentro de las familias
+El análisis del Capítulo 6 (sección 6.5.6) sugirió que dentro de cada tipo de equipo existen comportamientos distintos. Esta sección lo formaliza dentro del dataset principal, donde C3 ya está excluido y la lectura de A1 y D4 se limpia de outliers extremos asociados a configuraciones excepcionales.
+7.4.1 Familia A1: ¿siete equipos coherentes?</p>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:resumen-A1-equipos">Table 7.7: </span><span id="tab:resumen-A1-equipos">Table 7.8: </span>Costo de transformación por equipo dentro de A1
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+equipo_id
+</th>
+<th style="text-align:right;">
+n
+</th>
+<th style="text-align:right;">
+media
+</th>
+<th style="text-align:right;">
+ds
+</th>
+<th style="text-align:right;">
+50%
+</th>
+<th style="text-align:right;">
+Q1
+</th>
+<th style="text-align:right;">
+Q3
+</th>
+<th style="text-align:right;">
+IQR
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+M13
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:right;">
+30.30618
+</td>
+<td style="text-align:right;">
+9.351186
+</td>
+<td style="text-align:right;">
+28.92011
+</td>
+<td style="text-align:right;">
+23.77861
+</td>
+<td style="text-align:right;">
+34.13558
+</td>
+<td style="text-align:right;">
+10.356968
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+M17
+</td>
+<td style="text-align:right;">
+44
+</td>
+<td style="text-align:right;">
+30.31086
+</td>
+<td style="text-align:right;">
+11.170832
+</td>
+<td style="text-align:right;">
+29.43079
+</td>
+<td style="text-align:right;">
+24.17705
+</td>
+<td style="text-align:right;">
+34.49526
+</td>
+<td style="text-align:right;">
+10.318207
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+M09
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:right;">
+30.46855
+</td>
+<td style="text-align:right;">
+12.159829
+</td>
+<td style="text-align:right;">
+28.30983
+</td>
+<td style="text-align:right;">
+24.22474
+</td>
+<td style="text-align:right;">
+33.27041
+</td>
+<td style="text-align:right;">
+9.045671
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+M08
+</td>
+<td style="text-align:right;">
+32
+</td>
+<td style="text-align:right;">
+30.75338
+</td>
+<td style="text-align:right;">
+9.362068
+</td>
+<td style="text-align:right;">
+29.08394
+</td>
+<td style="text-align:right;">
+24.44062
+</td>
+<td style="text-align:right;">
+33.57619
+</td>
+<td style="text-align:right;">
+9.135572
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+M16
+</td>
+<td style="text-align:right;">
+43
+</td>
+<td style="text-align:right;">
+33.31158
+</td>
+<td style="text-align:right;">
+16.380168
+</td>
+<td style="text-align:right;">
+29.33401
+</td>
+<td style="text-align:right;">
+25.19359
+</td>
+<td style="text-align:right;">
+40.64056
+</td>
+<td style="text-align:right;">
+15.446962
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+M14
+</td>
+<td style="text-align:right;">
+40
+</td>
+<td style="text-align:right;">
+33.75485
+</td>
+<td style="text-align:right;">
+12.232435
+</td>
+<td style="text-align:right;">
+31.56359
+</td>
+<td style="text-align:right;">
+25.16327
+</td>
+<td style="text-align:right;">
+39.58087
+</td>
+<td style="text-align:right;">
+14.417596
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+M15
+</td>
+<td style="text-align:right;">
+43
+</td>
+<td style="text-align:right;">
+38.01583
+</td>
+<td style="text-align:right;">
+11.775535
+</td>
+<td style="text-align:right;">
+35.60816
+</td>
+<td style="text-align:right;">
+30.00709
+</td>
+<td style="text-align:right;">
+44.14519
+</td>
+<td style="text-align:right;">
+14.138099
+</td>
+</tr>
+</tbody>
+</table>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box-A1-equipos-1.png" alt="" width="90%" style="display: block; margin: auto;" />
+Lectura. [A desarrollar. Puntos clave:]</p>
+<p>¿El rango de medias entre los siete equipos A1 es estrecho o amplio?
+¿Hay equipos con dispersión interna marcadamente distinta?
+¿La conclusión del Capítulo 6 (“A1 es una familia coherente”) se sostiene tras eliminar las órdenes Z?</p>
+<p>Para completar esta subsección:</p>
+<p>Replicar el análisis con costo_insumo dentro de A1.
+Calcular el coeficiente de variación entre las medianas de los siete equipos A1. Una variación intra-tipo baja confirma la hipótesis de “familia coherente”. Calcula así: sd(medianas) / mean(medianas) * 100.
+Comparar las medias actuales con las del Capítulo 6 (M15 era 38.0, M13 era 30.3, etc.). ¿La exclusión de Z modificó significativamente algún equipo? Construye una tabla con dos columnas: media_cap6 y media_cap7.</p>
+<p>7.4.2 B2: un único equipo, ¿comparabilidad con A1?
+B2 está representado por un único equipo (M02). Toda conclusión sobre “el tipo B2” es en realidad una conclusión sobre M02. Esta sección compara su perfil con el cluster A1 para responder: ¿la categoría B2 aporta información distintiva respecto a A1?
+Para completar esta subsección:</p>
+<p>Construir una tabla resumen con M02 (B2) y los siete equipos A1, ordenados por media de costo de transformación, para visualizar dónde se ubica M02 en el ranking.
+Generar un boxplot conjunto con los ocho equipos (siete A1 + M02), coloreando por tipo (A1 en color cálido, M02 en color frío). Si M02 se mezcla visualmente con los A1, eso refuerza el hallazgo del Capítulo 6 sobre la indistinguibilidad económica.
+Replicar para costo_insumo.
+Discutir la implicación operativa: si M02 es indistinguible, ¿qué justifica mantener B2 como categoría tecnológica separada? Esta pregunta debe trasladarse al área técnica de la empresa, no resolverse estadísticamente.</p>
+<p>7.4.3 D4: dos equipos eficientes pero distintos
+D4 contiene dos equipos (M05 y M12) con perfil eficiente pero comportamientos diferentes entre sí.
+Para completar esta subsección:</p>
+<p>Construir tablas resumen separadas para M05 y M12 en costos de transformación e insumo. Calcular adicionalmente el coeficiente de variación.
+Boxplot comparativo M05 vs M12 para los dos costos. Marcar visualmente los outliers (M05 tenía un máximo de 46.2 en costo de insumo).
+Análisis de outliers en M05: identificar la(s) orden(es) responsables de los valores extremos. Mostrar qué configuración tienen (volumen, duración, insumos) y discutir si parecen estructurales o circunstanciales.
+Restricción operativa: M05 y M12 solo operan en (X, 1). El análisis de su eficiencia no puede extrapolarse a otras configuraciones. Documentar esta limitación.</p>
+<p>Conclusiones (Heterogeneidad intra-tipo):</p>
+<p>[A redactar tras completar las tres subsecciones. Plantilla:]
+A1 [confirma / no confirma] su carácter de familia coherente tras la exclusión de Z.
+B2 (M02) [se mantiene / se separa] del perfil A1, lo cual sugiere que la categoría tecnológica B2 [es / no es] analíticamente útil.
+D4 contiene dos regímenes operativos (M05 y M12) con diferencias relativas significativas; el análisis a nivel “tipo D4” es engañoso.</p>
+<p>7.5 Configuración universal A1: efectos de modalidad, insumos e interacción
+A1 es el único equipo con cobertura completa de las cuatro combinaciones de modalidad y número de insumos. Aquí se evalúan los efectos puros de cada factor y, crucialmente, si interactúan entre sí.
+7.5.1 Subconjunto y mapa de combinaciones</p>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:subset-A1">Table 7.9: </span><span id="tab:subset-A1">Table 7.10: </span>Combinaciones observadas dentro de A1
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+modalidad_proceso
+</th>
+<th style="text-align:right;">
+ins_1
+</th>
+<th style="text-align:right;">
+ins_2
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:right;">
+60
+</td>
+<td style="text-align:right;">
+63
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:right;">
+118
+</td>
+<td style="text-align:right;">
+33
+</td>
+</tr>
+</tbody>
+</table>
+A1 contiene r n_A1 órdenes distribuidas en cuatro celdas de tamaño suficiente. Esto permite analizar simultáneamente los dos factores y su interacción.
+7.5.2 Efecto principal: modalidad de proceso dentro de A1
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:resumen-A1-mod">Table 7.11: </span><span id="tab:resumen-A1-mod">Table 7.12: </span>Costo de transformación por modalidad dentro de A1
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+modalidad_proceso
+</th>
+<th style="text-align:right;">
+n
+</th>
+<th style="text-align:right;">
+media
+</th>
+<th style="text-align:right;">
+ds
+</th>
+<th style="text-align:right;">
+50%
+</th>
+<th style="text-align:right;">
+Q1
+</th>
+<th style="text-align:right;">
+Q3
+</th>
+<th style="text-align:right;">
+IQR
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:right;">
+123
+</td>
+<td style="text-align:right;">
+34.17373
+</td>
+<td style="text-align:right;">
+14.23261
+</td>
+<td style="text-align:right;">
+30.42801
+</td>
+<td style="text-align:right;">
+25.37595
+</td>
+<td style="text-align:right;">
+39.40807
+</td>
+<td style="text-align:right;">
+14.03212
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:right;">
+151
+</td>
+<td style="text-align:right;">
+31.25549
+</td>
+<td style="text-align:right;">
+10.32325
+</td>
+<td style="text-align:right;">
+29.37574
+</td>
+<td style="text-align:right;">
+24.95932
+</td>
+<td style="text-align:right;">
+36.29595
+</td>
+<td style="text-align:right;">
+11.33663
+</td>
+</tr>
+</tbody>
+</table>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/box-A1-mod-1.png" alt="" width="90%" style="display: block; margin: auto;" />
+Lectura. [A desarrollar. Comparar con la sección 6.5.4 del Capítulo 6, donde X y Y se analizaron sobre todo el dataset. ¿La diferencia X vs Y se mantiene, se amplía o se reduce al restringir a A1?]
+7.5.3 Efecto principal: número de insumos dentro de A1
+Para completar esta subsección:</p>
+<p>Construir el resumen descriptivo de costo_transformacion agrupando por num_insumos dentro de A1, siguiendo el patrón de la sección 7.5.2.
+Generar el boxplot correspondiente.
+Comparar con el análisis marginal del Capítulo 6. En el agregado, el paso de 1 a 2 insumos elevaba la media de 27.3 a 35.8. Calcular el equivalente dentro de A1 puro.
+Replicar para costo_insumo.</p>
+7.5.4 Interacción modalidad × número de insumos
+Esta es la pregunta más fina del análisis estratificado: ¿el efecto de tener dos insumos depende de la modalidad? Si las dos modalidades responden de forma distinta a la complejidad de insumos, hay interacción.
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:resumen-A1-interaccion">Table 7.13: </span><span id="tab:resumen-A1-interaccion">Table 7.14: </span>Costo de transformación por modalidad × num_insumos en A1
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+modalidad_proceso
+</th>
+<th style="text-align:left;">
+num_insumos
+</th>
+<th style="text-align:right;">
+n
+</th>
+<th style="text-align:right;">
+media
+</th>
+<th style="text-align:right;">
+ds
+</th>
+<th style="text-align:right;">
+50%
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+60
+</td>
+<td style="text-align:right;">
+31.65374
+</td>
+<td style="text-align:right;">
+11.715412
+</td>
+<td style="text-align:right;">
+29.73587
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+63
+</td>
+<td style="text-align:right;">
+36.57373
+</td>
+<td style="text-align:right;">
+15.999751
+</td>
+<td style="text-align:right;">
+32.31435
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+118
+</td>
+<td style="text-align:right;">
+30.74871
+</td>
+<td style="text-align:right;">
+11.073769
+</td>
+<td style="text-align:right;">
+28.98653
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+33
+</td>
+<td style="text-align:right;">
+33.06763
+</td>
+<td style="text-align:right;">
+6.844797
+</td>
+<td style="text-align:right;">
+30.47683
+</td>
+</tr>
+</tbody>
+</table>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/facet-A1-interaccion-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<p><img src="libro-maestria-estadistica-aplicada_files/figure-html/interaccion-plot-A1-1.png" alt="" width="90%" style="display: block; margin: auto;" /></p>
+<p>Cómo leer el gráfico de interacción. Si las dos líneas son paralelas, no hay interacción: el efecto de pasar de 1 a 2 insumos es el mismo en X que en Y. Si las líneas se cruzan o tienen pendientes distintas, sí hay interacción: el efecto de los insumos depende de la modalidad.
+Lectura económica. [A desarrollar. Si hay interacción significativa, las implicaciones para política de precios son directas: el recargo por órdenes con dos insumos no debería ser uniforme; debe diferenciarse por modalidad.]</p>
+<p>Para completar esta sección:</p>
+<p>Replicar todos los análisis para costo_insumo dentro de A1: tabla cruzada, boxplots por facet y gráfico de interacción.
+Construir el gráfico de interacción para costo_unitario_total.
+Calcular las diferencias absolutas y relativas del efecto de num_insumos dentro de cada modalidad. Por ejemplo: en X, ¿cuánto sube el costo medio al pasar de 1 a 2 insumos? ¿Y en Y? Si las dos magnitudes son muy distintas, eso confirma interacción.</p>
+<p>Conclusiones (Configuración universal A1):</p>
+<p>[A redactar. Plantilla:]
+Dentro de A1, la modalidad Y es [más estable / más volátil] que X.
+El efecto de pasar de 1 a 2 insumos es de [magnitud] en modalidad X y de [magnitud] en modalidad Y.
+[Existe / no existe] interacción significativa modalidad × num_insumos; las implicaciones de pricing son […].</p>
+7.6 Combinaciones de insumos restringidas a A1 y B2
+El Capítulo 6 (sección que tienes en tu render actual) analizó las combinaciones de insumos sobre el dataset completo. Aquí se replica restringiendo a A1 y B2 —los únicos equipos con cobertura amplia de combinaciones— para verificar si los patrones se mantienen tras controlar por equipo.
+7.6.1 Tabla resumen restringida
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:insumos-A1B2-construccion">Table 7.15: </span><span id="tab:insumos-A1B2-construccion">Table 7.16: </span>Costo de transformación por combinación de insumos (A1 + B2)
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+insumo_combinado
+</th>
+<th style="text-align:right;">
+n
+</th>
+<th style="text-align:right;">
+media
+</th>
+<th style="text-align:right;">
+ds
+</th>
+<th style="text-align:right;">
+50%
+</th>
+<th style="text-align:right;">
+Q1
+</th>
+<th style="text-align:right;">
+Q3
+</th>
+<th style="text-align:right;">
+IQR
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+B_T + sin_segundo_insumo
+</td>
+<td style="text-align:right;">
+88
+</td>
+<td style="text-align:right;">
+26.18373
+</td>
+<td style="text-align:right;">
+8.8721540
+</td>
+<td style="text-align:right;">
+24.95932
+</td>
+<td style="text-align:right;">
+21.13505
+</td>
+<td style="text-align:right;">
+29.82597
+</td>
+<td style="text-align:right;">
+8.6909211
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+N_T + sin_segundo_insumo
+</td>
+<td style="text-align:right;">
+59
+</td>
+<td style="text-align:right;">
+33.13060
+</td>
+<td style="text-align:right;">
+8.4846058
+</td>
+<td style="text-align:right;">
+32.01464
+</td>
+<td style="text-align:right;">
+28.59968
+</td>
+<td style="text-align:right;">
+37.45843
+</td>
+<td style="text-align:right;">
+8.8587488
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+N_O + sin_segundo_insumo
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+39.14571
+</td>
+<td style="text-align:right;">
+9.7864038
+</td>
+<td style="text-align:right;">
+39.57461
+</td>
+<td style="text-align:right;">
+31.45129
+</td>
+<td style="text-align:right;">
+47.48353
+</td>
+<td style="text-align:right;">
+16.0322357
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+N_T + N_O
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+33.53573
+</td>
+<td style="text-align:right;">
+9.3841212
+</td>
+<td style="text-align:right;">
+29.32622
+</td>
+<td style="text-align:right;">
+27.77304
+</td>
+<td style="text-align:right;">
+39.77638
+</td>
+<td style="text-align:right;">
+12.0033371
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B_T + A_T
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+24.85515
+</td>
+<td style="text-align:right;">
+7.4260697
+</td>
+<td style="text-align:right;">
+25.70475
+</td>
+<td style="text-align:right;">
+20.77840
+</td>
+<td style="text-align:right;">
+29.60049
+</td>
+<td style="text-align:right;">
+8.8220895
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B_T + R_T
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+37.15993
+</td>
+<td style="text-align:right;">
+10.7803599
+</td>
+<td style="text-align:right;">
+33.49531
+</td>
+<td style="text-align:right;">
+30.58996
+</td>
+<td style="text-align:right;">
+38.68800
+</td>
+<td style="text-align:right;">
+8.0980441
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A_T + sin_segundo_insumo
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+32.35429
+</td>
+<td style="text-align:right;">
+14.1202841
+</td>
+<td style="text-align:right;">
+29.93958
+</td>
+<td style="text-align:right;">
+25.21598
+</td>
+<td style="text-align:right;">
+34.79763
+</td>
+<td style="text-align:right;">
+9.5816487
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B_T + V_T
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+24.81689
+</td>
+<td style="text-align:right;">
+4.3703288
+</td>
+<td style="text-align:right;">
+23.97350
+</td>
+<td style="text-align:right;">
+22.03007
+</td>
+<td style="text-align:right;">
+26.15112
+</td>
+<td style="text-align:right;">
+4.1210565
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+N_O + N_T
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+38.97754
+</td>
+<td style="text-align:right;">
+17.5844355
+</td>
+<td style="text-align:right;">
+35.60816
+</td>
+<td style="text-align:right;">
+28.07363
+</td>
+<td style="text-align:right;">
+42.95819
+</td>
+<td style="text-align:right;">
+14.8845581
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+R_T + sin_segundo_insumo
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+40.60376
+</td>
+<td style="text-align:right;">
+20.9928287
+</td>
+<td style="text-align:right;">
+42.31702
+</td>
+<td style="text-align:right;">
+26.15528
+</td>
+<td style="text-align:right;">
+51.01074
+</td>
+<td style="text-align:right;">
+24.8554561
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A_T + B_T
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+41.31548
+</td>
+<td style="text-align:right;">
+11.0517812
+</td>
+<td style="text-align:right;">
+37.84286
+</td>
+<td style="text-align:right;">
+34.33981
+</td>
+<td style="text-align:right;">
+48.78550
+</td>
+<td style="text-align:right;">
+14.4456902
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B_T + N_T
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+40.08850
+</td>
+<td style="text-align:right;">
+14.8161871
+</td>
+<td style="text-align:right;">
+33.93466
+</td>
+<td style="text-align:right;">
+33.34378
+</td>
+<td style="text-align:right;">
+38.10776
+</td>
+<td style="text-align:right;">
+4.7639862
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A_T + R_T
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+54.54638
+</td>
+<td style="text-align:right;">
+18.4790049
+</td>
+<td style="text-align:right;">
+53.04372
+</td>
+<td style="text-align:right;">
+44.33195
+</td>
+<td style="text-align:right;">
+56.51862
+</td>
+<td style="text-align:right;">
+12.1866744
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+V_T + sin_segundo_insumo
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+26.50901
+</td>
+<td style="text-align:right;">
+6.7184275
+</td>
+<td style="text-align:right;">
+26.21786
+</td>
+<td style="text-align:right;">
+22.91967
+</td>
+<td style="text-align:right;">
+29.94077
+</td>
+<td style="text-align:right;">
+7.0210955
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+N_T + B_T
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+30.02081
+</td>
+<td style="text-align:right;">
+3.0716996
+</td>
+<td style="text-align:right;">
+30.07714
+</td>
+<td style="text-align:right;">
+28.49924
+</td>
+<td style="text-align:right;">
+31.57055
+</td>
+<td style="text-align:right;">
+3.0713121
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B_T + N_O
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+29.94753
+</td>
+<td style="text-align:right;">
+0.8562099
+</td>
+<td style="text-align:right;">
+29.94753
+</td>
+<td style="text-align:right;">
+29.64482
+</td>
+<td style="text-align:right;">
+30.25025
+</td>
+<td style="text-align:right;">
+0.6054319
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+N_O + B_T
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+30.46950
+</td>
+<td style="text-align:right;">
+3.7884858
+</td>
+<td style="text-align:right;">
+30.46950
+</td>
+<td style="text-align:right;">
+29.13007
+</td>
+<td style="text-align:right;">
+31.80894
+</td>
+<td style="text-align:right;">
+2.6788640
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+R_T + A_T
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+56.07840
+</td>
+<td style="text-align:right;">
+25.0918729
+</td>
+<td style="text-align:right;">
+56.07840
+</td>
+<td style="text-align:right;">
+47.20708
+</td>
+<td style="text-align:right;">
+64.94971
+</td>
+<td style="text-align:right;">
+17.7426335
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+R_T + B_T
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+39.59964
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+39.59964
+</td>
+<td style="text-align:right;">
+39.59964
+</td>
+<td style="text-align:right;">
+39.59964
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+V_T + B_T
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+24.44872
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+24.44872
+</td>
+<td style="text-align:right;">
+24.44872
+</td>
+<td style="text-align:right;">
+24.44872
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+</tbody>
+</table>
+<p>7.6.2 Comparación con el análisis del Capítulo 6
+Para completar esta subsección:</p>
+<p>Construir una tabla diferencial que muestre, para cada combinación de insumos:</p>
+<p>Media en el dataset completo (Capítulo 6).
+Media restringida a A1 + B2 (este capítulo).
+Diferencia absoluta y porcentual.</p>
+<p>Si la diferencia es pequeña, el patrón del Capítulo 6 era robusto. Si es grande, el patrón estaba contaminado por D4 o por C3.
+Identificar combinaciones que cambian de ranking. Por ejemplo, si una combinación era barata en el agregado pero cara restringida a A1+B2, eso indica que su bajo costo provenía de D4.
+Discutir el insumo N_O. En el Capítulo 6 era el principal driver de costo. Verificar si dentro de A1 y B2 mantiene ese rol o si pierde fuerza.</p>
+<p>7.6.3 Boxplot
+Para completar esta subsección:</p>
+<p>Generar el boxplot de costo_transformacion por insumo_combinado restringido a A1 y B2. Usar coord_flip() por la cantidad de combinaciones.
+Replicar para costo_insumo.
+Generar un gráfico facet que separe A1 y B2, para visualizar si las combinaciones se comportan igual en ambos equipos o si hay diferencias.</p>
+<p>Conclusiones (Combinaciones de insumos):</p>
+<p>[A redactar. Plantilla:]
+Las combinaciones más caras en el agregado [se confirman / cambian] al restringir a A1 + B2.
+El insumo N_O [mantiene / pierde] su rol como driver principal cuando se elimina la influencia de D4.
+[La política de pricing por insumos puede / no puede] generalizarse a todos los equipos.</p>
+7.7 Correlaciones condicionales
+El análisis de correlaciones del Capítulo 6 mezcló los cuatro tipos de equipo. Aquí se calculan dentro de A1 únicamente para verificar si las asociaciones observadas globalmente son artefactos de la composición o relaciones genuinas dentro de un régimen homogéneo.
+7.7.1 Matriz de correlación dentro de A1
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:corr-A1">Table 7.17: </span><span id="tab:corr-A1">Table 7.18: </span>Matriz de correlación de Spearman dentro de A1
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+costo_transformacion
+</th>
+<th style="text-align:right;">
+costo_insumo
+</th>
+<th style="text-align:right;">
+costo_unitario_total
+</th>
+<th style="text-align:right;">
+volumen_lote
+</th>
+<th style="text-align:right;">
+duracion_proceso
+</th>
+<th style="text-align:right;">
+cantidad_insumo_1
+</th>
+<th style="text-align:right;">
+cantidad_insumo_2
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+costo_transformacion
+</td>
+<td style="text-align:right;">
+1.000
+</td>
+<td style="text-align:right;">
+0.211
+</td>
+<td style="text-align:right;">
+0.944
+</td>
+<td style="text-align:right;">
+-0.261
+</td>
+<td style="text-align:right;">
+0.161
+</td>
+<td style="text-align:right;">
+-0.071
+</td>
+<td style="text-align:right;">
+0.132
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+costo_insumo
+</td>
+<td style="text-align:right;">
+0.211
+</td>
+<td style="text-align:right;">
+1.000
+</td>
+<td style="text-align:right;">
+0.470
+</td>
+<td style="text-align:right;">
+-0.214
+</td>
+<td style="text-align:right;">
+-0.088
+</td>
+<td style="text-align:right;">
+0.326
+</td>
+<td style="text-align:right;">
+0.248
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+costo_unitario_total
+</td>
+<td style="text-align:right;">
+0.944
+</td>
+<td style="text-align:right;">
+0.470
+</td>
+<td style="text-align:right;">
+1.000
+</td>
+<td style="text-align:right;">
+-0.314
+</td>
+<td style="text-align:right;">
+0.099
+</td>
+<td style="text-align:right;">
+0.007
+</td>
+<td style="text-align:right;">
+0.192
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+volumen_lote
+</td>
+<td style="text-align:right;">
+-0.261
+</td>
+<td style="text-align:right;">
+-0.214
+</td>
+<td style="text-align:right;">
+-0.314
+</td>
+<td style="text-align:right;">
+1.000
+</td>
+<td style="text-align:right;">
+0.857
+</td>
+<td style="text-align:right;">
+0.732
+</td>
+<td style="text-align:right;">
+0.249
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+duracion_proceso
+</td>
+<td style="text-align:right;">
+0.161
+</td>
+<td style="text-align:right;">
+-0.088
+</td>
+<td style="text-align:right;">
+0.099
+</td>
+<td style="text-align:right;">
+0.857
+</td>
+<td style="text-align:right;">
+1.000
+</td>
+<td style="text-align:right;">
+0.717
+</td>
+<td style="text-align:right;">
+0.310
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cantidad_insumo_1
+</td>
+<td style="text-align:right;">
+-0.071
+</td>
+<td style="text-align:right;">
+0.326
+</td>
+<td style="text-align:right;">
+0.007
+</td>
+<td style="text-align:right;">
+0.732
+</td>
+<td style="text-align:right;">
+0.717
+</td>
+<td style="text-align:right;">
+1.000
+</td>
+<td style="text-align:right;">
+0.340
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cantidad_insumo_2
+</td>
+<td style="text-align:right;">
+0.132
+</td>
+<td style="text-align:right;">
+0.248
+</td>
+<td style="text-align:right;">
+0.192
+</td>
+<td style="text-align:right;">
+0.249
+</td>
+<td style="text-align:right;">
+0.310
+</td>
+<td style="text-align:right;">
+0.340
+</td>
+<td style="text-align:right;">
+1.000
+</td>
+</tr>
+</tbody>
+</table>
+<p>7.7.2 Comparación marginal vs condicional
+Para completar esta subsección:</p>
+<p>Calcular la matriz de Pearson dentro de A1, siguiendo el mismo patrón.
+Construir una tabla comparativa con tres columnas:</p>
+<p>Correlación marginal (Capítulo 6).
+Correlación dentro de A1 (este capítulo).
+Diferencia.</p>
+<p>Selecciona los pares más relevantes: volumen-costo, duración-costo, insumo 1-costo, insumo 2-costo.
+Identificar paradojas de Simpson o cambios de signo. Si alguna correlación cambia de signo o se debilita drásticamente al condicionar, eso indica que la correlación marginal era un artefacto.
+Verificar las economías de escala. En el agregado, volumen-costo era -0.32 (Spearman). Dentro de A1, debería seguir siendo negativa pero quizá más débil (porque el rango de volumen es similar dentro de A1). Si es muy diferente, hay que explicar por qué.</p>
+<p>7.7.3 Diagramas de dispersión condicionales
+Para completar esta subsección:</p>
+<p>Generar diagramas de dispersión volumen_lote vs costo_transformacion facetados por modalidad dentro de A1. Esto muestra si las economías de escala operan igual en X que en Y.
+Replicar para duracion_proceso vs costo_transformacion.
+Generar un solo gráfico con volumen_lote vs costo_transformacion coloreando por equipo dentro de A1, para evaluar si todos los equipos A1 siguen el mismo patrón o si hay equipos que escapan.</p>
+<p>Conclusiones (Correlaciones condicionales):</p>
+<p>[A redactar. Plantilla:]
+Las economías de escala dentro de A1 son [más fuertes / más débiles / similares] que en el agregado.
+La correlación duración-costo [se mantiene / cambia] al condicionar; esto sugiere […].
+[Sí / no] hay evidencia de paradoja de Simpson en las correlaciones agregadas.</p>
+7.8 Caracterización descriptiva de los subconjuntos excluidos
+Esta sección documenta brevemente las órdenes excluidas del análisis estratificado. El propósito no es inferir, sino dejar trazabilidad y aportar referencia cualitativa sobre estos subconjuntos para el área operativa.
+7.8.1 Modalidad Z (n = 14)
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:descripcion-Z">Table 7.19: </span><span id="tab:descripcion-Z">Table 7.20: </span>Descriptivos de las órdenes en modalidad Z
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+tipo_equipo
+</th>
+<th style="text-align:right;">
+n
+</th>
+<th style="text-align:right;">
+ct_media
+</th>
+<th style="text-align:right;">
+ct_mediana
+</th>
+<th style="text-align:right;">
+ci_media
+</th>
+<th style="text-align:right;">
+ci_mediana
+</th>
+<th style="text-align:right;">
+ctot_media
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+A1
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+42.89671
+</td>
+<td style="text-align:right;">
+39.36351
+</td>
+<td style="text-align:right;">
+6.238983
+</td>
+<td style="text-align:right;">
+4.398346
+</td>
+<td style="text-align:right;">
+49.13569
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+25.04945
+</td>
+<td style="text-align:right;">
+25.04945
+</td>
+<td style="text-align:right;">
+14.986640
+</td>
+<td style="text-align:right;">
+14.986640
+</td>
+<td style="text-align:right;">
+40.03609
+</td>
+</tr>
+</tbody>
+</table>
+Observación cualitativa. [A desarrollar. Las órdenes Z presentan costo total promedio superior a las de X y Y, consistente con su naturaleza de proceso compuesto. La magnitud del sobrecosto observado (≈ 41 vs 28-31 UM/unidad) es referencial; con n=14 no permite inferencia formal pero puede orientar el recargo comercial aplicado a pedidos Z.]
+7.8.2 Tipo de equipo C3 (n = 8)
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:descripcion-C3">Table 7.21: </span><span id="tab:descripcion-C3">Table 7.22: </span>Descriptivos de las órdenes en tipo C3, por equipo
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+equipo_id
+</th>
+<th style="text-align:right;">
+n
+</th>
+<th style="text-align:right;">
+ct_media
+</th>
+<th style="text-align:right;">
+ct_mediana
+</th>
+<th style="text-align:right;">
+ci_media
+</th>
+<th style="text-align:right;">
+ci_mediana
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+M04
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+79.35268
+</td>
+<td style="text-align:right;">
+78.46310
+</td>
+<td style="text-align:right;">
+13.836663
+</td>
+<td style="text-align:right;">
+16.162889
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+M11
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+49.36509
+</td>
+<td style="text-align:right;">
+51.76305
+</td>
+<td style="text-align:right;">
+8.674712
+</td>
+<td style="text-align:right;">
+8.206842
+</td>
+</tr>
+</tbody>
+</table>
+<p>Observación cualitativa. [A desarrollar. M04 y M11 tienen perfiles muy distintos entre sí (≈ 79 vs 49 UM/unidad). M04 combina alto costo y alta variabilidad. Ambos equipos merecen revisión operativa específica fuera del alcance de este trabajo estadístico, dado que con n=4 cada uno cualquier estimación es altamente inestable.]
+Conclusiones (Subconjuntos excluidos):</p>
+<p>Las órdenes Z muestran sobrecosto sistemático en transformación; el área comercial debería verificar si se está cobrando recargo proporcional.
+El tipo C3 contiene dos regímenes operativos heterogéneos (M04 y M11) que merecen análisis caso por caso.
+Con los n disponibles (14 y 8), ninguna conclusión sobre estos grupos puede extrapolarse al sistema general.</p>
+<p>7.9 Síntesis e implicaciones
+7.9.1 Qué se puede afirmar después del EDA estratificado
+[A redactar consolidando los hallazgos de las secciones 7.3 a 7.7. Plantilla con cuatro mensajes:]</p>
+<p>Sobre los efectos puros de cada factor (qué se confirma del Cap 6 y qué se modifica).
+Sobre la interacción modalidad × insumos dentro de A1 (si existe y de qué magnitud).
+Sobre la robustez de los hallazgos del análisis marginal (qué se sostiene y qué era artefacto).
+Sobre las economías de escala (si operan igual dentro de un régimen homogéneo).</p>
+<p>7.9.2 Hipótesis para el capítulo de inferencia
+Con base en el EDA estratificado, las pruebas inferenciales formales que tienen sustento son:
+HipótesisPrueba aplicableEstraton aproxH1: El costo de transformación difiere entre A1, B2 y D4ANOVA o Kruskal-Wallis(X, 1) únicamente~120H2: Dentro de A1, la modalidad afecta el costot-test o Mann-WhitneyA1 completo~270H3: Dentro de A1, el número de insumos afecta el costot-test o Mann-WhitneyA1 completo~270H4: Existe interacción modalidad × num_insumos en A1ANOVA 2 víasA1 completo~270H5: Existe correlación volumen-costo dentro de A1Correlación de Spearman con ICA1 completo~270H6: Las correlaciones marginales y condicionales difierenComparación de coeficientesAgregado vs A1373 vs ~270
+[Ajustar los n aproximados según el resultado real al renderizar.]
+7.9.3 Comparaciones que el dataset no permite hacer
+Para transparencia metodológica, conviene documentar lo que el dataset no puede responder a pesar de la profundización:</p>
+<p>Si D4 sería más eficiente que A1 en modalidad Y o con dos insumos: D4 nunca operó en esas configuraciones.
+Si C3 sería competitivo con volúmenes altos: las 8 órdenes de C3 no cubren rangos altos.
+Si la modalidad Z es más costosa que la suma simple de X e Y: n=14 no da potencia.
+Si las diferencias entre equipos del mismo tipo (M15 vs M13 en A1; M05 vs M12 en D4) son estructurales o técnicas: requiere estratificación adicional por categoría de producto.</p>
+<p>Estas preguntas requerirían un diseño de recolección de datos distinto, con asignación deliberada de órdenes a configuraciones específicas para romper la dependencia entre factores.
+7.9.4 Implicaciones para la dirección financiera
+[A desarrollar tras completar el análisis. Cuatro mensajes esperados:]</p>
+<p>Sobre el techo de eficiencia y la palanca real de costos.
+Sobre la política de pricing por modalidad y número de insumos.
+Sobre la asignación de órdenes a equipos.
+Sobre la oportunidad de estandarización (qué hace M12 más eficiente que M05).</p>
+<p>Notas sobre el código
+Patrones que se repiten y que conviene tener identificados al replicar:</p>
+<p>Resumen estadístico con las nueve métricas estándar (n, media, ds, 50%, mínimo, máximo, Q1, Q3, IQR) usando summarise(). Si lo aplicas mucho, conviene definir una función helper:</p>
+<p>rresumen_costo &lt;- function(df, var, …) {
+df %&gt;%
+group_by(…) %&gt;%
+summarise(
+n = length(.data[[var]]),
+media = mean(.data[[var]], na.rm = TRUE),
+ds = sd(.data[[var]], na.rm = TRUE),
+<code>50%</code> = median(.data[[var]], na.rm = TRUE),
+Q1 = quantile(.data[[var]], 0.25, na.rm = TRUE),
+Q3 = quantile(.data[[var]], 0.75, na.rm = TRUE),
+IQR = IQR(.data[[var]], na.rm = TRUE),
+.groups = “drop”
+)
+}
+Definida una vez al inicio del capítulo, simplifica todos los summarise() posteriores. Decisión tuya si la usas o mantienes el patrón explícito del profesor.</p>
+<p>Boxplot estándar: la combinación geom_boxplot + stat_summary(fun = mean) + facet_grid(. ~ “Título”) se repite muchas veces. Podrías encapsularla en una función, pero al estilo del profesor conviene mantenerla explícita en cada chunk para que el código sea didácticamente legible.
+Nombres de chunks: prefijar todos con eda7- para evitar colisiones con los chunks del Capítulo 6 al renderizar el libro completo. Por ejemplo: eda7-subset-X1, eda7-resumen-A1-mod, etc.</p>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="análisis-exploratorio-básico.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="pruebas-de-hipótesis-sin-desarrollar.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "serif",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": {},
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  },
+  "toolbar": {
+    "position": "static"
+  }
+});
+});
+</script>
+
+</body>
+
+</html>

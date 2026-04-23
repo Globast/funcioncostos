@@ -13,7 +13,9 @@ datos_principal <- readRDS("data/data_costos_principal.rds")
 # Dataset depurado completo: para los grupos excluidos
 datos_completo <- readRDS("data/data_costos_limpio.rds") %>%
   mutate(costo_unitario_total = costo_transformacion + costo_insumo)
-r{r dims-eda7, echo=FALSE}
+```
+
+```{r dims-eda7, echo=FALSE}
 n_principal <- nrow(datos_principal)
 n_completo  <- nrow(datos_completo)
 n_excluidas <- n_completo - n_principal
