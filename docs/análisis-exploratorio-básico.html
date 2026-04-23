@@ -1198,6 +1198,13 @@ Comparando ambas matrices:</p>
 <p>Las economías de escala se debilitan ligeramente. Volumen-costo total pasa de -0.384 a -0.318. La relación inversa sigue presente, pero con dispersión real: a mayor volumen, costo unitario menor, pero no de forma uniforme.</p>
 <p>El segundo insumo gana presencia. Sus correlaciones con costos suben en Spearman. Esto indica que su efecto no es lineal sino más bien “por presencia”: el simple hecho de operar con dos insumos cambia el régimen de costos más que la cantidad específica del segundo insumo.</p>
 <p>Lectura conjunta de ambas matrices. El sistema productivo es consistente en dirección pero irregular en intensidad. Las relaciones existen y van en el sentido económico esperado (escala reduce costo, complejidad aumenta costo), pero no son uniformes a lo largo de los rangos de las variables. Esto significa que modelos simples basados en linealidad pueden producir conclusiones engañosas: las decisiones basadas en promedios y elasticidades constantes pueden subestimar o sobreestimar efectos reales. Se requiere segmentación.</p>
+<div class="alert alert-primary">
+<ul>
+<li>Las relaciones operativas son monótonas fuertes pero no lineales; los modelos lineales subestiman su intensidad.</li>
+<li>Las economías de escala son reales pero irregulares; existen rangos donde el beneficio marginal cambia.</li>
+<li>Las decisiones basadas en promedios pueden ser engañosas; se requiere análisis por rangos y segmentos.</li>
+</ul>
+</div>
 </div>
 <div id="análisis-bivariado-modalidad-proceso" class="section level3 hasAnchor" number="6.5.4">
 <h3><span class="header-section-number">6.5.4</span> Análisis bivariado: Modalidad proceso<a href="análisis-exploratorio-básico.html#an%C3%A1lisis-bivariado-modalidad-proceso" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -1338,15 +1345,11 @@ Z
 </tr>
 </tbody>
 </table>
-<p>La modalidad Z es una combinación operativa de X y Y.</p>
-<p>En costo de transformación, se observa un gradiente en la media que va de X a Y y luego a Z, pero el salto no es lineal.:
-X ≈ 27.9 &lt; Y ≈ 31.4 &lt; Z ≈ 41.6
-La mediana también confirma ese patrón (27.1 → 29.5 → 38.8).</p>
-<ul>
-<li>X tiene alta variabilidad (ds ≈ 17.9, IQR amplio). Es un proceso inestable.</li>
-<li>Y es más controlado (ds ≈ 10.5, IQR más estrecho).</li>
-<li>Z tiene dispersión alta en términos absolutos, pero IQR relativamente contenido. Esto indica que el costo base es alto de forma consistente, no solo por outliers.</li>
-</ul>
+<p>La modalidad Z corresponde a órdenes donde se aplican X y Y al mismo producto por requerimiento del cliente. Es una composición de procesos, no una alternativa.
+En transformación: se observa un gradiente claro X (27.9) &lt; Y (31.4) &lt; Z (41.6), confirmado por la mediana. Pero la dispersión cambia entre modalidades: X tiene desviación estándar de 17.9 (proceso volátil), Y tiene 10.5 (proceso controlado), Z tiene 17.3 pero con IQR contenido (alto y consistente).
+En insumo: el patrón es más suave (X: 4.8, Y: 5.2, Z: 6.9), y la mediana de Z (4.98) está muy cerca de la de Y. El sobrecosto de Z proviene principalmente del componente de transformación, no del de insumos.
+Lectura económica. Y es más estable y ligeramente más caro que X. X es más volátil. Z es estructuralmente más caro y tiene un comportamiento de costo distinto: el sobrecosto de Z no es la suma simple de X+Y, sino el producto de una interacción entre procesos. Esto sugiere que cuando el cliente solicita ambas modalidades sobre el mismo producto, hay ineficiencias de coordinación o setup adicionales que elevan el costo.
+Limitación crítica. El n de Z es de 14 órdenes. Cualquier conclusión cuantitativa sobre Z tiene intervalos de confianza muy amplios. Z aparece aquí como observación cualitativa, no como base para inferencia.</p>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:bivariado-ci-modproceso">Table 6.9: </span>Resumen Bivariado costos de insumo por modalidad de proceso

@@ -1143,10 +1143,11 @@ modproceso_q1     <- cc_modproceso$Q1
 modproceso_q3     <- cc_modproceso$Q3
 modproceso_cv     <- modproceso_ds / modproceso_media * 100
 
-  knitr::kable(resumen_bivariado_cc_modproceso , caption = "Resumen Bivariado costos de transformación por modalidad de proceso",
+  knitr::kable(cc_modproceso , caption = "Resumen Bivariado costos de transformación por modalidad de proceso",
                  format = "html",
              table.attr = "class='table'") %>%
   kableExtra::kable_styling(full_width = FALSE) 
+
 ```
 La modalidad Z corresponde a órdenes donde se aplican X y Y al mismo producto por requerimiento del cliente. Es una composición de procesos, no una alternativa.
 En transformación: se observa un gradiente claro X (27.9) < Y (31.4) < Z (41.6), confirmado por la mediana. Pero la dispersión cambia entre modalidades: X tiene desviación estándar de 17.9 (proceso volátil), Y tiene 10.5 (proceso controlado), Z tiene 17.3 pero con IQR contenido (alto y consistente).
