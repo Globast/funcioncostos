@@ -1091,8 +1091,26 @@ matriz_spearman <- datos %>%
   cor(use = "pairwise.complete.obs", method = "spearman") %>%
   round(3)
 
-knitr::kable(matriz_spearman , caption = "Matriz de correlación de Spearman") %>%
-  kableExtra::kable_styling(full_width = FALSE) 
+matriz_resaltada <- matriz_spearman
+
+for(i in 1:nrow(matriz_resaltada)) {
+  for(j in 1:ncol(matriz_resaltada)) {
+    valor <- matriz_spearman[i, j]
+    
+    matriz_resaltada[i, j] <- if(abs(valor) > 0.5) {
+      kableExtra::cell_spec(valor, bold = TRUE, color = "white", background = "darkred")
+    } else {
+      as.character(valor)
+    }
+  }
+}
+
+knitr::kable(
+  matriz_resaltada,
+  caption = "Matriz de correlación de Spearman",
+  escape = FALSE
+) %>%
+  kableExtra::kable_styling(full_width = FALSE)
 ```
 
 
