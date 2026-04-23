@@ -1637,7 +1637,7 @@ En insumo: el patrón es más suave (X: `r modproceso_media[1]`, Y: `r modproces
 
 Lectura económica. Y es más estable y ligeramente más caro que X. X es más volátil. Z es estructuralmente más caro y tiene un comportamiento de costo distinto: el sobrecosto de Z no es la suma simple de X+Y, sino el producto de una interacción entre procesos. Esto sugiere que cuando el cliente solicita ambas modalidades sobre el mismo producto, hay ineficiencias de coordinación o setup adicionales que elevan el costo.
 
-Limitación crítica. El n de Z es de `r cc_modproceso$n[3]` órdenes. Cualquier conclusión cuantitativa sobre Z tiene intervalos de confianza muy amplios. Z aparece aquí como observación cualitativa, no como base para inferencia.
+Limitación crítica. El n de Z es de `r modproceso$n[3]` órdenes. Cualquier conclusión cuantitativa sobre Z tiene intervalos de confianza muy amplios. Z aparece aquí como observación cualitativa, no como base para inferencia.
 
 
 ::: {.alert .alert-primary}
