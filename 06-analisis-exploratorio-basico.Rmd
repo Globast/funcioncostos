@@ -1246,10 +1246,3 @@ Tras estas exclusiones, el dataset principal queda conformado por r n_principal 
 
 ## Cierre: qué sabemos, qué no sabemos, qué sigue
       → Hipótesis que justifican el análisis estratificado
-
-
-
-
-
-
-

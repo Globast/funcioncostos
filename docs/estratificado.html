@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Prefacio | Análisis exploratorio e inferencial</title>
+  <title>Capítulo 7 estratificado | Análisis exploratorio e inferencial</title>
   <meta name="description" content="Maestría en Estadística Aplicada." />
   <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Prefacio | Análisis exploratorio e inferencial" />
+  <meta property="og:title" content="Capítulo 7 estratificado | Análisis exploratorio e inferencial" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="Maestría en Estadística Aplicada." />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Prefacio | Análisis exploratorio e inferencial" />
+  <meta name="twitter:title" content="Capítulo 7 estratificado | Análisis exploratorio e inferencial" />
   
   <meta name="twitter:description" content="Maestría en Estadística Aplicada." />
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="index.html"/>
-<link rel="next" href="resumen.html"/>
+<link rel="prev" href="análisis-exploratorio-básico.html"/>
+<link rel="next" href="pruebas-de-hipótesis-sin-desarrollar.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -239,19 +239,253 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="prefacio" class="section level1 unnumbered hasAnchor">
-<h1>Prefacio<a href="prefacio.html#prefacio" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>Este libro presenta una estructura reproducible y académica para documentar un proyecto de análisis estadístico usando <strong>R</strong>, <strong>bookdown</strong>, <strong>GitHub Codespaces</strong> y <strong>GitHub Pages</strong>.</p>
-<p>Se recomienda mantener todos los datos en la carpeta <code>data/</code>, todas las imágenes en <code>images/</code> y todas las referencias en <code>references.bib</code>.</p>
+<div id="estratificado" class="section level1 hasAnchor" number="7">
+<h1><span class="header-section-number">Capítulo 7</span> estratificado<a href="estratificado.html#estratificado" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Capítulo 7 — Análisis Exploratorio Estratificado
+7.1 Carga del dataset principal (n=373 tras exclusiones)
+7.2 Mapa del espacio operativo válido
+→ Qué comparaciones son posibles dentro del dataset principal
+7.3 Efecto puro del tipo de equipo en (X, 1)
+→ La única celda limpia inter-equipos
+7.4 Análisis intra-tipo: heterogeneidad dentro de las familias
+7.4.1 A1: siete equipos, familia coherente
+7.4.2 B2: un solo equipo, comparabilidad con A1
+7.4.3 D4: dos equipos con regímenes distintos
+→ Hallazgo: la clasificación por tipo agrega información distinta en cada tipo
+7.5 Análisis dentro de A1: configuración universal
+7.5.1 Efecto de modalidad_proceso
+7.5.2 Efecto de num_insumos
+7.5.3 Interacción modalidad × num_insumos
+7.6 Correlaciones condicionales
+7.6.1 Dentro de A1
+7.6.2 Comparación marginal vs condicional
+→ Cómo cambian las asociaciones al estratificar
+7.7 Análisis por combinación de insumos
+(esto que ya tienes en el render actual)
+7.8 Sección de referencia: subconjuntos excluidos
+7.8.1 Modalidad Z descriptiva
+7.8.2 Tipo C3 descriptivo
+7.9 Síntesis e implicaciones
+7.9.1 Qué se puede afirmar después del EDA estratificado
+7.9.2 Hipótesis que alimentan el capítulo de inferencia
+7.9.3 Comparaciones que el diseño NO permite
+7.9.4 Implicaciones para la dirección financiera</p>
+<div id="estructura-del-espacio-operativo-sobre-el-dataset-principal" class="section level2 hasAnchor" number="7.1">
+<h2><span class="header-section-number">7.1</span> Estructura del espacio operativo sobre el dataset principal<a href="estratificado.html#estructura-del-espacio-operativo-sobre-el-dataset-principal" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="mapa-de-combinaciones" class="section level3 hasAnchor" number="7.1.1">
+<h3><span class="header-section-number">7.1.1</span> Mapa de combinaciones<a href="estratificado.html#mapa-de-combinaciones" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:mapa-combinaciones">Table 7.1: </span>Tamaño muestral por combinación (dataset principal)
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+tipo_equipo
+</th>
+<th style="text-align:right;">
+X_1
+</th>
+<th style="text-align:right;">
+X_2
+</th>
+<th style="text-align:right;">
+Y_1
+</th>
+<th style="text-align:right;">
+Y_2
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+A1
+</td>
+<td style="text-align:right;">
+60
+</td>
+<td style="text-align:right;">
+63
+</td>
+<td style="text-align:right;">
+118
+</td>
+<td style="text-align:right;">
+33
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B2
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D4
+</td>
+<td style="text-align:right;">
+55
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<p>A1 tiene cobertura completa: 60 órdenes en (X, 1), 63 en (X, 2), 118 en (Y, 1), 33 en (Y, 2). Total: 274. Es el único equipo que permite comparar simultáneamente los efectos de modalidad y de número de insumos.
+B2 tiene cobertura en las 4 combinaciones pero con n reducido (7, 13, 18, 6). Permite análisis condicional con cautela.
+D4 opera exclusivamente en (X, 1) con 55 órdenes. No se puede estudiar si D4 cambia de comportamiento en otras modalidades o con otros insumos: esa información no existe.</p>
+<p>Este mapa define el universo de comparaciones legítimas:</p>
+<p>Comparación inter-equipos en (X, 1): es el único estrato donde A1 (n=60), B2 (n=7) y D4 (n=55) coexisten. Total: 122 órdenes. Es la única celda limpia para responder la pregunta “¿los equipos difieren en costo?”.
+Comparación intra-equipo A1 (efectos de modalidad e insumos): con 274 órdenes y cobertura completa, A1 es la configuración universal para estudiar cómo varían los costos según modalidad y número de insumos.
+Comparación intra-equipo B2: análoga a A1 pero con n=44. Las conclusiones son sugestivas, no definitivas.</p>
+</div>
+</div>
+<div id="análisis-condicional-lo-que-revelan-los-estratos" class="section level2 hasAnchor" number="7.2">
+<h2><span class="header-section-number">7.2</span> Análisis condicional: lo que revelan los estratos<a href="estratificado.html#an%C3%A1lisis-condicional-lo-que-revelan-los-estratos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="efecto-puro-de-tipo_equipo-dentro-de-x-1" class="section level3 hasAnchor" number="7.2.1">
+<h3><span class="header-section-number">7.2.1</span> Efecto puro de tipo_equipo dentro de (X, 1)<a href="estratificado.html#efecto-puro-de-tipo_equipo-dentro-de-x-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Esta es la pregunta que parecía obvia al inicio: ¿los equipos tienen costos distintos?</p>
+<pre><code>## # A tibble: 3 × 6
+##   tipo_equipo     n media `50%`    ds   IQR
+##   &lt;fct&gt;       &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 A1             60 31.7  29.7  11.7   9.23
+## 2 B2              7 29.6  28.9  14.8  19.9 
+## 3 D4             55  8.82  8.46  3.54  4.83</code></pre>
+<p>Interpretación. Dentro de la única celda donde los tres equipos son comparables:</p>
+<p>D4 mantiene un costo de transformación sustancialmente menor.
+A1 y B2 son relativamente similares entre sí.
+La diferencia entre D4 y los otros equipos es real, no un artefacto de la mezcla de modalidades.</p>
+<p>Implicación para la dirección financiera. D4 es efectivamente más eficiente en transformación, al menos en la configuración (X, 1). Sin embargo, el dataset no permite concluir que D4 sería igualmente eficiente en otras modalidades — simplemente porque D4 no puede operar en Y o con 2 insumos.</p>
+<p>Este es el análisis más potente del capítulo, porque A1 es el único equipo donde todas las combinaciones tienen n suficiente.</p>
+<pre><code>## # A tibble: 4 × 6
+##   modalidad_proceso num_insumos     n media `50%`    ds
+##   &lt;fct&gt;             &lt;ord&gt;       &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 X                 1              67  31.4  29.7 12.0 
+## 2 X                 2              76  34.8  30.6 15.4 
+## 3 Y                 1             136  30.5  29.0 10.7 
+## 4 Y                 2              39  34.4  31.7  9.32</code></pre>
+<p>Lo que revela el análisis estratificado. Dentro de A1:</p>
+<p>El paso de 1 a 2 insumos incrementa el costo de transformación medio de manera consistente en ambas modalidades.
+La modalidad Y tiende a tener costos más estables (menor IQR) que la modalidad X.
+La combinación (Y, 1) es la más eficiente y la más frecuente (n=118).</p>
+<p><strong>la combinación más frecuente del sistema (Y, 1 en A1) es también la más eficiente. ¿Es esto resultado de una estrategia consciente de planeación, o es una coincidencia del perfil de pedidos? La respuesta define si la eficiencia es replicable o circunstancial.</strong></p>
+</div>
+<div id="efecto-de-número-de-insumos-comparación-condicional" class="section level3 hasAnchor" number="7.2.2">
+<h3><span class="header-section-number">7.2.2</span> Efecto de número de insumos: comparación condicional<a href="estratificado.html#efecto-de-n%C3%BAmero-de-insumos-comparaci%C3%B3n-condicional" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Un análisis marginal diría que pasar de 1 a 2 insumos aumenta el costo en promedio de 27.3 a 35.8 UM/unidad (+31%). Pero esa comparación mezcla equipos, modalidades y productos.
+La comparación condicional dentro de A1 da una respuesta más fina:</p>
+<pre><code>## # A tibble: 2 × 5
+##   modalidad_proceso media_ct_ins1 media_ct_ins2 media_ci_ins1 media_ci_ins2
+##   &lt;fct&gt;                     &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;
+## 1 X                          31.4          34.8          4.09          5.61
+## 2 Y                          30.5          34.4          4.79          6.64</code></pre>
+<p>El efecto de agregar un segundo insumo es:</p>
+<p>En modalidad X: incremento claro en ambos costos.
+En modalidad Y: incremento menor en transformación, más marcado en insumo.</p>
+<p>Esta es una interacción: el efecto de num_insumos no es el mismo en todas las modalidades. El análisis marginal (el que no estratifica) promedia esas dos realidades y produce un número engañoso.
+Implicación financiera. Si la empresa cobra un recargo por órdenes con dos insumos, ese recargo debería depender de la modalidad. Un recargo uniforme subsidia las órdenes complejas en X con los márgenes de las órdenes simples en Y.</p>
+</div>
+</div>
+<div id="asociaciones-numéricas-cuando-la-correlación-cambia-al-estratificar" class="section level2 hasAnchor" number="7.3">
+<h2><span class="header-section-number">7.3</span> Asociaciones numéricas: cuando la correlación cambia al estratificar<a href="estratificado.html#asociaciones-num%C3%A9ricas-cuando-la-correlaci%C3%B3n-cambia-al-estratificar" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Las correlaciones marginales sobre el dataset principal muestran:</p>
+<p>volumen_lote ↔︎ costo_transformacion: −0.35 (Pearson) / −0.27 (Spearman).
+duracion_proceso ↔︎ costo_transformacion: +0.22 / +0.28.</p>
+<p>Lectura marginal: lotes más grandes son más baratos por unidad (economías de escala), procesos más largos son ligeramente más costosos.
+Pero al calcular las mismas correlaciones dentro de A1 y B2 únicamente:</p>
+<pre><code>##                      costo_transformacion volumen_lote duracion_proceso
+## costo_transformacion                1.000       -0.278            0.139
+## volumen_lote                       -0.278        1.000            0.859
+## duracion_proceso                    0.139        0.859            1.000
+## cantidad_insumo_1                  -0.086        0.731            0.714
+## cantidad_insumo_2                   0.124        0.240            0.293
+##                      cantidad_insumo_1 cantidad_insumo_2
+## costo_transformacion            -0.086             0.124
+## volumen_lote                     0.731             0.240
+## duracion_proceso                 0.714             0.293
+## cantidad_insumo_1                1.000             0.317
+## cantidad_insumo_2                0.317             1.000</code></pre>
+<p>Por qué importa este contraste. Si la correlación marginal y la correlación dentro de A1 difieren sustancialmente, significa que parte de la relación observada globalmente no es un efecto directo de la variable, sino un efecto de composición: los equipos con ciertos perfiles de volumen también tienen ciertos perfiles de costo, y eso infla o deforma la correlación marginal.
+Traducción financiera. Las economías de escala son reales dentro de A1, pero el tamaño del efecto marginal que ven los reportes tradicionales puede estar sobrestimado porque mezcla el efecto de “producir más” con el efecto de “producir en un equipo distinto”.</p>
+</div>
+<div id="caracterización-descriptiva-de-los-subconjuntos-excluidos" class="section level2 hasAnchor" number="7.4">
+<h2><span class="header-section-number">7.4</span> Caracterización descriptiva de los subconjuntos excluidos<a href="estratificado.html#caracterizaci%C3%B3n-descriptiva-de-los-subconjuntos-excluidos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Esta sección es puramente descriptiva. No se hacen inferencias, solo se documentan los subconjuntos excluidos del análisis principal para transparencia.
+### Modalidad Z (n=14)
+datos %&gt;%
+filter(modalidad_proceso == “Z”) %&gt;%
+group_by(tipo_equipo) %&gt;%
+summarise(
+n = n(),
+ct_media = mean(costo_transformacion),
+ci_media = mean(costo_insumo),
+ctot_media = mean(costo_unitario_total),
+.groups = “drop”
+)
+Observación descriptiva. Las órdenes en modalidad Z presentan un costo total promedio superior al de X y Y en A1. Esto es consistente con la definición operativa de Z (aplicación conjunta de X e Y al mismo producto), que implica mayor consumo de tiempo y recursos. La magnitud exacta del sobrecosto no es generalizable con n=14 y no se usará para ninguna conclusión. Solo sirve como referencia cualitativa para que la empresa calibre el recargo comercial aplicado a pedidos que solicitan Z.
+### Tipo de equipo C3 (n=8)
+datos %&gt;%
+filter(tipo_equipo == “C3”) %&gt;%
+summarise(
+n = n(),
+ct_media = mean(costo_transformacion),
+ct_mediana = median(costo_transformacion),
+ci_media = mean(costo_insumo),
+ci_mediana = median(costo_insumo)
+)
+Observación descriptiva. C3 presenta los costos más altos del dataset tanto en transformación como en insumos. Con n=8 el intervalo de confianza es demasiado amplio para afirmar cuánto más costoso es en comparación con otros equipos, pero el patrón es consistente y amerita una revisión operativa específica —fuera del alcance de este trabajo estadístico— sobre qué justifica su uso y en qué condiciones.</p>
+<p>6.9 Síntesis: lo que cambia para el capítulo de inferencia
+6.9.1 Qué se puede afirmar después del EDA</p>
+<p>El sistema productivo no es homogéneo: tiene al menos tres regímenes operativos diferenciados por tipo de equipo (A1/B2 como regímenes estándar, D4 como régimen eficiente restringido a (X, 1), C3 como régimen excepcional).
+Dentro de A1 (configuración universal), el número de insumos y la modalidad afectan el costo de manera interactiva. El efecto de agregar un segundo insumo depende de la modalidad.
+Las economías de escala son reales pero no uniformes: pierden intensidad en volúmenes altos y presentan mayor dispersión en lotes pequeños.
+El costo de transformación domina el costo total (85%). Cualquier iniciativa de reducción debe enfocarse en procesos, no en insumos.</p>
+<p>6.9.2 Hipótesis que alimentan el capítulo 7 (inferencia)
+Con base en el EDA, las pruebas inferenciales formales que tienen sustento son:
+HipótesisPrueba aplicableEstratonH1: El costo de transformación difiere entre A1, B2 y D4ANOVA 1 vía (Welch) o Kruskal-Wallis(X, 1) únicamente122H2: Dentro de A1, la modalidad afecta el costot-test o Mann-WhitneyA1 completo274H3: Dentro de A1, el número de insumos afecta el costot-test o Mann-WhitneyA1 completo274H4: Existe interacción modalidad × num_insumos dentro de A1ANOVA 2 víasA1 completo274H5: Existe correlación entre volumen_lote y costo dentro de A1Correlación de Spearman con ICA1 completo274
+6.9.3 Comparaciones que el diseño del dataset no permite hacer
+Para transparencia metodológica, se documenta lo que el dataset no puede responder:</p>
+<p>Si D4 sería más eficiente que A1 en modalidad Y: D4 nunca operó en Y.
+Si C3 sería competitivo con volúmenes altos: los 8 casos de C3 no cubren rangos altos de volumen.
+Si la modalidad Z es más costosa que la suma de X e Y: n=14 no da potencia suficiente.</p>
+<p>Estas preguntas requerirían un diseño de recolección de datos distinto, con asignación deliberada de órdenes a configuraciones específicas para romper la dependencia entre factores.</p>
+<p>6.10 Implicaciones para la dirección financiera
+Cuatro mensajes para la toma de decisiones:</p>
+<p>La reducción de costos tiene un techo estructural del 15% si se enfoca solo en insumos. La palanca mayor está en los procesos de transformación, específicamente en los regímenes menos eficientes.
+D4 es el equipo más eficiente observado, pero su alcance es limitado. Antes de recomendar migración de producción, se requiere un estudio operativo que determine si las restricciones de D4 son técnicas o históricas.
+La política de precios probablemente está subsidiando la complejidad. Las órdenes con dos insumos son sistemáticamente más costosas, pero el recargo aplicado (si existe) no varía por modalidad. Órdenes complejas en modalidad X son las menos rentables.
+El tamaño de lote mínimo rentable debe definirse explícitamente. Los lotes pequeños concentran los mayores costos unitarios y la mayor variabilidad. Una política de lote mínimo, o una estructura de precios que incentive la consolidación de pedidos, tendría impacto medible e inmediato.</p>
+<p>Nota final sobre el método. Este capítulo deliberadamente empezó con una visión agregada y la desmontó progresivamente. El objetivo no fue mostrar los hallazgos de la forma más eficiente, sino hacer visible el razonamiento: cómo una primera lectura simple escondía una estructura jerárquica, por qué el análisis marginal era engañoso, y qué comparaciones sí son válidas en un dataset con espacio operativo truncado. Esta disciplina es la que separa un EDA mecánico de un EDA con criterio.</p>
 
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="resumen.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="análisis-exploratorio-básico.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="pruebas-de-hipótesis-sin-desarrollar.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

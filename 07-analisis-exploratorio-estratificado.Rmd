@@ -1,4 +1,4 @@
-## estratificado
+# estratificado
 Capítulo 7 — Análisis Exploratorio Estratificado
   7.1 Carga del dataset principal (n=373 tras exclusiones)
   7.2 Mapa del espacio operativo válido
