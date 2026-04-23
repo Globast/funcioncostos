@@ -608,7 +608,7 @@ knitr::kable(matriz_correlacion , caption = "Matriz de correlación de Pearson",
 Relación casi perfecta entre el costo de transformación y el costo unitario total (`r round(matriz_correlacion[1,3], 3)`). Este resultado no es sorprendente, ambas variables contienen prácticamente la misma información, por lo que analizarlas por separado aporta poco valor adicional.
 
 Las correlaciones entre estas variables son altas y consistentes: volumen de lote, duración del proceso y cantidad de insumo 1.  (todas por encima de 0.6)
-estructura operativa coherente. A mayor volumen, mayor duración, y mayor consumo de insumos. El sistema productivo escala de manera integrada. No solo se produce más, sino que producir más implica procesos más largos y mayor uso de recursos.
+En cuanto a las variables operativas, las correlaciones son altas y consistentes entre volumen de lote, duración del proceso y cantidad de insumo 1 (todas por encima de 0.6). Este patrón refleja una estructura productiva coherente: a mayor volumen, mayor duración y mayor consumo de insumos. Es decir, el sistema escala de forma integrada.
 Relaciones con implicación económica: Se confirma la presencia de economías de escala. Es decir, aunque los procesos sean más largos y consuman más insumos en términos absolutos, el costo por unidad disminuye. 
 Relaciones débiles, pero interpretables: Procesos más largos tienden a ser más costosos, pero la variabilidad es alta. La duración no es un determinante directo del costo, sino un indicador parcial de complejidad.
 Relaciones secundarias interesantes: La cantidad de insumo 1 presenta correlaciones prácticamente nulas con los costos unitarios, es relativamente estable y no introduce grandes ineficiencias.
