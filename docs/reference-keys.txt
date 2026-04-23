@@ -8,12 +8,6 @@ tab:ck-resumen-ct
 tab:ck-hist-ci
 tab:ck-resumen-ctot
 tab:ck-resumen-num-predictoras
-tab:equipo-id
-tab:categoria-producto
-tab:modalidad-proceso
-tab:num-insumos
-tab:insumo-1
-tab:insumo-2
 tab:matriz-correlacion
 tab:matriz-spearman
 tab:bivariado-cc-modproceso

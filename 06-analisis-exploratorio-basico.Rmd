@@ -636,8 +636,7 @@ combinado <- gridExtra::arrangeGrob(
 
 grid::grid.draw(combinado)
 ```
-
-
+Tipo de equipo. A1 concentra el 72.7% de todas las órdenes. Esto es un dato con consecuencias profundas: cualquier estadístico global del sistema está dominado por A1. Cuando un reporte ejecutivo habla de "el costo promedio del sistema", en realidad está hablando, en casi tres cuartos, del costo promedio de A1. Las categorías B2 (11.4%), D4 (13.9%) y especialmente C3 (2.0%) tienen una representación mucho menor. C3 con apenas 8 órdenes está estadísticamente al borde de la inutilidad para inferencia.
 
 
 ```{r equipo-id, fig.width=10, fig.height=6, message=FALSE, warning=FALSE}
@@ -648,19 +647,14 @@ tabla_equipo_id <- datos %>%
     Categoria = as.character(equipo_id),
     Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")
   ) %>%
-  select(Categoria, Frecuencia, Porcentaje, Etiqueta)
+  select(Categoria, Frecuencia, Porcentaje)
 
-knitr::kable(
-  tabla_equipo_id %>% select(Categoria, Frecuencia, Porcentaje),
-  caption = "Tabla de frecuencias de equipo_id",
-  format = "html",
-  table.attr = "class='table'"
-) %>%
-  kableExtra::kable_styling(full_width = FALSE)
-
-ggplot(tabla_equipo_id, aes(x = Categoria, y = Frecuencia)) +
+grafico_equipo_id <- ggplot(
+  tabla_equipo_id %>% mutate(Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")),
+  aes(x = Categoria, y = Frecuencia)
+) +
   geom_col(fill = "#008B8B", width = 0.6) +
-  geom_text(aes(label = Etiqueta), vjust = -0.5, size = 3) +
+  geom_text(aes(label = Etiqueta), vjust = -0.5, size = 3.5) +
   scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
   labs(
     title = "Distribución de equipo_id",
@@ -670,7 +664,27 @@ ggplot(tabla_equipo_id, aes(x = Categoria, y = Frecuencia)) +
   theme_bw(base_size = 12) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
+tabla_grob <- gridExtra::tableGrob(
+  tabla_equipo_id,
+  rows = NULL
+)
+
+combinado <- gridExtra::arrangeGrob(
+  tabla_grob,
+  ggplotGrob(grafico_equipo_id),
+  ncol = 2,
+  widths = c(1, 2),
+  top = grid::textGrob(
+    "Equipo ID: tabla de frecuencias y gráfico de barras",
+    gp = grid::gpar(fontsize = 14, fontface = "bold")
+  )
+)
+
+grid::grid.draw(combinado)
+
 ```
+Equipo individual. Los 12 equipos tienen frecuencias entre el 1% y el 12%. M04 y M11 (los dos equipos C3) tienen 4 órdenes cada uno. Los equipos A1 están relativamente equilibrados entre sí (entre 8% y 12% cada uno). Los D4 (M05, M12) tienen 31 y 24 órdenes respectivamente.
+
 
 ```{r categoria-producto, fig.width=8, fig.height=5, message=FALSE, warning=FALSE}
 tabla_categoria_producto <- datos %>%
@@ -680,17 +694,12 @@ tabla_categoria_producto <- datos %>%
     Categoria = as.character(categoria_producto),
     Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")
   ) %>%
-  select(Categoria, Frecuencia, Porcentaje, Etiqueta)
+  select(Categoria, Frecuencia, Porcentaje)
 
-knitr::kable(
-  tabla_categoria_producto %>% select(Categoria, Frecuencia, Porcentaje),
-  caption = "Tabla de frecuencias de categoria_producto",
-  format = "html",
-  table.attr = "class='table'"
-) %>%
-  kableExtra::kable_styling(full_width = FALSE)
-
-ggplot(tabla_categoria_producto, aes(x = Categoria, y = Frecuencia)) +
+grafico_categoria_producto <- ggplot(
+  tabla_categoria_producto %>% mutate(Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")),
+  aes(x = Categoria, y = Frecuencia)
+) +
   geom_col(fill = "#008B8B", width = 0.6) +
   geom_text(aes(label = Etiqueta), vjust = -0.5, size = 3.5) +
   scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
@@ -702,7 +711,29 @@ ggplot(tabla_categoria_producto, aes(x = Categoria, y = Frecuencia)) +
   theme_bw(base_size = 12) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
+tabla_grob <- gridExtra::tableGrob(
+  tabla_categoria_producto,
+  rows = NULL
+)
+
+combinado <- gridExtra::arrangeGrob(
+  tabla_grob,
+  ggplotGrob(grafico_categoria_producto),
+  ncol = 2,
+  widths = c(1, 2),
+  top = grid::textGrob(
+    "Categoría de producto: tabla de frecuencias y gráfico de barras",
+    gp = grid::gpar(fontsize = 14, fontface = "bold")
+  )
+)
+
+grid::grid.draw(combinado)
+
 ```
+
+Categoría de producto. La categoría 5 absorbe el 62% de la producción. La categoría 6 tiene una sola orden. Este desequilibrio impone limitaciones al análisis: no hay base muestral para hacer comparaciones estables entre todas las categorías.
+
+
 
 ```{r modalidad-proceso, fig.width=8, fig.height=5, message=FALSE, warning=FALSE}
 tabla_modalidad_proceso <- datos %>%
@@ -712,17 +743,12 @@ tabla_modalidad_proceso <- datos %>%
     Categoria = as.character(modalidad_proceso),
     Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")
   ) %>%
-  select(Categoria, Frecuencia, Porcentaje, Etiqueta)
+  select(Categoria, Frecuencia, Porcentaje)
 
-knitr::kable(
-  tabla_modalidad_proceso %>% select(Categoria, Frecuencia, Porcentaje),
-  caption = "Tabla de frecuencias de modalidad_proceso",
-  format = "html",
-  table.attr = "class='table'"
-) %>%
-  kableExtra::kable_styling(full_width = FALSE)
-
-ggplot(tabla_modalidad_proceso, aes(x = Categoria, y = Frecuencia)) +
+grafico_modalidad_proceso <- ggplot(
+  tabla_modalidad_proceso %>% mutate(Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")),
+  aes(x = Categoria, y = Frecuencia)
+) +
   geom_col(fill = "#008B8B", width = 0.6) +
   geom_text(aes(label = Etiqueta), vjust = -0.5, size = 3.5) +
   scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
@@ -734,7 +760,29 @@ ggplot(tabla_modalidad_proceso, aes(x = Categoria, y = Frecuencia)) +
   theme_bw(base_size = 12) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
+tabla_grob <- gridExtra::tableGrob(
+  tabla_modalidad_proceso,
+  rows = NULL
+)
+
+combinado <- gridExtra::arrangeGrob(
+  tabla_grob,
+  ggplotGrob(grafico_modalidad_proceso),
+  ncol = 2,
+  widths = c(1, 2),
+  top = grid::textGrob(
+    "Modalidad de proceso: tabla de frecuencias y gráfico de barras",
+    gp = grid::gpar(fontsize = 14, fontface = "bold")
+  )
+)
+
+grid::grid.draw(combinado)
+
 ```
+
+Modalidad de proceso. X y Y están razonablemente balanceadas (52% y 44%). Z es marginal (3.5%, 14 órdenes).
+
+
 
 ```{r num-insumos, fig.width=8, fig.height=5, message=FALSE, warning=FALSE}
 tabla_num_insumos <- datos %>%
@@ -744,17 +792,12 @@ tabla_num_insumos <- datos %>%
     Categoria = as.character(num_insumos),
     Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")
   ) %>%
-  select(Categoria, Frecuencia, Porcentaje, Etiqueta)
+  select(Categoria, Frecuencia, Porcentaje)
 
-knitr::kable(
-  tabla_num_insumos %>% select(Categoria, Frecuencia, Porcentaje),
-  caption = "Tabla de frecuencias de num_insumos",
-  format = "html",
-  table.attr = "class='table'"
-) %>%
-  kableExtra::kable_styling(full_width = FALSE)
-
-ggplot(tabla_num_insumos, aes(x = Categoria, y = Frecuencia)) +
+grafico_num_insumos <- ggplot(
+  tabla_num_insumos %>% mutate(Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")),
+  aes(x = Categoria, y = Frecuencia)
+) +
   geom_col(fill = "#008B8B", width = 0.6) +
   geom_text(aes(label = Etiqueta), vjust = -0.5, size = 3.5) +
   scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
@@ -766,7 +809,27 @@ ggplot(tabla_num_insumos, aes(x = Categoria, y = Frecuencia)) +
   theme_bw(base_size = 12) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
+tabla_grob <- gridExtra::tableGrob(
+  tabla_num_insumos,
+  rows = NULL
+)
+
+combinado <- gridExtra::arrangeGrob(
+  tabla_grob,
+  ggplotGrob(grafico_num_insumos),
+  ncol = 2,
+  widths = c(1, 2),
+  top = grid::textGrob(
+    "Número de insumos: tabla de frecuencias y gráfico de barras",
+    gp = grid::gpar(fontsize = 14, fontface = "bold")
+  )
+)
+
+grid::grid.draw(combinado)
+
 ```
+
+Número de insumos. Dos tercios de las órdenes operan con un solo insumo; un tercio con dos.
 
 ```{r insumo-1, fig.width=8, fig.height=5, message=FALSE, warning=FALSE}
 tabla_insumo_1 <- datos %>%
@@ -776,17 +839,12 @@ tabla_insumo_1 <- datos %>%
     Categoria = as.character(insumo_1),
     Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")
   ) %>%
-  select(Categoria, Frecuencia, Porcentaje, Etiqueta)
+  select(Categoria, Frecuencia, Porcentaje)
 
-knitr::kable(
-  tabla_insumo_1 %>% select(Categoria, Frecuencia, Porcentaje),
-  caption = "Tabla de frecuencias de insumo_1",
-  format = "html",
-  table.attr = "class='table'"
-) %>%
-  kableExtra::kable_styling(full_width = FALSE)
-
-ggplot(tabla_insumo_1, aes(x = Categoria, y = Frecuencia)) +
+grafico_insumo_1 <- ggplot(
+  tabla_insumo_1 %>% mutate(Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")),
+  aes(x = Categoria, y = Frecuencia)
+) +
   geom_col(fill = "#008B8B", width = 0.6) +
   geom_text(aes(label = Etiqueta), vjust = -0.5, size = 3.5) +
   scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
@@ -798,8 +856,28 @@ ggplot(tabla_insumo_1, aes(x = Categoria, y = Frecuencia)) +
   theme_bw(base_size = 12) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
+tabla_grob <- gridExtra::tableGrob(
+  tabla_insumo_1,
+  rows = NULL
+)
+
+combinado <- gridExtra::arrangeGrob(
+  tabla_grob,
+  ggplotGrob(grafico_insumo_1),
+  ncol = 2,
+  widths = c(1, 2),
+  top = grid::textGrob(
+    "Distribución de insumo_1: tabla de frecuencias y gráfico de barras",
+    gp = grid::gpar(fontsize = 14, fontface = "bold")
+  )
+)
+
+grid::grid.draw(combinado)
+
 
 ```
+Insumos. Tanto en insumo_1 como en insumo_2, B_T y N_T son los más frecuentes. Hay insumos con presencia muy baja (R_T, V_T) que limitan la capacidad de análisis específico.
+
 
 ```{r insumo-2, fig.width=8, fig.height=5, message=FALSE, warning=FALSE}
 tabla_insumo_2 <- datos %>%
@@ -809,17 +887,12 @@ tabla_insumo_2 <- datos %>%
     Categoria = as.character(insumo_2),
     Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")
   ) %>%
-  select(Categoria, Frecuencia, Porcentaje, Etiqueta)
+  select(Categoria, Frecuencia, Porcentaje)
 
-knitr::kable(
-  tabla_insumo_2 %>% select(Categoria, Frecuencia, Porcentaje),
-  caption = "Tabla de frecuencias de insumo_2",
-  format = "html",
-  table.attr = "class='table'"
-) %>%
-  kableExtra::kable_styling(full_width = FALSE)
-
-ggplot(tabla_insumo_2, aes(x = Categoria, y = Frecuencia)) +
+grafico_insumo_2 <- ggplot(
+  tabla_insumo_2 %>% mutate(Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")),
+  aes(x = Categoria, y = Frecuencia)
+) +
   geom_col(fill = "#008B8B", width = 0.6) +
   geom_text(aes(label = Etiqueta), vjust = -0.5, size = 3.5) +
   scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
@@ -830,12 +903,35 @@ ggplot(tabla_insumo_2, aes(x = Categoria, y = Frecuencia)) +
   ) +
   theme_bw(base_size = 12) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+tabla_grob <- gridExtra::tableGrob(
+  tabla_insumo_2,
+  rows = NULL
+)
+
+combinado <- gridExtra::arrangeGrob(
+  tabla_grob,
+  ggplotGrob(grafico_insumo_2),
+  ncol = 2,
+  widths = c(1, 2),
+  top = grid::textGrob(
+    "Distribución de insumo_2: tabla de frecuencias y gráfico de barras",
+    gp = grid::gpar(fontsize = 14, fontface = "bold")
+  )
+)
+
+grid::grid.draw(combinado)
+
 ```
 
+La fuerte concentración en A1 sugiere dos cosas: (i) cualquier modelo debe considerar tipo_equipo como variable explicativa central; (ii) las comparaciones entre categorías minoritarias serán inestables por bajo n. Esto anticipa que el análisis no podrá tratar a todos los grupos de la misma manera.
 
+::: {.alert .alert-primary}
+- A1 representa el 73% de las órdenes: el "costo del sistema" es mayoritariamente el "costo de A1".
+- C3 (8 órdenes) está al borde de la inutilidad estadística; cualquier conclusión sobre C3 será especulativa.
+- Los desbalances en categorías de producto y en insumos minoritarios obligarán a agrupaciones o exclusiones en análisis posteriores.
 
-Parte del comportamiento del sistema está siendo explicado por unos cuantos casos recurrentes lo que puede sesgar interpretaciones si no se toma en cuenta,pues los patrones observados están fuertemente influenciados por los grupos más grandes. En este contexto, se debe evitar conclusiones generalizadas a partir de casos poco representativos.
-
+::: 
 
 
 ## Análisis bivariado marginal
