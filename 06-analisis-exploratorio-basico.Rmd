@@ -490,7 +490,7 @@ knitr::kable(resumen_num_predictoras, caption = "Resumen descriptivo de las vari
 La principal fuente de heterogeneidad del sistema productivo no está en los insumos —que son estables— sino en la escala de los lotes y la duración de los procesos. Esto tiene una implicación directa para la modelación posterior: cualquier modelo o iniciativa de mejora que ignore volumen y duración va a estar mal especificado y producirá conclusiones engañosas.
 
 
-```{r box-num-predictoras, fig.asp = 0.5, echo=FALSE}
+```{r box-num-predictoras, fig.asp = 1, echo=FALSE}
 p_vol <- datos %>%
   ggplot(aes(x = "", y = volumen_lote)) +
   geom_boxplot(fill = "#1f77b4", alpha = 0.7) +
