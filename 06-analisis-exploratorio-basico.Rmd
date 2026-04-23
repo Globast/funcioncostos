@@ -1,4 +1,9 @@
 # Análisis Exploratorio Básico
+Este capítulo describe el comportamiento del costo unitario de producción a partir de las 395 órdenes que sobrevivieron al proceso de depuración del Capítulo 5. La premisa de entrada tratar el dataset como un universo homogéneo del proceso productivo y observar qué dice cuando se le aplica la teoria estándar del análisis exploratorio (resúmenes descriptivos, distribuciones univariadas, correlaciones, y comparaciones bivariadas marginales).
+A lo largo del recorrido, la data va a revelar que no es uniforme, que mezcla modelos operativos distintos, y que las comparaciones agregadas pueden ser engañosas. El cierre del capítulo muestra decisiones metodológicas concretas que dan paso al análisis estratificado del Capítulo 7.
+::: {.alert .alert-primary}
+Este capítulo responde una pregunta básica de control de gestión: ¿qué tan predecible es el costo unitario que vemos en los reportes? La respuesta corta es que el promedio del sistema oculta más de lo que muestra. 
+::: 
 
 ## Carga del dataset analítico 
 Se parte del dataset depurado en el capítulo de metodología (395 órdenes de producción con tipos ajustados). La limpieza previa ya eliminó errores de digitación y validó la integridad de los registros; este capítulo se concentra en entender qué dicen esos datos.
@@ -33,7 +38,9 @@ n_total <- nrow(datos)
 El dataset contiene `r n_total` órdenes de producción y `r ncol(datos)` variables.
 
 ## Análisis univariado de variables respuesta
-Las tres variables respuesta del estudio son `costo_transformacion` (costo de conversión por unidad producida), `costo_insumo` (costo de materias primas por unidad producida) y su agregado `costo_unitario_total`. Se analizan en paralelo porque responden a lógicas operativas distintas: el costo de transformación refleja eficiencia de máquina y proceso, mientras que el costo de insumo refleja decisiones de formulación y consumo de materias primas.
+Las tres variables respuesta del estudio son `costo_transformacion` (costo de conversión por unidad producida), `costo_insumo` (costo de materias primas por unidad producida) y su agregado `costo_unitario_total`. Se analizan en paralelo porque responden a lógicas operativas distintas: el costo de transformación mide la eficiencia del proceso productivo (mano de obra, energía, depreciación, indirectos por unidad), mientras que el costo de insumo refleja decisiones de formulación y consumo de materias primas.
+
+Analizar las tres en paralelo permite separar responsabilidades y esfuerzos de gestión y que pueden tener dinámicas independientes.
  
 ### Costo unitario de conversión o de transformacion
 
@@ -69,7 +76,6 @@ ct_iqr     <- resumen_ct$IQR
 ct_cv      <- ct_ds / ct_media * 100
 ```
 
-La variable `costo_transformacion` se analizó a partir de `r n_total` órdenes de producción. 
 Se obtuvo un costo medio de conversión por unidad de `r round(ct_media, 2)` UM/unidad (DS = `r round(ct_ds, 2)` UM/unidad), con un coeficiente de variación de `r round(ct_cv, 1)`%. El 50% de las órdenes presenta un costo de conversión por debajo de `r round(ct_med, 2)` UM/unidad. 
 La desviación estándar alcanza `r round(ct_ds,2)`, lo que equivale a un coeficiente de variación de `r round(ct_cv,1)`%. Quiere decir que los costos fluctúan de manera importante respecto al promedio. 
 

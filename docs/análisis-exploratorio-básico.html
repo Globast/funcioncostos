@@ -241,6 +241,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="análisis-exploratorio-básico" class="section level1 hasAnchor" number="6">
 <h1><span class="header-section-number">Capítulo 6</span> Análisis Exploratorio Básico<a href="análisis-exploratorio-básico.html#an%C3%A1lisis-exploratorio-b%C3%A1sico" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Este capítulo describe el comportamiento del costo unitario de producción a partir de las 395 órdenes que sobrevivieron al proceso de depuración del Capítulo 5. La premisa de entrada tratar el dataset como un universo homogéneo del proceso productivo y observar qué dice cuando se le aplica la teoria estándar del análisis exploratorio (resúmenes descriptivos, distribuciones univariadas, correlaciones, y comparaciones bivariadas marginales).
+A lo largo del recorrido, la data va a revelar que no es uniforme, que mezcla modelos operativos distintos, y que las comparaciones agregadas pueden ser engañosas. El cierre del capítulo muestra decisiones metodológicas concretas que dan paso al análisis estratificado del Capítulo 7.
+::: {.alert .alert-primary}
+Este capítulo responde una pregunta básica de control de gestión: ¿qué tan predecible es el costo unitario que vemos en los reportes? La respuesta corta es que el promedio del sistema oculta más de lo que muestra.
+:::</p>
 <div id="carga-del-dataset-analítico" class="section level2 hasAnchor" number="6.1">
 <h2><span class="header-section-number">6.1</span> Carga del dataset analítico<a href="análisis-exploratorio-básico.html#carga-del-dataset-anal%C3%ADtico" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Se parte del dataset depurado en el capítulo de metodología (395 órdenes de producción con tipos ajustados). La limpieza previa ya eliminó errores de digitación y validó la integridad de los registros; este capítulo se concentra en entender qué dicen esos datos.</p>
@@ -248,7 +253,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="análisis-univariado-de-variables-respuesta" class="section level2 hasAnchor" number="6.2">
 <h2><span class="header-section-number">6.2</span> Análisis univariado de variables respuesta<a href="análisis-exploratorio-básico.html#an%C3%A1lisis-univariado-de-variables-respuesta" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Las tres variables respuesta del estudio son <code>costo_transformacion</code> (costo de conversión por unidad producida), <code>costo_insumo</code> (costo de materias primas por unidad producida) y su agregado <code>costo_unitario_total</code>. Se analizan en paralelo porque responden a lógicas operativas distintas: el costo de transformación refleja eficiencia de máquina y proceso, mientras que el costo de insumo refleja decisiones de formulación y consumo de materias primas.</p>
+<p>Las tres variables respuesta del estudio son <code>costo_transformacion</code> (costo de conversión por unidad producida), <code>costo_insumo</code> (costo de materias primas por unidad producida) y su agregado <code>costo_unitario_total</code>. Se analizan en paralelo porque responden a lógicas operativas distintas: el costo de transformación mide la eficiencia del proceso productivo (mano de obra, energía, depreciación, indirectos por unidad), mientras que el costo de insumo refleja decisiones de formulación y consumo de materias primas.</p>
+<p>Analizar las tres en paralelo permite separar responsabilidades y esfuerzos de gestión y que pueden tener dinámicas independientes.</p>
 <div id="costo-unitario-de-conversión-o-de-transformacion" class="section level3 hasAnchor" number="6.2.1">
 <h3><span class="header-section-number">6.2.1</span> Costo unitario de conversión o de transformacion<a href="análisis-exploratorio-básico.html#costo-unitario-de-conversi%C3%B3n-o-de-transformacion" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -318,8 +324,7 @@ IQR
 </tr>
 </tbody>
 </table>
-<p>La variable <code>costo_transformacion</code> se analizó a partir de 395 órdenes de producción.
-Se obtuvo un costo medio de conversión por unidad de 29.94 UM/unidad (DS = 15.26 UM/unidad), con un coeficiente de variación de 51%. El 50% de las órdenes presenta un costo de conversión por debajo de 29.09 UM/unidad.
+<p>Se obtuvo un costo medio de conversión por unidad de 29.94 UM/unidad (DS = 15.26 UM/unidad), con un coeficiente de variación de 51%. El 50% de las órdenes presenta un costo de conversión por debajo de 29.09 UM/unidad.
 La desviación estándar alcanza 15.26, lo que equivale a un coeficiente de variación de 51%. Quiere decir que los costos fluctúan de manera importante respecto al promedio.</p>
 <p>El rango intercuartílico (14.54) indica que la mitad central de los datos se sitúa en un intervalo relativamente acotado, lo que describe el comportamiento típico del proceso.
 Sin embargo, los extremos revela algo distinto. Mientras el valor mínimo (2.77) se mantiene dentro de lo esperado, el máximo (97.18) se encuentra considerablemente alejado del resto. Este comportamiento puede sugerir la presencia de valores atípicos en la parte superior de la distribución, generando una cola hacia la derecha.
