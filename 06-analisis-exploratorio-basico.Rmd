@@ -439,7 +439,7 @@ No son variables independientes: describen distintas dimensiones del mismo proce
 La principal fuente de heterogeneidad no está en los insumos, sino en el tamaño de los lotes y la duración de los procesos. Esto sugiere que cualquier modelamiento o mejora operativa debe centrarse en segmentar por escala de producción y complejidad del proceso, más que en el consumo de insumos.
 
 
-```{r box-num-predictoras, fig.asp = 0.5, echo=FALSE}
+```{r box-num-predictoras, fig.asp = 0.6, echo=FALSE}
 p_vol <- datos %>%
   ggplot(aes(x = "", y = volumen_lote)) +
   geom_boxplot(fill = "#1f77b4", alpha = 0.7) +
@@ -472,7 +472,7 @@ p_ci2 <- datos %>%
        y = "Litros equivalentes", x = "") +
   theme_bw()
 
-(p_vol + p_dur) / (p_ci1 + p_ci2)
+(p_vol + p_dur + p_ci1 + p_ci2)
 ```
 
 ```{r hist-num-predictoras,  echo=FALSE}
