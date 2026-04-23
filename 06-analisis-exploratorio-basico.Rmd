@@ -585,62 +585,6 @@ p_ci2_hist <- datos %>%
 ::: 
 
 
-```{r hist-num-predictoras,  echo=FALSE}
-
-p_vol_hist <- datos %>%
-  ggplot(aes(x = volumen_lote)) +
-  geom_histogram(aes(y = after_stat(density)),
-                 bins = 30,
-                 fill = "#1f77b4",
-                 color = "white",
-                 alpha = 0.7) +
-  geom_density(linewidth = 1.2) +
-  labs(title = "Distribución del volumen de lote",
-       x = "Unidades", y = "Densidad") +
-  theme_bw()
-
-p_dur_hist <- datos %>%
-  ggplot(aes(x = duracion_proceso)) +
-  geom_histogram(aes(y = after_stat(density)),
-                 bins = 30,
-                 fill = "#1f77b4",
-                 color = "white",
-                 alpha = 0.7) +
-  geom_density(linewidth = 1.2) +
-  labs(title = "Distribución de la duración de proceso",
-       x = "Horas", y = "Densidad") +
-  theme_bw()
-
-p_ci1_hist <- datos %>%
-  filter(num_insumos >= 1) %>%
-  ggplot(aes(x = cantidad_insumo_1)) +
-  geom_histogram(aes(y = after_stat(density)),
-                 bins = 25,
-                 fill = "#1f77b4",
-                 color = "white",
-                 alpha = 0.7) +
-  geom_density(linewidth = 1.2) +
-  labs(title = "Cantidad de insumo 1 (órdenes con insumo)",
-       x = "Litros equivalentes", y = "Densidad") +
-  theme_bw()
-
-p_ci2_hist <- datos %>%
-  filter(num_insumos == 2) %>%
-  ggplot(aes(x = cantidad_insumo_2)) +
-  geom_histogram(aes(y = after_stat(density)),
-                 bins = 20,
-                 fill = "#1f77b4",
-                 color = "white",
-                 alpha = 0.7) +
-  geom_density(linewidth = 1.2) +
-  labs(title = "Cantidad de insumo 2 (órdenes con segundo insumo)",
-       x = "Litros equivalentes", y = "Densidad") +
-  theme_bw()
-
-(p_vol_hist + p_dur_hist) / (p_ci1_hist + p_ci2_hist)
-```
-
-
 
 ## Análisis univariado de predictoras categóricas
 
