@@ -15,6 +15,76 @@ datos_completo <- readRDS("data/data_costos_limpio.rds") %>%
   mutate(costo_unitario_total = costo_transformacion + costo_insumo)
 ```
 
+
+```{r verificar-bimodalidad-A1B2, fig.width=11, fig.height=8}
+library(patchwork)
+
+# Histograma + densidad: dataset completo (395)
+p_completo <- datos_completo %>%
+  ggplot(aes(x = costo_transformacion)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 30,
+                 fill = "#cccccc",
+                 color = "white",
+                 alpha = 0.6) +
+  geom_density(color = "black", linewidth = 1) +
+  labs(x = "Costo de transformación (UM/unidad)",
+       y = "Densidad",
+       subtitle = paste0("Dataset completo (n = ", nrow(datos_completo), ")")) +
+  theme_bw() +
+  xlim(0, 100)
+
+# Histograma + densidad: solo A1
+p_A1 <- datos_principal %>%
+  filter(tipo_equipo == "A1") %>%
+  ggplot(aes(x = costo_transformacion)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 30,
+                 fill = "#fcae91",
+                 color = "white",
+                 alpha = 0.6) +
+  geom_density(color = "#a50f15", linewidth = 1) +
+  labs(x = "Costo de transformación (UM/unidad)",
+       y = "Densidad",
+       subtitle = paste0("Tipo A1 (n = ",
+                         sum(datos_principal$tipo_equipo == "A1"), ")")) +
+  theme_bw() +
+  xlim(0, 100)
+
+# Histograma + densidad: solo B2
+p_B2 <- datos_principal %>%
+  filter(tipo_equipo == "B2") %>%
+  ggplot(aes(x = costo_transformacion)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 20,
+                 fill = "#a1d99b",
+                 color = "white",
+                 alpha = 0.6) +
+  geom_density(color = "#005a32", linewidth = 1) +
+  labs(x = "Costo de transformación (UM/unidad)",
+       y = "Densidad",
+       subtitle = paste0("Tipo B2 (n = ",
+                         sum(datos_principal$tipo_equipo == "B2"), ")")) +
+  theme_bw() +
+  xlim(0, 100)
+
+# Densidades superpuestas para comparar directamente
+p_superpuesto <- datos_principal %>%
+  filter(tipo_equipo %in% c("A1", "B2")) %>%
+  ggplot(aes(x = costo_transformacion, color = tipo_equipo, fill = tipo_equipo)) +
+  geom_density(alpha = 0.3, linewidth = 1) +
+  labs(x = "Costo de transformación (UM/unidad)",
+       y = "Densidad",
+       subtitle = "Comparación A1 vs B2",
+       color = "Tipo", fill = "Tipo") +
+  theme_bw() +
+  xlim(0, 100)
+
+# Composición 2x2
+(p_completo + p_A1) / (p_B2 + p_superpuesto)
+```
+
+
 ```{r dims-eda7, echo=FALSE}
 n_principal <- nrow(datos_principal)
 n_completo  <- nrow(datos_completo)
