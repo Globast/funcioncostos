@@ -29,7 +29,7 @@ tab:descripcion-Z
 tab:descripcion-C3
 resumen
 introducción
-objetivos-en-construcccion
+objetivos
 objetivo-general
 objetivos-específicos
 metodologia
@@ -64,8 +64,8 @@ señales-de-heterogeneidad-estructural
 tabulación-cruzada-tipo_equipo-modalidad-num_insumos
 implicaciones-metodológicas-del-descubrimiento
 por-qué-el-análisis-marginal-puede-ser-engañoso-confounding
-decisiones-de-exclusión-justificadas
-cierre-qué-sabemos-qué-no-sabemos-qué-sigue
+decisiones-de-exclusión
+conclusiones-del-capítulo-eda
 análisis-exploratorio-estratificado
 mapa-del-espacio-operativo-válido
 tabulación-de-combinaciones

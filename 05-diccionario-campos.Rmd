@@ -11,7 +11,6 @@ output:
 
 # Diccionario de campos
 
-
 ```{r diccionario-datos, echo=FALSE, message=FALSE, warning=FALSE}
 library(knitr)
 library(kableExtra)
@@ -49,22 +48,13 @@ diccionario <- data.frame(
   Unidad = c("Mes", "—", "—", "unidades", "UM/unidad", "UM/unidad",
              "—", "—", "—", "{0, 1, 2}", "—", "—",
              "kg / L (verificar)", "kg / L (verificar)", "—", "horas"),
-  Rol = c("Control / estratificación", "Factor de agrupación",
-          "Identificador (no entra al modelo)", "Predictora (escala)",
-          "Variable respuesta 1", "Variable respuesta 2",
-          "Predictora (efecto fijo o aleatorio)", "Predictora (factor)",
-          "Predictora (factor)", "Predictora (proxy de complejidad)",
-          "Predictora (factor)", "Predictora (factor)",
-          "Predictora (intensidad de uso)", "Predictora (intensidad de uso)",
-          "Predictora (factor)", "Predictora (intensidad temporal)"),
   stringsAsFactors = FALSE
 )
 
 kbl(diccionario,
-    col.names = c("Variable", "Descripción", "Tipo", "Unidad",
-                  "Rol en el análisis"),
+    col.names = c("Variable", "Descripción", "Tipo", "Unidad"),
     caption = "Diccionario de datos del proceso productivo (n = 406 órdenes)",
-    align = c("l", "l", "l", "l", "l"),
+    align = c("l", "l", "l", "l"),
     escape = FALSE) %>%
   kable_styling(
     bootstrap_options = c("striped", "hover", "condensed", "responsive"),
@@ -76,7 +66,6 @@ kbl(diccionario,
   column_spec(2, width = "22em") %>%
   column_spec(3, width = "10em") %>%
   column_spec(4, width = "8em") %>%
-  column_spec(5, width = "14em") %>%
   row_spec(0, bold = TRUE, background = "#f2f2f2")
-```
 
+```
