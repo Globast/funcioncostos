@@ -1623,7 +1623,7 @@ El análisis exploratorio revela que el sistema productivo tiene una estructura 
 
 **La eficiencia aparente de D4 responde a una restricción técnica documentada.** La consulta con el área de operaciones confirma que D4 corresponde a una tecnología estructuralmente distinta de A1, B2 y C3, restringida por diseño a la configuración (X, 1): no admite procesos en modalidad Y ni órdenes con dos insumos simultáneos. La baja media de costo de D4 (≈ 9 UM/unidad) no resulta entonces de una elección operativa eficiente, sino de la combinación entre ventaja tecnológica y especialización forzada en la configuración más simple del sistema. Tecnología y configuración operativa están estructuralmente entrelazadas y no pueden separarse con los datos disponibles, dado que D4 nunca ha operado bajo otras condiciones. En consecuencia, la eficiencia de D4 es real pero su alcance es acotado al subconjunto de productos compatibles con (X, 1); cualquier evaluación de migración de producción hacia esta tecnología debe partir de esta restricción técnica, no de la comparación marginal de costos.
 
-### Preguntas propuestas para el análsis estratificado del Capítulo 7
+## Preguntas propuestas para el análsis estratificado del Capítulo 7
 
 1. Si las diferencias entre equipos del mismo tipo (M15 vs M13 en A1; M05 vs M12 en D4) son estructurales —reflejo de una asignación diferenciada de productos— o técnicas —reflejo de una eficiencia real del equipo—.
 

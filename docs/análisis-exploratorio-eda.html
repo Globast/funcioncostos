@@ -193,10 +193,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.7.1" data-path="análisis-exploratorio-eda.html"><a href="análisis-exploratorio-eda.html#por-qu%C3%A9-el-an%C3%A1lisis-marginal-puede-ser-enga%C3%B1oso-confounding"><i class="fa fa-check"></i><b>6.7.1</b> Por qué el análisis marginal puede ser engañoso (confounding)</a></li>
 <li class="chapter" data-level="6.7.2" data-path="análisis-exploratorio-eda.html"><a href="análisis-exploratorio-eda.html#decisiones-de-exclusi%C3%B3n"><i class="fa fa-check"></i><b>6.7.2</b> Decisiones de exclusión</a></li>
 </ul></li>
-<li class="chapter" data-level="6.8" data-path="análisis-exploratorio-eda.html"><a href="análisis-exploratorio-eda.html#conclusiones-del-cap%C3%ADtulo"><i class="fa fa-check"></i><b>6.8</b> Conclusiones del capítulo</a>
-<ul>
-<li class="chapter" data-level="6.8.1" data-path="análisis-exploratorio-eda.html"><a href="análisis-exploratorio-eda.html#preguntas-propuestas-para-el-an%C3%A1lsis-estratificado-del-cap%C3%ADtulo-7"><i class="fa fa-check"></i><b>6.8.1</b> Preguntas propuestas para el análsis estratificado del Capítulo 7</a></li>
-</ul></li>
+<li class="chapter" data-level="6.8" data-path="análisis-exploratorio-eda.html"><a href="análisis-exploratorio-eda.html#conclusiones-del-cap%C3%ADtulo"><i class="fa fa-check"></i><b>6.8</b> Conclusiones del capítulo</a></li>
+<li class="chapter" data-level="6.9" data-path="análisis-exploratorio-eda.html"><a href="análisis-exploratorio-eda.html#preguntas-propuestas-para-el-an%C3%A1lsis-estratificado-del-cap%C3%ADtulo-7"><i class="fa fa-check"></i><b>6.9</b> Preguntas propuestas para el análsis estratificado del Capítulo 7</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="análisis-estratificado-en-construcción.html"><a href="análisis-estratificado-en-construcción.html"><i class="fa fa-check"></i><b>7</b> Análisis Estratificado (en construcción)</a>
 <ul>
@@ -4357,15 +4355,15 @@ Esto no es una característica del muestreo, sino al propio funcionamiento del p
 <p><strong>La heterogeneidad de costo proviene del proceso, no de los materiales.</strong> Las variables operativas (volumen y duración) están fuertemente acopladas entre sí (correlación de Spearman ≈ 0.78), pero el consumo del insumo principal apenas se asocia con el costo unitario (correlación cercana a cero). Esto sugiere que la variabilidad económica del sistema se origina en cómo y cuánto se produce, no en qué materiales se utilizan. Los insumos están operativamente bajo control; el proceso productivo no.</p>
 <p><strong>El dataset refleja restricciones técnicas reales del proceso, no una muestra aleatoria.</strong> La tabulación cruzada <code>tipo_equipo × modalidad × num_insumos</code> revela que 11 de 24 combinaciones posibles están vacías o cuentan con observaciones marginales. Las variables categóricas no son independientes; existen dependencias operativas que el análisis estadístico debe respetar. Esta evidencia invalida el análisis marginal por confusión de efectos y exige el enfoque estratificado que se desarrolla en el Capítulo 7.</p>
 <p><strong>La eficiencia aparente de D4 responde a una restricción técnica documentada.</strong> La consulta con el área de operaciones confirma que D4 corresponde a una tecnología estructuralmente distinta de A1, B2 y C3, restringida por diseño a la configuración (X, 1): no admite procesos en modalidad Y ni órdenes con dos insumos simultáneos. La baja media de costo de D4 (≈ 9 UM/unidad) no resulta entonces de una elección operativa eficiente, sino de la combinación entre ventaja tecnológica y especialización forzada en la configuración más simple del sistema. Tecnología y configuración operativa están estructuralmente entrelazadas y no pueden separarse con los datos disponibles, dado que D4 nunca ha operado bajo otras condiciones. En consecuencia, la eficiencia de D4 es real pero su alcance es acotado al subconjunto de productos compatibles con (X, 1); cualquier evaluación de migración de producción hacia esta tecnología debe partir de esta restricción técnica, no de la comparación marginal de costos.</p>
-<div id="preguntas-propuestas-para-el-análsis-estratificado-del-capítulo-7" class="section level3 hasAnchor" number="6.8.1">
-<h3><span class="header-section-number">6.8.1</span> Preguntas propuestas para el análsis estratificado del Capítulo 7<a href="análisis-exploratorio-eda.html#preguntas-propuestas-para-el-an%C3%A1lsis-estratificado-del-cap%C3%ADtulo-7" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="preguntas-propuestas-para-el-análsis-estratificado-del-capítulo-7" class="section level2 hasAnchor" number="6.9">
+<h2><span class="header-section-number">6.9</span> Preguntas propuestas para el análsis estratificado del Capítulo 7<a href="análisis-exploratorio-eda.html#preguntas-propuestas-para-el-an%C3%A1lsis-estratificado-del-cap%C3%ADtulo-7" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ol style="list-style-type: decimal">
 <li><p>Si las diferencias entre equipos del mismo tipo (M15 vs M13 en A1; M05 vs M12 en D4) son estructurales —reflejo de una asignación diferenciada de productos— o técnicas —reflejo de una eficiencia real del equipo—.</p></li>
 <li><p>Cuál es el efecto puro del número de insumos sobre el costo cuando se controla por equipo y modalidad. Pasar de uno a dos insumos eleva el costo en aproximadamente 31%, pero no se sabe si este efecto se mantiene dentro de los estratos donde la comparación es válida.</p></li>
 <li><p>Si la modalidad Y es genuinamente más estable que X, o si esa estabilidad refleja la composición particular de equipos y productos asignados a cada modalidad.</p></li>
 </ol>
 
-</div>
 </div>
 </div>
             </section>
