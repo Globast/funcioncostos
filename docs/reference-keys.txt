@@ -45,7 +45,7 @@ eliminación-de-registros-inválidos
 conversión-de-tipos
 consideraciones-estructurales-para-el-análisis
 diccionario-de-campos
-análisis-exploratorio-básico
+análisis-exploratorio-eda
 carga-del-dataset-analítico
 análisis-univariado-de-variables-respuesta
 costo-unitario-de-conversión-o-de-transformacion
@@ -65,8 +65,9 @@ tabulación-cruzada-tipo_equipo-modalidad-num_insumos
 implicaciones-metodológicas-del-descubrimiento
 por-qué-el-análisis-marginal-puede-ser-engañoso-confounding
 decisiones-de-exclusión
-conclusiones-del-capítulo-eda
-análisis-exploratorio-estratificado
+conclusiones-del-capítulo
+preguntas-propuestas-para-el-análsis-estratificado-del-capítulo-7
+análisis-estratificado-en-construcción
 mapa-del-espacio-operativo-válido
 tabulación-de-combinaciones
 identificación-de-comparaciones-válidas
@@ -99,8 +100,5 @@ comparaciones-que-el-dataset-no-permite-hacer
 implicaciones-financiera
 pruebas-de-hipótesis-sin-desarrollar
 modelos-sin-desarrollar
-ajuste-del-modelo
-medidas-de-ajuste
-gráfico-de-observados-vs-ajustados
 conclusión
 bibliografía

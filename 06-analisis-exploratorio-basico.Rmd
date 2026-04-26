@@ -1,4 +1,5 @@
-# Análisis Exploratorio Básico
+# Análisis Exploratorio (EDA)
+
 Este capítulo describe el comportamiento del costo unitario de producción a partir de las 395 órdenes que sobrevivieron al proceso de depuración del Capítulo 5. La premisa de entrada tratar el dataset como un universo homogéneo del proceso productivo y observar qué dice cuando se le aplica la teoria estándar del análisis exploratorio (resúmenes descriptivos, distribuciones univariadas, correlaciones, y comparaciones bivariadas marginales).
 A lo largo del recorrido, la data va a revelar que no es uniforme, que mezcla modelos operativos distintos, y que las comparaciones agregadas pueden ser engañosas. El cierre del capítulo muestra decisiones metodológicas concretas que dan paso al análisis estratificado del Capítulo 7.
 
@@ -11,7 +12,7 @@ Se parte del dataset depurado en el capítulo de metodología (395 órdenes de p
 
 ```{r setup1, include=FALSE}
 knitr::opts_chunk$set(
-  echo = FALSE,
+  echo = TRUE,
   message = FALSE,
   warning = FALSE,
   out.width = "90%",  # Ocupa todo el ancho de la página
@@ -45,7 +46,7 @@ Analizar las tres en paralelo permite separar responsabilidades y esfuerzos de g
  
 ### Costo unitario de conversión o de transformacion
 
-```{r ck-resumen-ct, echo=FALSE}
+```{r ck-resumen-ct}
 datos %>%
   summarise(
     n       = length(costo_transformacion),
@@ -67,7 +68,7 @@ knitr::kable(resumen_ct,
 
 ```
 
-```{r ck_resumen_ct_calc, echo=FALSE}
+```{r ck_resumen_ct_calc}
 ct_media   <- resumen_ct$media
 ct_ds      <- resumen_ct$ds
 ct_med     <- resumen_ct$`50%`
@@ -83,7 +84,7 @@ Se obtuvo un costo medio de conversión por unidad de `r round(ct_media, 2)` UM/
 La desviación estándar alcanza `r round(ct_ds,2)`, lo que equivale a un coeficiente de variación de `r round(ct_cv,1)`%. Quiere decir que los costos fluctúan de manera importante respecto al promedio. 
 El rango intercuartílico (`r round(ct_iqr,2)`) confirma que el 50% central de las órdenes opera entre `r round(ct_q1,2)` y `r round(ct_q3,2)` UM/unidad, un rango operativo razonablemente delimitado. Pero los extremos cuentan otra historia: el mínimo de `r round(ct_min,2)` está muy alejado del Q1 (`r round(ct_q1,2)`), y el máximo de `r round(ct_max,2)` multiplica por más de tres el Q3 (`r round(ct_q3,2)`). Esta asimetría sugiere que la distribución no es simétrica y que puede haber fenómenos estructurales distintos en los extremos.
 
-```{r ck-hist-t,  out.width="100%",echo=FALSE}
+```{r ck-hist-t,  out.width="100%"}
 
 lineas <- tibble(
   estadistico = c("Media", "Mediana", "Q1", "Q3"),
@@ -160,7 +161,7 @@ El boxplot complementa la lectura mostrando outliers altos, que no son uno o dos
 
 ### Costo unitario de los insumos 
 
-```{r ck-hist-ci, echo=FALSE}
+```{r ck-hist-ci}
 datos %>%
   summarise(
     n       = length(costo_insumo),
@@ -197,7 +198,7 @@ El costo de insumo promedio es de `r round(ci_media, 2)` UM/unidad, sustancialme
 La distribución es marcadamente asimétrica positiva. La mediana (`r round(ci_med, 2)`) está claramente por debajo de la media (`r round(ci_media, 2)`), lo que confirma la influencia de valores altos en la cola derecha. El máximo (`r round(ci_max, 2)`) es nueve veces el Q3 (`r round(ci_q3, 2)`), un ratio que revela la presencia de pocas órdenes con consumos de insumo desproporcionadamente costosos.
 Operativamente,  un grupo dominante de insumos con costo bajo y una cola de insumos puntualmente costosos.  ¿esos insumos caros corresponden a productos premium con precio diferenciado, o están subsidiados por la mezcla?
 
-```{r ck-hist-box_ci, echo=FALSE}
+```{r ck-hist-box_ci}
 
 lineas <- tibble(
   estadistico = c("Media", "Mediana", "Q1", "Q3"),
@@ -303,7 +304,7 @@ El costo unitario total promedio es de `r round(cu_media, 2)` UM/unidad con CV d
 •	Insumos: 14.4% del costo total promedio.
 Cualquier estrategia de reducción de costos enfocada exclusivamente en insumos tiene un techo del 14% sobre el costo unitario. La palanca real está en la transformación.
 
-```{r ck-hist-box_ctot,  echo=FALSE}
+```{r ck-hist-box_ctot}
 
 lineas <- tibble(
   estadistico = c("Media", "Mediana", "Q1", "Q3"),
@@ -370,7 +371,7 @@ El boxplot del costo total hereda los outliers superiores que ya aparecían en t
 ## Análisis univariado de predictoras numéricas
 Tras revisar las variables respuesta surge la pregunta ¿qué características operativas explican esa variabilidad? Las cuatro predictoras numéricas describen tres dimensiones del proceso productivo: escala (volumen), intensidad temporal (duración) y consumo material (cantidades de insumo).
 
-```{r ck-resumen-num-predictoras, echo=FALSE}
+```{r ck-resumen-num-predictoras}
 datos %>%
   summarise(
     n = length(volumen_lote),
@@ -490,7 +491,7 @@ knitr::kable(resumen_num_predictoras, caption = "Resumen descriptivo de las vari
 La principal fuente de heterogeneidad del sistema productivo no está en los insumos —que son estables— sino en la escala de los lotes y la duración de los procesos. Esto tiene una implicación directa para la modelación posterior: cualquier modelo o iniciativa de mejora que ignore volumen y duración va a estar mal especificado y producirá conclusiones engañosas.
 
 
-```{r box-num-predictoras, fig.asp = 1, echo=FALSE}
+```{r box-num-predictoras, fig.asp = 1}
 p_vol <- datos %>%
   ggplot(aes(x = "", y = volumen_lote)) +
   geom_boxplot(fill = "#1f77b4", alpha = 0.7) +
@@ -590,7 +591,7 @@ p_ci2_hist <- datos %>%
 
 Se observa por la distribución de frecuencias de las siete variables categóricas que el sistema no está repartido de manera uniforme, sino que se concentra en pocas categorías dominantes, mientras que el resto aparece con baja frecuencia.
 
-```{r tipo-equipo,  out.width = "60%", echo=FALSE}
+```{r tipo-equipo,  out.width = "60%"}
 tabla_tipo_equipo <- datos %>%
   count(tipo_equipo, name = "Frecuencia") %>%
   mutate(
@@ -1608,39 +1609,26 @@ n_principal <- nrow(datos_principal)
 ::: 
 
 
-## Conclusiones del capítulo EDA
+## Conclusiones del capítulo
 
-El sistema productivo tiene una estructura económica más compleja de la que sugiere cualquier análisis agregado. Los Cuatro hallazgos principales son:
+El análisis exploratorio revela que el sistema productivo tiene una estructura económica considerablemente más compleja de la que sugiere cualquier lectura agregada. Cinco hallazgos sintetizan el aporte del capítulo y orientan las decisiones metodológicas posteriores.
 
-1.	El costo total está dominado por la transformación (85.6%), no por los insumos. Cualquier programa de eficiencia debe priorizar el componente de proceso.
+**La transformación domina la estructura de costos.** El componente de transformación representa el 85.6% del costo unitario total promedio, frente al 14.4% del componente de insumos. Cualquier programa de eficiencia debe priorizar el proceso productivo; las iniciativas centradas exclusivamente en compras o formulación tienen un techo estructural de aproximadamente 14% sobre el costo total.
 
-2.	El sistema opera en al menos cuatro regímenes de costo distintos según tipo de equipo: estándar (A1, B2), alto-inestable (M04), alto-estable (M11), eficiente (D4). Las recomendaciones genéricas no aplican.
+**El sistema opera en al menos cuatro regímenes de costo diferenciados.** El análisis a nivel de equipo individual identifica un régimen estándar (A1, B2, ≈ 30 UM/unidad), uno de alto costo e inestable (M04, ≈ 79 UM/unidad con dispersión amplia), uno de alto costo y estable (M11, ≈ 49 UM/unidad con dispersión contenida), y uno eficiente (D4, ≈ 9 UM/unidad). Esta segmentación invalida cualquier recomendación operativa formulada sobre el promedio global del sistema.
 
-3.	Las variables operativas (volumen, duración) están más fuertemente acopladas que las variables económicas (costos), sugiriendo que la heterogeneidad de costo proviene principalmente de cómo y cuánto se produce, no de qué materiales se usan.
+**La heterogeneidad de costo proviene del proceso, no de los materiales.** Las variables operativas (volumen y duración) están fuertemente acopladas entre sí (correlación de Spearman ≈ 0.78), pero el consumo del insumo principal apenas se asocia con el costo unitario (correlación cercana a cero). Esto sugiere que la variabilidad económica del sistema se origina en cómo y cuánto se produce, no en qué materiales se utilizan. Los insumos están operativamente bajo control; el proceso productivo no.
 
-4.	El dataset refleja restricciones técnicas reales, no una muestra aleatoria. Esto invalida el análisis marginal y exige análisis estratificado.
+**El dataset refleja restricciones técnicas reales del proceso, no una muestra aleatoria.** La tabulación cruzada `tipo_equipo × modalidad × num_insumos` revela que 11 de 24 combinaciones posibles están vacías o cuentan con observaciones marginales. Las variables categóricas no son independientes; existen dependencias operativas que el análisis estadístico debe respetar. Esta evidencia invalida el análisis marginal por confusión de efectos y exige el enfoque estratificado que se desarrolla en el Capítulo 7.
 
-Queda por investigar en capítulos posteriores:
+**La eficiencia aparente de D4 responde a una restricción técnica documentada.** La consulta con el área de operaciones confirma que D4 corresponde a una tecnología estructuralmente distinta de A1, B2 y C3, restringida por diseño a la configuración (X, 1): no admite procesos en modalidad Y ni órdenes con dos insumos simultáneos. La baja media de costo de D4 (≈ 9 UM/unidad) no resulta entonces de una elección operativa eficiente, sino de la combinación entre ventaja tecnológica y especialización forzada en la configuración más simple del sistema. Tecnología y configuración operativa están estructuralmente entrelazadas y no pueden separarse con los datos disponibles, dado que D4 nunca ha operado bajo otras condiciones. En consecuencia, la eficiencia de D4 es real pero su alcance es acotado al subconjunto de productos compatibles con (X, 1); cualquier evaluación de migración de producción hacia esta tecnología debe partir de esta restricción técnica, no de la comparación marginal de costos.
 
-1. Si las diferencias entre equipos del mismo tipo (M15 vs M13 en A1; M04 vs M11 en C3; M05 vs M12 en D4) son estructurales (asignación diferenciada de productos) o técnicas (eficiencia real del equipo). Sin estratificar por categoría de producto, no se puede separar.
+### Preguntas propuestas para el análsis estratificado del Capítulo 7
 
-•	Si los equipos eficientes (D4) lo son por la tecnología o por la simplicidad de las configuraciones que ejecutan. La pregunta solo se puede responder con datos que actualmente no existen (D4 nunca ha operado en otras configuraciones).
+1. Si las diferencias entre equipos del mismo tipo (M15 vs M13 en A1; M05 vs M12 en D4) son estructurales —reflejo de una asignación diferenciada de productos— o técnicas —reflejo de una eficiencia real del equipo—.
 
-•	Cuál es el efecto real del número de insumos sobre el costo cuando se controla por equipo y modalidad. La comparación marginal sugiere que dos insumos elevan el costo, pero no se sabe si esto se mantiene dentro de cada estrato.
+2. Cuál es el efecto puro del número de insumos sobre el costo cuando se controla por equipo y modalidad. Pasar de uno a dos insumos eleva el costo en aproximadamente 31%, pero no se sabe si este efecto se mantiene dentro de los estratos donde la comparación es válida.
 
-•	Si la modalidad Y es genuinamente más estable que X, o si esa estabilidad refleja la composición particular de equipos y productos asignados a cada modalidad.
+3. Si la modalidad Y es genuinamente más estable que X, o si esa estabilidad refleja la composición particular de equipos y productos asignados a cada modalidad. 
 
-Qué sigue.
-
-El Capítulo 7 retoma estas preguntas con análisis estratificado sobre el dataset principal (373 órdenes, sin Z y sin C3). La estructura del análisis estará organizada alrededor de las comparaciones que el diseño truncado del dataset sí permite hacer:
-
-•	Efecto puro del tipo de equipo dentro del único estrato donde A1, B2 y D4 coexisten: la combinación (X, 1).
-
-•	Efecto de modalidad y número de insumos dentro de A1, el único equipo con cobertura completa de las cuatro combinaciones (X/Y × 1/2 insumos).
-
-•	Heterogeneidad intra-tipo y comparación de regímenes operativos a nivel de equipo individual.
-
-•	Correlaciones condicionales dentro de A1 para verificar si las economías de escala observadas en el agregado se mantienen al controlar por equipo y modalidad.
-
-El Capítulo 8 formaliza las hipótesis derivadas en pruebas inferenciales con cálculo de tamaños de efecto. Las exclusiones documentadas en este capítulo restringen el alcance pero protegen la validez del análisis posterior.
 

@@ -1,6 +1,2 @@
 # Pruebas de Hipótesis SIN DESARROLLAR
 
-
-La hipótesis "el tipo de equipo afecta el costo" debe reformularse cuando el tipo agrupa equipos heterogéneos. Para C3 y D4, la pregunta correcta es a nivel de equipo individual, no de tipo.
-M02 (único B2) no permite una prueba de "tipo B2 vs tipo A1"; la prueba real es "M02 vs cluster de equipos A1".
-Para A1 con sus siete equipos, una prueba de homogeneidad interna (ANOVA o Kruskal-Wallis sobre los 7 equipos) podría confirmar formalmente que la familia es coherente. Si esa prueba no rechaza, se justifica tratarlos como un solo grupo en análisis posteriores.
