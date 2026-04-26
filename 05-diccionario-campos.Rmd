@@ -45,9 +45,9 @@ diccionario <- data.frame(
            "Categórica ordinal", "Categórica nominal", "Categórica nominal",
            "Numérica continua", "Numérica continua", "Categórica nominal",
            "Numérica continua"),
-  Unidad = c("Mes", "—", "—", "unidades", "UM/unidad", "UM/unidad",
+  Unidad = c("Mes", "—", "—", "unidades", "Unidades Monetarias (UM)/unidad", "Unidades Monetarias (UM)/unidad",
              "—", "—", "—", "{0, 1, 2}", "—", "—",
-             "kg / L (verificar)", "kg / L (verificar)", "—", "horas"),
+             "kg", "kg", "—", "horas"),
   stringsAsFactors = FALSE
 )
 
